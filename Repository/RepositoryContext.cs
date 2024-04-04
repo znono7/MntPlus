@@ -9,6 +9,11 @@ namespace Repository
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new EquipmentConfiguration());
+        }
+
         public DbSet<Equipment>? Equipment { get; set; }
         
     }
