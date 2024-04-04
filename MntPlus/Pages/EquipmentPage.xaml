@@ -1,0 +1,154 @@
+﻿<local:BasePage x:TypeArguments="local:EquipmentPageViewModel"  
+                x:Class="MntPlus.EquipmentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MntPlus"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="1000"
+      Title="EquipmentPage">
+
+    <Grid Background="{DynamicResource PrimaryBackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="20 20 20 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Gérer les Équipements" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
+            <Button Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un équipement" Tag="{StaticResource plus}">
+               
+            </Button>
+            <!--<StackPanel  Grid.Column="3">
+                <Button Command="{Binding MenuCommand}" x:Name="BulkBtn"  Style="{DynamicResource PrimeButton2}" Tag="{DynamicResource bulkActions}" Content="Actions en Vrac" Width="165" Margin="0 14 15 0" />
+                <Grid  Margin="0 10 0 0" x:Name="GridPopup"/>
+            </StackPanel>-->
+            <Button Grid.Column="4" x:Name="settingBtn" Style="{DynamicResource PrimeButton2}" Content="Paramètres" Tag="{DynamicResource settings}" Width="130" Margin="0 0 15 0"/>
+            <StackPanel Grid.Column="5">
+                <Button Command="{Binding ImpExpCommand}" x:Name="uploadBtn" Style="{DynamicResource PrimeButton2}" Content="Importer/Exporter" Tag="{DynamicResource cloud}" Width="180" Margin="0 14 0 0"/>
+                <Grid  Margin="0 10 0 0" x:Name="GridPopup2"/>
+
+            </StackPanel>
+            <!--<Popup StaysOpen="False" HorizontalAlignment="Center" Width="185"  Height="110" IsOpen="{Binding IsMenuOpen}" PlacementTarget="{Binding ElementName=GridPopup}" Placement="Bottom" AllowsTransparency="True">
+                <Grid>
+                    <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                    <StackPanel Margin="1 20 1 20">
+                        <Button Style="{DynamicResource PopupButton}" Content="Supprimer des équipements"/>
+                        <Button Style="{DynamicResource PopupButton}" Content="M-à-J les équipements"/>
+                    </StackPanel>
+
+
+                </Grid>
+            </Popup>-->
+            <Popup StaysOpen="False" HorizontalAlignment="Center" Width="185"  Height="110" IsOpen="{Binding IsMenu2Open}" PlacementTarget="{Binding ElementName=GridPopup2}" Placement="Bottom" AllowsTransparency="True">
+                <Grid>
+                    <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                    <StackPanel Margin="1 20 1 20">
+                        <Button Style="{DynamicResource PopupButton}" Content="Importer des équipements"/>
+                        <Button Style="{DynamicResource PopupButton}" Content="Exporter d'équipement"/>
+                    </StackPanel>
+
+
+                </Grid>
+            </Popup>
+        </Grid>
+
+            
+        <Grid Margin="20 0 20 20" Grid.Row="1">
+            <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            <Border Grid.RowSpan="3"  Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}">
+                <!--<Border.Effect>
+                    <DropShadowEffect BlurRadius="16" ShadowDepth="1"
+                       Color="LightSlateGray" Opacity="0.1" />
+                </Border.Effect>-->
+            </Border>
+           
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Margin="20" Style="{DynamicResource SearchTextBoxStyle}"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <RadioButton Command="{Binding TohierarchyCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource hierarchy}"  Content="Hiérarchie" IsChecked="True" Margin="0 0 5 0"/>
+                        <RadioButton Command="{Binding ToListCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource list}"  Content="Liste" Margin="0 0 25 0" />
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1" Height="42">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition x:Name="sep1" Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition x:Name="sep2" Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition x:Name="sep3" Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition x:Name="sep4" Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Height="1"  Grid.ColumnSpan="11" Fill="{DynamicResource LineColor}"  VerticalAlignment="Top" Margin="0" />
+                    <Rectangle Height="1"  Grid.ColumnSpan="11" Fill="{DynamicResource LineColor}"  VerticalAlignment="Bottom" Margin="0" />
+                        
+                    <TextBlock FontFamily="{StaticResource ClarityCity-SemiBold}" Text="Nom" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 0 0 0"/>
+                        
+                    <Rectangle Grid.Column="2" Width="1"  Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" HorizontalAlignment="Right" Margin="0" />
+
+                    <TextBlock Text="Catégorie" Grid.Column="3"  Style="{DynamicResource ColumnHeaderStyle}" Margin="0 0 0 0"/>
+                    <Rectangle Width="1"  Grid.Column="4" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
+                    <TextBlock Text="Marque" Grid.Column="5"  Style="{DynamicResource ColumnHeaderStyle}" Margin="0 0 0 0"/>
+                    <Rectangle Width="1"  Grid.Column="6" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
+                    <TextBlock Text="Modèle" Grid.Column="7"  Style="{DynamicResource ColumnHeaderStyle}" Margin="0 0 0 0"/>
+                    <Rectangle Width="1"  Grid.Column="8" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
+                    <TextBlock Text="Image de l'équipement" Grid.Column="9" Grid.ColumnSpan="2"  Style="{DynamicResource ColumnHeaderStyle}" Margin="0 0 0 0"/>
+                </Grid>
+            <ScrollViewer Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter}}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2">
+                <Grid>
+                    <TreeView Grid.Row="2" Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter}}"  ItemContainerStyle="{DynamicResource TreeViewItemContainerStyle1}" 
+                          ItemsSource="{Binding RootItems}"   >
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <local:EquipmentControl   />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+            </ScrollViewer>
+            <ItemsControl Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="2" ItemsSource="{Binding EquipmentItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:EquipmentListControl />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Margin" Value="1 0"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+
+            </Grid>
+
+    </Grid>
+</local:BasePage>

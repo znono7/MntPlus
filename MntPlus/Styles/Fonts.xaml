@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--<FontFamily x:Key="FontAwesome">/Fonts/#Font Awesome 6 Free Solid</FontFamily>-->
+    <FontFamily x:Key="FontAwesome2">/Fonts/#FontAwesome</FontFamily>
+
+    <FontFamily x:Key="ClarityCity-SemiBold">/Fonts/#Clarity City Semi Bold</FontFamily>
+    <FontFamily x:Key="ClarityCity-Light">/Fonts/#Clarity City Light</FontFamily>
+    <FontFamily x:Key="ClarityCity-Thin">/Fonts/#Clarity City Thin</FontFamily>
+    <FontFamily x:Key="ClarityCity-Regular">/Fonts/#Clarity City</FontFamily>
+   
+
+
+   
+</ResourceDictionary>

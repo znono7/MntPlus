@@ -1,0 +1,162 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="SearchTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor }"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LineColor2}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
+        <Setter Property="Padding" Value="32  0 0 0"/>
+        <Setter Property="Margin" Value="20 10"/>
+        <Setter Property="Width" Value="320"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Border Panel.ZIndex="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{TemplateBinding Background}" 
+                            SnapsToDevicePixels="True" CornerRadius="5" >
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <Border x:Name="brdShadow" Visibility="Hidden" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                SnapsToDevicePixels="True">
+                            <Border.Effect >
+                                <DropShadowEffect Opacity=".4"  ShadowDepth="3" 
+                                         Direction="0"
+                                         Color="#7B68EE"
+                                         BlurRadius="12"/>
+                            </Border.Effect>
+                        </Border>
+                        <Grid Margin="10 2 2 2" Panel.ZIndex="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Width="16" Height="16" Data="{DynamicResource search}" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Fill="{DynamicResource FourthTextColor}"/>
+                            <TextBlock  IsHitTestVisible="False" Grid.Column="1"
+                                     Text="Recherche"
+                                     x:Name="placeholder"
+                                     FontFamily="{StaticResource ClarityCity-Regular}"
+                                    
+                                     VerticalAlignment="Center"
+                                     Panel.ZIndex="1"
+                                     Foreground="{DynamicResource FourthTextColor}" Margin="5 0"
+                                     >
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                        </Grid>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" TargetName="Border" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF7EB4EA"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF569DE5"/>
+                            <Setter Property="Visibility" TargetName="brdShadow" Value="Visible"/>
+
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="InputTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor }"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LineColor2}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="{StaticResource ClarityCity-Regular}"/>
+        <Setter Property="Margin" Value="24 0 20 20"/>
+        <Setter Property="Width" Value="360"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Border Panel.ZIndex="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{TemplateBinding Background}"  Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                            SnapsToDevicePixels="True" CornerRadius="8" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}" >
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                           
+                        </Border>
+                        <!--<Border x:Name="brdShadow" Panel.ZIndex="0" Visibility="Hidden" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="8" Height="{TemplateBinding Height}"
+                                SnapsToDevicePixels="True">
+                           
+                            <Border.Effect >
+                                <DropShadowEffect  Opacity="0.4"  ShadowDepth="0" 
+                                        
+                                         Color="#0760FF"
+                                         BlurRadius="20"/>
+                            </Border.Effect>
+                        </Border>-->
+                       
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" TargetName="Border" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF7EB4EA"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect  ShadowDepth="0" Color="#0760FF" BlurRadius="10" Opacity="0.3"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderBrush" TargetName="Border" Value="#0760FF"/>
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource SecundaryRedColor}"/>
+                            <Setter TargetName="Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect  ShadowDepth="0" Color="#FFD8000C" BlurRadius="10" Opacity="0.3"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+</ResourceDictionary>
