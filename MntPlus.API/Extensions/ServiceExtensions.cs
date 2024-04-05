@@ -1,4 +1,10 @@
-﻿namespace MntPlus.API
+﻿using Contracts;
+using Repository;
+using Service.Contracts;
+using Service;
+using Microsoft.EntityFrameworkCore;
+
+namespace MntPlus.API
 {
     public static class ServiceExtensions
     {
@@ -24,6 +30,30 @@
             services.Configure<IISOptions>(options =>
             {
             });
+
+        /// <summary>
+        ///   register the Repository manager class in the service container
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+                                services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        /// <summary>
+        ///  register the Service manager class in the service container
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+                                services.AddScoped<IServiceManager, ServiceManager>();
+
+        /// <summary>
+        /// register the SqlContext class in the service container
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        public static void ConfigureSqlContext(this IServiceCollection services,
+                        IConfiguration configuration) =>
+                            services.AddDbContext<RepositoryContext>(opts =>
+                                    opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
 
 
     }

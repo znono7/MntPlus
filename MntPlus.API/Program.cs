@@ -14,6 +14,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 
+//
+builder.Services.ConfigureRepositoryManager();
+
+builder.Services.ConfigureServiceManager();
+
+builder.Services.ConfigureSqlContext(builder.Configuration);
+
+builder.Services.AddControllers()
+                        .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+
 
 var app = builder.Build();
 
