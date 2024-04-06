@@ -12,10 +12,10 @@ namespace Service
     {
         private readonly Lazy<IEquipmentService> _equipmentService;
 
-        public ServiceManager(IRepositoryManager repositoryManager) 
+        public ServiceManager(IRepositoryManager repositoryManager , ILoggerManager logger) 
           
         {
-            _equipmentService = new Lazy<IEquipmentService>(() => new EquipmentService(repositoryManager));
+            _equipmentService = new Lazy<IEquipmentService>(() => new EquipmentService(repositoryManager , logger));
         }
         public IEquipmentService EquipmentService => _equipmentService.Value;
     }

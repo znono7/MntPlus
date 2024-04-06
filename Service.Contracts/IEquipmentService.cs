@@ -1,10 +1,11 @@
 ﻿using Entities;
+using Shared.DataTransferObjects;
 
 namespace Service.Contracts
 {
     public interface IEquipmentService
     {
-        IEnumerable<Equipment> GetAllEquipments(bool trackChanges);
+        IEnumerable<EquipmentDto> GetAllEquipments(bool trackChanges);
 
     }
 }

@@ -3,6 +3,7 @@ using Repository;
 using Service.Contracts;
 using Service;
 using Microsoft.EntityFrameworkCore;
+using LoggerService;
 
 namespace MntPlus.API
 {
@@ -30,6 +31,14 @@ namespace MntPlus.API
             services.Configure<IISOptions>(options =>
             {
             });
+
+        /// <summary>
+        /// register the Logger manager class in the service container
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ConfigureLoggerService(this IServiceCollection services) =>
+                            services.AddSingleton<ILoggerManager, LoggerManager>();
+
 
         /// <summary>
         ///   register the Repository manager class in the service container
