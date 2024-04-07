@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using System;
 using System.Collections.Generic;
@@ -20,24 +21,19 @@ namespace Presentation
         [HttpGet]
         public ActionResult GetEquipments()
         {
-            try
-            {
-                var equipments = _service.EquipmentService.GetAllEquipments(false);
+            var equipments = _service.EquipmentService.GetAllEquipments(false);
                 return Ok(equipments);
-            }
-            catch 
-            {
-
-                return StatusCode(500, "Internal server error");
-            }
+           
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<EquipmentDto>> GetEquipment(int id)
-        //{
-        //    var equipment = await _equipmentService.GetEquipment(id);
-        //    return Ok(equipment);
-        //}
+        [HttpGet("{id:guid}")]
+        public  ActionResult GetEquipment(Guid id)
+        {
+            var equipment = _service.EquipmentService.GetEquipment(id,false);
+            if (equipment is null)
+                throw new EquipmentNotFoundException(id);
+            return Ok(equipment);
+        }
 
         //[HttpPost]
         //public async Task<ActionResult<EquipmentDto>> CreateEquipment([FromBody] CreateEquipmentDto createEquipmentDto)

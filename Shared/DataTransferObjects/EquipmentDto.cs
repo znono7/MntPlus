@@ -17,5 +17,16 @@ namespace Shared.DataTransferObjects
         string? EquipmentNameImage, 
         byte[]? EquipmentImage
         );
+
+    public record EquipmentForCreationDto 
+        (
+        Guid? EquipmentParent,
+        string EquipmentName,
+        string? EquipmentCategory,
+        string? EquipmentModel,
+        string? EquipmentMake,
+        string? EquipmentNameImage,
+        byte[]? EquipmentImage
+        );
   
 }

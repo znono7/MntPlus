@@ -1,8 +1,10 @@
+using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using MntPlus.API;
 using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 LogManager.Setup().LoadConfigurationFromFile("/nlog.config");
 
@@ -32,11 +34,16 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+
+app.ConfigureExceptionHandler(logger);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
 }
 
 app.UseHttpsRedirection();

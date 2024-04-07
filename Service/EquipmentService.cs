@@ -16,10 +16,38 @@ namespace Service
             _logger = logger;
         }
 
+        public EquipmentDto CreateEquipment(EquipmentForCreationDto equipment)
+        {
+            var equipmentEntity = new Equipment
+            {
+                EquipmentParent = equipment.EquipmentParent,
+                EquipmentName = equipment.EquipmentName,
+                EquipmentCategory = equipment.EquipmentCategory,
+                EquipmentModel = equipment.EquipmentModel,
+                EquipmentMake = equipment.EquipmentMake,
+                EquipmentNameImage = equipment.EquipmentNameImage,
+                EquipmentImage = equipment.EquipmentImage
+            };
+            _repository.Equipment.CreateEquipment(equipmentEntity);
+            _repository.Save();
+            var equipmentToReturn = new EquipmentDto
+                (equipmentEntity.Id,
+                 equipmentEntity.EquipmentParent,
+                 equipmentEntity.EquipmentName,
+                 equipmentEntity.EquipmentCategory,
+                 equipmentEntity.EquipmentModel,
+                 equipmentEntity.EquipmentMake,
+                 equipmentEntity.EquipmentNameImage,
+                 equipmentEntity.EquipmentImage
+                 );
+            return equipmentToReturn;
+            
+        }
+
         public IEnumerable<EquipmentDto> GetAllEquipments(bool trackChanges)
         {
-            try
-            {
+            
+            
                 var equipments = _repository.Equipment.GetAllEquipments(trackChanges);
                 var equipmentsDto = equipments.Select(equipment => new EquipmentDto
                                (equipment.Id,
@@ -32,13 +60,25 @@ namespace Service
                                 equipment.EquipmentImage
                                 )).ToList();
                 return equipmentsDto;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetAllEquipments)} service method {ex}");
+            
+           
+        }
 
-                throw;
-            }
+        public EquipmentDto GetEquipment(Guid equipmentId, bool trackChanges)
+        {
+            var equipment = _repository.Equipment.GetEquipment(equipmentId, trackChanges);
+            var equipmentDto = new EquipmentDto
+                (equipment.Id,
+                 equipment.EquipmentParent,
+                 equipment.EquipmentName,
+                 equipment.EquipmentCategory,
+                 equipment.EquipmentModel,
+                 equipment.EquipmentMake,
+                 equipment.EquipmentNameImage,
+                 equipment.EquipmentImage
+                 );
+            return equipmentDto;
+            
         }
     }
 }

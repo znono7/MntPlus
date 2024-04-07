@@ -15,10 +15,17 @@ namespace Repository
         {
         }
 
+        public void CreateEquipment(Equipment equipment) => Create(equipment);
+       
+
         public IEnumerable<Equipment> GetAllEquipments(bool trackChanges) =>
             FindAll(trackChanges)
             .OrderBy(c => c.EquipmentName)
             .ToList();
-        
+
+        public Equipment? GetEquipment(Guid equipmentId, bool trackChanges) =>
+            FindByCondition(c => c.Id.Equals(equipmentId), trackChanges)
+            .SingleOrDefault();
+       
     }
 }
