@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class SideMenuViewModel : BaseViewModel
     {
@@ -13,7 +13,7 @@ namespace MntPlus
         
         public bool TravailMenuEnabled { get; set; }
 
-        public double SideMenuWidth { get; set; } = 59;
+        public double SideMenuWidth { get; set; } = 68;
 
         private bool _isMenuOpen;
         public bool IsMenuOpen
@@ -29,11 +29,11 @@ namespace MntPlus
                     // Update SideMenuWidth based on the value of IsMenuOpen
                     if (IsMenuOpen)
                     {
-                        SideMenuWidth = 215;
+                        SideMenuWidth = 250;
                     }
                     else
                     {
-                        SideMenuWidth = 59;
+                        SideMenuWidth = 69;
                     }
                 }
             }
@@ -66,12 +66,12 @@ namespace MntPlus
 
         private async Task ToTravailPage()
         {
-            if(SideMenuWidth == 59)
-            {
-                return;
-            }
-           
-            TravailMenuEnabled = true;
+            //if(SideMenuWidth == 69)
+            //{
+            //    return;
+            //}
+
+            TravailMenuEnabled = true;//!TravailMenuEnabled;
 
             await Task.Delay(1);
 

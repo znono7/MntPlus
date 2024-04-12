@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// A basic command that runs an Action

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-                    xmlns:local="clr-namespace:MntPlus">
+                    xmlns:local="clr-namespace:MntPlus.WPF">
         <!-- ButtonNameConverter as a local resource -->
         
     <!-- Hoverless button -->
@@ -27,6 +27,140 @@
 
     </Style>
 
+    <!-- Start: VerticalMenuStyle2 -->
+    <Style x:Key="MenuRadioButtonStyle2" TargetType="{x:Type RadioButton}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Border x:Name="menuButton" CornerRadius="8"   Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="45"/>
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Selected  -->
+                            <Border x:Name="btnSelected"   Grid.ColumnSpan="2"  CornerRadius="4" Width="230" HorizontalAlignment="Right"/>
+
+                           
+                            <!-- Icon -->
+                            <Path x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}}" Height="24" Width="24" Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="12 0 0 0">
+                                <!-- Text -->
+                                <TextBlock x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                           Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                          FontWeight="{TemplateBinding FontWeight}"
+                                          FontSize="{TemplateBinding FontSize}"  Margin="0 0 5 0"/>
+                                <!-- expand Icon -->
+                                <Path  Visibility="Collapsed" x:Name="expandIcon" Data="{DynamicResource expand}" Height="11" Width="11" 
+                                       Stretch="Uniform" Fill="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0 2 0">
+
+                                </Path>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Name" Value="rdPayment">
+                            <Setter TargetName="expandIcon" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="txtName" Property="Foreground" Value="{DynamicResource SecundaryTextColor}"/>
+                            <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource SecundaryTextColor}"/>
+                            <!-- Optional 
+                      <Setter TargetName="Indicator" Property="Fill" Value="red"/>
+                      <Setter TargetName="Indicator" Property="Height" Value="20"/>-->
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Icon" Property="Fill" Value="#ffffff"/>
+                            <Setter TargetName="expandIcon" Property="Fill" Value="#ffffff"/>
+
+                            <Setter TargetName="menuButton" Property="Background" Value="#6239EB"/>
+                            <Setter TargetName="menuButton" Property="CornerRadius" Value="8 8 0 0"/>
+                            <Setter TargetName="txtName" Property="Foreground" Value="#ffffff"/>
+
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- End: VerticalMenuStyle -->
+    
+    <!-- Start: SubVerticalMenuStyle -->
+    <Style x:Key="SubVerticalMenuStyle" TargetType="{x:Type RadioButton}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Border x:Name="menuButton"  Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="45"/>
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Selected  -->
+                            <Border x:Name="btnSelected" Grid.ColumnSpan="2"  CornerRadius="4" Width="215" HorizontalAlignment="Right"/>
+
+                            <!-- Indicator -->
+                            <Rectangle Name="Indicator" HorizontalAlignment="Left" Width="4" Height="40" VerticalAlignment="Center" RadiusX="2" RadiusY="2"/>
+
+                            <!-- Icon -->
+                            <Path x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}}" Height="24" Width="24" Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="12 0 0 0">
+                                <!-- Text -->
+                                <TextBlock x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                           Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                          FontWeight="{TemplateBinding FontWeight}"
+                                          FontSize="{TemplateBinding FontSize}"  Margin="0 0 5 0"/>
+                                <!-- expand Icon -->
+                                <Path  Visibility="Collapsed" x:Name="expandIcon" Data="{DynamicResource expand}" Height="11" Width="11" Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0 2 0">
+
+                                </Path>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Name" Value="rdPayment">
+                            <Setter TargetName="expandIcon" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="txtName" Property="Foreground" Value="{DynamicResource SecundaryTextColor}"/>
+                            <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource SecundaryTextColor}"/>
+                            <!-- Optional 
+                      <Setter TargetName="Indicator" Property="Fill" Value="red"/>
+                      <Setter TargetName="Indicator" Property="Height" Value="20"/>-->
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource TertiaryTextColor}"/>
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource PrimaryBlueColor}"/>
+                            <Setter TargetName="Indicator" Property="Height" Value="20"/>
+                            <Setter TargetName="txtName" Property="Foreground" Value="{DynamicResource TertiaryTextColor}"/>
+
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- End: VerticalMenuStyle -->
     <!-- Start: Button | Minimize | Maximize | Close -->
     <Style x:Key="IconButtonsStyle" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent"/>
@@ -158,7 +292,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
-                    <Border x:Name="menuButton"  Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border x:Name="menuButton" CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="45"/>
@@ -200,11 +334,10 @@
                          <Setter TargetName="Indicator" Property="Height" Value="20"/>-->
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource TertiaryTextColor}"/>
-                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource PrimaryBlueColor}"/>
-                            <Setter TargetName="Indicator" Property="Height" Value="20"/>
-                            <Setter TargetName="btnSelected" Property="Background" Value="{DynamicResource SecundaryBackgroundColor}"/>
-                            <Setter TargetName="txtName" Property="Foreground" Value="{DynamicResource TertiaryTextColor}"/>
+                            <Setter TargetName="Icon" Property="Fill" Value="#ffffff"/>
+
+                            <Setter TargetName="menuButton" Property="Background" Value="#6239EB"/>
+                            <Setter TargetName="txtName" Property="Foreground" Value="#ffffff"/>
                            
                         </Trigger>
                       
@@ -212,7 +345,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style> 
     <!-- End: VerticalMenuStyle -->
 
     <!-- Start: Menu Icon -->
@@ -538,7 +671,7 @@
     <!-- End: VerticalMenuStyle -->
     
     
-    <Style x:Key="TextButton" TargetType="{x:Type Button}">
+    <Style x:Key="TextButton" TargetType="{x:Type Button}"> 
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -610,4 +743,123 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
+    <Style x:Key="CPrimeButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBlueColor}"/>
+        <Setter Property="Foreground" Value="#F8F8F8"/>
+        <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBlueColor}"/>
+        <Setter Property="Height" Value="33"/>
+        <Setter Property="Width" Value="180"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Grid>
+
+                        <Border  x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="5" Color="Gray" Opacity="0.5"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <Grid>
+                           
+                            <!-- Text -->
+                            <TextBlock   x:Name="txtName" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                  FontWeight="{TemplateBinding FontWeight}"
+                                  FontSize="{TemplateBinding FontSize}"  Margin="0"/>
+
+                        </Grid>
+                        <!--<Border.Effect>
+                            <DropShadowEffect ShadowDepth="0.5" Direction="0" Opacity="0.5"/>
+                        </Border.Effect>-->
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#0063F7" Duration="0:0:0.6" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" />
+
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#004FC4" Duration="0:0:0.6" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <!--<Trigger Property="IsMouseOver" Value="True">
+                        -->
+                        <!--<Setter Property="Background" TargetName="border" Value="{DynamicResource SecundaryBlueColor}"/>-->
+                        <!--
+                        <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                        <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PrimaryBlueColor}"/>
+
+                    </Trigger>-->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource TertiaryBlueColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
+    <Style x:Key="CPrime2" TargetType="{x:Type Button}" BasedOn="{StaticResource CPrimeButton}">
+        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBlueColor}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="12"/>
+
+        <Setter Property="Height" Value="33"/>
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+
+                        <Border  x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="5" Color="Gray" Opacity="0.5"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <Grid>
+
+                            <!-- Text -->
+                            <TextBlock   x:Name="txtName" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                         Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                        FontWeight="{TemplateBinding FontWeight}"
+                                        FontSize="{TemplateBinding FontSize}"  Margin="0"/>
+
+                        </Grid>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+    
+                        <Setter Property="Background" TargetName="border" Value="{DynamicResource SecundaryBlueColor}"/>
+                        
+    
+</Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 </ResourceDictionary>

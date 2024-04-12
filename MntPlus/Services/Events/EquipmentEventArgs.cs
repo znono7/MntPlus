@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
-   public class EquipmentEventArgs : EventArgs
+   public class EquipmentIemEventArgs : EventArgs
+    {
+        public EquipmentItem? AddEquipment { get; set; }
+    }
+
+    public class EquipmentEventArgs : EventArgs
     {
         public Equipment? AddEquipment { get; set; }
-    }
+    } 
 }

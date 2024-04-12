@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class AddEquipmentViewModel : PropertyValidation
     {
@@ -40,7 +40,7 @@ namespace MntPlus
         public ICommand BrowseCommand { get; set; }
         public EquipmentItemViewModel? Parent { get; set; }
 
-        public event EventHandler<EquipmentEventArgs> EquipmentAdded;
+        public event EventHandler<EquipmentIemEventArgs> EquipmentAdded;
 
         public AddEquipmentViewModel(EquipmentItemViewModel? parent = null) 
         {
@@ -54,7 +54,7 @@ namespace MntPlus
             if (IsValid)
             {
                
-                OnEquipmentAdded(new Equipment
+                OnEquipmentAdded(new EquipmentItem
                 {
                     EquipmentId = EquipmentId,
                     EquipmentName = EquipmentName,
@@ -79,9 +79,9 @@ namespace MntPlus
             }          
         }
 
-        public void OnEquipmentAdded(Equipment equipment)
+        public void OnEquipmentAdded(EquipmentItem equipment)
         {
-            EquipmentAdded?.Invoke(this, new EquipmentEventArgs { AddEquipment = equipment });
+            EquipmentAdded?.Invoke(this, new EquipmentIemEventArgs { AddEquipment = equipment });
         }
     }
 }

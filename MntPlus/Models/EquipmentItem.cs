@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
-   public class Equipment
+   public class EquipmentItem
     {
         public string EquipmentId { get; set; }
         public string? EquipmentParent { get; set; }

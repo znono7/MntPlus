@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// A base class to run any animation method when a boolean is set to true

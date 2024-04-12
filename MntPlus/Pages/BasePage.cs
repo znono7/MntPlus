@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 { /// <summary>
   /// The base page for all pages to gain base functionality
   /// </summary>

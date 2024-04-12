@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class ValidationErrorsConverter : IMultiValueConverter
 {

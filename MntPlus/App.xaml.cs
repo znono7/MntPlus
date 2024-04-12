@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -14,16 +14,22 @@ namespace MntPlus
             base.OnStartup(e);
 
             // Setup the main application 
-            //ApplicationSetup();
+            ApplicationSetup();
 
 
             // Show the main window
             //AddEquipmentWindow window = new AddEquipmentWindow();
             //window.DataContext = new AddEquipmentViewModel();
+           
             Current.MainWindow = new MainWindow();
 
 
             Current.MainWindow.Show();
+        }
+
+        private void ApplicationSetup()
+        {
+            IoContainer.Setup();
         }
     }
 

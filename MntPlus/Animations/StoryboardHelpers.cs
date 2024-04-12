@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public static class StoryboardHelpers
     {
@@ -135,7 +135,7 @@ namespace MntPlus
         public static void AddSlideFromTop(this Storyboard storyboard, float seconds, double offset, float decelerationRatio = 0.9f, bool keepMargin = true)
         {
             // Create the margin animate from right 
-            var animation = new ThicknessAnimation
+            var animation = new ThicknessAnimation 
             {
                 Duration = new Duration(TimeSpan.FromSeconds(seconds)),
                 From = new Thickness(0, -offset, 0, keepMargin ? offset : 0),

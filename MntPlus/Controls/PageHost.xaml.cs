@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// Interaction logic for PageHost.xaml

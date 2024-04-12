@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.IO;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class EquipmentItemViewModel : BaseViewModel
     {
@@ -17,6 +20,8 @@ namespace MntPlus
         /// </summary>
         public string EquipmentName { get; set; }
         public string EquipmentId { get; set; }
+        public Guid Id { get; set; }
+        public string Description { get; set; }
         public string? EquipmentParent { get; set; }
         public string? EquipmentCategory { get; set; }
         public string? EquipmentModel { get; set; }
@@ -25,7 +30,7 @@ namespace MntPlus
          
         public double WidthControl { get; set; }
 
-        public bool IsHaveImage => !string.IsNullOrEmpty(EquipmentImage);
+        public bool IsHaveImage { get => MyImageSource != null; }
 
         public bool IsHaveChildren => Children.Count > 0;
 
@@ -50,8 +55,13 @@ namespace MntPlus
 
         #region Public Commands
         public ICommand AddEquipmentCommand { get; set; }
+        public ICommand BrowseCommand { get; set; }
+        public ICommand ShowImgCommand { get; set; }
+        public ICommand DeleteImgCommand { get; set; }
+
 
         public Func<EquipmentItemViewModel, Task> AddChildFunc { get; set; }
+        public BitmapImage? MyImageSource { get; private set; }
         #endregion
 
         #region Constructor
@@ -69,11 +79,31 @@ namespace MntPlus
             Children = new ObservableCollection<EquipmentItemViewModel>();
             AddEquipmentCommand = new RelayCommand(async () => await AddChild());
         }
-          
-       
+        public EquipmentItemViewModel(Guid id , string name , string description, double width = 940)
+        {
+            Id = id;
+            EquipmentName = name;
+            Description = description;
+            WidthControl = width;
+            BrowseCommand = new RelayCommand(Browse);
+            ShowImgCommand = new RelayCommand(ShowImage);
+            DeleteImgCommand = new RelayCommand(() => MyImageSource = null);
+            AddEquipmentCommand = new RelayCommand(async () => await AddChild());
+
+            Children = new ObservableCollection<EquipmentItemViewModel>();
+
+        }
+
+
+
         #endregion
 
         #region Public Methods
+        public void ShowImage()
+        {
+            ShowImageWindow imageWindow = new(MyImageSource);
+            imageWindow.ShowDialog();
+        }
         public async Task AddChild()
         {
             await AddChildFunc(this);
@@ -84,7 +114,19 @@ namespace MntPlus
             Children.Remove(child);
         }
 
-       
+        public void Browse()
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
+            
+           
+            if (dlg.ShowDialog() == true)
+            {
+                string selectedFilePath = dlg.FileName;
+                EquipmentImage = Path.GetFileName(selectedFilePath);
+                MyImageSource = new BitmapImage(new Uri(selectedFilePath));
+            }
+        }
         #endregion
     }
 }

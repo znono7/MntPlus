@@ -13,11 +13,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// Interaction logic for EquipmentControl.xaml
-    /// </summary>
+    /// </summary> 
     public partial class EquipmentListControl : UserControl
     {
         private Image mainImage;
@@ -62,6 +62,17 @@ namespace MntPlus
                 }
             }
             return null;
+        }
+
+        private void AddDescBtn_Click(object sender, RoutedEventArgs e)
+        {
+             
+            var myTextBox = FindVisualChild<TextBox>(this, "DescTxt");
+            if (myTextBox is TextBox)
+            {
+                myTextBox.Visibility = Visibility.Visible;
+                myTextBox.Focus();
+            }
         }
     }
 }

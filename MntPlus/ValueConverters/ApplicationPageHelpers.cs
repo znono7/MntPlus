@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// Converts the <see cref="ApplicationPage"/> to an actual view/page

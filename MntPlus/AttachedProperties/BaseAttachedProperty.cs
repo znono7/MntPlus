@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// A base attached property to replace the vanilla WPF attached property

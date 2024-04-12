@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class MainWindowViewModel : BaseViewModel
     {
@@ -154,7 +154,7 @@ namespace MntPlus
         public MainWindowViewModel(Window window)
         {
             mWindow = window; 
-
+             
             // Listen out for the window resizing
             mWindow.StateChanged += (sender, e) =>
             {

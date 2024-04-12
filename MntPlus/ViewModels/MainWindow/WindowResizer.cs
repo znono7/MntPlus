@@ -8,7 +8,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 { /// <summary>
   /// The dock position of the window
   /// </summary>

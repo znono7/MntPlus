@@ -52,11 +52,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="ViewModels\Menu\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Repository\Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Controls\EquipmentListControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

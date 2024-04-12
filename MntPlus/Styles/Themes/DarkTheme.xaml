@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="TertiaryBackgroundColor" Color="#1E1E1E"/>
     <SolidColorBrush x:Key="LineColor" Color="#444444"/>
     <SolidColorBrush x:Key="LineColor2" Color="#5D5D5D"/>
+    <SolidColorBrush x:Key="BackSubButtons" Color="#2A2247"/>
 
     <!-- System Colors -->
     <!-- Typograhy Colors -->

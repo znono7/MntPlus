@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public static class PageAnimations
     {
@@ -33,7 +33,7 @@ namespace MntPlus
             // Wait for it to finish
             await Task.Delay((int)(seconds * 1000));
         }
-
+         
         /// <summary>
         /// Slides a page out to the left
         /// </summary>

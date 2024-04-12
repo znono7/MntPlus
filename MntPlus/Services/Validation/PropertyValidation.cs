@@ -10,12 +10,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public abstract class PropertyValidation : BaseViewModel, IDataErrorInfo
     {
         #region Fields 
-
+         
         private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace MntPlus
         }
 
         #endregion
-
+         
         #region Change Notification
 
         /// <summary>

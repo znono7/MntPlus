@@ -8,7 +8,7 @@ using System.Windows.Data;
 using System.Windows.Media.Effects;
 using System.Windows.Media;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class DropShadowConverter : IValueConverter
     {

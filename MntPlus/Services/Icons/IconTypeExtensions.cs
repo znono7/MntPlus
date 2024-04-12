@@ -1,6 +1,6 @@
 ﻿
 
-namespace MntPlus { 
+namespace MntPlus.WPF { 
     /// <summary>
     /// Helper functions for <see cref="IconType"/>
     /// </summary>

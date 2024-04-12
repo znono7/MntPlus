@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public static class ThemesController
     {

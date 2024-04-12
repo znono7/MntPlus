@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public static class FrameworkElementAnimations
     {
@@ -113,6 +113,7 @@ namespace MntPlus
             // Make element invisible
             element.Visibility = Visibility.Hidden;
         }
+
 
         #endregion
 

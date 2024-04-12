@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="MntPlus.SideMenu"
+﻿<UserControl x:Class="MntPlus.WPF.SideMenu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MntPlus"
+             xmlns:local="clr-namespace:MntPlus.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="250">
     <Grid x:Name="gridMenu" Width="{Binding SideMenuWidth,UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -15,12 +15,12 @@
         </Grid.RowDefinitions>
         <Border Grid.RowSpan="4"  BorderThickness="0 0 1 0"  BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}" />
         <!-- Menu -->
-        <ToggleButton x:Name="btnMenu" IsChecked="{Binding IsMenuOpen, Mode=TwoWay}" Command="{Binding ToggleCommand}"  HorizontalAlignment="Right" BorderThickness="0" Background="Transparent" VerticalAlignment="Center" Style="{StaticResource MenuIconStyle}" Margin="0 0 15 0">
+        <ToggleButton x:Name="btnMenu" IsChecked="{Binding IsMenuOpen, Mode=TwoWay}"  HorizontalAlignment="Right" BorderThickness="0" Background="Transparent" VerticalAlignment="Center" Style="{StaticResource MenuIconStyle}" Margin="0 0 15 0">
             <ToggleButton.Triggers>
                 <EventTrigger RoutedEvent="ToggleButton.Unchecked">
                     <BeginStoryboard>
                         <Storyboard x:Name="HideStackPanel">
-                            <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="215" To="59" Duration="0:0:0.3">
+                            <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="250" To="69" Duration="0:0:0.3">
                             </DoubleAnimation>
                         </Storyboard>
                     </BeginStoryboard>
@@ -28,27 +28,34 @@
                 <EventTrigger RoutedEvent="ToggleButton.Checked">
                     <BeginStoryboard>
                         <Storyboard x:Name="ShowStackPanel">
-                            <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="59" To="215" Duration="0:0:0.3">
+                            <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="69" To="250" Duration="0:0:0.3">
                             </DoubleAnimation>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </ToggleButton.Triggers>
         </ToggleButton>
-        <StackPanel Grid.Row="2" >
+        <StackPanel Margin="5 0" Grid.Row="2" >
 
             <RadioButton Command="{Binding DashboardCommand}" GroupName="MyGroup" x:Name="rdHome"  Content="Tableau de Bord" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource home}" />
-            <RadioButton Click="rdPayment_Click" Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdPayment" Content="Gérer le Travail" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource headphones}" Margin="0 5 0 5" />
-            <Grid local:AnimateSlideInFromTopProperty.Value="{Binding TravailMenuEnabled,FallbackValue=true}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <RadioButton GroupName="MyGroup" Margin="15 5 5 5" x:Name="rdNotes" Content="Tâches Ouvertes" Command="{Binding OpenTaskCommand}" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource openTask}" />
-                <RadioButton Grid.Row="1" GroupName="MyGroup" Margin="15 5 5 5" x:Name="rdNotes2" Content="Tâches Terminées" Command="{Binding CompletedTasksCommand}" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource notes}" />
-                <RadioButton Grid.Row="2" GroupName="MyGroup" Margin="15 5 5 5" x:Name="rdNotes3" Content="Demande de Travail" Command="{Binding WorkReqeustCommand}" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource workReqeust}" />
-            </Grid>
+           
+               
+            <RadioButton  Click="rdPayment_Click" Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdPayment" Content="Gérer le Travail            " Style="{DynamicResource MenuRadioButtonStyle2}" Tag="{DynamicResource headphones}" Margin="0 5 0 0" />
+                 
+                        
+            <Grid  local:AnimateSlideInFromTopProperty.Value="{Binding TravailMenuEnabled,FallbackValue=false}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                <Border Background="{DynamicResource BackSubButtons}" Margin="1 -2 1 0" CornerRadius="0 0 8 8" Grid.RowSpan="3"/>
+                <RadioButton GroupName="MyGroup2" Margin="0 5 5 5" x:Name="rdNotes" Content="Tâches Ouvertes" Command="{Binding OpenTaskCommand}" Style="{DynamicResource SubVerticalMenuStyle}" Tag="{DynamicResource openTask}" />
+                <RadioButton Grid.Row="1" GroupName="MyGroup2" Margin="0 5 5 5" x:Name="rdNotes2" Content="Tâches Terminées" Command="{Binding CompletedTasksCommand}" Style="{DynamicResource SubVerticalMenuStyle}" Tag="{DynamicResource notes}" />
+                <RadioButton Grid.Row="2" GroupName="MyGroup2" Margin="0 5 5 5" x:Name="rdNotes3" Content="Demande de Travail" Command="{Binding WorkReqeustCommand}" Style="{DynamicResource SubVerticalMenuStyle}" Tag="{DynamicResource workReqeust}" />
+                    </Grid>
+                
+            
             <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" x:Name="rdSounds" Content="Équipements" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource payment}" Margin="0 5 0 5" />
         </StackPanel>
     </Grid>

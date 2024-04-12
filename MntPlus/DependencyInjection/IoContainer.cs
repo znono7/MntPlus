@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public static class IoContainer
     {
@@ -18,8 +18,12 @@ namespace MntPlus
         /// <summary>
         /// A shortcut to access the <see cref="ApplicationViewModel"/>
         /// </summary>
-        public static ApplicationViewModel Application => IoContainer.Get<ApplicationViewModel>();
+        public static ApplicationViewModel Application => Get<ApplicationViewModel>();
 
+        /// <summary>
+        /// A shortcut to access the <see cref="IUIManager"/>
+        /// </summary>
+        public static INotificationsManager NotificationsManager => Get<INotificationsManager>();
         #endregion
 
         #region Construction
@@ -54,6 +58,8 @@ namespace MntPlus
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+
+            Kernel.Bind<INotificationsManager>().ToConstant(new NotificationsManager()); 
         }
 
         #endregion

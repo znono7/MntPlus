@@ -1,6 +1,6 @@
 ﻿
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// The direction an animation slides in (the slide out direction is reversed)

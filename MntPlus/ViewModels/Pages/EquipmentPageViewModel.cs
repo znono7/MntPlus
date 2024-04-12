@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MntPlus.WPF;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     public class EquipmentPageViewModel : BaseViewModel
     {
@@ -15,7 +16,7 @@ namespace MntPlus
         public bool IsMenuOpen { get; set; }
         public bool IsMenu2Open { get; set; }
         public bool IsList { get; set; } = false;
-
+         
         #endregion
 
         #region Commands  
@@ -31,49 +32,50 @@ namespace MntPlus
             MenuCommand = new RelayCommand(() => IsMenuOpen = !IsMenuOpen);
             ImpExpCommand = new RelayCommand(() => IsMenu2Open = !IsMenu2Open);
             AddEquipmentCommand = new RelayCommand(AddEquipment);
-            EquipmentItems = new ObservableCollection<EquipmentItemViewModel>(ConvertToEquipmentItemViewModel(GetDataFromDatabase()));
-            OrganizeData(EquipmentItems);
-            //ToListCommand = new RelayCommand(() => 
-            //{
-            //    IsList = true;
-            //    GenerateDataWithoutChildren();
-            //} );
-            //TohierarchyCommand = new RelayCommand(() => 
-            //{
-            //    IsList = false;
-            //    GenerateDataWithChildren();
-            //} );
-            //GenerateDataWithChildren();
+            //EquipmentItems = new ObservableCollection<EquipmentItemViewModel>(ConvertToEquipmentItemViewModel(GetDataFromDatabase()));
+            //OrganizeData(EquipmentItems);
+            ToListCommand = new RelayCommand(() =>
+            {
+                IsList = true;
+                GenerateDataWithoutChildren();
+            });
+            TohierarchyCommand = new RelayCommand(() =>
+            {
+                IsList = false;
+                GenerateDataWithChildren();
+            });
+            GenerateDataWithChildren();
         }
-        private IEnumerable<Equipment> GetDataFromDatabase()
+        private IEnumerable<EquipmentItem> GetDataFromDatabase()
         {
             // Retrieve data from the database here
             // This is just a mock implementation for demonstration purposes
-            return new List<Equipment>
+            return new List<EquipmentItem>
         {
-            new Equipment { EquipmentId = "1", EquipmentName = "Equipment 1", EquipmentParent = null },
-            new Equipment { EquipmentId = "2", EquipmentName = "Equipment 2", EquipmentParent = null },
-            new Equipment { EquipmentId = "3", EquipmentName = "Sub Equipment 1", EquipmentParent = "1" },
-            new Equipment { EquipmentId = "4", EquipmentName = "Sub Equipment 2", EquipmentParent = "1" },
-            new Equipment { EquipmentId = "5", EquipmentName = "Sub Sub Equipment 1", EquipmentParent = "3" },
-            new Equipment { EquipmentId = "6", EquipmentName = "Equipment 3", EquipmentParent = null },
-            new Equipment { EquipmentId = "7", EquipmentName = "Equipment 4", EquipmentParent = null },
-            new Equipment { EquipmentId = "8", EquipmentName = "Equipment 5", EquipmentParent = null },
-            new Equipment { EquipmentId = "9", EquipmentName = "Equipment 6", EquipmentParent = null },
-            new Equipment { EquipmentId = "10", EquipmentName = "Equipment 7", EquipmentParent = null }
+            new EquipmentItem { EquipmentId = "1", EquipmentName = "Equipment 1", EquipmentParent = null },
+            new EquipmentItem { EquipmentId = "2", EquipmentName = "Equipment 2", EquipmentParent = null },
+            new EquipmentItem { EquipmentId = "3", EquipmentName = "Sub Equipment 1", EquipmentParent = "1" },
+            new EquipmentItem { EquipmentId = "4", EquipmentName = "Sub Equipment 2", EquipmentParent = "1" },
+            new EquipmentItem { EquipmentId = "5", EquipmentName = "Sub Sub Equipment 1", EquipmentParent = "3" },
+            new EquipmentItem { EquipmentId = "6", EquipmentName = "Equipment 3", EquipmentParent = null },
+            new EquipmentItem { EquipmentId = "7", EquipmentName = "Equipment 4", EquipmentParent = null },
+            new EquipmentItem { EquipmentId = "8", EquipmentName = "Equipment 5", EquipmentParent = null },
+            new EquipmentItem { EquipmentId = "9", EquipmentName = "Equipment 6", EquipmentParent = null },
+            new EquipmentItem { EquipmentId = "10", EquipmentName = "Equipment 7", EquipmentParent = null }
         };
         }
         private void AddEquipment()
         {
-            AddEquipmentViewModel model = new AddEquipmentViewModel();
+            //if ((new ConfirmationWindow("Equipment 7").ShowDialog() ?? false))
+           
+           
+           InitialEquipmentWindow window = new();
+            InitialEquipmentViewModel model = new();
             model.EquipmentAdded += (s, e) =>
             {
-                EquipmentItems.Add(new EquipmentItemViewModel(e.AddEquipment.EquipmentName,e.AddEquipment.EquipmentId));
+                EquipmentItems.Add(new EquipmentItemViewModel(e.AddEquipment.EquipmentName, e.AddEquipment.Id.ToString()));
             };
-            AddEquipmentWindow window = new AddEquipmentWindow
-            {
-                DataContext = model
-            };
+            window.DataContext = model;
             window.ShowDialog();
         }
 
@@ -81,9 +83,9 @@ namespace MntPlus
         {
             EquipmentItems = new ObservableCollection<EquipmentItemViewModel>()
             {
-                new EquipmentItemViewModel("Equipment 1", "1",image:"/img.png"),
-                new EquipmentItemViewModel("Equipment 2", "2"),
-                new EquipmentItemViewModel("Equipment 3", "3"),
+                new EquipmentItemViewModel(Guid.Empty,"Equipment 1", "1"),
+                new EquipmentItemViewModel(Guid.Empty,"Equipment 2", "2"),
+                new EquipmentItemViewModel(Guid.Empty,"Equipment 3", "3"),
             };
            
         }
@@ -109,40 +111,40 @@ namespace MntPlus
             
             EquipmentItems = new ObservableCollection<EquipmentItemViewModel>()
             {
-                new EquipmentItemViewModel("Equipment 1", "1",image:"/img.png"),
-                new EquipmentItemViewModel("Equipment 2", "2")
+                new EquipmentItemViewModel(Guid.Empty,"Equipment 1", "1"),
+                new EquipmentItemViewModel(Guid.Empty,"Equipment 2", "2")
                 {
                     Children = new ObservableCollection<EquipmentItemViewModel>()
                     {
-                        new EquipmentItemViewModel("Equipment 2.1", "2.1"),
-                        new EquipmentItemViewModel("Equipment 2.2", "2.2")
+                        new EquipmentItemViewModel(Guid.Empty,"Equipment 2.1", "2.1"),
+                        new EquipmentItemViewModel(Guid.Empty, "Equipment 2.2", "2.2")
                         {
                             Children = new ObservableCollection<EquipmentItemViewModel>()
                             {
-                                new EquipmentItemViewModel("Equipment 2.2.1", "2.2.1"),
-                                new EquipmentItemViewModel("Equipment 2.2.2", "2.2.2")
+                                new EquipmentItemViewModel(Guid.Empty, "Equipment 2.2.1", "2.2.1"),
+                                new EquipmentItemViewModel(Guid.Empty, "Equipment 2.2.2", "2.2.2")
                             }
                         }
                     }
                 },
-                new EquipmentItemViewModel("Equipment 3", "3")
+                new EquipmentItemViewModel(Guid.Empty, "Equipment 3", "3")
                 {
                     Children = new ObservableCollection<EquipmentItemViewModel>()
                     {
-                        new EquipmentItemViewModel("Equipment 3.1", "3.1"),
-                        new EquipmentItemViewModel("Equipment 3.2", "3.2")
+                        new EquipmentItemViewModel(Guid.Empty, "Equipment 3.1", "3.1"),
+                        new EquipmentItemViewModel(Guid.Empty, "Equipment 3.2", "3.2")
                         {
                             Children = new ObservableCollection<EquipmentItemViewModel>()
                             {
-                                new EquipmentItemViewModel("Equipment 3.2.1", "3.2.1"),
-                                new EquipmentItemViewModel("Equipment 3.2.2", "3.2.2")
+                                new EquipmentItemViewModel(Guid.Empty, "Equipment 3.2.1", "3.2.1"),
+                                new EquipmentItemViewModel( Guid.Empty,"Equipment 3.2.2", "3.2.2")
                             }
                         }
                     }
                 }
             };
 
-            IterateEquipmentItemsAndChildren(equipmentItems: EquipmentItems);
+           // IterateEquipmentItemsAndChildren(equipmentItems: EquipmentItems);
         }
         public double SetWidthControl( int level)
         {
@@ -197,7 +199,7 @@ namespace MntPlus
         }
 
         //from equipment to equipmentItemViewModel observable collection
-        private ObservableCollection<EquipmentItemViewModel> ConvertToEquipmentItemViewModel(IEnumerable<Equipment> equipment)
+        private ObservableCollection<EquipmentItemViewModel> ConvertToEquipmentItemViewModel(IEnumerable<EquipmentItem> equipment)
         {
             var equipmentItems = new ObservableCollection<EquipmentItemViewModel>();
             foreach (var e in equipment)

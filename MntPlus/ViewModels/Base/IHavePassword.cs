@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace MntPlus
+namespace MntPlus.WPF
 {
     /// <summary>
     /// An interface for a class that can provide a secure password

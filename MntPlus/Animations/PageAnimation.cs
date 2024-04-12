@@ -1,6 +1,6 @@
 ﻿
 
-namespace MntPlus
+namespace MntPlus.WPF
 { /// <summary>
   /// Styles of page animations for appearing/disappearing
   /// </summary>
