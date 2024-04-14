@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contracts
+namespace Entities
 {
-    public interface IRepositoryManager
+    public class Assignee
     {
-        IEquipmentRepository Equipment { get; } 
-
-       Task SaveAsync();
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+      
     }
 }

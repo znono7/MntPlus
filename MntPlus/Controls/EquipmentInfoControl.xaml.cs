@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MntPlus.WPF
 {
     /// <summary>
-    /// Interaction logic for AddEquipmentWindow.xaml
+    /// Interaction logic for EquipmentInfoControl.xaml
     /// </summary>
-    public partial class AddEquipmentWindow : Window
+    public partial class EquipmentInfoControl : UserControl
     {
-        public AddEquipmentWindow()
+        public EquipmentInfoControl()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }

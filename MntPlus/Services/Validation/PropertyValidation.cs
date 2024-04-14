@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace MntPlus.WPF
 {
     public abstract class PropertyValidation : BaseViewModel, IDataErrorInfo
-    {
+    { 
         #region Fields 
          
         private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
@@ -54,7 +54,7 @@ namespace MntPlus.WPF
             }
 
             _values[propertyName] = value;
-            OnPropertyChanged(propertyName);
+            OnPropertyValidChanged(propertyName);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace MntPlus.WPF
             }
 
             //Notify that things have changed
-            OnPropertyChanged("IsValid");
+            OnPropertyValidChanged("IsValid");
 
             //Return the actual result
             return error;
@@ -185,7 +185,7 @@ namespace MntPlus.WPF
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void OnPropertyValidChanged([CallerMemberName] string propertyName = null)
         {
             this.VerifyPropertyName(propertyName);
 

@@ -9,9 +9,9 @@
     <SolidColorBrush x:Key="LineColor2" Color="#B3B3B3"/>
     <SolidColorBrush x:Key="BackSubButtons" Color="#EFEBFD"/>
 
-    <!-- System Colors -->
+    <!-- System Colors --> 
     <!-- Typograhy Colors -->
-    <SolidColorBrush x:Key="PrimaryTextColor" Color="#000000"/>
+    <SolidColorBrush x:Key="PrimaryTextColor" Color="#000000"/> 
     <SolidColorBrush x:Key="PrimTextColor" Color="#000000"/>
     <SolidColorBrush x:Key="SecundaryTextColor" Color="#102341"/>
     <SolidColorBrush x:Key="TertiaryTextColor" Color="#1C3254"/>

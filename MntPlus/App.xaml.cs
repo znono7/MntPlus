@@ -20,8 +20,8 @@ namespace MntPlus.WPF
             // Show the main window
             //AddEquipmentWindow window = new AddEquipmentWindow();
             //window.DataContext = new AddEquipmentViewModel();
-           
-            Current.MainWindow = new MainWindow();
+
+            Current.MainWindow = /*new EquipmentDataWindow();*/ new MainWindow();
 
 
             Current.MainWindow.Show();
@@ -29,6 +29,7 @@ namespace MntPlus.WPF
 
         private void ApplicationSetup()
         {
+            AppServices.Setup();
             IoContainer.Setup();
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Department
+    public class EquipmentDepartment
     {
         public Guid Id { get; set; }
 

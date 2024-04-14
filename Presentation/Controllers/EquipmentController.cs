@@ -19,17 +19,17 @@ namespace Presentation
       
 
         [HttpGet]
-        public ActionResult GetEquipments()
-        {
-            var equipments = _service.EquipmentService.GetAllEquipments(false);
+        public async Task <ActionResult> GetEquipments()
+        { 
+            var equipments = await _service.EquipmentService.GetAllEquipmentsAsync(false);
                 return Ok(equipments);
            
         }
 
         [HttpGet("{id:guid}")]
-        public  ActionResult GetEquipment(Guid id)
+        public async Task <  ActionResult> GetEquipment(Guid id)
         {
-            var equipment = _service.EquipmentService.GetEquipment(id,false);
+            var equipment = await _service.EquipmentService.GetEquipmentAsync(id,false);
             if (equipment is null)
                 throw new EquipmentNotFoundException(id);
             return Ok(equipment);

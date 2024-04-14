@@ -1,4 +1,5 @@
 ﻿using MntPlus.WPF;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,8 @@ namespace MntPlus.WPF
     {
         #region Public Properties
         public ObservableCollection<EquipmentItemViewModel> EquipmentItems { get; set; }
+
+        public ObservableCollection<EquipmentDto> EquipmentDtos { get; set; }
         public bool IsMenuOpen { get; set; }
         public bool IsMenu2Open { get; set; }
         public bool IsList { get; set; } = false;
@@ -45,6 +48,11 @@ namespace MntPlus.WPF
                 GenerateDataWithChildren();
             });
             GenerateDataWithChildren();
+        }
+
+        public async Task GetEquipments()
+        {
+
         }
         private IEnumerable<EquipmentItem> GetDataFromDatabase()
         {
@@ -97,7 +105,7 @@ namespace MntPlus.WPF
             {
                 cmodel.Children.Add(new EquipmentItemViewModel(e.AddEquipment.EquipmentName,e.AddEquipment.EquipmentId));
             };
-            AddEquipmentWindow window = new AddEquipmentWindow
+            EquipmentDataWindow window = new EquipmentDataWindow
             {
                 DataContext = model
             };

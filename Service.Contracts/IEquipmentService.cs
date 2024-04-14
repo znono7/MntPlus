@@ -1,13 +1,14 @@
 ﻿using Entities;
-using Shared.DataTransferObjects;
+using Shared;
 
 namespace Service.Contracts
-{
+{ 
     public interface IEquipmentService
-    {
-        IEnumerable<EquipmentDto> GetAllEquipments(bool trackChanges);
-        EquipmentDto GetEquipment(Guid equipmentId, bool trackChanges);
-        EquipmentDto CreateEquipment(EquipmentForCreationDto equipment);
-
+    { 
+       // Task<IEnumerable<EquipmentDto?>?> GetAllEquipmentsAsync(bool trackChanges);
+        Task<ApiBaseResponse> GetAllEquipmentsAsync(bool trackChanges);
+        Task<EquipmentDto?> GetEquipmentAsync(Guid equipmentId, bool trackChanges);
+        //Task<EquipmentDto?> CreateEquipmentAsync(EquipmentForCreationDto equipment);
+        Task<ApiBaseResponse> CreateEquipmentAsync(EquipmentForCreationDto equipment);
     }
 }

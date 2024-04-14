@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MntPlus.WPF", "MntPlus.WPF.csproj", "{2CBAD0EA-0D55-418A-AC76-A9FBDC74802D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MntPlus.API", "..\MntPlus.API\MntPlus.API.csproj", "{1AB3467B-B9EC-475E-BC89-E61C349B1B68}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "..\Entities\Entities.csproj", "{0888FF4F-FF55-4267-90D2-E98F22E8E6ED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "..\Repository\Repository.csproj", "{C3EF2028-D7F5-4865-AB75-B5413B3345DD}"
@@ -21,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "..\Presenta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "..\LoggerService\LoggerService.csproj", "{42E072A8-4727-4B8F-836E-9F7549B89F5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "..\Shared\Shared.csproj", "{13A4311B-4714-4349-AB62-352B6769AE9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "..\Shared\Shared.csproj", "{13A4311B-4714-4349-AB62-352B6769AE9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MntPlus.API", "..\MntPlus.API\MntPlus.API.csproj", "{B7DB173F-B3C1-4C75-AA30-0262A3EDFAF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{2CBAD0EA-0D55-418A-AC76-A9FBDC74802D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CBAD0EA-0D55-418A-AC76-A9FBDC74802D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CBAD0EA-0D55-418A-AC76-A9FBDC74802D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AB3467B-B9EC-475E-BC89-E61C349B1B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AB3467B-B9EC-475E-BC89-E61C349B1B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AB3467B-B9EC-475E-BC89-E61C349B1B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AB3467B-B9EC-475E-BC89-E61C349B1B68}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0888FF4F-FF55-4267-90D2-E98F22E8E6ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0888FF4F-FF55-4267-90D2-E98F22E8E6ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0888FF4F-FF55-4267-90D2-E98F22E8E6ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{13A4311B-4714-4349-AB62-352B6769AE9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13A4311B-4714-4349-AB62-352B6769AE9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13A4311B-4714-4349-AB62-352B6769AE9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7DB173F-B3C1-4C75-AA30-0262A3EDFAF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7DB173F-B3C1-4C75-AA30-0262A3EDFAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7DB173F-B3C1-4C75-AA30-0262A3EDFAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7DB173F-B3C1-4C75-AA30-0262A3EDFAF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

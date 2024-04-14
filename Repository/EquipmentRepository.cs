@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,14 @@ namespace Repository
         public void CreateEquipment(Equipment equipment) => Create(equipment);
        
 
-        public IEnumerable<Equipment> GetAllEquipments(bool trackChanges) =>
-            FindAll(trackChanges)
+        public async Task<IEnumerable<Equipment>> GetAllEquipmentsAsync(bool trackChanges) =>
+           await FindAll(trackChanges)
             .OrderBy(c => c.EquipmentName)
-            .ToList();
+            .ToListAsync();
 
-        public Equipment? GetEquipment(Guid equipmentId, bool trackChanges) =>
-            FindByCondition(c => c.Id.Equals(equipmentId), trackChanges)
-            .SingleOrDefault();
+        public async Task<Equipment?> GetEquipmentAsync(Guid equipmentId, bool trackChanges) =>
+           await FindByCondition(c => c.Id.Equals(equipmentId), trackChanges)
+            .SingleOrDefaultAsync();
        
     }
 }

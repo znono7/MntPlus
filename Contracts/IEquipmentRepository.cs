@@ -9,8 +9,8 @@ namespace Contracts
 {
     public interface IEquipmentRepository
     { 
-        IEnumerable<Equipment> GetAllEquipments(bool trackChanges);
-        Equipment? GetEquipment(Guid equipmentId, bool trackChanges);
+        Task<IEnumerable<Equipment>> GetAllEquipmentsAsync(bool trackChanges);
+        Task<Equipment?> GetEquipmentAsync(Guid equipmentId, bool trackChanges);
         void CreateEquipment(Equipment equipment);
     }
 }

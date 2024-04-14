@@ -10,24 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MntPlus.WPF
 {
     /// <summary>
-    /// Interaction logic for EquipmentItemForList.xaml
+    /// Interaction logic for AddEquipmentWindow.xaml
     /// </summary>
-    public partial class EquipmentItemForList : UserControl
+    public partial class EquipmentDataWindow : Window
     {
-        public EquipmentItemForList()
+        public EquipmentDataWindow()
         {
             InitializeComponent();
+            DataContext = new EquipmentDataViewModel();
         }
 
-        private void AddDescBtn_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
     }
 }
