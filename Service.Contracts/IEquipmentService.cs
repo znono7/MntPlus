@@ -7,8 +7,12 @@ namespace Service.Contracts
     { 
        // Task<IEnumerable<EquipmentDto?>?> GetAllEquipmentsAsync(bool trackChanges);
         Task<ApiBaseResponse> GetAllEquipmentsAsync(bool trackChanges);
-        Task<EquipmentDto?> GetEquipmentAsync(Guid equipmentId, bool trackChanges);
+        Task<ApiBaseResponse> GetEquipmentAsync(Guid equipmentId, bool trackChanges);
         //Task<EquipmentDto?> CreateEquipmentAsync(EquipmentForCreationDto equipment);
         Task<ApiBaseResponse> CreateEquipmentAsync(EquipmentForCreationDto equipment);
+        //Task<EquipmentDto?> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipment);
+        //Task<ApiBaseResponse> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipment);
+        Task<ApiBaseResponse> DeleteEquipmentAsync(Guid equipmentId,bool trackChanges); 
+        Task<ApiBaseResponse> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipmentForUpdate, bool trackChanges);
     }
 }

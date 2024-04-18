@@ -19,56 +19,138 @@ namespace Service
 
         public async Task<ApiBaseResponse> CreateEquipmentAsync(EquipmentForCreationDto equipment)
         {
-            var equipmentEntity = MapToEquipmentEntity(equipment);
-            _repository.Equipment.CreateEquipment(equipmentEntity);
-            await _repository.SaveAsync();
-            var equipmentToReturn = MapToEquipmentDTO(equipmentEntity);
-            return new ApiOkResponse<EquipmentDto>(equipmentToReturn);  
+            try
+            {
+                var equipmentEntity = MapToEquipmentEntity(equipment);
+                _repository.Equipment.CreateEquipment(equipmentEntity);
+                await _repository.SaveAsync();
+                var equipmentToReturn = MapToEquipmentDTO(equipmentEntity);
+                return new ApiOkResponse<EquipmentDto>(equipmentToReturn);
+            }
+            catch (Exception ex)
+            {
+
+                return new EquipmentCreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ApiBaseResponse> GetAllEquipmentsAsync(bool trackChanges)
         {
-            var equipments = await _repository.Equipment.GetAllEquipmentsAsync(trackChanges);
-            if (equipments is null)
+            try
+            {
+                var equipments = await _repository.Equipment.GetAllEquipmentsAsync(trackChanges);
+                if (equipments is null)
+                {
+
+                    return new EquipmentListNotFoundResponse();
+                }
+                var equipmentsDto = equipments.Select(MapToEquipmentDTO).ToList();
+
+                return new ApiOkResponse<IEnumerable<EquipmentDto>>(equipmentsDto);
+            }
+            catch (Exception ex)
             {
 
-                return new EquipmentListNotFoundResponse();
+                return new EquipmentGetListErrorResponse(ex.Message);
             }
-            var equipmentsDto = equipments.Select(MapToEquipmentDTO).ToList();
-           
-            return new ApiOkResponse <IEnumerable<EquipmentDto>>(equipmentsDto);
         }
 
-        //public async Task<EquipmentDto?> CreateEquipmentAsync(EquipmentForCreationDto equipment)
-        //{
-        //    var equipmentEntity = MapToEquipmentEntity(equipment);
-        //     _repository.Equipment.CreateEquipment(equipmentEntity);
-        //    await _repository.SaveAsync();
-        //    var equipmentToReturn = MapToEquipmentDTO(equipmentEntity);
-        //    return equipmentToReturn;
-            
-        //}
+       
 
-        //public async Task< IEnumerable<EquipmentDto?>?> GetAllEquipmentsAsync(bool trackChanges)
-        //{
-            
-            
-        //        var equipments = await _repository.Equipment.GetAllEquipmentsAsync(trackChanges);
-        //        var equipmentsDto = equipments.Select(MapToEquipmentDTO).ToList();
-        //        return equipmentsDto;
-            
-           
-        //}
-
-        public async Task<EquipmentDto?> GetEquipmentAsync(Guid equipmentId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetEquipmentAsync(Guid equipmentId, bool trackChanges)
         {
-            var equipment = await _repository.Equipment.GetEquipmentAsync(equipmentId, trackChanges);
-            var equipmentDto = MapToEquipmentDTO(equipment);
-            return equipmentDto;
+            try
+            {
+                var equipment = await _repository.Equipment.GetEquipmentAsync(equipmentId, trackChanges);
+                if (equipment is null)
+                {
+                    return new EquipmentNotFoundResponse(equipmentId);
+                }
+                var equipmentDto = MapToEquipmentDTO(equipment);
+                return new ApiOkResponse<EquipmentDto>(equipmentDto);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return new EquipmentGetListErrorResponse(ex.Message);
+
+            }
+
+
+        }
+
+
+        public async Task<ApiBaseResponse> DeleteEquipmentAsync(Guid equipmentId, bool trackChanges)
+        {
+            try
+            {
+                var equipment = await _repository.Equipment.GetEquipmentAsync(equipmentId, trackChanges);
+                if (equipment is null)
+                {
+                    return new EquipmentNotFoundResponse(equipmentId);
+                }
+                _repository.Equipment.DeleteEquipment(equipment);
+                await _repository.SaveAsync();
+                return new ApiOkResponse<Equipment>(equipment);
+            }
+            catch (Exception)
+            {
+                return new EquipmentDeleteErrorResponse("");
+
+
+            }
             
         }
+
+        public async Task<ApiBaseResponse> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipmentForUpdate, bool trackChanges)
+        {
+            try
+            {
+                var equipmentEntity = await _repository.Equipment.GetEquipmentAsync(equipmentId, trackChanges);
+                if (equipmentEntity is null)
+                {
+                    return new EquipmentNotFoundResponse(equipmentId);
+                }
+                equipmentEntity = MapToEquipmentEntity(equipmentForUpdate);
+                await _repository.SaveAsync();
+                return new ApiOkResponse<Equipment>(equipmentEntity);
+            }
+            catch (Exception)
+            {
+                return new EquipmentDeleteErrorResponse("");
+            }
+
+        }
+
+
+
+
 
         #region Mapping
+        private Equipment? MapToEquipmentEntity(EquipmentForUpdateDto equipment)
+        {
+            return new Equipment
+            {
+                EquipmentName = equipment.EquipmentName,
+                EquipmentType = equipment.EquipmentType is null ? null : new EquipmentType { Id = equipment.EquipmentType.Id, EquipmentTypeName = equipment.EquipmentType.EquipmentTypeName },
+                EquipmentDescription = equipment.EquipmentDescription,
+                EquipmentOrganization = equipment.EquipmentOrganization is null ? null : new Organization { Id = equipment.EquipmentOrganization.Id, OrganizationName = equipment.EquipmentOrganization.OrganizationName },
+                EquipmentDepartment = equipment.EquipmentDepartment is null ? null : new EquipmentDepartment { Id = equipment.EquipmentDepartment.Id, DepartmentName = equipment.EquipmentDepartment.DepartmentName },
+                EquipmentClass = equipment.EquipmentClass is null ? null : new EquipmentClass { Id = equipment.EquipmentClass.Id, EquipmentClassName = equipment.EquipmentClass.ClassName },
+                EquipmentSite = equipment.EquipmentSite,
+                EquipmentStatus = equipment.EquipmentStatus is null ? null : new EquipmentStatus { Id = equipment.EquipmentStatus.Id, EquipmentStatusName = equipment.EquipmentStatus.StatusName },
+                EquipmentMake = equipment.EquipmentMake,
+                EquipmentSerialNumber = equipment.EquipmentSerialNumber,
+                EquipmentModel = equipment.EquipmentModel,
+                EquipmentCost = equipment.EquipmentCost,
+                EquipmentCommissionDate = equipment.EquipmentCommissionDate,
+                EquipmentAssignedTo = equipment.EquipmentAssignedTo is null ? null : new Assignee { Id = equipment.EquipmentAssignedTo.Id, Name = equipment.EquipmentAssignedTo.AssignedToName },
+                EquipmentNameImage = equipment.EquipmentNameImage,
+                EquipmentImage = equipment.EquipmentImage
+            };
+        }
         //from Equipment to EquipmentDto
         private EquipmentDto? MapToEquipmentDTO(Equipment? equipment)
         {
@@ -229,8 +311,6 @@ namespace Service
             }
             return null;
         }
-
-      
 
 
         #endregion

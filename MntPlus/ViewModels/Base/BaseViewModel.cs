@@ -60,5 +60,10 @@ namespace MntPlus.WPF
 
         #endregion
 
+
+        public virtual void Dispose()
+        {
+        }
+
     }
 }

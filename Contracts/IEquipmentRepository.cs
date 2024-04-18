@@ -12,5 +12,6 @@ namespace Contracts
         Task<IEnumerable<Equipment>> GetAllEquipmentsAsync(bool trackChanges);
         Task<Equipment?> GetEquipmentAsync(Guid equipmentId, bool trackChanges);
         void CreateEquipment(Equipment equipment);
+        void DeleteEquipment(Equipment equipment);
     }
 }

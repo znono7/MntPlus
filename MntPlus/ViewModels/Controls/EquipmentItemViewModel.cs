@@ -8,28 +8,25 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
+using Shared;
+using Entities;
 
 namespace MntPlus.WPF
 {
     public class EquipmentItemViewModel : BaseViewModel
     {
-        #region Public Properties
+        #region Public Properties  
 
         /// <summary>
         /// The display Description of Equipment
         /// </summary>
         public string EquipmentName { get; set; }
-        public string EquipmentId { get; set; }
-        public Guid Id { get; set; }
-        public string Description { get; set; }
-        public string? EquipmentParent { get; set; }
-        public string? EquipmentCategory { get; set; }
-        public string? EquipmentModel { get; set; }
-        public string? EquipmentMake { get; set; }
+        public string? Description { get; set; }
         public string? EquipmentImage { get; set; }
-         
+        public EquipmentDto Equipment { get; }
         public double WidthControl { get; set; }
 
+        public int ChildrenCount { get; set; }
         public bool IsHaveImage { get => MyImageSource != null; }
 
         public bool IsHaveChildren => Children.Count > 0;
@@ -55,43 +52,40 @@ namespace MntPlus.WPF
 
         #region Public Commands
         public ICommand AddEquipmentCommand { get; set; }
+        public ICommand RemoveEquipmentCommand { get; set; }
         public ICommand BrowseCommand { get; set; }
         public ICommand ShowImgCommand { get; set; }
         public ICommand DeleteImgCommand { get; set; }
 
 
         public Func<EquipmentItemViewModel, Task> AddChildFunc { get; set; }
+        public Func<EquipmentItemViewModel, Task> RemoveItemFunc { get; set; }
         public BitmapImage? MyImageSource { get; private set; }
         #endregion
 
         #region Constructor
-        //generate constructor with all properties
-        public EquipmentItemViewModel(string name, string id, string? parent = null, string? category = null, string? model = null, string? make = null, string? image = null, double width = 940)
+        
+        public EquipmentItemViewModel(EquipmentDto equipment, double width = 940)
         {
-            EquipmentName = name;
-            EquipmentId = id;
-            EquipmentParent = parent;
-            EquipmentCategory = category;
-            EquipmentModel = model;
-            EquipmentMake = make;
-            EquipmentImage = image;
-            WidthControl = width;
-            Children = new ObservableCollection<EquipmentItemViewModel>();
-            AddEquipmentCommand = new RelayCommand(async () => await AddChild());
-        }
-        public EquipmentItemViewModel(Guid id , string name , string description, double width = 940)
-        {
-            Id = id;
-            EquipmentName = name;
-            Description = description;
+            
+            EquipmentName = equipment.EquipmentName;
+            Description = equipment.EquipmentDescription;
+            EquipmentImage = equipment.EquipmentNameImage;
+            Equipment = equipment;
             WidthControl = width;
             BrowseCommand = new RelayCommand(Browse);
             ShowImgCommand = new RelayCommand(ShowImage);
             DeleteImgCommand = new RelayCommand(() => MyImageSource = null);
             AddEquipmentCommand = new RelayCommand(async () => await AddChild());
+            RemoveEquipmentCommand = new RelayCommand(async () => await Remove());
 
             Children = new ObservableCollection<EquipmentItemViewModel>();
 
+        }
+
+        private async Task Remove()
+        {
+            await RemoveItemFunc(this);
         }
 
 

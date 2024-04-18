@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,10 @@ namespace MntPlus.WPF
     public class EquipmentEventArgs : EventArgs
     {
         public Equipment? AddEquipment { get; set; }
-    } 
+    }
+    public class EquipmentDtoEventArgs : EventArgs
+    {
+        public EquipmentDto? AddEquipmentDto { get; set; }
+    }
+
 }

@@ -50,6 +50,25 @@ namespace Shared
          byte[]? EquipmentImage
    );
 
+    public record EquipmentForUpdateDto
+  (
+        string EquipmentName,
+        EquipmentTypeDto? EquipmentType,
+        string? EquipmentDescription,
+        EquipmentOrganizationDto? EquipmentOrganization,
+        EquipmentDepartmentDto? EquipmentDepartment,
+        EquipmentClassDto? EquipmentClass,
+        string? EquipmentSite,
+        EquipmentStatusDto? EquipmentStatus,
+        string? EquipmentMake,
+        string? EquipmentSerialNumber,
+        string? EquipmentModel,
+        double? EquipmentCost,
+        DateTime? EquipmentCommissionDate,
+        EquipmentAssignedToDto? EquipmentAssignedTo,
+        string? EquipmentNameImage,
+        byte[]? EquipmentImage
+  );
 
 
 

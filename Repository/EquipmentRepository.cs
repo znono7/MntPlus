@@ -17,7 +17,9 @@ namespace Repository
         }
 
         public void CreateEquipment(Equipment equipment) => Create(equipment);
-       
+
+        public void DeleteEquipment(Equipment equipment) => Delete(equipment);
+        
 
         public async Task<IEnumerable<Equipment>> GetAllEquipmentsAsync(bool trackChanges) =>
            await FindAll(trackChanges)

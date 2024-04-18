@@ -11,4 +11,9 @@ namespace Shared
         Guid Id,
         string EquipmentTypeName
     );
+
+    public record EquipmentTypeDtoCreate
+    (
+               string EquipmentTypeName
+           );
 } 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,15 @@ namespace MntPlus.WPF
 {
     public class EquipmentDataViewModel : BaseViewModel
     {
-        public string HeaderInfo { get; set; } = "\uf05a  Info";
+
+        public EquipmentInfoViewModel? EquipmentInfoViewModel { get; set; }
+        public EquipmentDto Equipment { get; set; }
+
+        public EquipmentDataViewModel(/*EquipmentDto equipment*/)
+        {
+           // Equipment = equipment;
+            EquipmentInfoViewModel = new EquipmentInfoViewModel(/*equipment*/);
+        }
     }
 }
  

@@ -11,5 +11,10 @@ namespace Shared
         Guid Id,
         string ClassName
         );
+
+    public record EquipmentClassForCreationDto
+        (
+               string ClassName
+               );
         
 }

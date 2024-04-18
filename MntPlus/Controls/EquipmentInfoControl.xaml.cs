@@ -23,6 +23,7 @@ namespace MntPlus.WPF
         public EquipmentInfoControl()
         {
             InitializeComponent();
+            DataContext = new EquipmentInfoViewModel();
         }
     }
 }

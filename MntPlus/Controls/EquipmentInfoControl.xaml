@@ -12,6 +12,15 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!-- Dimmed overlay -->
+        <Border Grid.RowSpan="3"
+          Panel.ZIndex="10"
+          Opacity="0.3">
+
+            <Border CornerRadius="7" Background="{StaticResource PrimaryBlackColor}"
+                    local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
+
+        </Border>
         <Grid >
             <Border  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -20,7 +29,7 @@
             </StackPanel>
         </Grid>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <Grid>
+            <Grid x:Name="MainGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="16" x:Name="space1"/>
@@ -63,9 +72,9 @@
                              DisplayMemberPath="EquipmentTypeName" SelectedValuePath="Id" SelectedItem="{Binding SelectedEquipmentType, UpdateSourceTrigger=PropertyChanged}"
                              Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0" Text="Nom de l'équipement" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox  Grid.Row="2" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0" Text="Description" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="4" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="540"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentDescription, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="540"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0" Text="Organisation" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                     <ComboBox  Margin="13 0"  IsEditable="False"  ItemsSource="{Binding Organizations}" 
@@ -97,7 +106,7 @@
                     </Button>
                 </StackPanel>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0" Text="Site" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="12" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox Grid.Row="12" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentSite, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0" Text="Statut" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <ComboBox Grid.Row="14" Grid.Column="1"  Margin="13 0 0 0"  IsEditable="False"  ItemsSource="{Binding EquipmentStatuses}" 
                             DisplayMemberPath="type" SelectedValuePath="Id" SelectedItem="{Binding SelectedEquipmentStatus, UpdateSourceTrigger=PropertyChanged}"
@@ -105,25 +114,29 @@
                 <Rectangle Grid.ColumnSpan="2" Height="1" Grid.Row="16" VerticalAlignment="Top" Fill="{DynamicResource LineColor}"/>
                 <TextBlock FontSize="16" Text="Détails de l'équipement" Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource TitleTextBlockStyle}"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0" Text="Fabrication" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="18" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox Grid.Row="18" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentMake, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="20" Grid.Column="0" Text="Numéro de série" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="20" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox Grid.Row="20" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentSerialNumber, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="26" Grid.Column="0" Text="Date de mise en service" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="26" Grid.Column="1">
-                    <TextBox  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                    <TextBox  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentCommissionDate, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                     <Button  Command="{Binding AddEquipmentCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource SecundaryBlueColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
 
                     </Button>
                 </StackPanel>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="24" Grid.Column="0" Text="Coût" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="24" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox Grid.Row="24" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentCost, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="22" Grid.Column="0" Text="Modèle" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="22" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox Grid.Row="22" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentModel, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="28" Grid.Column="0" Text="Assigné à" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="28" Grid.Column="1">
-                    <TextBox  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                    <TextBox x:Name="AssignText"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding SelectedAssignee.Name, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                     <Button  Command="{Binding AddEquipmentCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                        <Path  Width="12" Fill="{DynamicResource SecundaryBlueColor}" Stretch="Uniform" Data="{DynamicResource dots}"/>
+
+                    </Button>
+                    <Button  Command="{Binding AddAssigneeCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
 
                     </Button>
@@ -135,5 +148,23 @@
 
             </Grid>
         </ScrollViewer>
+        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding AssignPopup,FallbackValue=true}" Placement="Center" PlacementTarget="{Binding ElementName=MainGrid}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="AssignedPopup" HorizontalOffset="20" VerticalOffset="20">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="2"    Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+                <StackPanel Margin="10 50">
+                    <TextBlock FontSize="18" Text="Ajouter an assignateur" FontFamily="{StaticResource ClarityCity-SemiBold}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBlock Text="le Nom Complet" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBox x:Name="AddAssignText"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding AssigneeNameAdded, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="400"/>
+                </StackPanel>
+                <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" >
+                    <Button  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
+                    <Button Command="{Binding CloseAddAssigneeCommand}"  Foreground="{DynamicResource FourthTextColor}" Background="{DynamicResource TertiaryBackgroundColor}" Content="Annuler" Width="120" Style="{StaticResource CPrime2}"/>
+                </StackPanel>
+            </Grid>
+        </Popup>
     </Grid>
 </UserControl>

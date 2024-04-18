@@ -25,7 +25,7 @@
 
             </Grid.ColumnDefinitions>
             <TextBlock Text="Gérer les Équipements" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
-            <Button Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un équipement" Tag="{StaticResource plus}">
+            <Button Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un équipement" Tag="{StaticResource plus}">
                
             </Button>
             <!--<StackPanel  Grid.Column="3">
@@ -80,21 +80,79 @@
                        Color="LightSlateGray" Opacity="0.1" />
                 </Border.Effect>-->
             </Border>
-           
-                
-                <Grid>
+            <Grid Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true,FallbackValue=Hidden}" Grid.RowSpan="3" Panel.ZIndex="5" >
+                <Border   Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image 
+                            Opacity="0.5" ClipToBounds="True"
+                            Source="/Styles/Icons/setting-240.png" 
+                            Height="100"  Width="430" />
+                    <TextBlock HorizontalAlignment="Center" Text="C'est tellement vide ici." Style="{DynamicResource TitleTextBlockStyle}" Margin="0 10 0 0"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Cliquez sur le bouton ci-dessous pour commencer." Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 0 10"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un équipement" Tag="{StaticResource plus}"/>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+            <Image Grid.RowSpan="3" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True,FallbackValue=Hidden}" Width="100" Height="100" Panel.ZIndex="10" Source="/Styles/Icons/setting-240.png" >
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                        <Setter Property="RenderTransform">
+                            <Setter.Value>
+                                <RotateTransform></RotateTransform>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Resources>
+                            <Storyboard x:Key="Spin">
+                                <DoubleAnimation
+                                        Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                        From="0"
+                                        To="360"
+                                        Duration="0:0:2"
+                                        RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IsVisible}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Name="SpinStoryboard" Storyboard="{StaticResource Spin}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="SpinStoryboard" />
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </Image.Style>
+            </Image>
+
+            <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Margin="20" Style="{DynamicResource SearchTextBoxStyle}"/>
-                    <StackPanel Orientation="Horizontal" Grid.Column="2">
-                        <RadioButton Command="{Binding TohierarchyCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource hierarchy}"  Content="Hiérarchie" IsChecked="True" Margin="0 0 5 0"/>
-                        <RadioButton Command="{Binding ToListCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource list}"  Content="Liste" Margin="0 0 25 0" />
+                <!--#region NewRegion -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 1 20" Style="{DynamicResource SearchTextBoxStyle}"/>
+                    <Button Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
+                </Grid>
+                <!--#endregion-->
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                    <RadioButton Command="{Binding TohierarchyCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource hierarchy}"  Content="Hiérarchie" IsChecked="True"  Margin="0 0 5 0"/>
+                    <RadioButton Command="{Binding ToListCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource list}"  Content="Liste" Margin="0 0 25 0"  />
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Row="1" Height="42">
+            <Grid Visibility="{Binding IsHeaderVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
                     <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -114,19 +172,21 @@
                     <Rectangle Width="1"  Grid.Column="3" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
                     <TextBlock Text="Image de l'équipement"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
                 </Grid>
-            <ScrollViewer Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter}}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2">
+            <ScrollViewer Margin="5" Visibility="{Binding IsHierarchy,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2">
                 <Grid>
                     <TreeView Grid.Row="2" Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter}}"  ItemContainerStyle="{DynamicResource TreeViewItemContainerStyle1}" 
-                          ItemsSource="{Binding EquipmentItems}"   >
+                          ItemsSource="{Binding FilterEquipmentTreeViewItems}"   >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                 <local:EquipmentControl   />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
+                       
                     </TreeView>
                 </Grid>
             </ScrollViewer>
-            <ItemsControl Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="2" ItemsSource="{Binding EquipmentItems}">
+            <ScrollViewer Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ItemsControl  ItemsSource="{Binding FilterEquipmentItems}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <local:EquipmentListControl />
@@ -138,8 +198,9 @@
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
+            </ScrollViewer>
 
-            </Grid>
+        </Grid>
 
     </Grid>
 </local:BasePage>

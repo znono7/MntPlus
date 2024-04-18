@@ -11,5 +11,10 @@ namespace Shared
         Guid Id,
         string AssignedToName
         );
+
+    public record AssignedToForCreationDto
+        (
+               string AssignedToName
+               );
         
 }

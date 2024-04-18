@@ -20,7 +20,7 @@ namespace MntPlus.WPF
         public bool Confirmed { get; private set; }
         public string? EquipmentName { get; set; }
         public string? TitleWindow { get; set; }
-
+         
         public ConfirmationWindow(string? _EquipmentName)
         {
             InitializeComponent();

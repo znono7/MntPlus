@@ -89,7 +89,7 @@
                                 <TextBlock FontSize="10" Text="{Binding EquipmentImage,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
                             </Button>
 
-                            <Button Command="{Binding BrowseCommand}" Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Grid.Column="2" x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="32 4 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Button Cursor="Arrow" Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Grid.Column="2" x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="32 4 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <Path  Width="20" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource image}"/>
                                
                             </Button>
@@ -103,7 +103,7 @@
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
-                                    <Button Opacity="0" x:Name="DeleteBtn" Style="{DynamicResource IconPathButton}" Margin="0,0,5,0">
+                                <Button Command="{Binding RemoveEquipmentCommand}" Opacity="0" x:Name="DeleteBtn" Style="{DynamicResource IconPathButton}" Margin="0,0,5,0">
 
                                         <Path  Width="12" Fill="{DynamicResource SecundaryRedColor}" Stretch="Uniform" Data="{DynamicResource delete}"/>
                                     </Button>

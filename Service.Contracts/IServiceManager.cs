@@ -9,6 +9,12 @@ namespace Service.Contracts
     public interface IServiceManager
     {
         IEquipmentService EquipmentService { get; }
-       
+        IAssignorService AssignorService { get; }
+        IEquipmentDepartmentService EquipmentDepartmentService { get; }
+        IEquipmentClassService EquipmentClassService { get; }
+        IEquipmentOrganizationService EquipmentOrganizationService { get; }
+        IEquipmentStatusService EquipmentStatusService { get; }
+        IEquipmentTypeService EquipmentTypeService { get; }
+
     }
 }

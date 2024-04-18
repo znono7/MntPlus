@@ -21,7 +21,7 @@ namespace MntPlus.WPF
 
         public ICommand AddCommand { get; set; }
 
-        public event EventHandler<EquipmentEventArgs> EquipmentAdded;
+        public event EventHandler<EquipmentDtoEventArgs>? EquipmentAdded;
 
 
        
@@ -31,10 +31,13 @@ namespace MntPlus.WPF
 
         public bool IsBtnEnabled => !DimmableOverlayVisible;
 
-        public InitialEquipmentViewModel()
+        public Guid? Parent { get; set; }
+        private EquipmentStore _equipmentStore { get; set; }
+        public InitialEquipmentViewModel(EquipmentStore equipmentStore, Guid? parent = null)
         {
-            AddCommand = new RelayParameterizedCommand( (p) => AddEquipment(p));
-            
+            AddCommand = new RelayParameterizedCommand( async (p) => await AddEquipment(p));
+            _equipmentStore = equipmentStore;
+            Parent = parent;
         }
 
         private async Task AddEquipment(object? p)
@@ -45,16 +48,11 @@ namespace MntPlus.WPF
                 if (IsValid)
                 {
                     DimmableOverlayVisible = true;
-                    // Add the equipment
-                    //OnEquipmentAdded(new Equipment
-                    //{
-                    //    Id = Guid.NewGuid(),
-                    //    EquipmentName = EquipmentName
-                    //});
+                    
                     var response = await AppServices.ServiceManager.EquipmentService.CreateEquipmentAsync(new EquipmentForCreationDto
                     (
                         //Id : Guid.NewGuid(),
-                        EquipmentParent: null,
+                        EquipmentParent: Parent,
                         EquipmentName: EquipmentName,
                         EquipmentType: null,
                         EquipmentDescription: Description,
@@ -80,8 +78,10 @@ namespace MntPlus.WPF
                     if (response is ApiOkResponse<EquipmentDto> okResponse)
                     {
                         var Result = okResponse.Result;
+                        _equipmentStore.CreateEquipment(Result);
+                        //OnEquipmentAdded(Result);
                     }
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
                     DimmableOverlayVisible = false;
                     ClearValidation();
                     window.Close();
@@ -92,9 +92,9 @@ namespace MntPlus.WPF
             }
            
         }
-        public void OnEquipmentAdded(Equipment equipment)
+        public void OnEquipmentAdded(EquipmentDto? equipment)
         {
-            EquipmentAdded?.Invoke(this, new EquipmentEventArgs { AddEquipment = equipment });
+            EquipmentAdded?.Invoke(this, new EquipmentDtoEventArgs { AddEquipmentDto = equipment });
         }
     }
 }

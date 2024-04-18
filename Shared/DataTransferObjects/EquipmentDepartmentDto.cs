@@ -11,4 +11,9 @@ namespace Shared
         Guid Id,
         string DepartmentName
         );
+
+    public record EquipmentDepartmentCreateDto
+        (
+               string DepartmentName
+           );
 }

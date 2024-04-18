@@ -61,7 +61,7 @@
                                         <!-- Window Buttons -->
 
 
-                                        <Button Grid.Column="2" Click="Button_Click" Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton"/>
+                                        <Button Grid.Column="2" Click="Button_Click_1" Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton"/>
 
                                     </Grid>
                                     <!-- Page Content -->
