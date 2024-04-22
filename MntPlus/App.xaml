@@ -17,6 +17,8 @@
                 <ResourceDictionary Source="Styles/ToolTip.xaml" />
                 <ResourceDictionary Source="Styles/TabControl.xaml" />
                 <ResourceDictionary Source="Styles/ComboBox.xaml" />
+                <ResourceDictionary Source="Styles/Calendar.xaml" />
+                <ResourceDictionary Source="Styles/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

@@ -50,7 +50,7 @@ namespace Shared
          byte[]? EquipmentImage
    );
 
-    public record EquipmentForUpdateDto
+    public record EquipmentForUpdateDto 
   (
         string EquipmentName,
         EquipmentTypeDto? EquipmentType,
@@ -69,6 +69,12 @@ namespace Shared
         string? EquipmentNameImage,
         byte[]? EquipmentImage
   );
+
+    public record EquipmentForImageUpdateDto
+    (
+               string? EquipmentNameImage,
+                      byte[]? EquipmentImage
+           );
 
 
 

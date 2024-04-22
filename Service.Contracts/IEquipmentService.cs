@@ -14,5 +14,6 @@ namespace Service.Contracts
         //Task<ApiBaseResponse> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipment);
         Task<ApiBaseResponse> DeleteEquipmentAsync(Guid equipmentId,bool trackChanges); 
         Task<ApiBaseResponse> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipmentForUpdate, bool trackChanges);
+        Task<ApiBaseResponse> UpdateEquipmentImageAsync(Guid equipmentId, EquipmentForImageUpdateDto equipmentImage, bool trackChanges);
     }
 }

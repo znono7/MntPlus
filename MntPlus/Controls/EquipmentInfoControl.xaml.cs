@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,18 @@ namespace MntPlus.WPF
         public EquipmentInfoControl()
         {
             InitializeComponent();
-            DataContext = new EquipmentInfoViewModel();
+            
+        }
+
+        private void usersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (usersDataGrid.SelectedItem is not null)
+            {
+                var model = (EquipmentAssignedToDto)usersDataGrid.SelectedItem;
+                var viewModel = (EquipmentInfoViewModel)DataContext;
+                viewModel.SelectedAssignee = model;
+            }
+               
         }
     }
 }

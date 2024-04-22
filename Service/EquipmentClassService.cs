@@ -25,7 +25,7 @@ namespace Service
             try
             {
                 var equipmentClassEntity = new EquipmentClass
-                {
+                { 
                     EquipmentClassName = equipmentClass.ClassName,
                 };
                 _repository.EquipmentClass.CreateEquipmentClass(equipmentClassEntity);

@@ -14,6 +14,6 @@ namespace Shared
 
     public record EquipmentTypeDtoCreate
     (
-               string EquipmentTypeName
+               string EquipmentTypeName 
            );
 } 

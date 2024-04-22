@@ -74,7 +74,7 @@ namespace Service
                 if (assignors is null)
                 {
 
-                    return new AssignorListNotFoundResponse();
+                    return new AssignorListNotFoundResponse(); 
                 }
                 var assignorsDto = assignors.Select(item => new EquipmentAssignedToDto(item.Id,item.Name)).ToList();
 

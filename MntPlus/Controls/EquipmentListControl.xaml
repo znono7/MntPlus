@@ -34,7 +34,7 @@
 
                             <StackPanel Margin="5 10 0 0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <Path Margin="10,0,0,0" Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource box}"/>
-                                <Button Style="{StaticResource TextButton}" >
+                                <Button Command="{Binding ViewEquipmentCommand}" Style="{StaticResource TextButton}" >
                                     <TextBlock Text="{Binding EquipmentName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
                                 </Button>
                             </StackPanel>
@@ -92,7 +92,7 @@
                                     <Image x:Name="mainImage" Panel.ZIndex="1"  Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" 
                                             Source="{Binding MyImageSource,UpdateSourceTrigger=PropertyChanged}"  Stretch="Uniform" >
                                         
-                                        <Image.Triggers>
+                                        <!--<Image.Triggers>
                                             <EventTrigger RoutedEvent="MouseEnter">
                                                 <BeginStoryboard>
                                                     <Storyboard>
@@ -111,10 +111,10 @@
                                             </EventTrigger>
                                            
 
-                                        </Image.Triggers>
+                                        </Image.Triggers>-->
                                     </Image>
                                 </Border>
-                                <Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
+                                <!--<Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
                                     x:Name="editImg" Margin="15 15 0 0"  Command="{Binding BrowseCommand}"
                                           Tag="{StaticResource edit}" Opacity="0" Panel.ZIndex="1"
                                           Style="{DynamicResource PrimeIconButton}" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -122,12 +122,12 @@
                                 <Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
                                     Command="{Binding DeleteImgCommand}" x:Name="deleteImg" Margin="0 15 15 0 "  Opacity="0" Panel.ZIndex="1"
                                            Tag="{StaticResource close}" Foreground="{DynamicResource PrimaryRedColor}"
-                                           Style="{DynamicResource PrimeIconButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                           Style="{DynamicResource PrimeIconButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>-->
 
                                 <Button Cursor="Arrow" Visibility="{Binding IsHaveImage,Converter={local:BooleanToVisiblityConverter}}" Panel.ZIndex="2"  x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Path  Width="20" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource image}"/>
                                 </Button>
-                                <Grid.Triggers>
+                                <!--<Grid.Triggers>
                                     <EventTrigger RoutedEvent="MouseLeave">
                                         <BeginStoryboard>
                                             <Storyboard>
@@ -144,7 +144,7 @@
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </EventTrigger>
-                                </Grid.Triggers>
+                                </Grid.Triggers>-->
                             </Grid>
                             <!--<StackPanel Grid.Column="3" Margin="0 5 0 0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
 

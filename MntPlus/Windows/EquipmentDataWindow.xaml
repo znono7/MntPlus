@@ -15,10 +15,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.ColumnSpan="2" Style="{StaticResource TitleTextBlockStyle}" Text="{Binding Equipment}"/>
+            <TextBlock Margin="20 20 0 0" Grid.ColumnSpan="2" FontSize="17" Style="{StaticResource TitleTextBlockStyle}" Text="{Binding EquipmentName,FallbackValue=Test}"/>
             <Button Grid.Column="1" Click="Button_Click" Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton" HorizontalAlignment="Right"/>
             <Grid Margin="10" Grid.Row="1" >
                 <Border Background="{DynamicResource TertiaryBackgroundColor}" CornerRadius="12" />
@@ -26,12 +26,62 @@
                 <Grid Margin="10" VerticalAlignment="Top">
                     
                     <Border Background="{DynamicResource LineColor}" CornerRadius="12" Height="190" >
-                        <Image   Height="190"  Source="{Binding MyImageSource}" Stretch="Uniform"/>
+                        <Image Name="EquipImage"   Height="190"  Source="{Binding MyImageSource}" Stretch="Uniform" 
+                               Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}">
+                            <Image.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+
+                                            <DoubleAnimation To="1" 
+                                    Duration="0:0:0.4" 
+                                    Storyboard.TargetName="editImg"
+                                    Storyboard.TargetProperty="Opacity" />
+                                            <DoubleAnimation To="1" 
+                                             Duration="0:0:0.4" 
+                                             Storyboard.TargetName="deleteImg"
+                                             Storyboard.TargetProperty="Opacity" />
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+
+
+                            </Image.Triggers>
+                        </Image>
                     </Border>
-                    <Button Command="{Binding BrowseCommand}" Height="190" Width="190"  x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Visibility="{Binding IsHaveImage,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding BrowseCommand}" Height="190" Width="190"  x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Path  Width="24" Height="16" Fill="{DynamicResource FourthTextColor}" Stretch="Fill" Data="{DynamicResource image}"/>
                     </Button>
+                    <Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
+                            x:Name="editImg" Margin="15 15 0 0"  Command="{Binding BrowseCommand}"
+                               Tag="{StaticResource edit}" Opacity="0" Panel.ZIndex="1"
+                               Style="{DynamicResource PrimeIconButton}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                              MouseEnter="editImg_MouseEnter" MouseLeave="editImg_MouseLeave"/>
+                    <Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
+                             Command="{Binding DeleteImgCommand}" x:Name="deleteImg" Margin="0 15 15 0 "  Opacity="0" Panel.ZIndex="1"
+                                    Tag="{StaticResource close}" Foreground="{DynamicResource PrimaryRedColor}"
+                                    Style="{DynamicResource PrimeIconButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+
+                                    <DoubleAnimation To="0" 
+                                     Duration="0:0:0.4" 
+                                     Storyboard.TargetName="editImg"
+                                     Storyboard.TargetProperty="Opacity" />
+                                    <DoubleAnimation To="0" 
+                                              Duration="0:0:0.4" 
+                                              Storyboard.TargetName="deleteImg"
+                                              Storyboard.TargetProperty="Opacity" />
+
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
                 </Grid>
+                
             </Grid>
             <Grid Grid.Row="1" Grid.Column="1">
                 <TabControl Background="Transparent" Style="{StaticResource TabControlStyle}">
@@ -41,8 +91,8 @@
                                 <TextBlock FontFamily="{StaticResource FontAwesome2}" Text="&#xf05a; Info" FontSize="16"/>
                             </Grid>
                         </TabItem.Header>
-                       
-                        <local:EquipmentInfoControl/>
+
+                        <local:EquipmentInfoControl DataContext="{Binding EquipmentInfoViewModel}"/>
                     </TabItem>
                     <TabItem  Style="{StaticResource TabItemStyle2}">
                         <TabItem.Header>
@@ -52,14 +102,14 @@
                             </StackPanel>
                         </TabItem.Header>
                     </TabItem>
-                    <TabItem  Style="{StaticResource TabItemStyle2}">
+                    <!--<TabItem  Style="{StaticResource TabItemStyle2}">
                         <TabItem.Header>
                             <StackPanel Cursor="Hand" Orientation="Horizontal">
                                 <Path Data="{StaticResource parts}" Stretch="Fill" Fill="{DynamicResource FourthTextColor}" Width="16" Height="16"/>
                                 <TextBlock Margin="2 0" FontFamily="{StaticResource FontAwesome2}" Text="Pièces" FontSize="16"/>
                             </StackPanel>
                         </TabItem.Header>
-                    </TabItem>
+                    </TabItem>-->
                 </TabControl>
             </Grid>
         </Grid>

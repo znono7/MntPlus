@@ -19,12 +19,14 @@
 
             <Border CornerRadius="7" Background="{StaticResource PrimaryBlackColor}"
                     local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
-
+            <Border.InputBindings>
+     <MouseBinding MouseAction="LeftClick"  Command="{Binding PopupClickawayCommand}" />
+            </Border.InputBindings>
         </Border>
         <Grid >
             <Border  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Margin="20 0" Style="{StaticResource CPrimeButton}" Content="Enregistrer les Modifications"/>
+                <Button Command="{Binding UpdateCommand}" Margin="20 0" Style="{StaticResource CPrimeButton}" Content="Enregistrer les Modifications"/>
                 <Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />
             </StackPanel>
         </Grid>
@@ -76,31 +78,31 @@
                 <TextBlock HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0" Text="Description" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <TextBox Grid.Row="4" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentDescription, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="540"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0" Text="Organisation" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+                <StackPanel x:Name="OrganText" Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                     <ComboBox  Margin="13 0"  IsEditable="False"  ItemsSource="{Binding Organizations}" 
-                                 DisplayMemberPath="type" SelectedValuePath="Id" SelectedItem="{Binding SelectedOrganization, UpdateSourceTrigger=PropertyChanged}"
+                                 DisplayMemberPath="OrganizationName" SelectedValuePath="Id" SelectedItem="{Binding SelectedOrganization, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
-                    <Button  Command="{Binding AddEquipmentCommand}"  x:Name="AddBtn" Style="{DynamicResource IconPathButton}" Margin="0">
+                    <Button  Command="{Binding ShowOrganizationCommand}"  x:Name="AddBtn" Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
                        
                     </Button>
                 </StackPanel>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0" Text="Département" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
+                <StackPanel x:Name="DepText" Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
                     <ComboBox  Margin="13 0"  IsEditable="False"  ItemsSource="{Binding Departments}" 
-                  DisplayMemberPath="type" SelectedValuePath="Id" SelectedItem="{Binding SelectedDepartment, UpdateSourceTrigger=PropertyChanged}"
+                  DisplayMemberPath="DepartmentName" SelectedValuePath="Id" SelectedItem="{Binding SelectedDepartment, UpdateSourceTrigger=PropertyChanged}"
                   Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
-                    <Button  Command="{Binding AddEquipmentCommand}"  Style="{DynamicResource IconPathButton}" Margin="0">
+                    <Button  Command="{Binding AddDepartementCommand}"  Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
                         
                     </Button>
                 </StackPanel>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0" Text="Classe" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
+                <StackPanel x:Name="ClassText" Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
                     <ComboBox  Margin="13 0"  IsEditable="False"  ItemsSource="{Binding EquipmentClasses}" 
-                               DisplayMemberPath="type" SelectedValuePath="Id" SelectedItem="{Binding SelectedEquipmentClass, UpdateSourceTrigger=PropertyChanged}"
+                               DisplayMemberPath="ClassName" SelectedValuePath="Id" SelectedItem="{Binding SelectedEquipmentClass, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
-                    <Button  Command="{Binding AddEquipmentCommand}"  Style="{DynamicResource IconPathButton}" Margin="0">
+                    <Button  Command="{Binding AddClassCommand}"  Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
                        
                     </Button>
@@ -119,36 +121,29 @@
                 <TextBox Grid.Row="20" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentSerialNumber, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="26" Grid.Column="0" Text="Date de mise en service" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="26" Grid.Column="1">
-                    <TextBox  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentCommissionDate, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
-                    <Button  Command="{Binding AddEquipmentCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                    <TextBox x:Name="CommissionDate"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentCommissionDate, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                    <Button  Command="{Binding CommissionDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource SecundaryBlueColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
 
                     </Button>
                 </StackPanel>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="24" Grid.Column="0" Text="Coût" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="24" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentCost, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                <TextBox Grid.Row="24" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentCost, UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="22" Grid.Column="0" Text="Modèle" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <TextBox Grid.Row="22" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding EquipmentModel, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="28" Grid.Column="0" Text="Assigné à" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="28" Grid.Column="1">
                     <TextBox x:Name="AssignText"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding SelectedAssignee.Name, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
-                    <Button  Command="{Binding AddEquipmentCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                    <Button  Command="{Binding OpenSettingAnAssignor}"   Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource SecundaryBlueColor}" Stretch="Uniform" Data="{DynamicResource dots}"/>
-
                     </Button>
                     <Button  Command="{Binding AddAssigneeCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
-
                     </Button>
                 </StackPanel>
-
-
-
-
-
             </Grid>
         </ScrollViewer>
-        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding AssignPopup,FallbackValue=true}" Placement="Center" PlacementTarget="{Binding ElementName=MainGrid}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="AssignedPopup" HorizontalOffset="20" VerticalOffset="20">
+        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding AssignPopup}" Placement="Center" PlacementTarget="{Binding ElementName=MainGrid}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="AssignedPopup" HorizontalOffset="20" VerticalOffset="20">
             <Grid Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -161,9 +156,121 @@
                     <TextBox x:Name="AddAssignText"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding AssigneeNameAdded, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="400"/>
                 </StackPanel>
                 <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" >
-                    <Button  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
+                    <Button Command="{Binding SaveNewAssigneeCommand}"  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
                     <Button Command="{Binding CloseAddAssigneeCommand}"  Foreground="{DynamicResource FourthTextColor}" Background="{DynamicResource TertiaryBackgroundColor}" Content="Annuler" Width="120" Style="{StaticResource CPrime2}"/>
                 </StackPanel>
+            </Grid>
+        </Popup>
+        <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding DatePopup}" Placement="Top" PlacementTarget="{Binding ElementName=CommissionDate}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="CalendarPopup">
+            <Grid >
+                
+                <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                       SelectedDate="{Binding EquipmentCommissionDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+        </Popup>
+
+        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding OrganisationPopup}" Placement="Top" PlacementTarget="{Binding ElementName=OrganText}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="OrganisationPopup" >
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="2"    Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+                <StackPanel Margin="10 50">
+                    <TextBlock FontSize="18" Text="Ajouter an Organisation" FontFamily="{StaticResource ClarityCity-SemiBold}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBlock Text="le Nom Complet" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBox x:Name="AddOrganisationText"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding OrganizationAdded, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="400"/>
+                </StackPanel>
+                <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" >
+                    <Button Command="{Binding SaveNewOrganizationCommand}"  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
+                    <Button Command="{Binding CloseOrganizationCommand}"  Foreground="{DynamicResource FourthTextColor}" Background="{DynamicResource TertiaryBackgroundColor}" Content="Annuler" Width="120" Style="{StaticResource CPrime2}"/>
+                </StackPanel>
+            </Grid>
+        </Popup>
+
+        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding DepartmentPopup}" Placement="Top" PlacementTarget="{Binding ElementName=DepText}"  PopupAnimation="Fade" AllowsTransparency="True"  x:Name="DepartementPopup">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="2"    Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+                <StackPanel Margin="10 50">
+                    <TextBlock FontSize="18" Text="Ajouter an Département" FontFamily="{StaticResource ClarityCity-SemiBold}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBlock Text="le Nom Complet" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBox   Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding DepartementAdded, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="400"/>
+                </StackPanel>
+                <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" >
+                    <Button Command="{Binding SaveNewDepartementCommand}"  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
+                    <Button Command="{Binding CloseDepartementCommand}"  Foreground="{DynamicResource FourthTextColor}" Background="{DynamicResource TertiaryBackgroundColor}" Content="Annuler" Width="120" Style="{StaticResource CPrime2}"/>
+                </StackPanel>
+            </Grid>
+        </Popup>
+
+        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding ClassPopup}" Placement="Top" PlacementTarget="{Binding ElementName=ClassText}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="ClassPopup" >
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="2"    Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+                <StackPanel Margin="10 50">
+                    <TextBlock FontSize="18" Text="Ajouter an Classe" FontFamily="{StaticResource ClarityCity-SemiBold}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBlock Text="le Nom Complet" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                    <TextBox   Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding ClassAdded, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="400"/>
+                </StackPanel>
+                <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" >
+                    <Button Command="{Binding SaveNewClassCommand}"  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
+                    <Button Command="{Binding CloseClassCommand}"  Foreground="{DynamicResource FourthTextColor}" Background="{DynamicResource TertiaryBackgroundColor}" Content="Annuler" Width="120" Style="{StaticResource CPrime2}"/>
+                </StackPanel>
+            </Grid>
+        </Popup>
+
+        <Popup Panel.ZIndex="11" Height="320" Width="500" StaysOpen="True" IsOpen="{Binding SetAssignPopup}" Placement="Center" PlacementTarget="{Binding ElementName=MainGrid}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="SetAssignPopup" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="3"    Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+                <TextBlock FontSize="18" Text="Définir un assignateur" FontFamily="{StaticResource ClarityCity-SemiBold}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                <ScrollViewer Grid.Row="1"  VerticalScrollBarVisibility="Auto"  >
+                    <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
+                                 ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                                 CellStyle="{DynamicResource DataGridCellStyle1}"
+                                 x:Name="usersDataGrid" 
+                                 Style="{DynamicResource DataGridStyle1}"
+                                 Margin="0 10"  
+                                 ItemsSource="{Binding Assignees}" 
+                                 AutoGenerateColumns="False"
+                                  SelectionMode="Single"
+                               SelectionChanged ="usersDataGrid_SelectionChanged" >
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn CanUserResize="False"  Width="*" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="TypeTxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding AssignedToName}" Text="{Binding AssignedToName,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBlockStyle}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+                <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="2" >
+                    <Button Command="{Binding SetAnAssignorCommand}"  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>
+                    <Button  Command="{Binding CloseSettingAnAssignor}"  Foreground="{DynamicResource FourthTextColor}" Background="{DynamicResource TertiaryBackgroundColor}" Content="Annuler" Width="120" Style="{StaticResource CPrime2}"/>
+                </StackPanel>
+
             </Grid>
         </Popup>
     </Grid>

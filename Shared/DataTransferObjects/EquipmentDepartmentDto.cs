@@ -12,7 +12,7 @@ namespace Shared
         string DepartmentName
         );
 
-    public record EquipmentDepartmentCreateDto
+    public record EquipmentDepartmentCreateDto 
         (
                string DepartmentName
            );

@@ -17,6 +17,6 @@ namespace Contracts
         IEquipmentStatusRepository EquipmentStatus { get; }
         IEquipmentTypeRepository EquipmentType { get; }
 
-       Task SaveAsync();
+       Task SaveAsync(); 
     }
 }

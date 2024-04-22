@@ -12,7 +12,7 @@ namespace MntPlus.WPF
     {
         /// <summary>
         /// The service collection for our IoC container
-        /// </summary>
+        /// </summary> 
         public static IServiceCollection ServiceCollection { get; private set; } = new ServiceCollection();
 
         /// <summary>

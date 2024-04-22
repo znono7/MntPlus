@@ -19,15 +19,25 @@ namespace MntPlus.WPF
     /// </summary>
     public partial class EquipmentDataWindow : Window
     {
-        public EquipmentDataWindow()
+        public EquipmentDataWindow(EquipmentDataViewModel model)
         {
             InitializeComponent();
-            DataContext = new EquipmentDataViewModel();
+            DataContext = model;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void editImg_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void editImg_MouseLeave(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

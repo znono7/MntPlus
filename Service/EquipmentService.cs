@@ -106,14 +106,35 @@ namespace Service
 
         public async Task<ApiBaseResponse> UpdateEquipmentAsync(Guid equipmentId, EquipmentForUpdateDto equipmentForUpdate, bool trackChanges)
         {
-            try
+            try  
             {
                 var equipmentEntity = await _repository.Equipment.GetEquipmentAsync(equipmentId, trackChanges);
                 if (equipmentEntity is null)
                 {
                     return new EquipmentNotFoundResponse(equipmentId);
                 }
-                equipmentEntity = MapToEquipmentEntity(equipmentForUpdate);
+                equipmentEntity = MapToEquipmentUpdateEntity(equipmentForUpdate, equipmentEntity);
+                await _repository.SaveAsync();
+                return new ApiOkResponse<Equipment>(equipmentEntity);
+            }
+            catch (Exception) 
+            {
+                return new EquipmentDeleteErrorResponse("");
+            }
+
+        }
+
+        public async Task<ApiBaseResponse> UpdateEquipmentImageAsync(Guid equipmentId, EquipmentForImageUpdateDto equipmentImage, bool trackChanges)
+        {
+            try
+            {
+                var equipmentEntity = await _repository.Equipment.GetEquipmentAsync(equipmentId, trackChanges);
+                if (equipmentEntity is null)
+                {
+                    return new EquipmentNotFoundResponse(equipmentId); 
+                }
+                equipmentEntity.EquipmentImage = equipmentImage.EquipmentImage;
+                equipmentEntity.EquipmentNameImage = equipmentImage.EquipmentNameImage;
                 await _repository.SaveAsync();
                 return new ApiOkResponse<Equipment>(equipmentEntity);
             }
@@ -121,35 +142,32 @@ namespace Service
             {
                 return new EquipmentDeleteErrorResponse("");
             }
-
         }
 
 
 
-
-
         #region Mapping
-        private Equipment? MapToEquipmentEntity(EquipmentForUpdateDto equipment)
+        private Equipment? MapToEquipmentUpdateEntity(EquipmentForUpdateDto equipment , Equipment entity)
         {
-            return new Equipment
-            {
-                EquipmentName = equipment.EquipmentName,
-                EquipmentType = equipment.EquipmentType is null ? null : new EquipmentType { Id = equipment.EquipmentType.Id, EquipmentTypeName = equipment.EquipmentType.EquipmentTypeName },
-                EquipmentDescription = equipment.EquipmentDescription,
-                EquipmentOrganization = equipment.EquipmentOrganization is null ? null : new Organization { Id = equipment.EquipmentOrganization.Id, OrganizationName = equipment.EquipmentOrganization.OrganizationName },
-                EquipmentDepartment = equipment.EquipmentDepartment is null ? null : new EquipmentDepartment { Id = equipment.EquipmentDepartment.Id, DepartmentName = equipment.EquipmentDepartment.DepartmentName },
-                EquipmentClass = equipment.EquipmentClass is null ? null : new EquipmentClass { Id = equipment.EquipmentClass.Id, EquipmentClassName = equipment.EquipmentClass.ClassName },
-                EquipmentSite = equipment.EquipmentSite,
-                EquipmentStatus = equipment.EquipmentStatus is null ? null : new EquipmentStatus { Id = equipment.EquipmentStatus.Id, EquipmentStatusName = equipment.EquipmentStatus.StatusName },
-                EquipmentMake = equipment.EquipmentMake,
-                EquipmentSerialNumber = equipment.EquipmentSerialNumber,
-                EquipmentModel = equipment.EquipmentModel,
-                EquipmentCost = equipment.EquipmentCost,
-                EquipmentCommissionDate = equipment.EquipmentCommissionDate,
-                EquipmentAssignedTo = equipment.EquipmentAssignedTo is null ? null : new Assignee { Id = equipment.EquipmentAssignedTo.Id, Name = equipment.EquipmentAssignedTo.AssignedToName },
-                EquipmentNameImage = equipment.EquipmentNameImage,
-                EquipmentImage = equipment.EquipmentImage
-            };
+           
+            entity.EquipmentName = equipment.EquipmentName;
+            entity.EquipmentType = equipment.EquipmentType is null ? null : new EquipmentType { Id = equipment.EquipmentType.Id, EquipmentTypeName = equipment.EquipmentType.EquipmentTypeName };
+            entity.EquipmentDescription = equipment.EquipmentDescription;
+            entity.EquipmentOrganization = equipment.EquipmentOrganization is null ? null : new Organization { Id = equipment.EquipmentOrganization.Id, OrganizationName = equipment.EquipmentOrganization.OrganizationName };
+                entity.EquipmentDepartment = equipment.EquipmentDepartment is null ? null : new EquipmentDepartment { Id = equipment.EquipmentDepartment.Id, DepartmentName = equipment.EquipmentDepartment.DepartmentName };
+            entity.EquipmentClass = equipment.EquipmentClass is null ? null : new EquipmentClass { Id = equipment.EquipmentClass.Id, EquipmentClassName = equipment.EquipmentClass.ClassName };
+                entity.EquipmentSite = equipment.EquipmentSite;
+            entity.EquipmentStatus = equipment.EquipmentStatus is null ? null : new EquipmentStatus { Id = equipment.EquipmentStatus.Id, EquipmentStatusName = equipment.EquipmentStatus.StatusName };
+                entity.EquipmentMake = equipment.EquipmentMake;
+                entity.EquipmentSerialNumber = equipment.EquipmentSerialNumber;
+                entity.EquipmentModel = equipment.EquipmentModel;
+                entity.EquipmentCost = equipment.EquipmentCost;
+                entity.EquipmentCommissionDate = equipment.EquipmentCommissionDate;
+            entity.EquipmentAssignedTo = equipment.EquipmentAssignedTo is null ? null : new Assignee { Id = equipment.EquipmentAssignedTo.Id, Name = equipment.EquipmentAssignedTo.AssignedToName };
+                entity.EquipmentNameImage = equipment.EquipmentNameImage;
+                entity.EquipmentImage = equipment.EquipmentImage;
+            return entity;
+            
         }
         //from Equipment to EquipmentDto
         private EquipmentDto? MapToEquipmentDTO(Equipment? equipment)
@@ -311,6 +329,8 @@ namespace Service
             }
             return null;
         }
+
+       
 
 
         #endregion

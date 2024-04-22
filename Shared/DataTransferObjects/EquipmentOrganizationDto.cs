@@ -11,7 +11,7 @@ namespace Shared
         Guid Id,
         string OrganizationName
         );
-
+     
     public record EquipmentOrganizationCreateDto
         (
                string OrganizationName

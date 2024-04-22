@@ -126,6 +126,7 @@ namespace MntPlus.WPF
             AddEquipmentCommand = new RelayCommand(AddEquipment);
             _equipmentStore = new EquipmentStore();
             _equipmentStore.EquipmentCreated += OnEquipmentCreated;
+            _equipmentStore.EquipmentUpdated += OnEquipmentUpdated;
             //EquipmentListItems = new ObservableCollection<EquipmentItemViewModel>();
             ToListCommand = new RelayCommand(() =>
             {
@@ -152,6 +153,55 @@ namespace MntPlus.WPF
             }
 
 
+        }
+
+        private void OnEquipmentUpdated(EquipmentDto? dto)
+        {
+            if(IsList)
+            {
+                EquipmentItemViewModel? item = EquipmentListItems.FirstOrDefault(e => e.Equipment.Id == dto.Id);
+                
+                EquipmentItemViewModel? itemF = FilterEquipmentItems.FirstOrDefault(e => e.Equipment.Id == dto.Id);
+                if (item is not null)
+                {
+                    //int indexItem = EquipmentListItems.IndexOf(item);
+                    item.Equipment = dto;
+                    item.EquipmentName = dto.EquipmentName;
+                    item.Description = dto.EquipmentDescription;
+                    item.EquipmentImage = dto.EquipmentNameImage;
+                }
+                if (itemF is not null)
+                {
+                    itemF.Equipment = dto;
+                    itemF.EquipmentName = dto.EquipmentName;
+                    itemF.Description = dto.EquipmentDescription;
+                    itemF.EquipmentImage = dto.EquipmentNameImage;
+                    //int indexItemF = FilterEquipmentItems.IndexOf(itemF);
+                }
+            }
+            else if(IsHierarchy)
+            {
+                EquipmentItemViewModel? item = EquipmentTreeViewItems.FirstOrDefault(e => e.Equipment.Id == dto.Id);
+                EquipmentItemViewModel? itemF = FilterEquipmentTreeViewItems.FirstOrDefault(e => e.Equipment.Id == dto.Id);
+                if (item is not null)
+                {
+                    item.Equipment = dto;
+                    item.EquipmentName = dto.EquipmentName;
+                    item.Description = dto.EquipmentDescription;
+                    item.EquipmentImage = dto.EquipmentNameImage;
+                }
+                if (itemF is not null)
+                {
+                    itemF.Equipment = dto;
+                    itemF.EquipmentName = dto.EquipmentName;
+                    itemF.Description = dto.EquipmentDescription;
+                    itemF.EquipmentImage = dto.EquipmentNameImage;
+                }
+            }
+           
+
+
+            
         }
 
         private void Search()
@@ -191,13 +241,13 @@ namespace MntPlus.WPF
 
                     return;
                 }
-                FilterEquipmentTreeViewItems = new ObservableCollection<EquipmentItemViewModel>( SearchItems(EquipmentTreeViewItems, SearchText));
+                FilterEquipmentTreeViewItems = new ObservableCollection<EquipmentItemViewModel>(SearchItems(EquipmentTreeViewItems, SearchText));
                 // Set last search text
                 mLastSearchText = SearchText;
             }
         }
 
-        private void OnEquipmentCreated(EquipmentDto newEquipment)
+        private void OnEquipmentCreated(EquipmentDto? newEquipment)
         {
             // Update the tree view
             var newItemViewModel = new EquipmentItemViewModel(newEquipment);
@@ -206,6 +256,7 @@ namespace MntPlus.WPF
             var parentViewModel = FindParentViewModel(newEquipment.EquipmentParent);
             newItemViewModel.AddChildFunc = AddNewChild;
             newItemViewModel.RemoveItemFunc = RemoveItem;
+            newItemViewModel.ViewFunc = ViewItem;
 
             if (parentViewModel != null)
                 {
@@ -214,9 +265,11 @@ namespace MntPlus.WPF
                 else
                 {
                     EquipmentTreeViewItems.Add(newItemViewModel);
+                FilterEquipmentTreeViewItems.Add(newItemViewModel);
                 }
             
                 EquipmentListItems.Add(newItemViewModel);
+            FilterEquipmentItems.Add(newItemViewModel);
             
 
             
@@ -353,6 +406,7 @@ namespace MntPlus.WPF
             {
                 equipmentItem.AddChildFunc = AddNewChild;
                 equipmentItem.RemoveItemFunc = RemoveItem;
+                equipmentItem.ViewFunc = ViewItem;
                 // Check if the current equipmentItem has children
                 if (equipmentItem.Children != null && equipmentItem.Children.Any())
                 {
@@ -360,6 +414,14 @@ namespace MntPlus.WPF
                     IterateEquipmentItemsAndChildren(equipmentItem.Children);
                 }
             }
+        }
+
+        private async Task ViewItem(EquipmentItemViewModel model)
+        {
+            EquipmentDataViewModel modelEquip = new(model.Equipment , _equipmentStore);
+            EquipmentDataWindow window = new(modelEquip);
+            window.ShowDialog();
+            await Task.Delay(1);
         }
 
         private ObservableCollection<EquipmentItemViewModel> OrganizeData(ObservableCollection<EquipmentItemViewModel>? EquipmentList)
