@@ -16,16 +16,15 @@ using System.Windows.Shapes;
 namespace MntPlus.WPF
 {
     /// <summary>
-    /// Interaction logic for EquipmentPage.xaml
+    /// Interaction logic for ManageWorkPage.xaml
     /// </summary>
-    public partial class EquipmentPage : BasePage<EquipmentPageViewModel>
+    public partial class ManageWorkPage : BasePage<ManageWorkViewModel>
     {
-        public EquipmentPage()
-        { 
+        public ManageWorkPage()
+        {
             InitializeComponent();
         }
-
-        public EquipmentPage(EquipmentPageViewModel viewModel) : base(viewModel)
+        public ManageWorkPage(ManageWorkViewModel specificViewModel) : base(specificViewModel)
         {
             InitializeComponent();
         }

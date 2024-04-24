@@ -32,14 +32,16 @@ namespace MntPlus.WPF
         public bool IsBtnEnabled => !DimmableOverlayVisible;
 
         public Guid? Parent { get; set; }
+        public EquipmentStore? EquipmentStore2 { get; }
         private EquipmentStore _equipmentStore { get; set; }
-        public InitialEquipmentViewModel(EquipmentStore equipmentStore, Guid? parent = null)
+        public InitialEquipmentViewModel(EquipmentStore equipmentStore, Guid? parent = null, EquipmentStore? equipmentStore2 = null)
         {
             AddCommand = new RelayParameterizedCommand( async (p) => await AddEquipment(p));
             _equipmentStore = equipmentStore;
             Parent = parent;
+            EquipmentStore2 = equipmentStore2;
         }
-
+       
         private async Task AddEquipment(object? p)
         {
            
@@ -78,8 +80,16 @@ namespace MntPlus.WPF
                     if (response is ApiOkResponse<EquipmentDto> okResponse)
                     {
                         var Result = okResponse.Result;
-                        _equipmentStore.CreateEquipment(Result);
-                        //OnEquipmentAdded(Result);
+                        
+                        if (EquipmentStore2 is not null)
+                        {
+                            EquipmentStore2.CreateEquipment(Result);
+                        }
+                        else
+                        {
+                            _equipmentStore.CreateEquipment(Result);
+                        }
+                       
                     }
                     await Task.Delay(500);
                     DimmableOverlayVisible = false;

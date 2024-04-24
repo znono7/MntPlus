@@ -17,11 +17,9 @@ namespace MntPlus.WPF
             ApplicationSetup();
 
 
-            // Show the main window
-            //AddEquipmentWindow window = new AddEquipmentWindow();
-            //window.DataContext = new AddEquipmentViewModel();
 
-            Current.MainWindow = /*new EquipmentDataWindow();*/ new MainWindow();
+
+            Current.MainWindow = new SelectEquipmentWindow { DataContext = new SelectEquipmentViewModel() }; /*new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel() };*/ //new MainWindow();
 
 
             Current.MainWindow.Show();

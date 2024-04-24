@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.IO;
 using System.Windows.Input;
 using Entities;
+using System.Collections.ObjectModel;
 
 namespace MntPlus.WPF
 {
@@ -16,8 +17,10 @@ namespace MntPlus.WPF
     {
 
         public EquipmentInfoViewModel? EquipmentInfoViewModel { get; set; }
+        public EquipmentChildrenViewModel? EquipmentChildrenViewModel { get; set; }
         public EquipmentDto Equipment { get; set; }
         public EquipmentStore EquipmentStore { get; }
+        public ObservableCollection<EquipmentItemViewModel>? Children { get; }
         public string? EquipmentName { get; set; }
         public string? EquipmentImage { get; private set; }
         public BitmapImage? MyImageSource { get; private set; }
@@ -27,15 +30,17 @@ namespace MntPlus.WPF
         public ICommand BrowseCommand { get; set; }
         public ICommand DeleteImgCommand { get; set; }
 
-        public EquipmentDataViewModel(EquipmentDto equipment , EquipmentStore equipmentStore)
+        public EquipmentDataViewModel(EquipmentDto equipment , EquipmentStore equipmentStore , ObservableCollection<EquipmentItemViewModel>? _children = null)
         {
             Equipment = equipment;
             EquipmentStore = equipmentStore;
+            Children = _children;
             EquipmentName = equipment.EquipmentName;
             EquipmentImageBytes = equipment.EquipmentImage;
             ReadImage();
             BrowseCommand = new RelayCommand(async () => await Browse());
             EquipmentInfoViewModel = new EquipmentInfoViewModel(equipment, equipmentStore);
+            EquipmentChildrenViewModel = new EquipmentChildrenViewModel(equipment.Id, equipmentStore,Children);
             DeleteImgCommand = new RelayCommand(async () => await RemoveImage());
 
         }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MntPlus.WPF"
              mc:Ignorable="d" Background="{DynamicResource PrimaryBackgroundColor}"
-             d:DesignHeight="1200" d:DesignWidth="800">
+             d:DesignHeight="1200" d:DesignWidth="800" Width="800">
     <Grid Margin="20">
          <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
@@ -27,7 +27,7 @@
             <Border  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Command="{Binding UpdateCommand}" Margin="20 0" Style="{StaticResource CPrimeButton}" Content="Enregistrer les Modifications"/>
-                <Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />
+                <!--<Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />-->
             </StackPanel>
         </Grid>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">

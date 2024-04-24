@@ -16,7 +16,7 @@ namespace MntPlus.WPF
 {
     public class EquipmentItemViewModel : BaseViewModel
     {
-        #region Public Properties  
+        #region Public Properties   
 
         /// <summary>
         /// The display Description of Equipment
@@ -33,6 +33,7 @@ namespace MntPlus.WPF
         public bool IsHaveChildren => Children.Count > 0;
 
         private ObservableCollection<EquipmentItemViewModel> _children;
+
         public ObservableCollection<EquipmentItemViewModel> Children
         {
             get { return _children; }
@@ -67,7 +68,7 @@ namespace MntPlus.WPF
         #endregion
 
         #region Constructor
-        
+
         public EquipmentItemViewModel(EquipmentDto equipment, double width = 940)
         {
             
@@ -78,6 +79,7 @@ namespace MntPlus.WPF
             ReadImage(equipment.EquipmentImage);
             Equipment = equipment;
             WidthControl = width;
+          
             BrowseCommand = new RelayCommand(Browse);
             ShowImgCommand = new RelayCommand(ShowImage);
             DeleteImgCommand = new RelayCommand(async () => await RemoveImage());
@@ -176,4 +178,6 @@ namespace MntPlus.WPF
         }
         #endregion
     }
+
+    
 }

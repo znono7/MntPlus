@@ -69,7 +69,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\EquipmentListControl.xaml.cs">
+    <Compile Update="Controls\Equipment\SelectEquipmentItemControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Equipment\EquipmentItemChildControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Equipment\EquipmentListControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">

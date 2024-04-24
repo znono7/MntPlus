@@ -33,6 +33,8 @@ namespace MntPlus.WPF
 
                 case ApplicationPage.Equipement:
                     return new EquipmentPage(viewModel as EquipmentPageViewModel); 
+                    case ApplicationPage.ManageWork:
+                        return new ManageWorkPage(viewModel as ManageWorkViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -49,6 +51,8 @@ namespace MntPlus.WPF
             // Find application page that matches the base page
             if (page is EquipmentPage)
                 return ApplicationPage.Equipement;
+            if (page is ManageWorkPage)
+                return ApplicationPage.ManageWork;
 
             // Alert developer of issue
             Debugger.Break();

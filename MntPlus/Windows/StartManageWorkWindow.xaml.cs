@@ -10,24 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MntPlus.WPF
 {
     /// <summary>
-    /// Interaction logic for EquipmentPage.xaml
+    /// Interaction logic for StartManageWorkWindow.xaml
     /// </summary>
-    public partial class EquipmentPage : BasePage<EquipmentPageViewModel>
+    public partial class StartManageWorkWindow : Window
     {
-        public EquipmentPage()
-        { 
+        public StartManageWorkWindow()
+        {
             InitializeComponent();
         }
 
-        public EquipmentPage(EquipmentPageViewModel viewModel) : base(viewModel)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            Close();
+
         }
     }
 }

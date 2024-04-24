@@ -72,6 +72,7 @@ namespace MntPlus.WPF
             //}
 
             TravailMenuEnabled = true;//!TravailMenuEnabled;
+            IoContainer.Application.GoToPage(ApplicationPage.ManageWork);
 
             await Task.Delay(1);
 

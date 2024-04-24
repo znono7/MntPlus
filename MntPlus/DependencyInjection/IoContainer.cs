@@ -58,6 +58,9 @@ namespace MntPlus.WPF
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+            Kernel.Bind<ManageWorkViewModel>().ToConstant(new ManageWorkViewModel());
+            Kernel.Bind<EquipmentPageViewModel>().ToConstant(new EquipmentPageViewModel());
+
 
             Kernel.Bind<INotificationsManager>().ToConstant(new NotificationsManager()); 
         }

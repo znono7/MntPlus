@@ -110,23 +110,36 @@
                             SnapsToDevicePixels="True" CornerRadius="8" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalAlignment}" >
                             <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                           
+                            
                         </Border>
-                        <!--<Border x:Name="brdShadow" Panel.ZIndex="0" Visibility="Hidden" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}" 
-                                CornerRadius="8" Height="{TemplateBinding Height}"
-                                SnapsToDevicePixels="True">
-                           
-                            <Border.Effect >
-                                <DropShadowEffect  Opacity="0.4"  ShadowDepth="0" 
-                                        
-                                         Color="#0760FF"
-                                         BlurRadius="20"/>
-                            </Border.Effect>
-                        </Border>-->
-                       
+                        <Grid Margin="10 2 2 2" Panel.ZIndex="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  IsHitTestVisible="False" Grid.Column="1"
+                                      Text="{TemplateBinding Tag}"
+                                      x:Name="placeholder"
+                                      FontFamily="{StaticResource ClarityCity-Regular}"
+             
+                                      VerticalAlignment="Center"
+                                      Panel.ZIndex="1"
+                                      Foreground="{DynamicResource FourthTextColor}" Margin="5 0"
+                                        > 
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                        </Grid>
+
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">

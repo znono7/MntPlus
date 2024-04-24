@@ -16,16 +16,11 @@ using System.Windows.Shapes;
 namespace MntPlus.WPF
 {
     /// <summary>
-    /// Interaction logic for EquipmentPage.xaml
+    /// Interaction logic for AssignorControl.xaml
     /// </summary>
-    public partial class EquipmentPage : BasePage<EquipmentPageViewModel>
+    public partial class AssignorControl : UserControl
     {
-        public EquipmentPage()
-        { 
-            InitializeComponent();
-        }
-
-        public EquipmentPage(EquipmentPageViewModel viewModel) : base(viewModel)
+        public AssignorControl()
         {
             InitializeComponent();
         }

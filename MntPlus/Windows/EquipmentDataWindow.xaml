@@ -101,6 +101,7 @@
                                 <TextBlock Margin="2 0" FontFamily="{StaticResource FontAwesome2}" Text="Enfants" FontSize="16"/>
                             </StackPanel>
                         </TabItem.Header>
+                        <local:EquipmentChildrenControl DataContext="{Binding EquipmentChildrenViewModel}"/>
                     </TabItem>
                     <!--<TabItem  Style="{StaticResource TabItemStyle2}">
                         <TabItem.Header>

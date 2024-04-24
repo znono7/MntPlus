@@ -84,7 +84,7 @@ namespace MntPlus.WPF
         public bool IsList { get; set; }
         public bool IsHierarchy { get; set; }
         public bool IsLoading { get; set; } 
-        public bool IsEmpty { get; set; }
+        public bool IsEmpty => EquipmentListItems is null || EquipmentListItems.Count == 0 ;
         private EquipmentStore _equipmentStore { get; set; }
 
 
@@ -418,7 +418,7 @@ namespace MntPlus.WPF
 
         private async Task ViewItem(EquipmentItemViewModel model)
         {
-            EquipmentDataViewModel modelEquip = new(model.Equipment , _equipmentStore);
+            EquipmentDataViewModel modelEquip = new(model.Equipment , _equipmentStore , model.Children);
             EquipmentDataWindow window = new(modelEquip);
             window.ShowDialog();
             await Task.Delay(1);
@@ -491,7 +491,7 @@ namespace MntPlus.WPF
             {
                 FilterEquipmentItems.Add(new EquipmentItemViewModel(equipmentDto));
             }
-            IsEmpty = FilterEquipmentItems.Count == 0;
+            
             IterateEquipmentItemsAndChildren(FilterEquipmentItems);
         }
        
@@ -649,19 +649,19 @@ namespace MntPlus.WPF
             if (searchPattern.StartsWith("*") && !searchPattern.EndsWith("*"))
             {
                 string searchTerm = searchPattern.TrimStart('*');
-                return items.Where(item => item.EquipmentName.EndsWith(searchTerm));
+                return items.Where(item => item.EquipmentName.EndsWith(searchTerm,StringComparison.OrdinalIgnoreCase));
             }
             // Case 2: Search for items that start with the word
             else if (!searchPattern.StartsWith("*") && searchPattern.EndsWith("*"))
             {
                 string searchTerm = searchPattern.TrimEnd('*');
-                return items.Where(item => item.EquipmentName.StartsWith(searchTerm));
+                return items.Where(item => item.EquipmentName.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
             }
             // Case 3: Search for items that contain the word
             else if (searchPattern.StartsWith("*") && searchPattern.EndsWith("*"))
             {
                 string searchTerm = searchPattern.Trim('*');
-                return items.Where(item => item.EquipmentName.Contains(searchTerm));
+                return items.Where(item => item.EquipmentName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
             }
             else
             {
