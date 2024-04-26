@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MntPlus.WPF"
-        mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
+        xmlns:local="clr-namespace:MntPlus.WPF" x:Name="SelectEquipmentWind"
+        mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
         Title="SelectEquipmentWindow" Height="490" Width="1000">
     <Grid>
         <!-- Opacity mask for corners on grid -->
@@ -75,7 +75,7 @@
                    
                 </ScrollViewer>
             </Grid>
-            <Button   Grid.Row="2"  Command="{Binding GetSelectedEquipmentCommand}" Style="{DynamicResource CPrimeButton}" Content="Sélectionner" Margin="0 0 20 20" HorizontalAlignment="Right"/>
+            <Button   Grid.Row="2"  Command="{Binding GetSelectedEquipmentCommand}" CommandParameter="{Binding ElementName=SelectEquipmentWind}" Style="{DynamicResource CPrimeButton}" Content="Sélectionner" Margin="0 0 20 20" HorizontalAlignment="Right"/>
 
         </Grid>
     </Grid>

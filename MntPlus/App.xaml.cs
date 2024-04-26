@@ -19,7 +19,7 @@ namespace MntPlus.WPF
 
 
 
-            Current.MainWindow = new SelectEquipmentWindow { DataContext = new SelectEquipmentViewModel() }; /*new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel() };*/ //new MainWindow();
+            Current.MainWindow = new MainWindow();
 
 
             Current.MainWindow.Show();

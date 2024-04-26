@@ -11,7 +11,7 @@ namespace MntPlus.WPF
         /// <summary>
         /// The current page of the application 
         /// </summary>
-        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Equipement;
+        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.ManageWork;
 
         /// <summary>
         /// The view model to use for the current page when the CurrentPage changes

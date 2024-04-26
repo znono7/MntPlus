@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows;
 
 namespace MntPlus.WPF
 {
@@ -66,16 +67,26 @@ namespace MntPlus.WPF
                 EquipmentTreeViewItems = CreateTreeViewItems(EquipmentDtos.ToList());
                 IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);
             }
-            GetSelectedEquipmentCommand = new RelayCommand(TheSelectedEquipment);
+            GetSelectedEquipmentCommand = new RelayParameterizedCommand((p) => TheSelectedEquipment(p));
                 
         }
 
-        private void TheSelectedEquipment()
+        private void TheSelectedEquipment(object? p)
         {
-            if(SelectedViewModel is not null)
-            {
-                SelectedViewModel.IsSelected = true;
-            }
+            if (SelectedViewModel is null || !(p is Window wind))
+                return;
+
+            SelectedViewModel.IsSelected = true;
+
+            if (p is not Window)
+                return;
+
+            var window = new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel(SelectedViewModel.Equipment) };
+            
+            window.ShowDialog();
+            
+
+            wind.Close();
         }
 
         private async Task GetSelectedEquipment(SelectEquipmentItemViewModel selected)

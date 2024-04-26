@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF"
-        mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
+        mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
         Title="InitialEquipmentWindow" Height="400" Width="1000" Loaded="Window_Loaded" x:Name="Wind">
     <Window.Resources>
         <local:ValidationErrorsConverter x:Key="ValidationErrorsConverter"/>

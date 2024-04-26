@@ -111,6 +111,7 @@
                 <Rectangle Width="1"  Grid.Column="3" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
                 <TextBlock Text="Assigné à"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
             </Grid>
+            <local:WorkOrderControl HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2"/>
         </Grid>
     </Grid>
 </local:BasePage>

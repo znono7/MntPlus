@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace MntPlus.WPF
     public class StartManageWorkWindowViewModel : BaseViewModel
     {
         public string OrderWorkName { get; set; }
-        public string? OrderWorkInstructions { get; set; }
+        public string? OrderWorkInstructions { get; set; } 
 
         private string _orderWorkPriority = "3";
         public string OrderWorkPriority
@@ -55,15 +56,17 @@ namespace MntPlus.WPF
         public ICommand LowPriorityCommand { get; set; }
 
         public string ForgroundColor { get; set; } = "429b1f";
+        public EquipmentDto Equipment { get; }
 
-        public StartManageWorkWindowViewModel()
+        public string EquipmentName => Equipment.EquipmentName;
+        public StartManageWorkWindowViewModel(EquipmentDto equipment)
         {
             OpenMenuPriorityCommand = new RelayCommand(() => IsMenuPrioprityOpen = !IsMenuPrioprityOpen);
             OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);
             HighPriorityCommand = new RelayCommand(() => OrderWorkPriority = "1");
             MediumPriorityCommand = new RelayCommand(() => OrderWorkPriority = "2");
             LowPriorityCommand = new RelayCommand(() => OrderWorkPriority = "3");
-
+            Equipment = equipment;
         }
     }
 }
