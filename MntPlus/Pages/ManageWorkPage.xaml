@@ -14,12 +14,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
+       
+        <local:ViewTaskControl DataContext="{Binding TaskViewModel}" Panel.ZIndex="10" 
+                               local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.TaskPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ManageWorkPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="2" />
         <Grid Margin="20 20 20 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -28,9 +25,10 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Gérer le Travail" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
-            <Button Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter}}" Width="220" Command="{Binding AddWorkOrderCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>
+            <Button Width="220" Command="{Binding TaskPopupCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>
+            <!--<Button Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter}}" Width="220" Command="{Binding TaskPopupCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>-->
         </Grid>
-        <Grid Margin="20 10 20 20" Grid.Row="1">
+        <!--<Grid Margin="20 10 20 20" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -118,6 +116,6 @@
                 <TextBlock Text="Assigné à"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
             </Grid>
             <local:WorkOrderControl HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2"/>
-        </Grid>
+        </Grid>-->
     </Grid>
 </local:BasePage>

@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MntPlus.WPF"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600">
+             mc:Ignorable="d"  Width="720"
+             d:DesignHeight="450" d:DesignWidth="720">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -17,17 +17,16 @@
         </Grid>
         <Grid Grid.Column="1" Background="{DynamicResource TertiaryBackgroundColor}">
             <Grid.RowDefinitions>
-
                 <!-- Title Bar -->
                 <RowDefinition Height="60" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-
                 <!-- Window Content -->
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
 
             </Grid.RowDefinitions>
+            <local:TextEntryControl Margin="25 0" DataContext="{Binding TaskName}"/>
         </Grid>
     </Grid>
 </UserControl>
