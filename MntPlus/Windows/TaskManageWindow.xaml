@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF" 
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
-        Title="TaskManageWindow" d:DesignHeight="800" Height="625" Width="1120">
+        Title="TaskManageWindow" d:DesignHeight="1200" Height="625" Width="1120">
     <Grid>
         <!-- Opacity mask for corners on grid -->
         <Border x:Name="Container"

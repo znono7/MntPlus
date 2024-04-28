@@ -64,9 +64,9 @@
                      Grid.Column="1"
                      Opacity="0"
                      local:AnimateFadeInProperty.Value="{Binding Editing}"
-                    
+                     Style="{StaticResource InputTextBoxStyle}"
                      FontSize="14"
-                     Padding="2"
+                     
                      Margin="10 10 15 8"
                      />
 

@@ -25,7 +25,7 @@ namespace MntPlus.WPF
         private static void ChangeTheme(Uri uri)
         {
             ThemeDictionary = new ResourceDictionary() { Source = uri };
-        }
+        } 
 
         public static void SetTheme(ThemeTypes theme)
         {

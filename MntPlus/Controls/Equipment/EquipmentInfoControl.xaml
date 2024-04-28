@@ -237,7 +237,7 @@
                 <Border Grid.RowSpan="3"    Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
                 <TextBlock FontSize="18" Text="Définir un assignateur" FontFamily="{StaticResource ClarityCity-SemiBold}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
                 <ScrollViewer Grid.Row="1"  VerticalScrollBarVisibility="Auto"  >
-                    <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
+                    <!--<DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
                                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                                  CellStyle="{DynamicResource DataGridCellStyle1}"
                                  x:Name="usersDataGrid" 
@@ -264,7 +264,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
-                    </DataGrid>
+                    </DataGrid>-->
                 </ScrollViewer>
                 <StackPanel  Margin="20 10" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="2" >
                     <Button Command="{Binding SetAnAssignorCommand}"  Content="Sauvegarder" Margin="0 0 10 0" Width="120" Style="{StaticResource CPrimeButton}"/>

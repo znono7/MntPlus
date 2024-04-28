@@ -28,7 +28,7 @@
             <Button Width="220" Command="{Binding TaskPopupCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>
             <!--<Button Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter}}" Width="220" Command="{Binding TaskPopupCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>-->
         </Grid>
-        <!--<Grid Margin="20 10 20 20" Grid.Row="1">
+        <Grid Margin="20 10 20 20" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -95,7 +95,7 @@
                 <TextBox Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 1 20" Style="{DynamicResource SearchTextBoxStyle}"/>
                 <Button Margin="0 0 0 2" Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
             </Grid>
-            <Grid Visibility="{Binding IsHeaderVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
+            <!--<Grid Visibility="{Binding IsHeaderVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -115,7 +115,58 @@
                 <Rectangle Width="1"  Grid.Column="3" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
                 <TextBlock Text="Assigné à"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
             </Grid>
-            <local:WorkOrderControl HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2"/>
-        </Grid>-->
+            <local:WorkOrderControl HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2"/>-->
+            <DataGrid Grid.Row="2" Margin="10" 
+                      Style="{StaticResource DataGridStyle2}"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
+                      RowStyle="{StaticResource DataGridRowStyle2}"
+                      CellStyle="{StaticResource DataGridCellStyle2}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Nom" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Actif" Width="160">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Priorité" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Statut" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Date d'échéance" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Assigné à" Width="180">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </local:BasePage>
