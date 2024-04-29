@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public abstract class ApiBadRequestResponse : ApiBaseResponse
+    public sealed class ApiBadRequestResponse : ApiBaseResponse
     {
         public string Message { get; set; }
         public ApiBadRequestResponse(string message) : base(false)

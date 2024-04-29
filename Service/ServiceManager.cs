@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
 using Service.Contracts;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,10 @@ namespace Service
 {
     public sealed class ServiceManager : IServiceManager
     {
+
+        private readonly Lazy<ILocationService> _locationService;
+        private readonly Lazy<IAssetService> assetService;
+
         private readonly Lazy<IEquipmentService> _equipmentService;
         private readonly Lazy<IAssignorService> _assignorService;
         private readonly Lazy<IEquipmentDepartmentService> _equipmentDepartmentService;
@@ -18,9 +23,12 @@ namespace Service
         private readonly Lazy<IEquipmentStatusService> _equipmentStatusService;
         private readonly Lazy<IEquipmentTypeService> equipmentTypeService;
 
-        public ServiceManager(IRepositoryManager repositoryManager ) 
+
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper) 
           
         {
+            _locationService = new Lazy<ILocationService>(() => new LocationService(repositoryManager, mapper));
+            assetService = new Lazy<IAssetService>(() => new AssetService(repositoryManager, mapper));
             _equipmentService = new Lazy<IEquipmentService>(() => new EquipmentService(repositoryManager ));
             _assignorService = new Lazy<IAssignorService>(() => new AssignorService(repositoryManager ));
             _equipmentDepartmentService = new Lazy<IEquipmentDepartmentService>(() => new EquipmentDepartmentService(repositoryManager ));
@@ -42,5 +50,9 @@ namespace Service
         public IEquipmentStatusService EquipmentStatusService => _equipmentStatusService.Value;
 
         public IEquipmentTypeService EquipmentTypeService => equipmentTypeService.Value;
+
+        public ILocationService LocationService => _locationService.Value;
+
+        public IAssetService AssetService => assetService.Value;
     }
 }

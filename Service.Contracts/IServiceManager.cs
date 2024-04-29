@@ -8,6 +8,8 @@ namespace Service.Contracts
 {
     public interface IServiceManager
     {
+        ILocationService LocationService { get; }
+        IAssetService AssetService { get; }
         IEquipmentService EquipmentService { get; }
         IAssignorService AssignorService { get; }
         IEquipmentDepartmentService EquipmentDepartmentService { get; }

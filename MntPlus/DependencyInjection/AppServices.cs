@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Service.Contracts;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +45,8 @@ namespace MntPlus.WPF
         {
             ServiceCollection.ConfigureRepositoryManager();
             ServiceCollection.ConfigureServiceManager();
-            ServiceCollection.ConfigureSqlContext(DefaultConnectionString); 
+            ServiceCollection.ConfigureSqlContext(DefaultConnectionString);
+            ServiceCollection.AddAutoMapper(typeof(App));
         }
 
         public static void Setup()

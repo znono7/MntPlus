@@ -17,6 +17,10 @@ namespace Repository
         private readonly Lazy<IEquipmentOrganizationRepository> _equipmentOrganizationRepository;
         private readonly Lazy<IEquipmentStatusRepository> equipmentStatusRepository;
         private readonly Lazy<IEquipmentTypeRepository> equipmentTypeRepository;
+        private readonly Lazy<ILocationRepository> locationRepository;
+        private readonly Lazy<IAssetRepository> assetRepository;
+
+
 
 
 
@@ -26,6 +30,8 @@ namespace Repository
         public RepositoryManager(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
+            locationRepository = new Lazy<ILocationRepository>(() => new LocationRepository(repositoryContext));
+            assetRepository = new Lazy<IAssetRepository>(() => new AssetRepository(repositoryContext));
             _equipmentRepository = new Lazy<IEquipmentRepository>(() => new EquipmentRepository(repositoryContext));
             _assignorRepository = new Lazy<IAssignorRepository>(() => new AssignorRepository(repositoryContext));
             _equipmentClassRepository = new Lazy<IEquipmentClassRepository>(() => new EquipmentClassRepository(repositoryContext));
@@ -47,6 +53,10 @@ namespace Repository
         public IEquipmentStatusRepository EquipmentStatus => equipmentStatusRepository.Value;
 
         public IEquipmentTypeRepository EquipmentType => equipmentTypeRepository.Value;
+
+        public ILocationRepository Location => locationRepository.Value;
+
+        public IAssetRepository Asset => assetRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

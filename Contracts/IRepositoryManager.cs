@@ -8,6 +8,8 @@ namespace Contracts
 {
     public interface IRepositoryManager
     {
+        ILocationRepository Location { get; }
+        IAssetRepository Asset { get; }
         IEquipmentRepository Equipment { get; } 
         IAssignorRepository Assignor { get; }
 
