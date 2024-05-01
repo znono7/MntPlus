@@ -71,11 +71,24 @@
                           Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
                 <TextBlock HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0" Text="Date de mise en service" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.Column="1">
-                    <TextBox x:Name="CommissionDate"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding ShortAssetCommissionDate, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                    <Grid Width="320" Margin="13 0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="36" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="CommissionDate" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="32" Width="320" BorderThickness="0" BorderBrush="{DynamicResource LineColor2}" Background="{DynamicResource LineColor}" CornerRadius="7"/>
+                        <Border Grid.Column="0" HorizontalAlignment="Left" Height="32" Width="480" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="7"/>
+                        <Button  Command="{Binding CommissionDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                            <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                        </Button>
+                        <TextBlock Text="{Binding ShortAssetCommissionDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="1" Style="{StaticResource TextBlockStyle}"/>
+                        
+                    </Grid>
+                    <!--<TextBox x:Name="CommissionDate"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding AssetCommissionDate}" IsReadOnly="True" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
                     <Button  Command="{Binding CommissionDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
                         <Path  Width="12" Fill="{DynamicResource SecundaryBlueColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
 
-                    </Button>
+                    </Button>-->
                 </StackPanel>
                 <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding DatePopup}" Placement="Top" PlacementTarget="{Binding ElementName=CommissionDate}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="CalendarPopup">
                     <Grid>

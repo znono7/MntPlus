@@ -18,7 +18,7 @@ namespace MntPlus.WPF
         #region protected
         protected string mLastSearchText;
         protected string mSearchText;
-
+         
         #endregion
         #region Public Properties
 
@@ -127,7 +127,7 @@ namespace MntPlus.WPF
             });
             _ = LoadDataAsync();
             
-            if(AssetDtos is not null)
+            if(AssetDtos is not null && AssetDtos.Count > 0)
             {
                 IsHierarchy = true;
                 EquipmentTreeViewItems = CreateTreeViewItems(AssetDtos.ToList());
@@ -300,10 +300,17 @@ namespace MntPlus.WPF
             if(Result is ApiNotFoundResponse response)
             {
                 AssetDtos = new ObservableCollection<AssetDto>();
+                EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
+
+                EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+
             }
             else if (Result is ApiBadRequestResponse response1)
             {
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, response1.Message));
+                EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
+
+                EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
             }
             await Task.Delay(100);
             IsLoading = false;
@@ -391,7 +398,7 @@ namespace MntPlus.WPF
             window.DataContext = modelEquip;
             window.ShowDialog();
             await Task.Delay(1);
-        }
+        } 
 
         private int CalculateChildrenCount(AssetItemViewModel item)
         {

@@ -23,9 +23,9 @@ namespace MntPlus.WPF
         public AssetStatus? SelectedAssetStatus { get; set; }
 
 
-
-        public DateTime? AssetCommissionDate { get; set; }
-        public string? ShortAssetCommissionDate => AssetCommissionDate?.ToShortDateString();
+        private DateTime? _dueDate ;
+        public DateTime? AssetCommissionDate { get => _dueDate; set => _dueDate = value; }
+        public string? ShortAssetCommissionDate => AssetCommissionDate?.ToString("d");
 
 
        
@@ -57,7 +57,7 @@ namespace MntPlus.WPF
             SelectedAssetType.Name = equipment.Type;
             SelectedAssetStatus = new AssetStatus();
             SelectedAssetStatus.Name = equipment.Status;
-            AssetCommissionDate = equipment.AssetCommissionDate;
+            _dueDate = equipment.AssetCommissionDate;
 
             EquipmentStore = equipmentStore;
            

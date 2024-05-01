@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class MntPlusMigration : Migration
+    public partial class MntPlus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

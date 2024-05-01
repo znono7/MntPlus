@@ -25,7 +25,7 @@
 
             </Grid.ColumnDefinitions>
             <TextBlock Text="Gérer les Actifs" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
-            <Button Width="140" Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un actif" Tag="{StaticResource plus}">
+            <Button Width="140" Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un actif" Tag="{StaticResource plus}">
                
             </Button>
             <!--<StackPanel  Grid.Column="3">
@@ -80,7 +80,7 @@
                        Color="LightSlateGray" Opacity="0.1" />
                 </Border.Effect>-->
             </Border>
-            <Grid Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true,FallbackValue=Hidden}" Grid.RowSpan="3" Panel.ZIndex="5" >
+            <Grid Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true,FallbackValue=Hidden}" Grid.RowSpan="3" Panel.ZIndex="5" >
                 <Border   Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -91,7 +91,7 @@
                     <TextBlock HorizontalAlignment="Center" Text="C'est tellement vide ici." Style="{DynamicResource TitleTextBlockStyle}" Margin="0 10 0 0"/>
                     <TextBlock HorizontalAlignment="Center" Text="Cliquez sur le bouton ci-dessous pour commencer." Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 0 10"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un équipement" Tag="{StaticResource plus}"/>
+                        <Button Width="140" Command="{Binding AddEquipmentCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un actif" Tag="{StaticResource plus}"/>
 
                     </StackPanel>
 
@@ -152,7 +152,7 @@
                     <RadioButton Command="{Binding ToListCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource list}"  Content="Liste" Margin="0 0 25 0"  />
                     </StackPanel>
                 </Grid>
-            <Grid Visibility="{Binding IsHeaderVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
+            <Grid Visibility="{Binding IsHeaderVisible,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
                     <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -170,7 +170,7 @@
 
                     <TextBlock Text="Description" Grid.Column="2"  Style="{DynamicResource ColumnHeaderStyle}" Margin="0 0 0 0"/>
                     <Rectangle Width="1"  Grid.Column="3" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
-                    <TextBlock Text="Image de l'équipement"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
+                    <TextBlock Text="Image de l'actif"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
                 </Grid>
             <ScrollViewer Margin="5" Visibility="{Binding IsHierarchy,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2">
                 <Grid>

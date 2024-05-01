@@ -11,8 +11,8 @@ using Repository;
 namespace MntPlus.WPF.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240501190423_MntPlusMigration")]
-    partial class MntPlusMigration
+    [Migration("20240501230010_MntPlus")]
+    partial class MntPlus
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
