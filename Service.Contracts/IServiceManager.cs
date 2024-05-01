@@ -10,13 +10,11 @@ namespace Service.Contracts
     {
         ILocationService LocationService { get; }
         IAssetService AssetService { get; }
-        IEquipmentService EquipmentService { get; }
-        IAssignorService AssignorService { get; }
-        IEquipmentDepartmentService EquipmentDepartmentService { get; }
-        IEquipmentClassService EquipmentClassService { get; }
-        IEquipmentOrganizationService EquipmentOrganizationService { get; }
-        IEquipmentStatusService EquipmentStatusService { get; }
-        IEquipmentTypeService EquipmentTypeService { get; }
+        IUserService UserService { get; }
+        ITeamService TeamService { get; }
+        IWorkOrderService WorkOrderService { get;}
+        IWorkOrderHistoryService WorkOrderHistoryService { get; }
+      
 
     }
 }

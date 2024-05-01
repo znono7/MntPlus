@@ -60,6 +60,7 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="DataBase\" />
+    <Folder Include="Services\Events\" />
     <Folder Include="ViewModels\Menu\" />
   </ItemGroup>
 
@@ -69,13 +70,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\Equipment\SelectEquipmentItemControl.xaml.cs">
+    <Compile Update="Controls\Asset\SelectEquipmentItemControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Equipment\EquipmentItemChildControl.xaml.cs">
+    <Compile Update="Controls\Asset\EquipmentItemChildControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Equipment\EquipmentListControl.xaml.cs">
+    <Compile Update="Controls\Asset\AssetListControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\LocationWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">

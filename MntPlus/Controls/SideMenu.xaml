@@ -38,9 +38,10 @@
         <StackPanel Margin="5 0" Grid.Row="2" >
 
             <RadioButton Command="{Binding DashboardCommand}" GroupName="MyGroup" x:Name="rdHome"  Content="Tableau de Bord" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource home}" />
+            <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdWork"  Content="Gérer le Travail" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource headphones}" />
            
                
-            <RadioButton  Click="rdPayment_Click" Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdPayment" Content="Gérer le Travail            " Style="{DynamicResource MenuRadioButtonStyle2}" Tag="{DynamicResource headphones}" Margin="0 5 0 0" />
+            <!--<RadioButton  Click="rdPayment_Click" Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdPayment" Content="Gérer le Travail            " Style="{DynamicResource MenuRadioButtonStyle2}" Tag="{DynamicResource headphones}" Margin="0 5 0 0" />
                  
                         
             <Grid  local:AnimateSlideInFromTopProperty.Value="{Binding TravailMenuEnabled,FallbackValue=false}">
@@ -53,10 +54,10 @@
                 <RadioButton GroupName="MyGroup2" Margin="0 5 5 5" x:Name="rdNotes" Content="Tâches Ouvertes" Command="{Binding OpenTaskCommand}" Style="{DynamicResource SubVerticalMenuStyle}" Tag="{DynamicResource openTask}" />
                 <RadioButton Grid.Row="1" GroupName="MyGroup2" Margin="0 5 5 5" x:Name="rdNotes2" Content="Tâches Terminées" Command="{Binding CompletedTasksCommand}" Style="{DynamicResource SubVerticalMenuStyle}" Tag="{DynamicResource notes}" />
                 <RadioButton Grid.Row="2" GroupName="MyGroup2" Margin="0 5 5 5" x:Name="rdNotes3" Content="Demande de Travail" Command="{Binding WorkReqeustCommand}" Style="{DynamicResource SubVerticalMenuStyle}" Tag="{DynamicResource workReqeust}" />
-                    </Grid>
+                    </Grid>-->
                 
             
-            <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" x:Name="rdSounds" Content="Équipements" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource payment}" Margin="0 5 0 5" />
+            <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" x:Name="rdSounds" Content="Actifs" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource payment}" Margin="0 5 0 5" />
         </StackPanel>
     </Grid>
 </UserControl>

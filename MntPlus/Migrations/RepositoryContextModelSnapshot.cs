@@ -17,209 +17,345 @@ namespace MntPlus.WPF.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
-            modelBuilder.Entity("Entities.Assignee", b =>
+            modelBuilder.Entity("Entities.Asset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("AssetCommissionDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("AssetImage")
+                        .HasColumnType("BLOB");
+
+                    b.Property<Guid?>("AssetParent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Make")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("PurchaseCost")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("SerialNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("Entities.Location", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("LocationImage")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("State")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("Entities.MaintenanceActivities", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ScheduleId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.ToTable("MaintenanceActivities");
+                });
+
+            modelBuilder.Entity("Entities.Schedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Interval")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastScheduledDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("NextScheduledDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ScheduleType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schedules");
+                });
+
+            modelBuilder.Entity("Entities.Team", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Assignees");
+                    b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("Entities.Equipment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("EquipmentId");
-
-                    b.Property<Guid?>("EquipmentAssignedToId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EquipmentClassId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("EquipmentCommissionDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("EquipmentCost")
-                        .HasColumnType("REAL");
-
-                    b.Property<Guid?>("EquipmentDepartmentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EquipmentDescription")
-                        .HasColumnType("TEXT");
-
-                    b.Property<byte[]>("EquipmentImage")
-                        .HasColumnType("BLOB");
-
-                    b.Property<string>("EquipmentMake")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EquipmentModel")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EquipmentName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EquipmentNameImage")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EquipmentOrganizationId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EquipmentParent")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EquipmentSerialNumber")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EquipmentSite")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EquipmentStatusId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EquipmentTypeId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EquipmentAssignedToId");
-
-                    b.HasIndex("EquipmentClassId");
-
-                    b.HasIndex("EquipmentDepartmentId");
-
-                    b.HasIndex("EquipmentOrganizationId");
-
-                    b.HasIndex("EquipmentStatusId");
-
-                    b.HasIndex("EquipmentTypeId");
-
-                    b.ToTable("Equipment");
-                });
-
-            modelBuilder.Entity("Entities.EquipmentClass", b =>
+            modelBuilder.Entity("Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EquipmentClassName")
-                        .IsRequired()
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("EquipmentClasses");
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Entities.EquipmentDepartment", b =>
+            modelBuilder.Entity("Entities.WorkOrder", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Instructions")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TeamAssignedToId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserAssignedToId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("EquipmentDepartments");
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("TeamAssignedToId");
+
+                    b.HasIndex("UserAssignedToId");
+
+                    b.ToTable("WorkOrders");
                 });
 
-            modelBuilder.Entity("Entities.EquipmentStatus", b =>
+            modelBuilder.Entity("Entities.WorkOrderHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EquipmentStatusName")
-                        .IsRequired()
+                    b.Property<Guid?>("ChangedById")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateChanged")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("WorkOrderId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("EquipmentStatuses");
+                    b.HasIndex("ChangedById");
+
+                    b.HasIndex("WorkOrderId");
+
+                    b.ToTable("WorkOrderHistories");
                 });
 
-            modelBuilder.Entity("Entities.EquipmentType", b =>
+            modelBuilder.Entity("Entities.Asset", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                    b.HasOne("Entities.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
 
-                    b.Property<string>("EquipmentTypeName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EquipmentTypes");
+                    b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("Entities.Organization", b =>
+            modelBuilder.Entity("Entities.MaintenanceActivities", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                    b.HasOne("Entities.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId");
 
-                    b.Property<string>("OrganizationName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.HasOne("Entities.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleId");
 
-                    b.HasKey("Id");
+                    b.Navigation("Asset");
 
-                    b.ToTable("Organizations");
+                    b.Navigation("Schedule");
                 });
 
-            modelBuilder.Entity("Entities.Equipment", b =>
+            modelBuilder.Entity("Entities.User", b =>
                 {
-                    b.HasOne("Entities.Assignee", "EquipmentAssignedTo")
+                    b.HasOne("Entities.Team", "Team")
+                        .WithMany("TeamMembers")
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Entities.WorkOrder", b =>
+                {
+                    b.HasOne("Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("EquipmentAssignedToId");
+                        .HasForeignKey("AssetId");
 
-                    b.HasOne("Entities.EquipmentClass", "EquipmentClass")
+                    b.HasOne("Entities.Team", "TeamAssignedTo")
                         .WithMany()
-                        .HasForeignKey("EquipmentClassId");
+                        .HasForeignKey("TeamAssignedToId");
 
-                    b.HasOne("Entities.EquipmentDepartment", "EquipmentDepartment")
+                    b.HasOne("Entities.User", "UserAssignedTo")
                         .WithMany()
-                        .HasForeignKey("EquipmentDepartmentId");
+                        .HasForeignKey("UserAssignedToId");
 
-                    b.HasOne("Entities.Organization", "EquipmentOrganization")
+                    b.Navigation("Asset");
+
+                    b.Navigation("TeamAssignedTo");
+
+                    b.Navigation("UserAssignedTo");
+                });
+
+            modelBuilder.Entity("Entities.WorkOrderHistory", b =>
+                {
+                    b.HasOne("Entities.User", "ChangedBy")
                         .WithMany()
-                        .HasForeignKey("EquipmentOrganizationId");
+                        .HasForeignKey("ChangedById");
 
-                    b.HasOne("Entities.EquipmentStatus", "EquipmentStatus")
-                        .WithMany()
-                        .HasForeignKey("EquipmentStatusId");
+                    b.HasOne("Entities.WorkOrder", "WorkOrder")
+                        .WithMany("WorkOrderHistories")
+                        .HasForeignKey("WorkOrderId");
 
-                    b.HasOne("Entities.EquipmentType", "EquipmentType")
-                        .WithMany()
-                        .HasForeignKey("EquipmentTypeId");
+                    b.Navigation("ChangedBy");
 
-                    b.Navigation("EquipmentAssignedTo");
+                    b.Navigation("WorkOrder");
+                });
 
-                    b.Navigation("EquipmentClass");
+            modelBuilder.Entity("Entities.Team", b =>
+                {
+                    b.Navigation("TeamMembers");
+                });
 
-                    b.Navigation("EquipmentDepartment");
-
-                    b.Navigation("EquipmentOrganization");
-
-                    b.Navigation("EquipmentStatus");
-
-                    b.Navigation("EquipmentType");
+            modelBuilder.Entity("Entities.WorkOrder", b =>
+                {
+                    b.Navigation("WorkOrderHistories");
                 });
 #pragma warning restore 612, 618
         }

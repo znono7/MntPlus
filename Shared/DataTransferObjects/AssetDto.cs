@@ -9,7 +9,7 @@ namespace Shared
     public record AssetDto
     (
         Guid Id,
-        Guid? AssetParent,
+        Guid? AssetParent, 
         string? Name,
         string? Description,
         string? Status,
@@ -26,11 +26,11 @@ namespace Shared
 
     public record AssetForCreationDto(
         Guid? AssetParent,
-               string? Name,
+               string? Name, 
                       string? Description,
                              string? Status,
                                     string? Type,
-                                           LocationDto? Location,
+                                           Guid? LocationId,
                                                   string? SerialNumber,
                                                          string? Model,
                                                                 string? Make,
@@ -41,8 +41,8 @@ namespace Shared
            );
 
     public record AssetForUpdateImage(
-               string ImagePath,
-                      byte[] AssetImage
+               string? ImagePath,
+                      byte[]? AssetImage
            );
 
 }

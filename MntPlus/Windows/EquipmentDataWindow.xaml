@@ -92,7 +92,7 @@
                             </Grid>
                         </TabItem.Header>
 
-                        <local:EquipmentInfoControl DataContext="{Binding EquipmentInfoViewModel}"/>
+                        <local:AssetInfoControl DataContext="{Binding EquipmentInfoViewModel}"/>
                     </TabItem>
                     <TabItem  Style="{StaticResource TabItemStyle2}">
                         <TabItem.Header>

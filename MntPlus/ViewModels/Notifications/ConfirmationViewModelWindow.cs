@@ -10,7 +10,7 @@ namespace MntPlus.WPF
 {
     public class ConfirmationViewModelWindow : BaseViewModel
     {
-        public  string? EquipmentName { get;  set; }
+        public  string? AssetName { get;  set; }
         public string Title { get; set; }
         public Window Window { get; }
         public string? Message { get; set; }
@@ -20,12 +20,12 @@ namespace MntPlus.WPF
         public ICommand DeleteCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
-        public ConfirmationViewModelWindow(Window window, EquipmentItem? equipment, string? message)
+        public ConfirmationViewModelWindow(Window window, string? asset, string? message)
         {
-            EquipmentName = equipment is  null ? "" : equipment.EquipmentName ;
+            AssetName = asset;
             Window = window;
             Message = message;
-            Title = $"Supprimer l'équipement - {EquipmentName}";
+            Title = $"Supprimer l'équipement - {AssetName}";
             DeleteCommand = new RelayCommand(async () => await Delete());
             CloseCommand = new RelayCommand(() => Window.Close());
         }

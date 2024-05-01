@@ -26,15 +26,15 @@ namespace MntPlus.WPF
             }
         }
         public string EquipmentName { get; set; }
-        public EquipmentDto Equipment { get; set; }
+        public AssetDto Equipment { get; set; }
 
         public ObservableCollection<SelectEquipmentItemViewModel> Children { get; set; } 
         public ICommand SelectEquipmentCommand { get; set; }
         public Func<SelectEquipmentItemViewModel, Task> SelectEquipmentFunc { get; set; }
 
-        public SelectEquipmentItemViewModel(EquipmentDto equipment) 
+        public SelectEquipmentItemViewModel(AssetDto equipment) 
         {
-            EquipmentName = equipment.EquipmentName;
+            EquipmentName = equipment.Name;
             Equipment = equipment;
             Children = new ObservableCollection<SelectEquipmentItemViewModel>();
             SelectEquipmentCommand = new RelayCommand(async () => await GetSelected());

@@ -31,8 +31,8 @@ namespace MntPlus.WPF
             switch (page)
             {
 
-                case ApplicationPage.Equipement:
-                    return new EquipmentPage(viewModel as EquipmentPageViewModel); 
+                case ApplicationPage.Assets:
+                    return new AssetsPage(viewModel as EquipmentPageViewModel); 
                     case ApplicationPage.ManageWork:
                         return new ManageWorkPage(viewModel as ManageWorkViewModel);
                 default:
@@ -49,8 +49,8 @@ namespace MntPlus.WPF
         public static ApplicationPage ToApplicationPage(this BasePage page)
         {
             // Find application page that matches the base page
-            if (page is EquipmentPage)
-                return ApplicationPage.Equipement;
+            if (page is AssetsPage)
+                return ApplicationPage.Assets;
             if (page is ManageWorkPage)
                 return ApplicationPage.ManageWork;
 

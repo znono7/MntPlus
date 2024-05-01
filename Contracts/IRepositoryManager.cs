@@ -10,14 +10,11 @@ namespace Contracts
     {
         ILocationRepository Location { get; }
         IAssetRepository Asset { get; }
-        IEquipmentRepository Equipment { get; } 
-        IAssignorRepository Assignor { get; }
-
-        IEquipmentClassRepository EquipmentClass { get; }
-        IEquipmentDepartmentRepository EquipmentDepartment { get; } 
-        IEquipmentOrganizationRepository EquipmentOrganization { get; }
-        IEquipmentStatusRepository EquipmentStatus { get; }
-        IEquipmentTypeRepository EquipmentType { get; }
+        IUserRepository User { get; }
+        ITeamRepository Team { get; }
+        IWorkOrderRepository WorkOrder { get; }
+        IWorkOrderHistoryRepository WorkOrderHistory { get; }
+       
 
        Task SaveAsync(); 
     }

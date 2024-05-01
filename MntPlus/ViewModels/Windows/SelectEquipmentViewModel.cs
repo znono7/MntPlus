@@ -1,5 +1,4 @@
-﻿using Entities.Responses.Equipment;
-using Entities;
+﻿using Entities;
 using Shared;
 using System;
 using System.Collections.Generic;
@@ -54,7 +53,7 @@ namespace MntPlus.WPF
                 OnPropertyChanged(nameof(EquipmentTreeViewItems));
             }
         }
-        public ObservableCollection<EquipmentDto> EquipmentDtos { get; set; }
+        public ObservableCollection<AssetDto> EquipmentDtos { get; set; }
 
         public bool IsLoading { get; set; }
 
@@ -99,30 +98,30 @@ namespace MntPlus.WPF
         public async Task LoadDataAsync()
         {
             IsLoading = true;
-            var Result = await AppServices.ServiceManager.EquipmentService.GetAllEquipmentsAsync(false);
-            if (Result.Success && Result is ApiOkResponse<IEnumerable<EquipmentDto>> okResponse)
+            var Result = await AppServices.ServiceManager.AssetService.GetAllAssetsAsync(false);
+            if (Result.Success && Result is ApiOkResponse<IEnumerable<AssetDto>> okResponse)
             {
-                EquipmentDtos = new ObservableCollection<EquipmentDto>(okResponse.Result);
+                EquipmentDtos = new ObservableCollection<AssetDto>(okResponse.Result);
             }
             else
-            if (Result is AssignorListNotFoundResponse response)
+            if (Result is ApiNotFoundResponse response)
             {
-                EquipmentDtos = new ObservableCollection<EquipmentDto>();
+                EquipmentDtos = new ObservableCollection<AssetDto>();
             }
-            else if (Result is EquipmentGetListErrorResponse response1)
+            else if (Result is ApiBadRequestResponse response1)
             {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, response1.ErrorMessage));
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, response1.Message));
             }
             await Task.Delay(1000);
             IsLoading = false;
         }
 
-        private ObservableCollection<SelectEquipmentItemViewModel> CreateTreeViewItems(List<EquipmentDto>? equipmentData)
+        private ObservableCollection<SelectEquipmentItemViewModel> CreateTreeViewItems(List<AssetDto>? equipmentData)
         {
             var treeViewItems = new ObservableCollection<SelectEquipmentItemViewModel>();
 
             // Assuming root items have null ParentId
-            var rootItems = equipmentData.Where(e => e.EquipmentParent == null);
+            var rootItems = equipmentData.Where(e => e.AssetParent == null);
 
             foreach (var rootItem in rootItems)
             {
@@ -137,9 +136,9 @@ namespace MntPlus.WPF
 
             return treeViewItems;
         }
-        private void CreateTreeViewChildren(SelectEquipmentItemViewModel parentViewModel, List<EquipmentDto> equipmentData)
+        private void CreateTreeViewChildren(SelectEquipmentItemViewModel parentViewModel, List<AssetDto> equipmentData)
         {
-            var children = equipmentData.Where(e => e.EquipmentParent == parentViewModel.Equipment.Id);
+            var children = equipmentData.Where(e => e.AssetParent == parentViewModel.Equipment.Id);
 
             foreach (var child in children)
             {

@@ -10,15 +10,14 @@ namespace Repository
     public sealed class RepositoryManager : IRepositoryManager
     {
         private readonly RepositoryContext _repositoryContext;
-        private readonly Lazy<IEquipmentRepository> _equipmentRepository;
-        private readonly Lazy<IAssignorRepository> _assignorRepository;
-        private readonly Lazy<IEquipmentClassRepository> _equipmentClassRepository;
-        private readonly Lazy<IEquipmentDepartmentRepository> _equipmentDepartmentRepository;
-        private readonly Lazy<IEquipmentOrganizationRepository> _equipmentOrganizationRepository;
-        private readonly Lazy<IEquipmentStatusRepository> equipmentStatusRepository;
-        private readonly Lazy<IEquipmentTypeRepository> equipmentTypeRepository;
+      
         private readonly Lazy<ILocationRepository> locationRepository;
         private readonly Lazy<IAssetRepository> assetRepository;
+        private readonly Lazy<IUserRepository> userRepository;
+        private readonly Lazy<ITeamRepository> teamRepository;
+        private readonly Lazy<IWorkOrderRepository> workOrderRepository;
+        private readonly Lazy<IWorkOrderHistoryRepository> workOrderHistoryRepository;
+
 
 
 
@@ -32,32 +31,25 @@ namespace Repository
             _repositoryContext = repositoryContext;
             locationRepository = new Lazy<ILocationRepository>(() => new LocationRepository(repositoryContext));
             assetRepository = new Lazy<IAssetRepository>(() => new AssetRepository(repositoryContext));
-            _equipmentRepository = new Lazy<IEquipmentRepository>(() => new EquipmentRepository(repositoryContext));
-            _assignorRepository = new Lazy<IAssignorRepository>(() => new AssignorRepository(repositoryContext));
-            _equipmentClassRepository = new Lazy<IEquipmentClassRepository>(() => new EquipmentClassRepository(repositoryContext));
-            _equipmentDepartmentRepository = new Lazy<IEquipmentDepartmentRepository>(() => new EquipmentDepartmentRepository(repositoryContext));
-            _equipmentOrganizationRepository = new Lazy<IEquipmentOrganizationRepository>(() => new EquipmentOrganizationRepository(repositoryContext));
-            equipmentStatusRepository = new Lazy<IEquipmentStatusRepository>(() => new EquipmentStatusRepository(repositoryContext));
-            equipmentTypeRepository = new Lazy<IEquipmentTypeRepository>(() => new EquipmentTypeRepository(repositoryContext));
+            userRepository = new Lazy<IUserRepository>(() => new UserRepository(repositoryContext));
+            teamRepository = new Lazy<ITeamRepository>(() => new TeamRepository(repositoryContext));
+            workOrderRepository = new Lazy<IWorkOrderRepository>(() => new WorkOrderRepository(repositoryContext));
+            workOrderHistoryRepository = new Lazy<IWorkOrderHistoryRepository>(() => new WorkOrderHistoryRepository(repositoryContext));
+              
         }
-        public IEquipmentRepository Equipment => _equipmentRepository.Value;
-
-        public IAssignorRepository Assignor => _assignorRepository.Value;
-
-        public IEquipmentClassRepository EquipmentClass => _equipmentClassRepository.Value;
-
-        public IEquipmentDepartmentRepository EquipmentDepartment => _equipmentDepartmentRepository.Value;
-
-        public IEquipmentOrganizationRepository EquipmentOrganization => _equipmentOrganizationRepository.Value;
-
-        public IEquipmentStatusRepository EquipmentStatus => equipmentStatusRepository.Value;
-
-        public IEquipmentTypeRepository EquipmentType => equipmentTypeRepository.Value;
+      
 
         public ILocationRepository Location => locationRepository.Value;
 
         public IAssetRepository Asset => assetRepository.Value;
 
+        public IUserRepository User => userRepository.Value;
+
+        public ITeamRepository Team => teamRepository.Value;
+
+        public IWorkOrderRepository WorkOrder => workOrderRepository.Value;
+
+        public IWorkOrderHistoryRepository WorkOrderHistory => workOrderHistoryRepository.Value;
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         
     }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +10,16 @@ namespace Entities
 {
     public class Asset
     {
+        [Key]
         public Guid Id { get; set; }
         public Guid? AssetParent { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Status { get; set; }
         public string? Type { get; set; }
+
+        [ForeignKey(nameof(Location))]
+        public Guid? LocationId { get; set; }
         public Location? Location { get; set; }
         public string? SerialNumber { get; set; }
         public string? Model { get; set; }

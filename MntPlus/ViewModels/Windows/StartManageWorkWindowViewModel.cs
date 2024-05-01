@@ -56,10 +56,10 @@ namespace MntPlus.WPF
         public ICommand LowPriorityCommand { get; set; }
 
         public string ForgroundColor { get; set; } = "429b1f";
-        public EquipmentDto Equipment { get; }
+        public AssetDto Equipment { get; }
 
-        public string EquipmentName => Equipment.EquipmentName;
-        public StartManageWorkWindowViewModel(EquipmentDto equipment)
+        public string EquipmentName => Equipment.Name;
+        public StartManageWorkWindowViewModel(AssetDto equipment) 
         {
             OpenMenuPriorityCommand = new RelayCommand(() => IsMenuPrioprityOpen = !IsMenuPrioprityOpen);
             OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);

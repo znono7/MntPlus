@@ -6,7 +6,7 @@ namespace MntPlus.WPF
     {
         Dashboard = 0,
         ManageWork = 1,
-        Equipement = 2,
+        Assets = 2,
         Task = 3,
         CompletedTasks = 4,
         WorkRequest = 5

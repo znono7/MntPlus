@@ -14,14 +14,14 @@ namespace Service
 
         private readonly Lazy<ILocationService> _locationService;
         private readonly Lazy<IAssetService> assetService;
+        private readonly Lazy<IUserService> userService;
+        private readonly Lazy<ITeamService> teamService;
+        private readonly Lazy<IWorkOrderService> workOrderService;
+        private readonly Lazy<IWorkOrderHistoryService> workOrderHistoryService;
 
-        private readonly Lazy<IEquipmentService> _equipmentService;
-        private readonly Lazy<IAssignorService> _assignorService;
-        private readonly Lazy<IEquipmentDepartmentService> _equipmentDepartmentService;
-        private readonly Lazy<IEquipmentClassService> _equipmentClassService;
-        private readonly Lazy<IEquipmentOrganizationService> _equipmentOrganizationService;
-        private readonly Lazy<IEquipmentStatusService> _equipmentStatusService;
-        private readonly Lazy<IEquipmentTypeService> equipmentTypeService;
+
+
+
 
 
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper) 
@@ -29,30 +29,23 @@ namespace Service
         {
             _locationService = new Lazy<ILocationService>(() => new LocationService(repositoryManager, mapper));
             assetService = new Lazy<IAssetService>(() => new AssetService(repositoryManager, mapper));
-            _equipmentService = new Lazy<IEquipmentService>(() => new EquipmentService(repositoryManager ));
-            _assignorService = new Lazy<IAssignorService>(() => new AssignorService(repositoryManager ));
-            _equipmentDepartmentService = new Lazy<IEquipmentDepartmentService>(() => new EquipmentDepartmentService(repositoryManager ));
-            _equipmentClassService = new Lazy<IEquipmentClassService>(() => new EquipmentClassService(repositoryManager ));
-            _equipmentOrganizationService = new Lazy<IEquipmentOrganizationService>(() => new EquipmentOrganizationService(repositoryManager ));
-            _equipmentStatusService = new Lazy<IEquipmentStatusService>(() => new EquipmentStatusService(repositoryManager ));
-            equipmentTypeService = new Lazy<IEquipmentTypeService>(() => new EquipmentTypeService(repositoryManager));
+            userService = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper));
+            teamService = new Lazy<ITeamService>(() => new TeamService(repositoryManager, mapper));
+            workOrderService = new Lazy<IWorkOrderService>(() => new WorkOrderService(repositoryManager, mapper));
+            workOrderHistoryService = new Lazy<IWorkOrderHistoryService>(() => new WorkOrderHistoryService(repositoryManager, mapper));
         }
-        public IEquipmentService EquipmentService => _equipmentService.Value;
-
-        public IAssignorService AssignorService => _assignorService.Value;
-
-        public IEquipmentDepartmentService EquipmentDepartmentService => _equipmentDepartmentService.Value;
-
-        public IEquipmentClassService EquipmentClassService => _equipmentClassService.Value;
-
-        public IEquipmentOrganizationService EquipmentOrganizationService => _equipmentOrganizationService.Value;
-
-        public IEquipmentStatusService EquipmentStatusService => _equipmentStatusService.Value;
-
-        public IEquipmentTypeService EquipmentTypeService => equipmentTypeService.Value;
+      
 
         public ILocationService LocationService => _locationService.Value;
 
         public IAssetService AssetService => assetService.Value;
+
+        public IUserService UserService => userService.Value;
+
+        public ITeamService TeamService => teamService.Value;
+
+        public IWorkOrderService WorkOrderService => workOrderService.Value;
+
+        public IWorkOrderHistoryService WorkOrderHistoryService => workOrderHistoryService.Value;
     }
 }

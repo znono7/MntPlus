@@ -19,7 +19,7 @@ namespace Service
         {
             try
             {
-                var assetEntity = _mapper.Map<Asset>(asset);
+                var assetEntity = _mapper.Map<Asset>(asset); 
                 _repository.Asset.CreateAsset(assetEntity);
                 await _repository.SaveAsync();
                 var assetToReturn = _mapper.Map<AssetDto>(assetEntity);
@@ -60,8 +60,8 @@ namespace Service
             {
                 var assets = await _repository.Asset.GetAllAssetsAsync(trackChanges);
                 if (assets is null)
-                {
-                    return new ApiNotFoundResponse("");
+                { 
+                    return new ApiNotFoundResponse(""); 
                 }
                 var assetsDto = _mapper.Map<IEnumerable<AssetDto>>(assets);
                 return new ApiOkResponse<IEnumerable<AssetDto>>(assetsDto);
@@ -119,10 +119,11 @@ namespace Service
             {
                 var assetEntity = await _repository.Asset.GetAssetAsync(assetId, trackChanges);
                 if (assetEntity is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
-                _mapper.Map(asset, assetEntity);
+                assetEntity.ImagePath = asset.ImagePath;
+                assetEntity.AssetImage = asset.AssetImage;
                 await _repository.SaveAsync();
                 var assetToReturn = _mapper.Map<AssetDto>(assetEntity);
                 return new ApiOkResponse<AssetDto>(assetToReturn);

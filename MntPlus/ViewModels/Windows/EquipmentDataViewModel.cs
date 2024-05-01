@@ -17,10 +17,10 @@ namespace MntPlus.WPF
     {
 
         public EquipmentInfoViewModel? EquipmentInfoViewModel { get; set; }
-        public EquipmentChildrenViewModel? EquipmentChildrenViewModel { get; set; }
-        public EquipmentDto Equipment { get; set; }
-        public EquipmentStore EquipmentStore { get; }
-        public ObservableCollection<EquipmentItemViewModel>? Children { get; }
+        public AssetChildrenViewModel? EquipmentChildrenViewModel { get; set; }
+        public AssetDto Equipment { get; set; }
+        public AssetStore EquipmentStore { get; }
+        public ObservableCollection<AssetItemViewModel>? Children { get; }
         public string? EquipmentName { get; set; }
         public string? EquipmentImage { get; private set; }
         public BitmapImage? MyImageSource { get; private set; }
@@ -30,17 +30,17 @@ namespace MntPlus.WPF
         public ICommand BrowseCommand { get; set; }
         public ICommand DeleteImgCommand { get; set; }
 
-        public EquipmentDataViewModel(EquipmentDto equipment , EquipmentStore equipmentStore , ObservableCollection<EquipmentItemViewModel>? _children = null)
+        public EquipmentDataViewModel(AssetDto equipment , AssetStore equipmentStore , ObservableCollection<AssetItemViewModel>? _children = null)
         {
             Equipment = equipment;
             EquipmentStore = equipmentStore;
             Children = _children;
-            EquipmentName = equipment.EquipmentName;
-            EquipmentImageBytes = equipment.EquipmentImage;
+            EquipmentName = equipment.Name;
+            EquipmentImageBytes = equipment.AssetImage;
             ReadImage();
             BrowseCommand = new RelayCommand(async () => await Browse());
             EquipmentInfoViewModel = new EquipmentInfoViewModel(equipment, equipmentStore);
-            EquipmentChildrenViewModel = new EquipmentChildrenViewModel(equipment.Id, equipmentStore,Children);
+            EquipmentChildrenViewModel = new AssetChildrenViewModel(equipment.Id, equipmentStore,Children);
             DeleteImgCommand = new RelayCommand(async () => await RemoveImage());
 
         }
@@ -75,17 +75,17 @@ namespace MntPlus.WPF
                 MyImageSource = new BitmapImage(new Uri(selectedFilePath));
                 EquipmentImageBytes = File.ReadAllBytes(selectedFilePath);
 
-                if (EquipmentImageBytes != Equipment.EquipmentImage && EquipmentImageBytes.Length > 0)
+                if (EquipmentImageBytes != Equipment.AssetImage && EquipmentImageBytes.Length > 0)
                 {
-                    var Result = await AppServices.ServiceManager.EquipmentService.UpdateEquipmentImageAsync(Equipment.Id, new EquipmentForImageUpdateDto(EquipmentImage, EquipmentImageBytes), true);
-                    if (Result is not null && Result is EquipmentDeleteErrorResponse)
+                    var Result = await AppServices.ServiceManager.AssetService.UpdateAssetImage(Equipment.Id, new AssetForUpdateImage(EquipmentImage, EquipmentImageBytes), true);
+                    if (Result is not null && Result is ApiBadRequestResponse)
                     {
                         IsHaveImage = true;
                         await IoContainer.NotificationsManager.ShowMessage( new NotificationControlViewModel(NotificationType.Error,"Error updating equipment image"));
-                    }else if (Result is not null && Result is ApiOkResponse<Equipment> response)
+                    }else if (Result is not null && Result is ApiOkResponse<AssetDto> response)
                     {
-                        Equipment = MapToEquipmentDTO(response.Result)!;
-                        EquipmentStore.UpdateEquipment(Equipment);
+                        Equipment = response.Result!;
+                        EquipmentStore.UpdateAsset(Equipment);
                         await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Equipment image updated successfully"));
                     }else
                     {
@@ -104,12 +104,12 @@ namespace MntPlus.WPF
             MyImageSource = null;
             EquipmentImage = null;
             IsHaveImage = false;
-            var Result = await AppServices.ServiceManager.EquipmentService.UpdateEquipmentImageAsync(Equipment.Id, new EquipmentForImageUpdateDto(EquipmentImage, null), true);
-            if (Result is not null && Result is EquipmentDeleteErrorResponse)
+            var Result = await AppServices.ServiceManager.AssetService.UpdateAssetImage(Equipment.Id, new AssetForUpdateImage(EquipmentImage, null), true);
+            if (Result is not null && Result is ApiBadRequestResponse)
             {
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Error updating equipment image"));
             }
-            else if (Result is not null && Result is ApiOkResponse<Equipment> response)
+            else if (Result is not null && Result is ApiOkResponse<AssetDto> response)
             {
                 
                 //Equipment = MapToEquipmentDTO(response.Result)!;
@@ -121,31 +121,6 @@ namespace MntPlus.WPF
             }
         }
 
-        private EquipmentDto? MapToEquipmentDTO(Equipment? equipment)
-        {
-           
-            return new EquipmentDto
-            (
-                Id: equipment.Id,
-                EquipmentParent: equipment.EquipmentParent,
-                EquipmentName: equipment.EquipmentName,
-                EquipmentType: equipment.EquipmentType is null ? null : new EquipmentTypeDto(Id: equipment.EquipmentType.Id, EquipmentTypeName: equipment.EquipmentType.EquipmentTypeName),
-                EquipmentDescription: equipment.EquipmentDescription,
-                EquipmentOrganization: equipment.EquipmentOrganization is null ? null : new EquipmentOrganizationDto(Id: equipment.EquipmentOrganization.Id, OrganizationName: equipment.EquipmentOrganization.OrganizationName),
-                EquipmentDepartment: equipment.EquipmentDepartment is null ? null : new EquipmentDepartmentDto(Id: equipment.EquipmentDepartment.Id, DepartmentName: equipment.EquipmentDepartment.DepartmentName),
-                EquipmentClass: equipment.EquipmentClass is null ? null : new EquipmentClassDto(Id: equipment.EquipmentClass.Id, ClassName: equipment.EquipmentClass.EquipmentClassName),
-                EquipmentSite: equipment.EquipmentSite,
-                EquipmentStatus: equipment.EquipmentStatus is null ? null : new EquipmentStatusDto(Id: equipment.EquipmentStatus.Id, StatusName: equipment.EquipmentStatus.EquipmentStatusName),
-                EquipmentMake: equipment.EquipmentMake,
-                EquipmentSerialNumber: equipment.EquipmentSerialNumber,
-                EquipmentModel: equipment.EquipmentModel,
-                EquipmentCost: equipment.EquipmentCost,
-                EquipmentCommissionDate: equipment.EquipmentCommissionDate,
-                EquipmentAssignedTo: equipment.EquipmentAssignedTo is null ? null : new EquipmentAssignedToDto(Id: equipment.EquipmentAssignedTo.Id, AssignedToName: equipment.EquipmentAssignedTo.Name),
-                EquipmentNameImage: equipment.EquipmentNameImage,
-                EquipmentImage: equipment.EquipmentImage
-            );
-        }
     }
 }
  

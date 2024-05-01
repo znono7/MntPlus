@@ -19,13 +19,13 @@ namespace Shared
 
     public record LocationForCreationDto
         (
-        string Name,
-            string Address,
-            string City,
-            string State,
-            string Country,
-            string ImagePath,
-            byte[] LocationImage
+        string? Name,
+            string? Address,
+            string? City,
+            string? State,
+            string? Country,
+            string? ImagePath,
+            byte[]? LocationImage
         );
 
    

@@ -89,7 +89,7 @@ namespace MntPlus.WPF
         private async Task ToEquipementPage()
         {
             TravailMenuEnabled = false;
-            IoContainer.Application.GoToPage(ApplicationPage.Equipement);
+            IoContainer.Application.GoToPage(ApplicationPage.Assets);
             await Task.Delay(1);
         }
 

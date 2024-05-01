@@ -23,7 +23,7 @@ namespace Service
         }
         public async Task<ApiBaseResponse> CreateLocation(LocationForCreationDto location)
         {
-            try
+            try 
             {
                 var locationEntity = _mapper.Map<Location>(location);
                 _repository.Location.CreateLocation(locationEntity);
@@ -64,7 +64,7 @@ namespace Service
         public async Task<ApiBaseResponse> GetAllLocationsAsync(bool trackChanges)
         {
             try
-            {
+            { 
                 var locations = await _repository.Location.GetAllLocationsAsync(trackChanges);
                 if(locations is null)
                 {

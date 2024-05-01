@@ -57,7 +57,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Title -->
-                                        <TextBlock Grid.Column="0" Text="Ajouter un Équipement" Margin="20 20 0 0" Style="{DynamicResource TitleTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="0" Text="Ajouter un actif" Margin="20 20 0 0" Style="{DynamicResource TitleTextBlockStyle}"/>
                                         <!-- Window Buttons -->
 
 
@@ -150,7 +150,7 @@
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Nom du nouvel équipement" Style="{DynamicResource LabelTextBlockStyle}" />
                 <TextBox x:Name="txtEquipmentName" Margin="24 0 0 0" Style="{DynamicResource InputTextBoxStyle}" 
-                         Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,ValidatesOnDataErrors=True,NotifyOnValidationError=True}"/>
+                         Text="{Binding AssetName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,ValidatesOnDataErrors=True,NotifyOnValidationError=True}"/>
                 <StackPanel Orientation="Horizontal" Margin="30 0 0 6" Height="22">
                     <!--<Path x:Name="errorIcon" Data="{StaticResource error}" Height="11" Width="11" Stretch="Fill" Fill="{DynamicResource SecundaryRedColor}"/>-->
                     <TextBlock Margin="2 0 0 0" FontSize="10" Style="{StaticResource ErrorLabelTextBlockStyle}" 
