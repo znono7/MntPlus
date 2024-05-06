@@ -10,7 +10,22 @@ namespace MntPlus.WPF
     public class SideMenuViewModel : BaseViewModel
     {
         #region Public Properties
-        
+
+        private ApplicationPage _currentPage;
+
+        public ApplicationPage CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                if (_currentPage != value)
+                {
+                    _currentPage = value;
+                    IoContainer.Application.GoToPage(value);
+                }
+            }
+        }
+
         public bool TravailMenuEnabled { get; set; }
 
         public double SideMenuWidth { get; set; } = 68;
@@ -48,6 +63,7 @@ namespace MntPlus.WPF
         public ICommand EquipementCommand { get; set; }
         public ICommand DashboardCommand { get; set; }
         public ICommand OpenTaskCommand { get; set; }
+        public ICommand TeamsCommand { get; set; }
         public ICommand CompletedTasksCommand { get; set; }
         public ICommand WorkReqeustCommand { get; set; }
 
@@ -57,21 +73,29 @@ namespace MntPlus.WPF
         #region Constructor
         public SideMenuViewModel()
         {
-            TravailCommand = new RelayCommand(async () => await ToTravailPage() /*TravailMenuEnabled = true*/);//^
+            TravailCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.ManageWork) /*TravailMenuEnabled = true*/);//^
             ToggleCommand = new RelayCommand(async () => await ToggleAction());
             DashboardCommand = new RelayCommand(async () => await ToDashPage());
-            EquipementCommand = new RelayCommand(async () => await ToEquipementPage());
+            EquipementCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Assets));
+            TeamsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Users));
 
+        }
+
+        private async Task NavigateToPageAsync(ApplicationPage page)
+        {
+            if (CurrentPage == page)
+                return;
+
+            CurrentPage = page;
+            await Task.Delay(1);
         }
 
         private async Task ToTravailPage()
         {
-            //if(SideMenuWidth == 69)
-            //{
-            //    return;
-            //}
+           
 
-            TravailMenuEnabled = true;//!TravailMenuEnabled;
+            TravailMenuEnabled = true;
+            
             IoContainer.Application.GoToPage(ApplicationPage.ManageWork);
 
             await Task.Delay(1);

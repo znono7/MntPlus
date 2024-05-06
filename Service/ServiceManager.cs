@@ -18,6 +18,8 @@ namespace Service
         private readonly Lazy<ITeamService> teamService;
         private readonly Lazy<IWorkOrderService> workOrderService;
         private readonly Lazy<IWorkOrderHistoryService> workOrderHistoryService;
+        private readonly Lazy<IInstructionService> instructionService;
+
 
 
 
@@ -33,6 +35,7 @@ namespace Service
             teamService = new Lazy<ITeamService>(() => new TeamService(repositoryManager, mapper));
             workOrderService = new Lazy<IWorkOrderService>(() => new WorkOrderService(repositoryManager, mapper));
             workOrderHistoryService = new Lazy<IWorkOrderHistoryService>(() => new WorkOrderHistoryService(repositoryManager, mapper));
+            instructionService = new Lazy<IInstructionService>(() => new InstructionService(repositoryManager, mapper));
         }
       
 
@@ -47,5 +50,7 @@ namespace Service
         public IWorkOrderService WorkOrderService => workOrderService.Value;
 
         public IWorkOrderHistoryService WorkOrderHistoryService => workOrderHistoryService.Value;
+
+        public IInstructionService InstructionService => instructionService.Value;
     }
 }

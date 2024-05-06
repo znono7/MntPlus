@@ -20,7 +20,7 @@ namespace Service
             try
             {
                 var assetEntity = _mapper.Map<Asset>(asset); 
-                _repository.Asset.CreateAsset(assetEntity);
+                _repository.Asset.CreateAsset(assetEntity); 
                 await _repository.SaveAsync();
                 var assetToReturn = _mapper.Map<AssetDto>(assetEntity);
                 return new ApiOkResponse<AssetDto>(assetToReturn);

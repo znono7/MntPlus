@@ -14,6 +14,7 @@ namespace Service.Contracts
         ITeamService TeamService { get; }
         IWorkOrderService WorkOrderService { get;}
         IWorkOrderHistoryService WorkOrderHistoryService { get; }
+        IInstructionService InstructionService { get; }
       
 
     }

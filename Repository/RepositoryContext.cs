@@ -8,7 +8,7 @@ namespace Repository
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
         }
-
+         
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
         }
@@ -20,6 +20,7 @@ namespace Repository
         public DbSet<WorkOrderHistory>? WorkOrderHistories { get; set; }
         public DbSet<MaintenanceActivities>? MaintenanceActivities { get; set; }
         public DbSet<Schedule>? Schedules { get; set; }
+        public DbSet<Instruction>? Instructions { get; set; }
 
 
 

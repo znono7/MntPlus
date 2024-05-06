@@ -9,7 +9,7 @@ namespace Shared
     public record WorkOrderDto (
         Guid Id, 
         string? Name, 
-        string? Instructions, 
+        string? Instructions,  
         string? Priority, 
         DateTime? DueDate, 
         string? Type, 

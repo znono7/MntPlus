@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MntPlus.WPF" 
+        xmlns:local="clr-namespace:MntPlus.WPF" x:Name="WorkWind"
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
         Title="StartManageWorkWindow" d:DesignHeight="800" Height="625" Width="1120">
     <Grid>
@@ -85,12 +85,12 @@
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Nom" Style="{DynamicResource LabelTextBlockStyle}" FontSize="16"/>
                             <TextBox Width="480"  Margin="24 0 0 0" Style="{DynamicResource InputTextBoxStyle}" Tag="Nom de OT"
-                                Text="{Binding OrderWorkName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Vertical">
                             <TextBlock Text="Instructions" Style="{DynamicResource LabelTextBlockStyle}" FontSize="16"/>
                             <TextBox Width="480"  Margin="24 0 0 0" Style="{DynamicResource InputTextBoxStyle}" Tag="entrez les instructions ici"
-                                Text="{Binding OrderWorkInstructions, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                                Text="{Binding Instructions, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Orientation="Vertical">
                             <TextBlock Text="Priorité" Style="{DynamicResource LabelTextBlockStyle}" FontSize="16"/>
@@ -153,10 +153,14 @@
                 </ScrollViewer>
             </Grid>
 
-            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="3" Margin="20">
-               
-                <Button  Command="{Binding SaveOrderWorkCommand}" Style="{DynamicResource CPrimeButton}" Content="Enregistrer" Margin="0 0 20 0"/>
-                <Button  Command="{Binding CancelOrderWorkCommand}" Style="{DynamicResource CPrime2}" Content="Annuler" Margin="20 0"/>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="3" Margin="20 5 20 20">
+
+                <Button  Command="{Binding SaveCommand}"
+                         CommandParameter="{Binding ElementName=WorkWind}"
+                         local:IsBusyProperty.Value="{Binding SaveIsRunning}" 
+                         Tag="{StaticResource done}" 
+                         Style="{DynamicResource RegullarPrimeButton}" Content="Enregistrer"/>
+                <Button  Command="{Binding CancelOrderWorkCommand}" CommandParameter="{Binding ElementName=WorkWind}" Style="{DynamicResource CPrime2}" Content="Annuler" Margin="20 0"/>
             </StackPanel>
         </Grid>
     </Grid>

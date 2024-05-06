@@ -11,13 +11,13 @@ namespace MntPlus.WPF
 {
     public class AssetChildrenViewModel : BaseViewModel
     {
-        protected string mLastSearchText;
-        protected string mSearchText;
+        protected string? mLastSearchText;
+        protected string? mSearchText;
 
         public ICommand SearchCommand { get; set; }
         public ICommand AddNewChildCommand { get; set; }
 
-        public string SearchText
+        public string? SearchText
         {
             get => mSearchText;
             set
@@ -75,18 +75,8 @@ namespace MntPlus.WPF
             BaseequipmentStore = baseequipmentStore;
             Children = _children;
             Parent = parent;
-            foreach (var child in Children)
-            {
-                child.WidthControl = 640;
-            }
-            //    child.PropertyChanged += (sender, e) =>
-            //    {
-            //        if (e.PropertyName == nameof(EquipmentItemViewModel.IsSelected))
-            //        {
-            //            OnPropertyChanged(nameof(Children));
-            //        }
-            //    };
-            //}
+           
+            
         }
 
         private void EquipmentStore_EquipmentCreated(AssetDto? dto)
@@ -95,9 +85,8 @@ namespace MntPlus.WPF
                 return;
 
             var viewModel = new AssetItemViewModel(dto);
-            //viewModel.WidthControl = 640;
-            Children.Add(viewModel);
-            FilteredChildren.Add(viewModel);
+            Children?.Add(viewModel);
+            FilteredChildren?.Add(viewModel);
             
         }
 
@@ -120,7 +109,7 @@ namespace MntPlus.WPF
             {
                 _children = value;
                 FilteredChildren = 
-                    new ObservableCollection<AssetItemViewModel>(_children);
+                    new ObservableCollection<AssetItemViewModel>(_children!);
                 OnPropertyChanged(nameof(Children));
             }
         }
@@ -131,19 +120,19 @@ namespace MntPlus.WPF
             if (searchPattern.StartsWith("*") && !searchPattern.EndsWith("*"))
             {
                 string searchTerm = searchPattern.TrimStart('*');
-                return items.Where(item => item.AssetName.EndsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
+                return items.Where(item => item.AssetName!.EndsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
             }
             // Case 2: Search for items that start with the word
             else if (!searchPattern.StartsWith("*") && searchPattern.EndsWith("*"))
             {
                 string searchTerm = searchPattern.TrimEnd('*');
-                return items.Where(item => item.AssetName.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
+                return items.Where(item => item.AssetName!.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
             }
             // Case 3: Search for items that contain the word
             else if (searchPattern.StartsWith("*") && searchPattern.EndsWith("*"))
             {
                 string searchTerm = searchPattern.Trim('*');
-                return items.Where(item => item.AssetName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+                return items.Where(item => item.AssetName!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
             }
             else
             {

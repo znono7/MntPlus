@@ -20,5 +20,7 @@ namespace Entities
         public Guid? TeamId { get; set; }
         public Team? Team { get; set; }
 
+        public ICollection<UserRole>? UserRoles { get; set; }
+
     }
 }

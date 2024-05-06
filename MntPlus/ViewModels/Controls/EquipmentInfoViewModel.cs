@@ -54,11 +54,19 @@ namespace MntPlus.WPF
             //LoadDataAsync().GetAwaiter().GetResult();
             Asset = equipment;
             SelectedAssetType = new AssetType();
-            SelectedAssetType.Name = equipment.Type;
+            if(equipment.Type is not null)
+                SelectedAssetType = AssetTypes.AssetTypeList.FirstOrDefault(x => x.Name == equipment.Type);
             SelectedAssetStatus = new AssetStatus();
-            SelectedAssetStatus.Name = equipment.Status;
+            if(equipment.Status is not null)
+                SelectedAssetStatus = AssetStatuses.AssetStatusList.FirstOrDefault(x => x.Name == equipment.Status);
+
             _dueDate = equipment.AssetCommissionDate;
 
+            if(equipment.Location is not null && LocationDtos is not null)
+            {
+                SelectedLocation = LocationDtos.FirstOrDefault(x => x.Id == equipment.Location.Id);
+            }
+            
             EquipmentStore = equipmentStore;
            
             CommissionDateCommand = new RelayCommand(() => DatePopup = !DatePopup);

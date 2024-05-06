@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Entities;
+using Microsoft.VisualBasic;
+using Shared;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +13,15 @@ namespace MntPlus.WPF
 {
     public class ViewTaskViewModel : BaseViewModel
     {
+        public InstructionControlViewModel InstructionControlViewModel { get; set; }
+        public CommentControlViewModel CommentControlViewModel { get; set; }
+
+        public bool IsCommentControlOpen { get; set; }
+        public bool IsMenuInstructionOpen { get; set; }
         public bool IsMenuPrioprityOpen { get; set; }
+        public ICommand OpenCommentControlCommand { get; set; }
+        public ICommand OpenMenuInstructionCommand { get; set; }
+
         public ICommand OpenMenuPriorityCommand { get; set; }
         public ICommand HighPriorityCommand { get; set; }
         public ICommand MediumPriorityCommand { get; set; }
@@ -43,7 +55,7 @@ namespace MntPlus.WPF
                     case "Moyenne":
                         ForgroundColor = "ef6a00";
                         break;
-                    case "Faible":
+                    case "Basse":
                         ForgroundColor = "429b1f";
                         break;
                 }
@@ -99,21 +111,119 @@ namespace MntPlus.WPF
         public string WorkType { get; set; } = "Prévu";
 
         public TextEntryViewModel TaskName { get; set; }
+        public WorkOrderDto? Dto { get; set; }
 
-        public ViewTaskViewModel()
+        public string? WorkAsset { get; set; }
+
+        public ICommand ClosePopupCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand RemoveInstructionCommand { get; set; }
+        public bool SaveIsRunning { get; set; }
+        public bool DeleteIsRunning { get; set; }
+        public bool DimmableOverlayVisible { get; set; }
+        public Func<Task> ClosePopupAction { get; set; }
+
+        public ObservableCollection<InstructionDto> InstructionDtos { get; set; } 
+        public ObservableCollection<InstructionDto> CompleteWork { get; set; }
+        public ObservableCollection<WorkOrderHistoryDto> WorkOrderHistoryDtos { get; set; }
+
+        public bool IsForComplete { get; set; }
+        public ViewTaskViewModel(WorkOrderDto? dto)
         {
-            TaskName = new TextEntryViewModel { OriginalText = "Task Name" };
+            Dto = dto;
+            WorkType = dto?.Type!;
+            DueDate = dto?.DueDate ?? DateTime.Today;
+            WorkStat = dto?.Status ?? "Ouvrir";
+            OrderWorkPriority = dto?.Priority ?? "Basse";
+            TaskName = new TextEntryViewModel { OriginalText = dto?.Name! };
+            WorkAsset = dto?.Asset?.Name ?? string.Empty;
             OpenMenuPriorityCommand = new RelayCommand(() => IsMenuPrioprityOpen = !IsMenuPrioprityOpen);
             OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);
             OpenMenuTypeCommand = new RelayCommand(() => IsMenuTypeOpen = !IsMenuTypeOpen);
             OpenMenuAssignedCommand = new RelayCommand(() => IsMenuAssignedOpen = !IsMenuAssignedOpen);
             HighPriorityCommand = new RelayCommand(() => OrderWorkPriority = "Haute");
             MediumPriorityCommand = new RelayCommand(() => OrderWorkPriority = "Moyenne");
-            LowPriorityCommand = new RelayCommand(() => OrderWorkPriority = "Faible");
+            LowPriorityCommand = new RelayCommand(() => OrderWorkPriority = "Basse");
             OpenMenuStatCommand = new RelayCommand(() => IsMenuStatOpen = !IsMenuStatOpen);
             OpenStatCommand = new RelayCommand(() => WorkStat = "Ouvrir");
             InProgressCommand = new RelayCommand(() => WorkStat = "En Cours");
             CompleteCommand = new RelayCommand(() => WorkStat = "Complété");
+            ClosePopupCommand = new RelayCommand(async () => await ClosePopupAction());
+            SaveCommand = new RelayCommand(async () => await Save());
+            InstructionDtos = new ObservableCollection<InstructionDto>
+            {
+                new InstructionDto ( Guid.Empty,  "Description 1" ),
+                new InstructionDto ( Guid.Empty,  "Description 2" ),
+                new InstructionDto ( Guid.Empty,  "Description 3" )
+            };
+            if(InstructionDtos is null)
+            {
+                CompleteWork = new ObservableCollection<InstructionDto>
+                {
+                    new InstructionDto ( Guid.Empty,  "Travail Complet" ),
+                };
+                IsForComplete = true;
+            }
+            OpenMenuInstructionCommand = new RelayCommand( async() => await MenuInstruction());
+            InstructionControlViewModel = new InstructionControlViewModel(dto?.Id);
+            InstructionControlViewModel.CommitAction = MenuInstruction;
+
+            RemoveInstructionCommand = new RelayParameterizedCommand(async(p) => await RemoveInstruction(p));
+
+
+            CommentControlViewModel = new CommentControlViewModel("Ouvrir", null, dto?.Id);
+            CommentControlViewModel.CommitAction = MenuComment;
+            OpenCommentControlCommand = new RelayCommand(async () => await MenuComment());
+
+        }
+
+        private async Task MenuComment()
+        {
+            CommentControlViewModel = new CommentControlViewModel("Ouvrir", null, Dto?.Id);
+            CommentControlViewModel.CommitAction = MenuComment;
+            IsCommentControlOpen = !IsCommentControlOpen;
+            DimmableOverlayVisible = IsCommentControlOpen ? true : false;
+            await Task.Delay(1);
+        }
+        private async Task RemoveInstruction(object? p)
+        {
+            var instruction = p as InstructionDto;
+            if (instruction is null)
+            {
+                return;
+            }
+            
+            await RunCommandAsync(() => DeleteIsRunning, async () =>
+            {
+                var Result = await AppServices.ServiceManager.InstructionService.DeleteInstruction(instruction.Id,false);
+                if(Result is not null && Result is ApiOkResponse<InstructionDto> response)
+                {
+                   
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Instruction supprimée avec succès"));
+                }
+                else
+                {
+                    
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression de l'instruction"));
+                }
+            });
+            InstructionDtos.Remove(instruction);
+            await Task.Delay(1);
+            
+        }
+
+        private async Task MenuInstruction()
+        {
+            IsMenuInstructionOpen = !IsMenuInstructionOpen;
+            DimmableOverlayVisible = IsMenuInstructionOpen ? true : false;
+            await Task.Delay(1);
+        }
+
+        private async Task Save()
+        {
+            SaveIsRunning = true;
+            await Task.Delay(1000);
+            SaveIsRunning = false;
         }
     }
 }

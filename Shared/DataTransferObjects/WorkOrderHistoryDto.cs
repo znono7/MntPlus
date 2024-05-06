@@ -17,7 +17,7 @@ namespace Shared
            );
 
     public record WorkOrderHistoryCreateDto(
-        string? Status,
+        string? Status, 
                       DateTime? DateChanged,
                                            UserDto? ChangedBy,
                                                                        string? Notes,

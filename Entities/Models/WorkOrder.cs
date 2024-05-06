@@ -9,17 +9,16 @@ namespace Entities
         [Key]
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        public string? Instructions { get; set; }
         public string? Priority { get; set; }
         public DateTime? DueDate { get; set; }
         public string? Type { get; set; }
         public string? Status { get; set; }
 
-        [ForeignKey(nameof(User))]
+        [ForeignKey(nameof(UserAssignedTo))]
         public Guid? UserAssignedToId { get; set; }
-        public User? UserAssignedTo { get; set; }
+        public UserRole? UserAssignedTo { get; set; }
 
-        [ForeignKey(nameof(Team))]
+        [ForeignKey(nameof(TeamAssignedTo))]
         public Guid? TeamAssignedToId { get; set; }
         public Team? TeamAssignedTo { get; set; }
 
@@ -27,5 +26,6 @@ namespace Entities
         public Guid? AssetId { get; set; }
         public Asset? Asset { get; set; }
         public ICollection<WorkOrderHistory>? WorkOrderHistories { get; set; }
+        public ICollection<Instruction>? Instructions { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Shared
         string? SerialNumber,
         string? Model,
         string? Make,
-        double? PurchaseCost,
+        double? PurchaseCost, 
         string? ImagePath,
         byte[]? AssetImage,
         DateTime? AssetCommissionDate

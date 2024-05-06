@@ -74,13 +74,13 @@ namespace MntPlus.WPF
                 EquipmentImage = Path.GetFileName(selectedFilePath);
                 MyImageSource = new BitmapImage(new Uri(selectedFilePath));
                 EquipmentImageBytes = File.ReadAllBytes(selectedFilePath);
+                IsHaveImage = true;
 
                 if (EquipmentImageBytes != Equipment.AssetImage && EquipmentImageBytes.Length > 0)
                 {
                     var Result = await AppServices.ServiceManager.AssetService.UpdateAssetImage(Equipment.Id, new AssetForUpdateImage(EquipmentImage, EquipmentImageBytes), true);
                     if (Result is not null && Result is ApiBadRequestResponse)
                     {
-                        IsHaveImage = true;
                         await IoContainer.NotificationsManager.ShowMessage( new NotificationControlViewModel(NotificationType.Error,"Error updating equipment image"));
                     }else if (Result is not null && Result is ApiOkResponse<AssetDto> response)
                     {

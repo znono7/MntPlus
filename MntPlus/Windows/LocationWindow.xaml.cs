@@ -46,7 +46,7 @@ namespace MntPlus.WPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            SetTop();
+           // SetTop();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace MntPlus.WPF
     /// </summary>
     public partial class StartManageWorkWindow : Window
     {
-        public StartManageWorkWindow()
+        public StartManageWorkWindow() 
         {
             InitializeComponent();
         }

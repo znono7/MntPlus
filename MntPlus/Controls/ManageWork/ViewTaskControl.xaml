@@ -5,186 +5,354 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MntPlus.WPF"
              mc:Ignorable="d"  Width="720"
-             d:DesignHeight="620" d:DesignWidth="720">
+             d:DesignHeight="900" d:DesignWidth="720">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.RowSpan="2" VerticalAlignment="Top" Margin="0 25 0 0">
+        <!-- Dimmed overlay -->
+        <Border Grid.RowSpan="3" Grid.ColumnSpan="2"
+                   Panel.ZIndex="10"
+                   Opacity="0.3">
+
+            <Border Background="{StaticResource PrimaryBlackColor}"
+                local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
+
+        </Border>
+        <local:InstructionControl VerticalAlignment="Center" Panel.ZIndex="11"  Grid.ColumnSpan="2" Grid.RowSpan="3" DataContext="{Binding InstructionControlViewModel}" 
+                            local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.IsMenuInstructionOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ViewTaskControl}}}" HorizontalAlignment="Right"   />
+
+        <local:CommentControl VerticalAlignment="Center" Panel.ZIndex="11"  Grid.ColumnSpan="2" Grid.RowSpan="3" DataContext="{Binding CommentControlViewModel}" 
+                     local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.IsCommentControlOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ViewTaskControl}}}" HorizontalAlignment="Right"   />
+
+        <Border Grid.Column="1" Grid.RowSpan="3" Background="{DynamicResource TertiaryBackgroundColor}"/>
+        <Grid Grid.RowSpan="3" VerticalAlignment="Top" Margin="0 25 0 0">
             <Border Background="{DynamicResource PrimaryBackgroundColor}" Height="32" Width="32" CornerRadius="5"/>
-            <Button   Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton"/>
+            <Button Command="{Binding ClosePopupCommand}"  Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton"/>
         </Grid>
-        <Grid Grid.Column="1" Background="{DynamicResource TertiaryBackgroundColor}"/>
-        <Grid Grid.Row="1" Grid.Column="1" Background="{DynamicResource TertiaryBackgroundColor}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            
-            <local:TextEntryControl Margin="25 10" DataContext="{Binding TaskName}"/>
-            <TextBlock Grid.Row="1" Margin="25 5" Text="{Binding TaskDescription}" Style="{DynamicResource LabelTextBlockStyle}"/>
-            <Rectangle Height="1"  Grid.Row="2" Fill="{DynamicResource LineColor}"  VerticalAlignment="Top" Margin="25 0" />
-            <Grid Grid.Row="3" Margin="25 5" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid x:Name="PriorityGrid">
-                    <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" Text="Priorité"/>
+        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid Grid.Row="1" Grid.Column="1" Background="{DynamicResource TertiaryBackgroundColor}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <local:TextEntryControl Margin="25 10" DataContext="{Binding TaskName}"/>
+                <TextBlock Grid.Row="1" Margin="25 5" Text="{Binding TaskDescription}" Style="{DynamicResource LabelTextBlockStyle}"/>
+                <Rectangle Height="1"  Grid.Row="2" Fill="{DynamicResource LineColor}"  VerticalAlignment="Top" Margin="25 0" />
+                <Grid Grid.Row="3" Margin="25 5" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="PriorityGrid">
+                        <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" Text="Priorité"/>
                             <!--<Path Width="16" Height="16" Stretch="UniformToFill" Data="{StaticResource priority}" Fill="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter},FallbackValue=black}"/>-->
-                        <Button Command="{Binding OpenMenuPriorityCommand}" HorizontalAlignment="Stretch" ToolTipService.InitialShowDelay="1" Foreground="{Binding ForgroundColor,FallbackValue=Black,Converter={local:StringRGBToBrushConverter}}" Style="{StaticResource PrimeButton3}" Tag="{StaticResource priority}" Content="{Binding OrderWorkPriority,UpdateSourceTrigger=PropertyChanged,FallbackValue=Hight}"/>
+                            <Button Command="{Binding OpenMenuPriorityCommand}" HorizontalAlignment="Stretch" ToolTipService.InitialShowDelay="1" Foreground="{Binding ForgroundColor,FallbackValue=Black,Converter={local:StringRGBToBrushConverter}}" Style="{StaticResource PrimeButton3}" Tag="{StaticResource priority}" Content="{Binding OrderWorkPriority,UpdateSourceTrigger=PropertyChanged,FallbackValue=Hight}"/>
 
-                    </StackPanel>
-                </Grid>
-                <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuPrioprityOpen}" PlacementTarget="{Binding ElementName=PriorityGrid}" Placement="Bottom" AllowsTransparency="True">
-                    <Grid>
-                        <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
-
-                        <StackPanel Margin="1 20 1 20">
-                            <Button Command="{Binding HighPriorityCommand}" Style="{DynamicResource PopupButton}" Content="1- Haute Priorité"/>
-                            <Button Command="{Binding MediumPriorityCommand}" Style="{DynamicResource PopupButton}" Content="2- Priorité Moyenne"/>
-                            <Button Command="{Binding LowPriorityCommand}" Style="{DynamicResource PopupButton}" Content="3- Faible Priorité"/>
                         </StackPanel>
                     </Grid>
-                </Popup>
-                <Grid x:Name="DateGrid" Margin="10 0" Grid.Column="1">
-                    <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Date d'échéance" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                    <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuPrioprityOpen}" PlacementTarget="{Binding ElementName=PriorityGrid}" Placement="Bottom" AllowsTransparency="True">
+                        <Grid>
+                            <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                            <StackPanel Margin="1 20 1 20">
+                                <Button Command="{Binding HighPriorityCommand}" Style="{DynamicResource PopupButton}" Content="1- Haute Priorité"/>
+                                <Button Command="{Binding MediumPriorityCommand}" Style="{DynamicResource PopupButton}" Content="2- Priorité Moyenne"/>
+                                <Button Command="{Binding LowPriorityCommand}" Style="{DynamicResource PopupButton}" Content="3- Faible Priorité"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
+                    <Grid x:Name="DateGrid" Margin="10 0" Grid.Column="1">
+                        <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Date d'échéance" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
                             <!--<Path Width="16" Height="16" Stretch="UniformToFill" Data="{StaticResource priority}" Fill="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter},FallbackValue=black}"/>-->
-                        <Button Command="{Binding OpenMenuDueDateCommand}" ToolTipService.InitialShowDelay="1"  Style="{StaticResource PrimeButton3}" Tag="{StaticResource date}" Content="{Binding ShortDueDate,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Command="{Binding OpenMenuDueDateCommand}" ToolTipService.InitialShowDelay="1"  Style="{StaticResource PrimeButton3}" Tag="{StaticResource date}" Content="{Binding ShortDueDate,UpdateSourceTrigger=PropertyChanged}"/>
 
                         </StackPanel>
-                </Grid>
-                <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding IsMenuDueDateOpen}" Placement="Bottom" PlacementTarget="{Binding ElementName=DateGrid}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup">
-                    <Grid >
+                    </Grid>
+                    <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding IsMenuDueDateOpen}" Placement="Bottom" PlacementTarget="{Binding ElementName=DateGrid}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup">
+                        <Grid >
 
-                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                            <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
                                     SelectedDate="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
-                </Popup>
-                <Grid x:Name="TypeGrid" Margin=" 0 0 10 0" Grid.Column="2">
-                    <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Type de Tâche" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                        </Grid>
+                    </Popup>
+                    <Grid x:Name="TypeGrid" Margin=" 0 0 10 0" Grid.Column="2">
+                        <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Type de Tâche" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
                             <!--<Path Width="16" Height="16" Stretch="UniformToFill" Data="{StaticResource priority}" Fill="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter},FallbackValue=black}"/>-->
-                        <Button Command="{Binding OpenMenuTypeCommand}" ToolTipService.InitialShowDelay="1" Style="{StaticResource PrimeButton3}" Tag="{StaticResource typework}" Content="{Binding WorkType,UpdateSourceTrigger=PropertyChanged}">
-                                
-                            </Button>
-                    </StackPanel>
-                </Grid>
-                <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuTypeOpen}" PlacementTarget="{Binding ElementName=TypeGrid}" Placement="Bottom" AllowsTransparency="True">
-                    <Grid>
-                        <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+                            <Button Command="{Binding OpenMenuTypeCommand}" ToolTipService.InitialShowDelay="1" Style="{StaticResource PrimeButton3}" Tag="{StaticResource typework}" Content="{Binding WorkType,UpdateSourceTrigger=PropertyChanged}">
 
-                        <StackPanel Margin="10 15">
-                            <RadioButton Margin="0 10 0 10"  IsChecked="{Binding WorkType, Converter={local:TypeToBooleanConverter}, ConverterParameter=Prévu}"  Content="Prévu"/>
-                            <RadioButton Margin="0 0 0 10" IsChecked="{Binding WorkType, Converter={local:TypeToBooleanConverter}, ConverterParameter=Imprévu}"  Content="Imprévu"/>
-                            <RadioButton Margin="0 0 0 10" IsChecked="{Binding WorkType, Converter={local:TypeToBooleanConverter}, ConverterParameter=Correctif}"  Content="Correctif"/>
+                            </Button>
                         </StackPanel>
                     </Grid>
-                </Popup>
-                <Grid x:Name="AssigneGrid" Margin=" 0 0 10 0" Grid.Column="3">
-                    <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Assigné à" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
-                        
+                    <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuTypeOpen}" PlacementTarget="{Binding ElementName=TypeGrid}" Placement="Bottom" AllowsTransparency="True">
+                        <Grid>
+                            <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                            <StackPanel Margin="10 15">
+                                <RadioButton Margin="0 10 0 10"  IsChecked="{Binding WorkType, Converter={local:TypeToBooleanConverter}, ConverterParameter=Prévu}"  Content="Prévu"/>
+                                <RadioButton Margin="0 0 0 10" IsChecked="{Binding WorkType, Converter={local:TypeToBooleanConverter}, ConverterParameter=Imprévu}"  Content="Imprévu"/>
+                                <RadioButton Margin="0 0 0 10" IsChecked="{Binding WorkType, Converter={local:TypeToBooleanConverter}, ConverterParameter=Correctif}"  Content="Correctif"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
+                    <Grid x:Name="AssigneGrid" Margin=" 0 0 10 0" Grid.Column="3">
+                        <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="5" Height="64" Width="120"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Assigné à" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+
                             <!--<Path Width="16" Height="16" Stretch="UniformToFill" Data="{StaticResource priority}" Fill="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter},FallbackValue=black}"/>-->
-                        <Button Command="{Binding OpenMenuAssignedCommand}" ToolTipService.InitialShowDelay="1" Style="{StaticResource PrimeButton3}" Tag="{StaticResource user}" Content="{Binding WorkType,UpdateSourceTrigger=PropertyChanged}">
-                               
+                            <Button Command="{Binding OpenMenuAssignedCommand}" ToolTipService.InitialShowDelay="1" Style="{StaticResource PrimeButton3}" Tag="{StaticResource user}" Content="{Binding WorkType,UpdateSourceTrigger=PropertyChanged}">
+
                             </Button>
-                    </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="340"  IsOpen="{Binding IsMenuAssignedOpen}" PlacementTarget="{Binding ElementName=AssigneGrid}" Placement="Bottom" AllowsTransparency="True">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="240"/>
+                                <RowDefinition Height="240"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.RowSpan="2" Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                            <StackPanel Grid.Row="0"  Orientation="Vertical">
+                                <TextBlock HorizontalAlignment="Left" Text="Utilisateurs" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 10" FontSize="14"/>
+                                <RadioButton GroupName="g1" Content="Lamine Belkheir" Tag="{StaticResource user}" Style="{StaticResource AssignorRadioButtonStyle}"/>
+                                <RadioButton GroupName="g1" Content="User 2" Tag="{StaticResource user}" Style="{StaticResource AssignorRadioButtonStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Vertical">
+                                <TextBlock HorizontalAlignment="Left" Text="Équipes" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 10" FontSize="14"/>
+                                <RadioButton GroupName="g1" Content="Directeur" Tag="{StaticResource users}" Style="{StaticResource AssignorRadioButtonStyle}"/>
+                                <RadioButton GroupName="g1" Content="Technicien" Tag="{StaticResource users}" Style="{StaticResource AssignorRadioButtonStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
                 </Grid>
-                <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="340"  IsOpen="{Binding IsMenuAssignedOpen}" PlacementTarget="{Binding ElementName=AssigneGrid}" Placement="Bottom" AllowsTransparency="True">
+                <Rectangle Height="1"  Grid.Row="4" Fill="{DynamicResource LineColor}"  VerticalAlignment="Top" Margin="25 0" />
+                <Button Grid.Row="5" ToolTipService.InitialShowDelay="1" Style="{StaticResource PrimeButton3}" Tag="{StaticResource box}" Content="{Binding WorkAsset,UpdateSourceTrigger=PropertyChanged}">
+                    <Button.ToolTip>
+                        <ToolTip Style="{StaticResource ToolTipStyle}" >
+                            <TextBlock>Actif</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <Grid Grid.Row="6" Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="70"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource LineColor}" CornerRadius="7 7 0 0" />
+                    <Border Grid.Row="1" BorderThickness="1 0 1 1" BorderBrush="{DynamicResource LineColor}" CornerRadius="0 0 7 7" />
+                    <Button VerticalAlignment="Top" Margin="0 5 5 0" Width="140"  Style="{StaticResource PrimeButton}" Content="Fermer la Tâche" Tag="{StaticResource done}" HorizontalAlignment="Right"/>
+                    <StackPanel Orientation="Vertical" Margin="10 5">
+                        <TextBlock Text="Sujet de la Tâche" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Text="{Binding TaskSubject}" FontSize="17" Foreground="{DynamicResource PrimTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                    </StackPanel>
+                    <StackPanel x:Name="StatStack" Orientation="Vertical" Margin="10 5" Grid.Row="1">
+                        <TextBlock Text="Statut" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                        <Button Command="{Binding OpenMenuStatCommand}" HorizontalAlignment="Stretch"  Foreground="{Binding ForgroundColorStat,FallbackValue=Black,Converter={local:StringRGBToBrushConverter}}" 
+                            Content="{Binding WorkStat,UpdateSourceTrigger=PropertyChanged,FallbackValue=Ouvrir}">
+                            <Button.Style >
+                                <Style TargetType="Button" BasedOn="{StaticResource PrimeButton3}">
+                                    <Setter Property="Tag" Value="{StaticResource statopen}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding WorkStat}" Value="Ouvrir">
+                                            <Setter Property="Tag" Value="{StaticResource statopen}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding WorkStat}" Value="En Cours">
+                                            <Setter Property="Tag" Value="{StaticResource statinprogress}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding WorkStat}" Value="Complété">
+                                            <Setter Property="Tag" Value="{StaticResource statcomplete}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                    <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuStatOpen}" PlacementTarget="{Binding ElementName=StatStack}" Placement="Bottom" AllowsTransparency="True">
+                        <Grid>
+                            <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                            <StackPanel Margin="1 20 1 20">
+                                <Button Command="{Binding OpenStatCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statopen}" Foreground="#429b1f" Content="Ouvrir"/>
+                                <Button Command="{Binding InProgressCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statinprogress}" Foreground="#ef6a00" Content="En cours"/>
+                                <Button Command="{Binding CompleteCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statcomplete}" Foreground="#c22528" Content="Complété"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
+
+                </Grid>
+                 <Grid Grid.Row="7" Margin="20">
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource LineColor}" CornerRadius="7" />
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="240"/>
-                            <RowDefinition Height="240"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Border Grid.RowSpan="2" Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+                        <TextBlock  Text="Instructions" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="17 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                        <!--<Button Style="{StaticResource PrimeButton2}" Tag="{StaticResource edit}" Content="Modifier" HorizontalAlignment="Right" Height="24" Width="110" Margin="0 5 5 0"/>-->
+                        <Button ToolTipService.InitialShowDelay="2" Command="{Binding OpenMenuInstructionCommand}" HorizontalAlignment="Right" Style="{DynamicResource IconPathButton}" Margin="0">
+                            <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
+                            <Button.ToolTip>
+                                <ToolTip Style="{StaticResource ToolTipStyle}" >
+                                    <TextBlock>Ajouter un nouvel instruction</TextBlock>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+                        <DataGrid Grid.Row="1" Margin="10" Width="560"
+                                  ItemsSource="{Binding InstructionDtos,UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource DataGridStyle2}"
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
+                                  RowStyle="{StaticResource DataGridRowStyle3}"
+                                  CellStyle="{StaticResource DataGridCellStyle1}"
+                                  AutoGenerateColumns="False" 
+                                  ColumnHeaderHeight="0"
+                                  Visibility="{Binding IsForComplete,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True}">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn  CanUserResize="False" Width="Auto" ElementStyle="{StaticResource CheckBoxStyle1}">
+                                    <DataGridCheckBoxColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox VerticalAlignment="Center" Margin="10" HorizontalAlignment="Center" Style="{StaticResource CheckBoxStyle1}"/>
+                                        </DataTemplate>
+                                    </DataGridCheckBoxColumn.HeaderTemplate>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn  IsReadOnly="True" CanUserResize="False" Width="Auto" Binding="{Binding Description}"/>
 
-                        <StackPanel Grid.Row="0"  Orientation="Vertical">
-                            <TextBlock HorizontalAlignment="Left" Text="Utilisateurs" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 10" FontSize="14"/>
-                            <RadioButton GroupName="g1" Content="Lamine Belkheir" Tag="{StaticResource user}" Style="{StaticResource AssignorRadioButtonStyle}"/>
-                            <RadioButton GroupName="g1" Content="User 2" Tag="{StaticResource user}" Style="{StaticResource AssignorRadioButtonStyle}"/>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Orientation="Vertical">
-                            <TextBlock HorizontalAlignment="Left" Text="Équipes" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 10" FontSize="14"/>
-                            <RadioButton GroupName="g1" Content="Directeur" Tag="{StaticResource users}" Style="{StaticResource AssignorRadioButtonStyle}"/>
-                            <RadioButton GroupName="g1" Content="Technicien" Tag="{StaticResource users}" Style="{StaticResource AssignorRadioButtonStyle}"/>
-                        </StackPanel>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <DataGrid Grid.Row="1" Margin="10" 
+                                  ItemsSource="{Binding InstructionDtos,UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource DataGridStyle2}"
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
+                                  RowStyle="{StaticResource DataGridRowStyle3}"
+                                  CellStyle="{StaticResource DataGridCellStyle1}"
+                                  AutoGenerateColumns="False" 
+                                  ColumnHeaderHeight="0" Width="560"
+                                  Visibility="{Binding IsForComplete,Converter={local:BooleanToVisiblityConverter}}">
+
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn  CanUserResize="False" Width="Auto" ElementStyle="{StaticResource CheckBoxStyle1}">
+                                    <DataGridCheckBoxColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox VerticalAlignment="Center" Margin="10" HorizontalAlignment="Center" Style="{StaticResource CheckBoxStyle1}"/>
+                                        </DataTemplate>
+                                    </DataGridCheckBoxColumn.HeaderTemplate>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn  IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Description}"/>
+                                <DataGridTemplateColumn Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button   
+                                                    Command="{Binding DataContext.RemoveInstructionCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                                    CommandParameter="{Binding }" local:IsBusyProperty.Value="{Binding  DataContext.DeleteIsRunning,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
+                                                    Style="{DynamicResource IconPathButton}" Margin="0,0,5,0">
+
+                                                <Path  Width="12" Fill="{DynamicResource SecundaryRedColor}" Stretch="Uniform" Data="{DynamicResource delete}"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
-                </Popup>
-            </Grid>
-            <Rectangle Height="1"  Grid.Row="4" Fill="{DynamicResource LineColor}"  VerticalAlignment="Top" Margin="25 0" />
-            <Button Grid.Row="5" ToolTipService.InitialShowDelay="1" Style="{StaticResource PrimeButton3}" Tag="{StaticResource box}" Content="{Binding WorkAsset,UpdateSourceTrigger=PropertyChanged}">
-                <Button.ToolTip>
-                    <ToolTip Style="{StaticResource ToolTipStyle}" >
-                        <TextBlock>Actif</TextBlock>
-                    </ToolTip>
-                </Button.ToolTip>
-            </Button>
-            <Grid Grid.Row="6" Margin="20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="70"/>
-                </Grid.RowDefinitions>
-                <Border BorderThickness="1" BorderBrush="{DynamicResource LineColor}" CornerRadius="7 7 0 0" />
-                <Border Grid.Row="1" BorderThickness="1 0 1 1" BorderBrush="{DynamicResource LineColor}" CornerRadius="0 0 7 7" />
-                <Button VerticalAlignment="Top" Margin="0 5 5 0" Width="140"  Style="{StaticResource PrimeButton}" Content="Fermer la Tâche" Tag="{StaticResource done}" HorizontalAlignment="Right"/>
-                <StackPanel Orientation="Vertical" Margin="10 5">
-                    <TextBlock Text="Sujet de la Tâche" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
-                    <TextBlock Text="{Binding TaskSubject}" FontSize="17" Foreground="{DynamicResource PrimTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
-                </StackPanel>
-                <StackPanel x:Name="StatStack" Orientation="Vertical" Margin="10 5" Grid.Row="1">
-                    <TextBlock Text="Statut" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
-                    <Button Command="{Binding OpenMenuStatCommand}" HorizontalAlignment="Stretch"  Foreground="{Binding ForgroundColorStat,FallbackValue=Black,Converter={local:StringRGBToBrushConverter}}" 
-                            Content="{Binding WorkStat,UpdateSourceTrigger=PropertyChanged,FallbackValue=Ouvrir}">
-                        <Button.Style >
-                            <Style TargetType="Button" BasedOn="{StaticResource PrimeButton3}">
-                                <Setter Property="Tag" Value="{StaticResource statopen}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding WorkStat}" Value="Ouvrir">
-                                        <Setter Property="Tag" Value="{StaticResource statopen}" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding WorkStat}" Value="En Cours">
-                                        <Setter Property="Tag" Value="{StaticResource statinprogress}" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding WorkStat}" Value="Complété">
-                                        <Setter Property="Tag" Value="{StaticResource statcomplete}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-                <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuStatOpen}" PlacementTarget="{Binding ElementName=StatStack}" Placement="Bottom" AllowsTransparency="True">
+                </Grid>
+                <Grid Grid.Row="8" Margin="20">
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource LineColor}" CornerRadius="7" />
                     <Grid>
-                        <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock  Text="Commentaires" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="17 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                        <!--<Button Style="{StaticResource PrimeButton2}" Tag="{StaticResource edit}" Content="Modifier" HorizontalAlignment="Right" Height="24" Width="110" Margin="0 5 5 0"/>-->
+                        <Button ToolTipService.InitialShowDelay="2" Command="{Binding OpenCommentControlCommand}" HorizontalAlignment="Right" Style="{DynamicResource IconPathButton}" Margin="0">
+                            <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
+                            <Button.ToolTip>
+                                <ToolTip Style="{StaticResource ToolTipStyle}" >
+                                    <TextBlock>Ajouter un nouvel instruction</TextBlock>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
 
-                        <StackPanel Margin="1 20 1 20">
-                            <Button Command="{Binding OpenStatCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statopen}" Foreground="#429b1f" Content="Ouvrir"/>
-                            <Button Command="{Binding InProgressCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statinprogress}" Foreground="#ef6a00" Content="En cours"/>
-                            <Button Command="{Binding CompleteCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statcomplete}" Foreground="#c22528" Content="Complété"/>
-                        </StackPanel>
+                        <DataGrid Grid.Row="1" Margin="10" 
+                                  ItemsSource="{Binding WorkOrderHistoryDtos,UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource DataGridStyle2}"
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
+                                  RowStyle="{StaticResource DataGridRowStyle3}"
+                                  CellStyle="{StaticResource DataGridCellStyle1}"
+                                  AutoGenerateColumns="False" 
+                                  ColumnHeaderHeight="0" Width="560"
+                                  Visibility="{Binding IsForComplete,Converter={local:BooleanToVisiblityConverter}}">
+
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn  CanUserResize="False" Width="Auto" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Notes}" Foreground="{DynamicResource PrimTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                    <TextBlock Text="{Binding CreatedBy}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                                                    <TextBlock Text="." Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                                                    <TextBlock Text="{Binding CreatedDate}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7 10 0 0"  Style="{StaticResource TextBlockStyle}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button   
+                                                    Command="{Binding DataContext.RemoveInstructionCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                                    CommandParameter="{Binding }" 
+                                                    local:IsBusyProperty.Value="{Binding  DataContext.DeleteIsRunning,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
+                                                    Style="{DynamicResource IconPathButton}" Margin="0,0,5,0">
+
+                                                <Path  Width="12" Fill="{DynamicResource SecundaryRedColor}" Stretch="Uniform" Data="{DynamicResource delete}"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
                     </Grid>
-                </Popup>
-
+                </Grid>
             </Grid>
-        </Grid>
+
+        </ScrollViewer>
+        <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right"
+                Command="{Binding SaveCommand}" Margin="0 10 15 10"
+                  local:IsBusyProperty.Value="{Binding SaveIsRunning,FallbackValue=False}" 
+                  Tag="{StaticResource done}" 
+                  Style="{DynamicResource RegullarPrimeButton}" Content="Enregistrer"/>
+
     </Grid>
 </UserControl>

@@ -37,6 +37,9 @@ namespace MntPlus.WPF
             CreateMap<WorkOrderHistory, WorkOrderHistoryDto>().ReverseMap();
             CreateMap<WorkOrderHistoryCreateDto, WorkOrderHistory>().ReverseMap();
 
+            CreateMap<InstructionDtoForCreation, Instruction>().ReverseMap();
+            CreateMap<Instruction, InstructionDto>().ReverseMap();
+
 
            
 

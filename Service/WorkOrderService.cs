@@ -23,7 +23,7 @@ namespace Service
         public async Task<ApiBaseResponse> CreateWorkOrder(WorkOrderForCreationDto workOrder)
         {
             try
-            {
+            { 
                 var workOrderEntity = _mapper.Map<WorkOrder>(workOrder);
                 _repository.WorkOrder.CreateWorkOrder(workOrderEntity);
                 await _repository.SaveAsync();
@@ -65,7 +65,7 @@ namespace Service
             {
                 var workOrders = await _repository.WorkOrder.GetAllWorkOrdersAsync(trackChanges);
                 if (workOrders is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
                 var workOrdersDto = _mapper.Map<IEnumerable<WorkOrderDto>>(workOrders);

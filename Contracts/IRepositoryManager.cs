@@ -14,6 +14,7 @@ namespace Contracts
         ITeamRepository Team { get; }
         IWorkOrderRepository WorkOrder { get; }
         IWorkOrderHistoryRepository WorkOrderHistory { get; }
+        IInstructionRepository Instruction { get; }
        
 
        Task SaveAsync(); 

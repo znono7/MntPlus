@@ -27,7 +27,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Border Grid.RowSpan="2"  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
-            <Grid>
+            <Grid Margin="10 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -37,9 +37,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Path Margin="10,0,0,0" Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource box}"/>
-                    <Button Command="{Binding ViewEquipmentCommand}" Style="{StaticResource TextButton}" >
-                        <TextBlock Text="Équipement - enfants" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
-                    </Button>
+                    <TextBlock Text="Actif - enfants" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
                 </StackPanel>
                 <TextBox Grid.Column="3" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 2 20" Style="{DynamicResource SearchTextBoxStyle}"/>
                 <Button Command="{Binding SearchCommand}" Grid.Column="4" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}" Margin="0 0 5 1"/>

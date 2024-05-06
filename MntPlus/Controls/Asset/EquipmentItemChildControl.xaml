@@ -37,7 +37,7 @@
                             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                                 <Path Margin="10,0,0,0" Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource box}"/>
                                 <Button Command="{Binding ViewEquipmentCommand}" Style="{StaticResource TextButton}" >
-                                    <TextBlock Text="{Binding EquipmentName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                    <TextBlock Text="{Binding AssetName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
                                 </Button>
                             </StackPanel>
                             <!--<Grid Grid.Column="1" >

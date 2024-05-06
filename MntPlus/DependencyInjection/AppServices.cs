@@ -36,7 +36,7 @@ namespace MntPlus.WPF
 
         }
 
-        private const string DefaultConnectionString = "Data Source=C:\\Users\\nour-\\source\\repos\\MntPlus\\MntPlusDatabase.db";
+        private const string DefaultConnectionString = "Data Source=D:\\WPF\\My Projects\\repos\\MntPlus\\MntPlusDatabase.db";
 
         /// <summary>
         /// Binds all singleton services

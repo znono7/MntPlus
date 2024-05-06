@@ -5,28 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF"
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
-        Title="AddEquipmentWindow" Height="620" Width="1120">
+        Title="AddEquipmentWindow" Height="620" Width="1200">
     <Grid>
        
         <Border Background="{DynamicResource PrimaryBackgroundColor}" CornerRadius="10" />
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="220"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Margin="20 20 0 0" Grid.ColumnSpan="2" FontSize="17" Style="{StaticResource TitleTextBlockStyle}" Text="{Binding EquipmentName,FallbackValue=Test}"/>
+            <TextBlock Margin="170 20 0 2" Grid.ColumnSpan="2" FontSize="17" Style="{StaticResource TitleTextBlockStyle}" Text="{Binding EquipmentName,FallbackValue=Test}"/>
             <Button Grid.Column="1" Click="Button_Click" Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton" HorizontalAlignment="Right"/>
-            <Grid Margin="10" Grid.Row="1" >
-                <Border Background="{DynamicResource TertiaryBackgroundColor}" CornerRadius="12" />
+            <Grid Margin="10" Grid.Column="1" Grid.Row="1" >
+                <Border Background="{DynamicResource TertiaryBackgroundColor}" CornerRadius="12" Height="220" VerticalAlignment="Top" />
                 <!--<Rectangle Width="1" HorizontalAlignment="Right" Fill="{DynamicResource LineColor2}" Height="Auto" Margin="0 0 0 0" />-->
                 <Grid Margin="10" VerticalAlignment="Top">
                     
                     <Border Background="{DynamicResource LineColor}" CornerRadius="12" Height="190" >
-                        <Image Name="EquipImage"   Height="190"  Source="{Binding MyImageSource}" Stretch="Uniform" 
+                        <Image  Height="190"  Source="{Binding MyImageSource,UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform" 
                                Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}">
                             <Image.Triggers>
                                 <EventTrigger RoutedEvent="MouseEnter">
@@ -51,7 +51,7 @@
                         </Image>
                     </Border>
                     <Button Visibility="{Binding IsHaveImage,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding BrowseCommand}" Height="190" Width="190"  x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Path  Width="24" Height="16" Fill="{DynamicResource FourthTextColor}" Stretch="Fill" Data="{DynamicResource image}"/>
+                        <Path  Width="30" Height="24" Fill="{DynamicResource FourthTextColor}" Stretch="Fill" Data="{DynamicResource image}"/>
                     </Button>
                     <Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
                             x:Name="editImg" Margin="15 15 0 0"  Command="{Binding BrowseCommand}"
@@ -83,24 +83,15 @@
                 </Grid>
                 
             </Grid>
-            <Grid Grid.Row="1" Grid.Column="1">
-                <TabControl Background="Transparent" Style="{StaticResource TabControlStyle}">
-                    <TabItem Style="{StaticResource TabItemStyle2}">
-                        <TabItem.Header>
-                            <Grid Cursor="Hand">
-                                <TextBlock FontFamily="{StaticResource FontAwesome2}" Text="&#xf05a; Info" FontSize="16"/>
-                            </Grid>
-                        </TabItem.Header>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <TabControl Margin="20 0 0 0" Background="Transparent" Style="{StaticResource TabControlStl}">
+                    <TabItem Header="Info" Tag="{StaticResource priority}"  Style="{StaticResource TabItemStl}">
+                      
 
                         <local:AssetInfoControl DataContext="{Binding EquipmentInfoViewModel}"/>
                     </TabItem>
-                    <TabItem  Style="{StaticResource TabItemStyle2}">
-                        <TabItem.Header>
-                            <StackPanel Cursor="Hand" Orientation="Horizontal">
-                                <Path Data="{StaticResource hierarchy}" Stretch="Fill" Fill="{DynamicResource FourthTextColor}" Width="16" Height="16"/>
-                                <TextBlock Margin="2 0" FontFamily="{StaticResource FontAwesome2}" Text="Enfants" FontSize="16"/>
-                            </StackPanel>
-                        </TabItem.Header>
+                    <TabItem Header="Enfants" Tag="{StaticResource hierarchy}" Style="{StaticResource TabItemStl}">
+                      
                         <local:EquipmentChildrenControl DataContext="{Binding EquipmentChildrenViewModel}"/>
                     </TabItem>
                     <!--<TabItem  Style="{StaticResource TabItemStyle2}">

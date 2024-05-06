@@ -14,6 +14,9 @@ namespace Entities
         public Guid Id { get; set; }
         public string? Status { get; set; }
         public DateTime? DateChanged { get; set; }
+
+        [ForeignKey(nameof(ChangedBy))]
+        public Guid? ChangedById { get; set; }
         public User? ChangedBy { get; set; }
         public string? Notes { get; set; }
 

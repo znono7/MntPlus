@@ -24,17 +24,17 @@ namespace MntPlus.WPF
         public string? AssetName { get; set; }
         public string? Description { get; set; }
         public string? AssetImage { get; set; }
-        public AssetDto Asset { get; set; }
+        public AssetDto? Asset { get; set; }
         public double WidthControl { get; set; }
 
         public int ChildrenCount { get; set; }
         public bool IsHaveImage { get; set;}
 
-        public bool IsHaveChildren => Children.Count > 0;
+        public bool IsHaveChildren => Children?.Count > 0;
 
-        private ObservableCollection<AssetItemViewModel> _children;
+        private ObservableCollection<AssetItemViewModel>? _children;
 
-        public ObservableCollection<AssetItemViewModel> Children
+        public ObservableCollection<AssetItemViewModel>? Children
         {
             get { return _children; }
             set
@@ -61,22 +61,22 @@ namespace MntPlus.WPF
         public ICommand ViewEquipmentCommand { get; set; }
 
 
-        public Func<AssetItemViewModel, Task> AddChildFunc { get; set; }
-        public Func<AssetItemViewModel, Task> RemoveItemFunc { get; set; }
-        public Func<AssetItemViewModel, Task> ViewFunc { get; set; }
+        public Func<AssetItemViewModel, Task>? AddChildFunc { get; set; }
+        public Func<AssetItemViewModel, Task>? RemoveItemFunc { get; set; }
+        public Func<AssetItemViewModel, Task>? ViewFunc { get; set; }
         public BitmapImage? MyImageSource { get;  set; }
         #endregion
-
+         
         #region Constructor
 
-        public AssetItemViewModel(AssetDto asset, double width = 940)
+        public AssetItemViewModel(AssetDto? asset, double width = 940)
         {
 
-            AssetName = asset.Name;
-            Description = asset.Description;
-            AssetImage = asset.ImagePath;
+            AssetName = asset?.Name ?? string.Empty;
+            Description = asset?.Description ?? string.Empty;
+            AssetImage = asset?.ImagePath ?? string.Empty;
 
-            ReadImage(asset.AssetImage);
+            ReadImage(asset?.AssetImage);
             Asset = asset;
             WidthControl = width;
           
@@ -96,6 +96,10 @@ namespace MntPlus.WPF
             MyImageSource = null;
             AssetImage = null;
             IsHaveImage = false;
+            if(Asset is null)
+            {
+                return;
+            }
             var Result = await AppServices.ServiceManager.AssetService.UpdateAssetImage(Asset.Id, new AssetForUpdateImage (AssetImage, null), true);
             if (Result is not null && Result is ApiBadRequestResponse)
             {
@@ -130,12 +134,20 @@ namespace MntPlus.WPF
         }
         private async Task ViewEquipment()
         {
+            if (ViewFunc is null)
+            {
+                return;
+            }
             await ViewFunc(this);
          
         }
 
         private async Task Remove()
         {
+            if (RemoveItemFunc is null)
+            {
+                return;
+            }
             await RemoveItemFunc(this);
         }
 
@@ -151,6 +163,10 @@ namespace MntPlus.WPF
         }
         public async Task AddChild()
         {
+            if (AddChildFunc is null)
+            {
+                return;
+            }
             await AddChildFunc(this);
         }
 

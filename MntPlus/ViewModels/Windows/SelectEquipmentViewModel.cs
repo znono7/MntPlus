@@ -58,17 +58,22 @@ namespace MntPlus.WPF
         public bool IsLoading { get; set; }
 
         public ICommand GetSelectedEquipmentCommand { get; set; }
-        public SelectEquipmentViewModel()
+        public WorkOrderStore? WorkOrderStore { get; set; }
+
+        public SelectEquipmentViewModel(WorkOrderStore? workOrderStore)
         {
-                _ = LoadDataAsync();
+            WorkOrderStore = workOrderStore;
+            _ = LoadDataAsync();
             if (EquipmentDtos is not null)
             {
                 EquipmentTreeViewItems = CreateTreeViewItems(EquipmentDtos.ToList());
                 IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);
             }
             GetSelectedEquipmentCommand = new RelayParameterizedCommand((p) => TheSelectedEquipment(p));
-                
+
         }
+
+       
 
         private void TheSelectedEquipment(object? p)
         {
@@ -80,7 +85,7 @@ namespace MntPlus.WPF
             if (p is not Window)
                 return;
 
-            var window = new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel(SelectedViewModel.Equipment) };
+            var window = new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel(SelectedViewModel.Equipment,WorkOrderStore) }; 
             
             window.ShowDialog();
             

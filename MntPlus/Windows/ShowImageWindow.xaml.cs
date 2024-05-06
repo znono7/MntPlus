@@ -19,7 +19,7 @@ namespace MntPlus.WPF
     /// </summary>
     public partial class ShowImageWindow : Window
     {
-        public ShowImageWindow(BitmapImage image)
+        public ShowImageWindow(BitmapImage? image)
         {
             InitializeComponent();
            
@@ -27,7 +27,7 @@ namespace MntPlus.WPF
             MyImage.Source = Image;
         }
 
-        public BitmapImage Image { get; set; }
+        public BitmapImage? Image { get; set; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

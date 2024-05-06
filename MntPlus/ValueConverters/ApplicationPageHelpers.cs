@@ -35,6 +35,8 @@ namespace MntPlus.WPF
                     return new AssetsPage(viewModel as EquipmentPageViewModel); 
                     case ApplicationPage.ManageWork:
                         return new ManageWorkPage(viewModel as ManageWorkViewModel);
+                    case ApplicationPage.Users:
+                        return new UsersPage(viewModel as UsersPageViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -53,6 +55,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.Assets;
             if (page is ManageWorkPage)
                 return ApplicationPage.ManageWork;
+            if (page is UsersPage)
+                return ApplicationPage.Users;
 
             // Alert developer of issue
             Debugger.Break();

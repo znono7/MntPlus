@@ -17,6 +17,7 @@ namespace Repository
         private readonly Lazy<ITeamRepository> teamRepository;
         private readonly Lazy<IWorkOrderRepository> workOrderRepository;
         private readonly Lazy<IWorkOrderHistoryRepository> workOrderHistoryRepository;
+        private readonly Lazy<IInstructionRepository> instructionRepository;
 
 
 
@@ -35,6 +36,7 @@ namespace Repository
             teamRepository = new Lazy<ITeamRepository>(() => new TeamRepository(repositoryContext));
             workOrderRepository = new Lazy<IWorkOrderRepository>(() => new WorkOrderRepository(repositoryContext));
             workOrderHistoryRepository = new Lazy<IWorkOrderHistoryRepository>(() => new WorkOrderHistoryRepository(repositoryContext));
+            instructionRepository = new Lazy<IInstructionRepository>(() => new InstructionRepository(repositoryContext));
               
         }
       
@@ -50,6 +52,9 @@ namespace Repository
         public IWorkOrderRepository WorkOrder => workOrderRepository.Value;
 
         public IWorkOrderHistoryRepository WorkOrderHistory => workOrderHistoryRepository.Value;
+
+        public IInstructionRepository Instruction => instructionRepository.Value;
+
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         
     }

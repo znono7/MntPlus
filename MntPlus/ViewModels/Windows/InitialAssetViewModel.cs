@@ -83,10 +83,15 @@ namespace MntPlus.WPF
                         else
                         {
                             _assetStore.CreateAsset(AssetResult);
-                        }
+                        } 
                         await Task.Delay(200);
                         ClearValidation();
                         window.Close();
+                    }
+                    else if (Result is ApiBadRequestResponse errorResponse)
+                    {
+                        await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message)); //"Erreur lors de l'ajout de l'actif"));
+
                     }
                    
                     
