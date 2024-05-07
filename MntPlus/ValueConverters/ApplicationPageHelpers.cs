@@ -23,7 +23,7 @@ namespace MntPlus.WPF
         
         public static BasePage? ToBasePage(this ApplicationPage page, object? viewModel = null)
         {
-            if(viewModel == null)
+            if(viewModel is null)
             {
                 viewModel = new ();
             }
@@ -37,6 +37,8 @@ namespace MntPlus.WPF
                         return new ManageWorkPage(viewModel as ManageWorkViewModel);
                     case ApplicationPage.Users:
                         return new UsersPage(viewModel as UsersPageViewModel);
+                    case ApplicationPage.Settings:
+                        return new SettingsPage(viewModel as SettingsViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -57,6 +59,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.ManageWork;
             if (page is UsersPage)
                 return ApplicationPage.Users;
+            if (page is SettingsPage)
+                return ApplicationPage.Settings;
 
             // Alert developer of issue
             Debugger.Break();

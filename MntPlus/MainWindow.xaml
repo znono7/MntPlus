@@ -61,8 +61,10 @@
                                         <Border Grid.ColumnSpan="3" BorderThickness="0 0 0 1" CornerRadius="10 10 0 0 " BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}" />
                                         <!-- Icon -->
                                         <Button Style="{StaticResource SystemIconButton}" Command="{Binding MenuCommand}">
-                                            <Image Source="Styles/Icons/maintenance.png" />
-                                        </Button>
+                                                <Image Source="Styles/Icons/maintenance.png" />
+                                            </Button>
+                                        
+                                       
                                         <!-- Title -->
                                         <Viewbox Height="16" Grid.Column="0" Grid.ColumnSpan="3" Margin="5">
                                             <StackPanel>
@@ -140,6 +142,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+       
         <!-- Dimmed overlay -->
         <Border Grid.ColumnSpan="2"
                  Panel.ZIndex="10"
@@ -149,9 +152,9 @@
               local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
 
         </Border>
-        <local:SideMenu local:AnimateSlideInFromLeftProperty.Value="{Binding ApplicationViewModel.SideMenuVisible, 
+        <local:SideMenu  local:AnimateSlideInFromLeftProperty.Value="{Binding ApplicationViewModel.SideMenuVisible, 
                         Source={x:Static local:ViewModelLocator.Instance}}"/>
-        <local:PageHost Grid.Column="1" 
+        <local:PageHost Grid.Column="1"  
                  CurrentPage="{Binding ApplicationViewModel.CurrentPage,
            Source={x:Static local:ViewModelLocator.Instance}}"
            CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,

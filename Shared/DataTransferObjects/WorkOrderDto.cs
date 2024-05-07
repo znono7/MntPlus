@@ -16,7 +16,7 @@ namespace Shared
         string? Status, 
         Guid? UserAssignedToId,
         UserDto? UserAssignedTo, 
-        Guid? TeamAssignedToId,
+        Guid? TeamAssignedToId, 
         TeamDto? TeamAssignedTo, 
         Guid? AssetId,
         AssetDto? Asset); 

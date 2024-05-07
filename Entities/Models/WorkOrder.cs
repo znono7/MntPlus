@@ -12,11 +12,12 @@ namespace Entities
         public string? Priority { get; set; }
         public DateTime? DueDate { get; set; }
         public string? Type { get; set; }
-        public string? Status { get; set; }
+        public string? Status { get; set; } 
 
-        [ForeignKey(nameof(UserAssignedTo))]
-        public Guid? UserAssignedToId { get; set; }
-        public UserRole? UserAssignedTo { get; set; }
+        //[ForeignKey(nameof(UserAssignedTo))]
+        //public Guid? UserAssignedToId { get; set; }
+        //public UserRole? UserAssignedTo { get; set; }
+        public User? UserAssignedTo { get; set; }
 
         [ForeignKey(nameof(TeamAssignedTo))]
         public Guid? TeamAssignedToId { get; set; }

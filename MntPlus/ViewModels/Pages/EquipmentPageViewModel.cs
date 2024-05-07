@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -72,6 +73,9 @@ namespace MntPlus.WPF
         public bool IsEmpty { get; set; } //=> EquipmentListItems is null || EquipmentListItems.Count == 0 ;
         private AssetStore _equipmentStore { get; set; }
 
+        public bool IsFilterOpen { get; set; }
+        public ICommand OpenFilterCommand { get; set; }
+
 
         #endregion
 
@@ -101,8 +105,10 @@ namespace MntPlus.WPF
                     Search();
             }
         }
+
+        public FilterAssetControlViewModel FilterAssetControl { get; set; }
         #endregion
-         
+
         public EquipmentPageViewModel()
         {
             SearchCommand = new RelayCommand(Search);
@@ -130,14 +136,17 @@ namespace MntPlus.WPF
             
             if(AssetDtos is not null && AssetDtos.Count > 0)
             {
+                CreateEquipmentTreeViewItems treeViewItems = new();
                 IsHierarchy = true;
-                EquipmentTreeViewItems = CreateTreeViewItems(AssetDtos.ToList());
+                EquipmentTreeViewItems = treeViewItems.CreateTreeViewItems(AssetDtos.ToList());
                 EquipmentListItems = CreateListItems(AssetDtos.ToList());
                 IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);
                 IterateEquipmentItemsAndChildren(EquipmentListItems);
                 IsHeaderVisible = true;
                 IsEmpty = false;
             }
+            FilterAssetControl = new FilterAssetControlViewModel();
+            OpenFilterCommand = new RelayCommand(() => IsFilterOpen = !IsFilterOpen);
 
 
         }
@@ -194,6 +203,9 @@ namespace MntPlus.WPF
             if ((string.IsNullOrEmpty(mLastSearchText) && string.IsNullOrEmpty(SearchText)) ||
                 string.Equals(mLastSearchText, SearchText))
                 return;
+
+            SearchEquipmentHelper searchHelper = new();
+
             // If we have no search text, or no items
             if (IsList)
             {
@@ -207,8 +219,7 @@ namespace MntPlus.WPF
 
                     return;
                 }
-
-                FilterEquipmentItems = new ObservableCollection<AssetItemViewModel>( SearchItems(EquipmentListItems, SearchText));
+                FilterEquipmentItems = new ObservableCollection<AssetItemViewModel>( searchHelper.SearchItems(EquipmentListItems, SearchText) );
                 // Set last search text
                 mLastSearchText = SearchText;
             }
@@ -225,7 +236,8 @@ namespace MntPlus.WPF
 
                     return;
                 }
-                FilterEquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>(SearchItems(EquipmentTreeViewItems, SearchText));
+
+                FilterEquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>(searchHelper.SearchItems(EquipmentTreeViewItems, SearchText));
                 // Set last search text
                 mLastSearchText = SearchText;
             }
@@ -279,35 +291,41 @@ namespace MntPlus.WPF
 
         public async Task LoadDataAsync()
         {
-            IsLoading = true;
-            var Result = await AppServices.ServiceManager.AssetService.GetAllAssetsAsync(false);
-            if ( Result.Success && Result is ApiOkResponse<IEnumerable<AssetDto>> okResponse)
+            await RunCommandAsync( () => IsLoading , async () =>
             {
-                AssetDtos = new ObservableCollection<AssetDto>(okResponse.Result!) ;
+                var Result = await AppServices.ServiceManager.AssetService.GetAllAssetsAsync(false); 
 
-                EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
+                if ( Result.Success && Result is ApiOkResponse<IEnumerable<AssetDto>> okResponse)
+                {
+                    AssetDtos = new ObservableCollection<AssetDto>(okResponse.Result!);
 
-                EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
-            }
-            else 
-            if(Result is ApiNotFoundResponse response)
-            {
-                AssetDtos = new ObservableCollection<AssetDto>();
+                    EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
 
-                EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
+                    EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                   
+                }
+                
+                if (Result is ApiNotFoundResponse response)
+                {
+                    IsEmpty = true;
+                    AssetDtos = new ObservableCollection<AssetDto>();
 
-                EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                    EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
 
-            }
-            else if (Result is ApiBadRequestResponse response1)
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, response1.Message));
-                EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
+                    EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
 
-                EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
-            }
-            await Task.Delay(100);
-            IsLoading = false;
+                }
+                 if (!Result.Success && Result is ApiBadRequestResponse response1)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, response1.Message));
+
+                    EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
+
+                    EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                }
+            });
+           
         }
       
         private void AddEquipment()
@@ -432,49 +450,8 @@ namespace MntPlus.WPF
 
         }
 
-        private void CalculateNumberOfChildren(AssetItemViewModel parentViewModel, List<AssetDto> equipmentData)
-        {
-            // Calculate the number of children for the parentViewModel
-            parentViewModel.ChildrenCount = equipmentData.Count(e => e.AssetParent == parentViewModel.Asset.Id);
+      
 
-            // Recursively calculate the number of children for each child
-            foreach (var childViewModel in parentViewModel.Children)
-            {
-                CalculateNumberOfChildren(childViewModel, equipmentData);
-            }
-        }
-        private ObservableCollection<AssetItemViewModel> CreateTreeViewItems(List<AssetDto>? equipmentData)
-        {
-            var treeViewItems = new ObservableCollection<AssetItemViewModel>();
-
-            // Assuming root items have null ParentId
-            var rootItems = equipmentData.Where(e => e.AssetParent is null);
-
-            foreach (var rootItem in rootItems)
-            {
-                var rootViewModel = new AssetItemViewModel(rootItem);
-                CreateTreeViewChildren(rootViewModel, equipmentData);
-
-                CalculateNumberOfChildren(rootViewModel, equipmentData);
-
-                
-                treeViewItems.Add(rootViewModel);
-            }
-
-            return treeViewItems;
-        }
-
-        private void CreateTreeViewChildren(AssetItemViewModel parentViewModel, List<AssetDto> equipmentData)
-        {
-            var children = equipmentData.Where(e => e.AssetParent == parentViewModel.Asset.Id);
-
-            foreach (var child in children)
-            {
-                var childViewModel = new AssetItemViewModel(child);
-                CreateTreeViewChildren(childViewModel, equipmentData);
-                parentViewModel?.Children?.Add(childViewModel);
-            }
-        }
 
         private AssetItemViewModel? FindParentViewModel(Guid? parentId)
         {
@@ -579,31 +556,6 @@ namespace MntPlus.WPF
             return null;
         }
 
-        public IEnumerable<AssetItemViewModel> SearchItems(ObservableCollection<AssetItemViewModel> items, string searchPattern)
-        {
-            // Case 1: Search for items that end with the word
-            if (searchPattern.StartsWith("*") && !searchPattern.EndsWith("*"))
-            {
-                string searchTerm = searchPattern.TrimStart('*');
-                return items.Where(item => item.AssetName!.EndsWith(searchTerm,StringComparison.OrdinalIgnoreCase));
-            }
-            // Case 2: Search for items that start with the word
-            else if (!searchPattern.StartsWith("*") && searchPattern.EndsWith("*"))
-            {
-                string searchTerm = searchPattern.TrimEnd('*');
-                return items.Where(item => item.AssetName!.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
-            }
-            // Case 3: Search for items that contain the word
-            else if (searchPattern.StartsWith("*") && searchPattern.EndsWith("*"))
-            {
-                string searchTerm = searchPattern.Trim('*');
-                return items.Where(item => item.AssetName!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
-            }
-            else
-            {
-                // Invalid search pattern
-                return Enumerable.Empty<AssetItemViewModel>();
-            }
-        }
+       
     }
 }

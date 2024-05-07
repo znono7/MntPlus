@@ -82,6 +82,9 @@
     <Compile Update="Controls\ManageWork\CommentControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\RoleWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\LocationWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

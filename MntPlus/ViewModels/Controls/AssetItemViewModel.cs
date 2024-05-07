@@ -91,6 +91,8 @@ namespace MntPlus.WPF
 
         }
 
+       
+
         private async Task RemoveImage()
         {
             MyImageSource = null;

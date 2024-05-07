@@ -44,7 +44,7 @@
                             </Grid.ColumnDefinitions>
                             <Path Width="16" Height="16" Data="{DynamicResource search}" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Fill="{DynamicResource FourthTextColor}"/>
                             <TextBlock  IsHitTestVisible="False" Grid.Column="1"
-                                     Text="Recherche"
+                                     Text="{TemplateBinding Tag}"
                                      x:Name="placeholder"
                                      FontFamily="{StaticResource ClarityCity-Regular}"
                                     

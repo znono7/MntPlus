@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MntPlus.WPF
 {
@@ -24,10 +25,28 @@ namespace MntPlus.WPF
         /// <summary>
         /// True if the side menu should be shown
         /// </summary>
-        public bool SideMenuVisible { get; set; } = true;
+        private bool _sideMenuVisible = true;
+        public bool SideMenuVisible 
+        { 
+            get => _sideMenuVisible;
+            set 
+            { 
+                _sideMenuVisible = value; 
+                if (value == false) 
+                    SideBarStatus = "Afficher le Menu"; 
+                else 
+                    SideBarStatus = "Masquer le Menu";
+                OnPropertyChanged(nameof(SideMenuVisible)); 
+            } 
+        }
 
-       
+       public ICommand SideMenuCommand { get; set; }
+        public string SideBarStatus { get; set; } = "Masquer la Barre";
 
+        public ApplicationViewModel()
+        {
+            SideMenuCommand = new RelayCommand(() => SideMenuVisible = !SideMenuVisible);
+        }
         /// <summary>
         /// Navigates to the specified page
         /// </summary>
@@ -51,6 +70,20 @@ namespace MntPlus.WPF
             // Show side menu or not?
             SideMenuVisible = true; /*page != ApplicationPage.Login*/ ;
 
+        }
+
+        private void SideMenu()
+        {
+            if (SideBarStatus == "Masquer la Barre")
+            {
+                SideBarStatus = "Afficher la Barre";
+                SideMenuVisible = false;
+            }
+            else
+            {
+                SideBarStatus = "Masquer la Barre";
+                SideMenuVisible = true;
+            }
         }
     }
 }

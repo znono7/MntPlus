@@ -68,16 +68,19 @@ namespace MntPlus.WPF
         public ICommand WorkReqeustCommand { get; set; }
 
         public ICommand ToggleCommand { get; set; }
+
+        public ICommand SettingsCommand { get; set; }
         #endregion
 
         #region Constructor
         public SideMenuViewModel()
-        {
+        { 
             TravailCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.ManageWork) /*TravailMenuEnabled = true*/);//^
             ToggleCommand = new RelayCommand(async () => await ToggleAction());
             DashboardCommand = new RelayCommand(async () => await ToDashPage());
             EquipementCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Assets));
             TeamsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Users));
+            SettingsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Settings));
 
         }
 

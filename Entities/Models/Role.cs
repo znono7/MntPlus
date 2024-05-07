@@ -12,7 +12,7 @@ namespace Entities
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
-
+        public bool IsSeeded { get; set; }
         public ICollection<UserRole>? UserRoles { get; set; }
     }
 }

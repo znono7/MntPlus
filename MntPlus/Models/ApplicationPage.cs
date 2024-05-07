@@ -8,6 +8,7 @@ namespace MntPlus.WPF
         ManageWork = 1,
         Assets = 2,
         Users = 3,
+        Settings = 4,
        
     }
 }

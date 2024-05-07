@@ -108,7 +108,7 @@ namespace MntPlus.WPF
         /// <summary>
         /// The height of the title bar / caption of the window
         /// </summary>
-        public int TitleHeight { get; set; } = 42;
+        public int TitleHeight { get; set; } = 36;
         /// <summary>
         /// The height of the title bar / caption of the window
         /// </summary>
@@ -154,7 +154,7 @@ namespace MntPlus.WPF
         public MainWindowViewModel(Window window)
         {
             mWindow = window; 
-             
+              
             // Listen out for the window resizing
             mWindow.StateChanged += (sender, e) =>
             {
