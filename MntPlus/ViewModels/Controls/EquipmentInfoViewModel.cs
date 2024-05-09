@@ -54,9 +54,7 @@ namespace MntPlus.WPF
             //LoadDataAsync().GetAwaiter().GetResult();
             Asset = equipment;
             SelectedAssetType = new AssetType();
-            if(equipment.Type is not null)
-                SelectedAssetType = AssetTypes.AssetTypeList.FirstOrDefault(x => x.Name == equipment.Type);
-            SelectedAssetStatus = new AssetStatus();
+               SelectedAssetStatus = new AssetStatus();
             if(equipment.Status is not null)
                 SelectedAssetStatus = AssetStatuses.AssetStatusList.FirstOrDefault(x => x.Name == equipment.Status);
 
@@ -122,7 +120,7 @@ namespace MntPlus.WPF
                 Name: Asset.Name,
                 Description: Asset.Description,
                 Status : SelectedAssetStatus?.Name,
-                Type: SelectedAssetType?.Name,
+                Category: SelectedAssetType?.Name,
                 LocationId : SelectedLocation?.Id,
                 SerialNumber: Asset.SerialNumber,
                 Model: Asset.Model,
@@ -130,7 +128,9 @@ namespace MntPlus.WPF
                 PurchaseCost: Asset.PurchaseCost,
                 ImagePath: Asset.ImagePath,
                 AssetImage: Asset.AssetImage,
-                AssetCommissionDate : AssetCommissionDate
+                AssetCommissionDate : AssetCommissionDate,
+                CreatedDate: AssetCommissionDate,
+                PurchaseDate: AssetCommissionDate
             );
             var response = await AppServices.ServiceManager.AssetService.UpdateAsset(Asset.Id, modelForUpdate, true);
             if(response is ApiOkResponse<AssetDto> okResponse)

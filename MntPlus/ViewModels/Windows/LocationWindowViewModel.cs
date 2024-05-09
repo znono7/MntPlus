@@ -17,28 +17,19 @@ namespace MntPlus.WPF
 
         public string? Name { get; set; }
         public string? Address { get; set; }
-        public string? City { get; set; }
-        public string? State { get; set; }
-        public string? Country { get; set; }
-        public string? ImagePath { get; set; }
-        public byte[]? LocationImage { get; set; }
+       
+        public LocationDto? ParentLocation { get; set; }
+        public string? ParentName { get; set; }
 
-        public BitmapImage? MyImageSource { get; private set; }
-        public bool IsHaveImage { get; set; }
 
-        private bool _DimmableOverlayVisible { get; set; }
-
-        public bool DimmableOverlayVisible { get => _DimmableOverlayVisible; set { _DimmableOverlayVisible = value; OnPropertyChanged(nameof(DimmableOverlayVisible)); } }
-
-        public bool IsBtnEnabled => !DimmableOverlayVisible;
-
-        public ICommand BrowseCommand { get; set; }
         public ICommand AddCommand { get; set; }
+        public ICommand BrowseToParentCommand { get; set; }
         public LocationStore? LocationStore { get; }
+        public bool SaveIsRunning { get; set; }
+        public bool browseVisible { get; set; }= true;
 
-        public LocationWindowViewModel(LocationStore? locationStore = null )
+        public LocationWindowViewModel(LocationStore? locationStore = null ) 
         {
-            BrowseCommand = new RelayCommand(async () => await Browse());
             AddCommand = new RelayParameterizedCommand(async (p) => await AddLocation(p));
             LocationStore = locationStore;
         }
@@ -48,54 +39,30 @@ namespace MntPlus.WPF
             if (p is not Window window)
                 return;
                 
-            DimmableOverlayVisible = true;
 
-            var location = new LocationForCreationDto
-            (
-                Name : Name,
-                Address : Address,
-                City : City,
-                State : State,
-                Country : Country,
-                ImagePath : ImagePath,
-                LocationImage : LocationImage
-            );
-            var response = await AppServices.ServiceManager.LocationService.CreateLocation(location);
-            if(response is ApiOkResponse<LocationDto> result)
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success,"Location added successfully"));
-               if(LocationStore is not null )
-                {
-                    LocationStore.CreateLocation(result.Result);
-                }
-                window.Close();
-            }
-            else
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error,"Failed to add location"));
-
-            }
-            DimmableOverlayVisible = false;
-        }
-
-        public async Task Browse()
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
-
-
-            if (dlg.ShowDialog() == true)
-            {
-                string selectedFilePath = dlg.FileName;
-                ImagePath = Path.GetFileName(selectedFilePath);
-                MyImageSource = new BitmapImage(new Uri(selectedFilePath));
-                LocationImage = File.ReadAllBytes(selectedFilePath);
-
+            //var location = new LocationForCreationDto
+            //(
+            //    Name : Name,
+            //    Address : Address
                
+            //);
+            //var response = await AppServices.ServiceManager.LocationService.CreateLocation(location);
+            //if(response is ApiOkResponse<LocationDto> result)
+            //{
+            //    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success,"Location added successfully"));
+            //   if(LocationStore is not null )
+            //    {
+            //        LocationStore.CreateLocation(result.Result);
+            //    }
+            //    window.Close();
+            //}
+            //else
+            //{
+            //    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error,"Failed to add location"));
 
-            }
-            await Task.Delay(1);
+            //}
         }
 
+      
     }
 }

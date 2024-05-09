@@ -82,10 +82,13 @@
     <Compile Update="Controls\ManageWork\CommentControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\LocationsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\RoleWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Windows\LocationWindow.xaml.cs">
+    <Compile Update="Windows\Locations\LocationWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">

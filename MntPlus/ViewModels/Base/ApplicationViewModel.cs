@@ -12,7 +12,7 @@ namespace MntPlus.WPF
         /// <summary>
         /// The current page of the application 
         /// </summary>
-        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Assets;
+        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Locations;
 
         /// <summary>
         /// The view model to use for the current page when the CurrentPage changes
@@ -41,7 +41,7 @@ namespace MntPlus.WPF
         }
 
        public ICommand SideMenuCommand { get; set; }
-        public string SideBarStatus { get; set; } = "Masquer la Barre";
+        public string SideBarStatus { get; set; } = "Masquer le Menu";
 
         public ApplicationViewModel()
         {

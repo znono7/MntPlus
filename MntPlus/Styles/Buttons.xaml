@@ -1082,6 +1082,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBlueColor}"/>
         <Setter Property="Padding" Value="50 10" />
         <Setter Property="Margin" Value="0 10" />
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         <Setter Property="local:IsBusyProperty.Value" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>

@@ -107,7 +107,7 @@
                         <Border Panel.ZIndex="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
                             Background="{TemplateBinding Background}"  Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
-                            SnapsToDevicePixels="True" CornerRadius="8" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            SnapsToDevicePixels="True" CornerRadius="4" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalAlignment}" >
                             <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             
@@ -146,7 +146,7 @@
                             <Setter Property="Opacity" TargetName="Border" Value="1"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF7EB4EA"/>
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource FourthTextColor}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Border" Property="Effect">

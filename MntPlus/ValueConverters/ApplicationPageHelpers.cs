@@ -39,6 +39,8 @@ namespace MntPlus.WPF
                         return new UsersPage(viewModel as UsersPageViewModel);
                     case ApplicationPage.Settings:
                         return new SettingsPage(viewModel as SettingsViewModel);
+                    case ApplicationPage.Locations:
+                        return new LocationsPage(viewModel as LocationsPageViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -61,6 +63,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.Users;
             if (page is SettingsPage)
                 return ApplicationPage.Settings;
+            if (page is LocationsPage)
+                return ApplicationPage.Locations;
 
             // Alert developer of issue
             Debugger.Break();

@@ -9,6 +9,7 @@ namespace MntPlus.WPF
         Assets = 2,
         Users = 3,
         Settings = 4,
+        Locations = 5,
        
     }
 }

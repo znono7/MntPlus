@@ -12,11 +12,14 @@ namespace Entities
     {
         [Key]
         public Guid Id { get; set; }
+
+        [ForeignKey(nameof(Parent))]
         public Guid? AssetParent { get; set; }
+        public Asset? Parent { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Status { get; set; }
-        public string? Type { get; set; }
+        public string? Category { get; set; }
 
         [ForeignKey(nameof(Location))]
         public Guid? LocationId { get; set; }
@@ -28,6 +31,8 @@ namespace Entities
         public string? ImagePath { get; set; }
         public byte[]? AssetImage { get; set; }
         public DateTime? AssetCommissionDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
 
     }
 }

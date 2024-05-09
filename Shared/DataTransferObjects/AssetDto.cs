@@ -9,11 +9,13 @@ namespace Shared
     public record AssetDto
     (
         Guid Id,
-        Guid? AssetParent, 
+        Guid? AssetParent,
+        AssetDto? Parent,
         string? Name,
         string? Description,
         string? Status,
-        string? Type,
+        string? Category,
+        Guid? LocationId,
         LocationDto? Location,
         string? SerialNumber,
         string? Model,
@@ -21,7 +23,9 @@ namespace Shared
         double? PurchaseCost, 
         string? ImagePath,
         byte[]? AssetImage,
-        DateTime? AssetCommissionDate
+        DateTime? AssetCommissionDate,
+        DateTime? CreatedDate,
+        DateTime? PurchaseDate
     );
 
     public record AssetForCreationDto(
@@ -29,7 +33,7 @@ namespace Shared
                string? Name, 
                       string? Description,
                              string? Status,
-                                    string? Type,
+                                    string? Category,
                                            Guid? LocationId,
                                                   string? SerialNumber,
                                                          string? Model,
@@ -37,7 +41,9 @@ namespace Shared
                                                                        double? PurchaseCost,
                                                                               string? ImagePath,
                                                                                      byte[]? AssetImage,
-                                                                                            DateTime? AssetCommissionDate
+                                                                                            DateTime? AssetCommissionDate,
+                                                                                            DateTime? CreatedDate,
+                                                                                                             DateTime? PurchaseDate
            );
 
     public record AssetForUpdateImage(

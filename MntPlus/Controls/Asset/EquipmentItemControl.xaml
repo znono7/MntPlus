@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="MntPlus.WPF.EquipmentItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MntPlus.WPF"
+             mc:Ignorable="d" Height="64" Width="3000"
+             d:DesignHeight="64" d:DesignWidth="3000">
+    <Grid Background="{DynamicResource TertiaryBackgroundColor}">
+        <Border BorderThickness="0 0 0 1.2" BorderBrush="{DynamicResource LineColor}"/>
+        <Grid TextBlock.TextAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="0"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Button Height="60" HorizontalAlignment="Left" Style="{StaticResource TextButton}">
+                <TextBlock  Text="{Binding Name}"  Style="{DynamicResource ColumnHeaderStyle}"  />
+            </Button>
+            <TextBlock Grid.Column="1" Text="&#xf03e;" FontSize="32" Foreground="{DynamicResource FourthTextColor}" FontFamily="{StaticResource FontAwesome2}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="2" Text="{Binding Description}"  TextTrimming="CharacterEllipsis" ToolTip="{Binding Description}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <Border Grid.Column="3" Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="#4C44A0">
+
+                <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding Status,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+            </Border>
+            <TextBlock Grid.Column="4" TextTrimming="CharacterEllipsis" ToolTip="{Binding LocationName}" Text="{Binding LocationName}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="5" Text="{Binding Category}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="6" Text="{Binding Make}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="7" Text="{Binding Model}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="8" TextTrimming="CharacterEllipsis" ToolTip="{Binding SerialNumber}" Text="{Binding SerialNumber}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="9" Text="" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="10" Text="{Binding ParentName}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="11" Text="{Binding AssetCommissionDate}"  Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="12" Text="{Binding PurchaseDate}"  Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="13" Text="{Binding PurchaseCost,Converter={local:CurrencyConverter}}"  Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="14" Text="{Binding CreatedDate}"  Style="{DynamicResource ColumnHeaderStyle}" />
+
+        </Grid>
+    </Grid>
+</UserControl>

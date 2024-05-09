@@ -55,7 +55,7 @@ namespace MntPlus.WPF
                             Name: AssetName,
                             Description: Description,
                             Status: null,
-                            Type: null,
+                            Category: null,
                             LocationId: null,
                             SerialNumber: null,
                             Model: null,
@@ -63,7 +63,7 @@ namespace MntPlus.WPF
                             PurchaseCost: null,
                             ImagePath: null,
                             AssetImage: null,
-                            AssetCommissionDate: null
+                            AssetCommissionDate: null,null,null
                         ));
                           
                    

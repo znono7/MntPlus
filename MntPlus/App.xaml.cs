@@ -20,7 +20,7 @@ namespace MntPlus.WPF
 
 
 
-            Current.MainWindow = new MainWindow();
+            Current.MainWindow = /*new NewEquipmentWindow();*/ new MainWindow();
 
 
             Current.MainWindow.Show();

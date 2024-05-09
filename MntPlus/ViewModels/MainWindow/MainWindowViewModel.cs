@@ -114,6 +114,7 @@ namespace MntPlus.WPF
         /// </summary>
         public GridLength TitleHeightGridLength => new GridLength(TitleHeight + ResizeBorder);
 
+
         #endregion
 
         #region Commands
@@ -155,7 +156,7 @@ namespace MntPlus.WPF
         {
             mWindow = window; 
               
-            // Listen out for the window resizing
+            // Listen out for the window resizing 
             mWindow.StateChanged += (sender, e) =>
             {
                 // Fire off events for all properties that are affected by a resize

@@ -70,6 +70,7 @@ namespace MntPlus.WPF
         public ICommand ToggleCommand { get; set; }
 
         public ICommand SettingsCommand { get; set; }
+        public ICommand LocationCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -81,6 +82,7 @@ namespace MntPlus.WPF
             EquipementCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Assets));
             TeamsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Users));
             SettingsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Settings));
+            LocationCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Locations));
 
         }
 

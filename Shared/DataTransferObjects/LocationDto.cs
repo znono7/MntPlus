@@ -8,13 +8,11 @@ namespace Shared
 {
     public record LocationDto(
                Guid Id,
-               string Name,
-               string Address,
-               string City,
-               string State,
-               string Country,
-               string ImagePath,
-               byte[] LocationImage
+               string Name, 
+               string? Address,
+               bool IsPrimaryLocation,
+               Guid? IdParent,
+              DateTime CreatedAt
                );
 
     public record LocationForCreationDto

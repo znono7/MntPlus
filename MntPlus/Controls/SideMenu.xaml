@@ -54,7 +54,7 @@
         </StackPanel>
         <Rectangle Margin="0 5" Height="1" Grid.Row="4" Fill="{DynamicResource LineColor}"/>
         <StackPanel Grid.Row="5">
-            <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup"  Content="Localisations" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource loc}"  />
+            <RadioButton Command="{Binding LocationCommand}" GroupName="MyGroup"  Content="Localisations" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource loc}"  />
             <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" Content="Équipements" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource box}" />
             <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" Content="Pièces" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource part}"  />
         </StackPanel>

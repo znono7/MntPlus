@@ -137,9 +137,10 @@ namespace MntPlus.WPF
             if(AssetDtos is not null && AssetDtos.Count > 0)
             {
                 CreateEquipmentTreeViewItems treeViewItems = new();
+                CreateEquipmentListItems equipmentListItems = new();
                 IsHierarchy = true;
                 EquipmentTreeViewItems = treeViewItems.CreateTreeViewItems(AssetDtos.ToList());
-                EquipmentListItems = CreateListItems(AssetDtos.ToList());
+                EquipmentListItems = equipmentListItems.CreateListItems(AssetDtos.ToList());
                 IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);
                 IterateEquipmentItemsAndChildren(EquipmentListItems);
                 IsHeaderVisible = true;
@@ -245,10 +246,11 @@ namespace MntPlus.WPF
 
         private void OnEquipmentCreated(AssetDto? newEquipment)
         {
-            var newItemViewModel = new AssetItemViewModel(newEquipment); ;
-           
-                
-            var parentViewModel = FindParentViewModel(newEquipment?.AssetParent);
+            var newItemViewModel = new AssetItemViewModel(newEquipment);
+            FindEquipmentParentViewModel findEquipmentParentViewModel = new(EquipmentTreeViewItems);
+
+
+            var parentViewModel = findEquipmentParentViewModel.FindParentViewModel(newEquipment?.AssetParent);
             newItemViewModel.AddChildFunc = AddNewChild;
             newItemViewModel.RemoveItemFunc = RemoveItem;
             newItemViewModel.ViewFunc = ViewItem;
@@ -269,26 +271,7 @@ namespace MntPlus.WPF
         }
 
        
-        private List<AssetItemViewModel> OrganizeDataToList(AssetItemViewModel? equipmentItems)
-        {
-           if(equipmentItems is null)
-            {
-                return new List<AssetItemViewModel>();
-            }
-           
-            List<AssetItemViewModel> flatList = [equipmentItems];
-                
-            foreach (var child in equipmentItems.Children!)
-                
-            {
-                    flatList.AddRange(OrganizeDataToList(child));
-                
-            }
-                 
-            
-            return flatList;
-        }
-
+      
         public async Task LoadDataAsync()
         {
             await RunCommandAsync( () => IsLoading , async () =>
@@ -363,8 +346,9 @@ namespace MntPlus.WPF
                 var response = await AppServices.ServiceManager.AssetService.DeleteAsset(cmodel.Asset.Id,false);
                 if (response is ApiOkResponse<AssetDto> && response.Success)
                 {
+                    RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentTreeViewItems);
                     // Remove the item from the tree view
-                    RemoveItemFromTreeView(cmodel);
+                    removeEquipmentItem.RemoveItemFromTreeView(cmodel);
 
                     // Remove the item from the list view
                     EquipmentListItems?.Remove(cmodel);
@@ -417,31 +401,9 @@ namespace MntPlus.WPF
             await Task.Delay(1);
         } 
 
-        private int CalculateChildrenCount(AssetItemViewModel item)
-        {
-            int childrenCount = item.Children.Count;
-            foreach (var child in item.Children)
-            {
-                childrenCount += CalculateChildrenCount(child);
-            }
-            item.ChildrenCount = childrenCount;
-            return childrenCount;
-        }
+      
 
 
-        private void ConvertToEquipmentItemViewModel(ObservableCollection<AssetDto>? equipmentDtos)
-        {
-            if ( equipmentDtos is null || equipmentDtos.Count == 0)
-                return;
-
-            FilterEquipmentItems = new ObservableCollection<AssetItemViewModel>();
-            foreach (var equipmentDto in equipmentDtos)
-            {
-                FilterEquipmentItems.Add(new AssetItemViewModel(equipmentDto));
-            }
-            
-            IterateEquipmentItemsAndChildren(FilterEquipmentItems);
-        }
        
         public override void Dispose()
         {
@@ -453,108 +415,13 @@ namespace MntPlus.WPF
       
 
 
-        private AssetItemViewModel? FindParentViewModel(Guid? parentId)
-        {
-            if (parentId is null)
-            { 
-                return null; 
-            }
+      
+       
 
-            // Search for the parent view model based on parentId
-            foreach (var itemViewModel in EquipmentTreeViewItems!)
-            {
-                var parentViewModel = FindParentViewModelRecursive(itemViewModel, parentId);
-                if (parentViewModel is not null)
-                {
-                    return parentViewModel;
-                }
-            }
+       
+       
 
-            return null; // Parent not found
-        }
-
-        private AssetItemViewModel? FindParentViewModelRecursive(AssetItemViewModel? viewModel, Guid? parentId)
-        {
-            if (viewModel?.Asset?.Id == parentId)
-            {
-                return viewModel;
-            }
-
-            foreach (var childViewModel in viewModel?.Children!)
-            {
-                var parentViewModel = FindParentViewModelRecursive(childViewModel, parentId);
-                if (parentViewModel is not null)
-                {
-                    return parentViewModel;
-                }
-            }
-
-            return null;
-        }
-
-        private ObservableCollection<AssetItemViewModel> CreateListItems(List<AssetDto> equipmentData)
-        {
-            // For the list view, simply convert the equipment data to view models
-            return new ObservableCollection<AssetItemViewModel>(
-                                equipmentData.Select(e => new AssetItemViewModel(e)));
-           
-          
-        }
-
-        private void RemoveItemFromTreeView(AssetItemViewModel? itemToRemove)
-        {
-            if(itemToRemove is null) return;
-            // Find the parent of the item to remove
-            var parentViewModel = FindParentViewModel(itemToRemove);
-
-            if (parentViewModel is not null )
-            {
-                parentViewModel?.Children?.Remove(itemToRemove);
-            }
-            else
-            {
-                EquipmentTreeViewItems?.Remove(itemToRemove);
-            }
-        }
-        private AssetItemViewModel? FindParentViewModel(AssetItemViewModel? itemToRemove)
-        {
-            if (itemToRemove is null) return null;
-
-            // Search for the parent view model of the item to remove
-            foreach (var itemViewModel in EquipmentTreeViewItems!)
-            {
-                if (itemViewModel is null) continue;
-                var parentViewModel = FindParentViewModelRecursive(itemViewModel, itemToRemove);
-                if (parentViewModel is not null)
-                {
-                    return parentViewModel;
-                }
-            }
-
-            return null; // Parent not found
-        }
-
-        private AssetItemViewModel? FindParentViewModelRecursive(AssetItemViewModel? viewModel, AssetItemViewModel? itemToRemove)
-        {
-            if (itemToRemove is null) return null;
-
-            // Recursively search for the parent view model of the item to remove
-            if (viewModel!.Children!.Contains(itemToRemove))
-            {
-                return viewModel;
-            }
-
-            foreach (var childViewModel in viewModel.Children)
-            {
-                var parentViewModel = FindParentViewModelRecursive(childViewModel, itemToRemove);
-                if (parentViewModel != null)
-                {
-                    return parentViewModel;
-                }
-            }
-
-            return null;
-        }
+       
 
        
     }

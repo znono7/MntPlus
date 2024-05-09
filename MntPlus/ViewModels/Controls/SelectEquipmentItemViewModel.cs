@@ -30,7 +30,7 @@ namespace MntPlus.WPF
 
         public ObservableCollection<SelectEquipmentItemViewModel> Children { get; set; } 
         public ICommand SelectEquipmentCommand { get; set; }
-        public Func<SelectEquipmentItemViewModel, Task> SelectEquipmentFunc { get; set; }
+        public Func<SelectEquipmentItemViewModel, Task> SelectEquipmentFunc { get; set; } 
 
         public SelectEquipmentItemViewModel(AssetDto equipment) 
         {
