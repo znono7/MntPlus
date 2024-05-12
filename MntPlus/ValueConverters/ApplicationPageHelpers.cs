@@ -41,6 +41,8 @@ namespace MntPlus.WPF
                         return new SettingsPage(viewModel as SettingsViewModel);
                     case ApplicationPage.Locations:
                         return new LocationsPage(viewModel as LocationsPageViewModel);
+                    case ApplicationPage.Teams:
+                        return new TeamsPage(viewModel as TeamsPageViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -65,6 +67,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.Settings;
             if (page is LocationsPage)
                 return ApplicationPage.Locations;
+            if (page is TeamsPage)
+                return ApplicationPage.Teams;
 
             // Alert developer of issue
             Debugger.Break();

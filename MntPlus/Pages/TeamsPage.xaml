@@ -1,5 +1,5 @@
-﻿<local:BasePage x:TypeArguments="local:UsersPageViewModel"  
-                x:Class="MntPlus.WPF.UsersPage"
+﻿<local:BasePage x:TypeArguments="local:TeamsPageViewModel"  
+                x:Class="MntPlus.WPF.TeamsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +7,7 @@
       xmlns:local="clr-namespace:MntPlus.WPF"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="UsersPage">
+      Title="TeamsPage">
 
     <Grid Background="{DynamicResource TertiaryBackgroundColor}">
         <Grid.RowDefinitions>
@@ -45,8 +45,8 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Utilisateurs et Équipes" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <RadioButton Command="{Binding ToUsersPageCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource user}"  Content="Utilisateurs" IsChecked="True"  Margin="0 0 5 0"/>
-                        <RadioButton Command="{Binding ToTeamsPageCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource users}"  Content="Équipes" Margin="0 0 25 0"  />
+                        <RadioButton Command="{Binding ToUsersPageCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource user}"  Content="Utilisateurs"   Margin="0 0 5 0"/>
+                        <RadioButton Command="{Binding ToTeamsPageCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource users}"  Content="Équipes" IsChecked="True" Margin="0 0 25 0"  />
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -60,7 +60,7 @@
             </Grid.ColumnDefinitions>
             <TextBox Tag="Recherche par nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle}"/>
             <Button Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
-            <Button Width="110" Margin="10 0" Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding OpenWindowCommand}" Grid.Column="3" Style="{DynamicResource PrimeButton}" Content="Utilisateur" Tag="{StaticResource plus}"/>
+            <Button Width="90" Margin="10 0" Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding OpenWindowCommand}" Grid.Column="3" Style="{DynamicResource PrimeButton}" Content="Équipe" Tag="{StaticResource plus}"/>
         </Grid>
         <Rectangle Height="1" Grid.Row="2" Fill="{DynamicResource LineColor}"/>
         <Grid Grid.Row="3">
@@ -68,7 +68,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <RadioButton Command="{Binding MenuActionCommand}" x:Name="ActionBtn" Margin="20 0"  Style="{StaticResource SubVerticalMenuStyle}" Content="Actions" HorizontalAlignment="Left" />
+            <RadioButton Command="{Binding MenuActionCommand}" Margin="20 0"  Style="{StaticResource SubVerticalMenuStyle}" Content="Actions" HorizontalAlignment="Left" />
             <Popup StaysOpen="True" HorizontalAlignment="Center" Width="185"  Height="110" IsOpen="{Binding IsMenuActionOpen}" PlacementTarget="{Binding ElementName=ActionBtn}" Placement="Bottom" AllowsTransparency="True" PopupAnimation="Scroll">
                 <Grid>
                     <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
@@ -77,14 +77,17 @@
                     </StackPanel>
                 </Grid>
             </Popup>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="1">
+            <ScrollViewer Grid.Row="1">
                 <DataGrid Grid.Row="1" Margin="10" 
-                       ItemsSource="{Binding FilterUsers}"
+                       ItemsSource="{Binding FilterTeams}"
                        Style="{StaticResource DataGridStyle}"
                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
                        RowStyle="{StaticResource DataGridRowStyle1}"
                        CellStyle="{StaticResource DataGridCellStyle}"
-                       AutoGenerateColumns="False">
+                       AutoGenerateColumns="False" 
+                        >
+
+
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
                             <DataGridCheckBoxColumn.HeaderTemplate>
@@ -94,18 +97,6 @@
                             </DataGridCheckBoxColumn.HeaderTemplate>
                         </DataGridCheckBoxColumn>
                         <DataGridTextColumn Header="Nom" CanUserResize="False" Width="*" Binding="{Binding Name}" />
-                        <DataGridTemplateColumn Header="Statut">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border Grid.Column="3" Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="#4C44A0">
-                                        <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding Status,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
-                                    </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="E-mail" CanUserResize="False" Width="Auto" Binding="{Binding Email}" />
-                        <DataGridTextColumn Header="N° de téléphone" CanUserResize="False" Width="Auto" Binding="{Binding PhoneNumber}" />
-                        <DataGridTextColumn Header="Rôle" CanUserResize="False" Width="Auto" Binding="{Binding Role}" />
 
                     </DataGrid.Columns>
                 </DataGrid>

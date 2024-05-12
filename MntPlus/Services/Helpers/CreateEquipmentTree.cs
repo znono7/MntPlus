@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace MntPlus.WPF
 {
-    public class CreateEquipmentTreeViewItems
+    public class CreateEquipmentTree
     {
-        public ObservableCollection<AssetItemViewModel> CreateTreeViewItems(List<AssetDto>? equipmentData)
+        public ObservableCollection<EquipmentItemViewModel> CreateTreeViewItems(List<AssetDto>? equipmentData)
         {
-            var treeViewItems = new ObservableCollection<AssetItemViewModel>();
+            var treeViewItems = new ObservableCollection<EquipmentItemViewModel>();
 
             // Assuming root items have null ParentId
-            var rootItems = equipmentData?.Where(e => e.AssetParent is null);
+            var rootItems = equipmentData?.Where(e => e.AssetParent == null);
 
-            foreach (var rootItem in rootItems!)
+            foreach (var rootItem in rootItems!) 
             {
-                var rootViewModel = new AssetItemViewModel(rootItem);
+                var rootViewModel = new EquipmentItemViewModel(rootItem);
                 CreateTreeViewChildren(rootViewModel, equipmentData);
 
                 CalculateNumberOfChildren(rootViewModel, equipmentData);
@@ -31,27 +31,31 @@ namespace MntPlus.WPF
             return treeViewItems;
         }
 
-        private void CreateTreeViewChildren(AssetItemViewModel parentViewModel, List<AssetDto>? equipmentData)
+        private void CreateTreeViewChildren(EquipmentItemViewModel parentViewModel, List<AssetDto>? equipmentData)
         {
            
-            var children = equipmentData?.Where(e => parentViewModel is not null && parentViewModel?.Asset is not null  &&  e.AssetParent == parentViewModel?.Asset?.Id);
+            var children = equipmentData?.Where(e => parentViewModel != null 
+                                                    && parentViewModel?.Asset != null  
+                                                    &&  e.AssetParent == parentViewModel?.Asset?.Id);
 
-            foreach (var child in children!)
+            if(children == null) return;
+         
+            foreach (var child in children)
             {
-                var childViewModel = new AssetItemViewModel(child);
+                var childViewModel = new EquipmentItemViewModel(child);
                 CreateTreeViewChildren(childViewModel, equipmentData);
                 parentViewModel?.Children?.Add(childViewModel);
             }
         }
 
-        private void CalculateNumberOfChildren(AssetItemViewModel? parentViewModel, List<AssetDto>? equipmentData)
+        private void CalculateNumberOfChildren(EquipmentItemViewModel? parentViewModel, List<AssetDto>? equipmentData)
         {
             if(parentViewModel is null || parentViewModel?.Asset is null)
             {
                 return;
             }
             // Calculate the number of children for the parentViewModel
-            parentViewModel.ChildrenCount = !(equipmentData is null)
+            parentViewModel.ChildrenCount = !(equipmentData == null)
                                             ? equipmentData.Count( e => e.AssetParent == parentViewModel?.Asset?.Id ) : 0;
 
             // Recursively calculate the number of children for each child

@@ -28,7 +28,7 @@ namespace Repository
             .SingleOrDefaultAsync();
 
         public async Task<IEnumerable<User>?> GetUsersByTeamAsync(Guid teamId, bool trackChanges) =>
-            await FindByCondition(c => c.TeamId.Equals(teamId), trackChanges)
+            await FindByCondition(c => c.Id.Equals(teamId), trackChanges)
             .OrderBy(c => c.FirstName)
             .ToListAsync();
         

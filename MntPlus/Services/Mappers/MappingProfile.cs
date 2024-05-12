@@ -23,6 +23,11 @@ namespace MntPlus.WPF
 
             CreateMap<UserCreateDto, User>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserWithRolesDto>()
+                .ForMember(x => x.FullName, opt => opt.MapFrom(x => string.Join(' ',x.FirstName,x.LastName)))
+                .ForMember(x => x.RoleNames, opt => opt.MapFrom(
+                    src => string.Join(' ',  src.UserRoles != null ? string.Join(", ", src.UserRoles.Select(ur => ur.Role.Name)) : "")))
+                .ReverseMap();
 
 
             CreateMap<TeamCreatedDto, Team>().ReverseMap();

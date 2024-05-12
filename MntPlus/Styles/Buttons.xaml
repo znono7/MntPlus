@@ -113,55 +113,37 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Height" Value="40"/>
+        <Setter Property="Height" Value="32"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Border x:Name="menuButton"  Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="45"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
 
                             </Grid.ColumnDefinitions>
 
-                            <!-- Selected  -->
-                            <Border x:Name="btnSelected" Grid.ColumnSpan="2"  CornerRadius="4" Width="215" HorizontalAlignment="Right"/>
-
-                            <!-- Indicator -->
-                            <Rectangle Name="Indicator" HorizontalAlignment="Left" Width="4" Height="40" VerticalAlignment="Center" RadiusX="2" RadiusY="2"/>
-
-                            <!-- Icon -->
-                            <Path x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}}" Height="24" Width="24" Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 5 0"/>
-
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="12 0 0 0">
                                 <!-- Text -->
-                                <TextBlock x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                <TextBlock x:Name="txtName" HorizontalAlignment="Center" VerticalAlignment="Center" 
                                            Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
-                                          FontWeight="{TemplateBinding FontWeight}"
-                                          FontSize="{TemplateBinding FontSize}"  Margin="0 0 5 0"/>
+                                          FontWeight="{TemplateBinding FontWeight}" Grid.Column="0"
+                                          FontSize="{TemplateBinding FontSize}"  Margin="12 0 0 0"/>
                                 <!-- expand Icon -->
-                                <Path  Visibility="Collapsed" x:Name="expandIcon" Data="{DynamicResource expand}" Height="11" Width="11" Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0 2 0">
+                            <Path x:Name="expandIcon" Grid.Column="1" Data="{DynamicResource expand}" Height="11" Width="11" Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" 
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="6 6 6 0"/>
 
-                                </Path>
-                            </StackPanel>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="Name" Value="rdPayment">
-                            <Setter TargetName="expandIcon" Property="Visibility" Value="Visible"/>
-                        </Trigger>
+                        
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="txtName" Property="Foreground" Value="{DynamicResource SecundaryTextColor}"/>
-                            <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource SecundaryTextColor}"/>
-                            <!-- Optional 
-                      <Setter TargetName="Indicator" Property="Fill" Value="red"/>
-                      <Setter TargetName="Indicator" Property="Height" Value="20"/>-->
+                            
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource TertiaryTextColor}"/>
-                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource PrimaryBlueColor}"/>
-                            <Setter TargetName="Indicator" Property="Height" Value="20"/>
+                           
                             <Setter TargetName="txtName" Property="Foreground" Value="{DynamicResource TertiaryTextColor}"/>
 
                         </Trigger>

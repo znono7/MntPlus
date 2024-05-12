@@ -13,14 +13,15 @@ namespace Repository
         {
         }
         public DbSet<Location>? Locations { get; set; }
-        public DbSet<Asset>? Assets { get; set; }
-        public DbSet<WorkOrder>? WorkOrders { get; set; }
+        //public DbSet<Asset>? Assets { get; set; }
+        //public DbSet<WorkOrder>? WorkOrders { get; set; }
         public DbSet<User>? Users { get; set; }
         public DbSet<Team>? Teams { get; set; }
+        public DbSet<UserTeam>? UserTeams { get; set; }
         public DbSet<WorkOrderHistory>? WorkOrderHistories { get; set; }
-        public DbSet<MaintenanceActivities>? MaintenanceActivities { get; set; }
-        public DbSet<Schedule>? Schedules { get; set; }
-        public DbSet<Instruction>? Instructions { get; set; }
+        //public DbSet<MaintenanceActivities>? MaintenanceActivities { get; set; }
+        //public DbSet<Schedule>? Schedules { get; set; }
+        //public DbSet<Instruction>? Instructions { get; set; }
 
 
 

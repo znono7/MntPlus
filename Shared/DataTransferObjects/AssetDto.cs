@@ -10,7 +10,7 @@ namespace Shared
     (
         Guid Id,
         Guid? AssetParent,
-        AssetDto? Parent,
+        AssetDto? Parent,  
         string? Name,
         string? Description,
         string? Status,

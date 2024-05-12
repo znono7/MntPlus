@@ -9,13 +9,13 @@ namespace MntPlus.WPF
 {
     public class FindEquipmentParentViewModel
     {
-        public ObservableCollection<AssetItemViewModel>? EquipmentTreeViewItems { get; set; }
+        public ObservableCollection<EquipmentItemViewModel>? EquipmentTreeViewItems { get; set; }
 
-        public FindEquipmentParentViewModel(ObservableCollection<AssetItemViewModel>? equipmentTreeViewItems)
+        public FindEquipmentParentViewModel(ObservableCollection<EquipmentItemViewModel>? equipmentTreeViewItems)
         {
             EquipmentTreeViewItems = equipmentTreeViewItems;
         }
-        public AssetItemViewModel? FindParentViewModel(Guid? parentId)
+        public EquipmentItemViewModel? FindParentViewModel(Guid? parentId)
         {
             if (parentId is null)
             {
@@ -35,7 +35,7 @@ namespace MntPlus.WPF
             return null; // Parent not found
         }
 
-        private AssetItemViewModel? FindParentViewModelRecursive(AssetItemViewModel? viewModel, Guid? parentId)
+        private EquipmentItemViewModel? FindParentViewModelRecursive(EquipmentItemViewModel? viewModel, Guid? parentId)
         {
             if (viewModel?.Asset?.Id == parentId)
             {

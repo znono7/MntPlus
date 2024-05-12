@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MntPlus.WPF"
-             mc:Ignorable="d" Height="64" Width="3000"
+             mc:Ignorable="d" Height="64" Width="3200"
              d:DesignHeight="64" d:DesignWidth="3000">
     <Grid Background="{DynamicResource TertiaryBackgroundColor}">
         <Border BorderThickness="0 0 0 1.2" BorderBrush="{DynamicResource LineColor}"/>

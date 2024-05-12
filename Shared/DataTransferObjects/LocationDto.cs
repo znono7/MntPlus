@@ -12,18 +12,16 @@ namespace Shared
                string? Address,
                bool IsPrimaryLocation,
                Guid? IdParent,
-              DateTime CreatedAt
+               DateTime CreatedAt
                );
 
     public record LocationForCreationDto
         (
-        string? Name,
-            string? Address,
-            string? City,
-            string? State,
-            string? Country,
-            string? ImagePath,
-            byte[]? LocationImage
+               string Name,
+               string? Address,
+               bool IsPrimaryLocation,
+               Guid? IdParent,
+               DateTime CreatedAt
         );
 
    

@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid>
@@ -85,20 +86,58 @@
             </Grid>
         </Grid>
 
-        <Grid Height="50" Grid.Row="1">
+        <Grid  Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="75"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
 
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.ColumnSpan="4" Grid.Row="1" Height="1" Fill="{DynamicResource LineColor}" Margin="20 0"/>
             <Button Command="{Binding OpenFilterCommand}" x:Name="AllFilterBtn" Grid.Column="1"  Style="{DynamicResource PrimeButton2}" Content="Tous les Filtres" Tag="{DynamicResource filter}" Width="150" />
             <Popup VerticalOffset="4"  StaysOpen="True" PopupAnimation="Slide" HorizontalAlignment="Center" Width="210" Height="480"  IsOpen="{Binding IsFilterOpen}" PlacementTarget="{Binding ElementName=AllFilterBtn}" Placement="Bottom" AllowsTransparency="True">
                 <local:FilterAssetControl DataContext="{Binding FilterAssetControl}" />
             </Popup>
+            <!--#region NewRegion -->
+            <Grid Grid.Column="3" Margin="20 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Tag="Recherche par Nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle}"/>
+                <Button Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
+            </Grid>
+            <!--#endregion-->
         </Grid>
-            
-        <Grid Margin="20 0 20 20" Grid.Row="2">
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Row="1" Grid.ColumnSpan="4" Height="1" Fill="{DynamicResource LineColor}" Margin="20 0"/>
+            <ItemsControl ItemsSource="{Binding FilterTags}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <!-- Define your item template here -->
+                    <!-- For example, if you want to display text -->
+                    <DataTemplate>
+                        <local:TagControl Margin="5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        
+        
+        <Grid Margin="20 0 20 20" Grid.Row="3">
             <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -107,12 +146,12 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-            <Border Grid.RowSpan="3"  Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}">
-                <!--<Border.Effect>
+            <!--<Border Grid.RowSpan="3"  Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}">
+                --><!--<Border.Effect>
                     <DropShadowEffect BlurRadius="16" ShadowDepth="1"
                        Color="LightSlateGray" Opacity="0.1" />
-                </Border.Effect>-->
-            </Border>
+                </Border.Effect>--><!--
+            </Border>-->
             <Grid Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true,FallbackValue=Hidden}" Grid.RowSpan="3" Panel.ZIndex="5" >
                 <Border   Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
 
@@ -170,23 +209,31 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                <!--#region NewRegion -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Tag="Recherche par Nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle}"/>
-                    <Button Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
-                </Grid>
-                <!--#endregion-->
+               
+                <!--
                 <StackPanel Orientation="Horizontal" Grid.Column="2">
                     <RadioButton Command="{Binding TohierarchyCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource hierarchy}"  Content="Hiérarchie" IsChecked="True"  Margin="0 0 5 0"/>
                     <RadioButton Command="{Binding ToListCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource list}"  Content="Liste" Margin="0 0 25 0"  />
-                    </StackPanel>
+                    </StackPanel>-->
                 </Grid>
-            <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="1">
-                <local:HeaderEquipmentControl Margin="5 30"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible" Grid.Row="1">
+                <Grid Width="3200" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <local:HeaderEquipmentControl Margin="5 0"/>
+                    <local:StretchingTreeView Grid.Row="1" ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"  
+                                ItemsSource="{Binding FilterEquipmentItemViewModels}"   >
+                        <local:StretchingTreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <local:EquipmentItemControl   />
+                            </HierarchicalDataTemplate>
+                           
+                        </local:StretchingTreeView.ItemTemplate>
+                        
+                    </local:StretchingTreeView>
+                </Grid>
             </ScrollViewer>
             <!--<Grid Visibility="{Binding IsHeaderVisible,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
                     <Grid.ColumnDefinitions>
@@ -208,7 +255,7 @@
                     <Rectangle Width="1"  Grid.Column="3" Fill="{DynamicResource LineColor}"  VerticalAlignment="Stretch" Margin="0" />
                     <TextBlock Text="Image de l'actif"  Grid.Column="4"   Style="{DynamicResource ColumnHeaderStyle}" Margin="10 0 0 0"/>
                 </Grid>-->
-            <ScrollViewer Margin="5" Visibility="{Binding IsHierarchy,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2">
+            <!--<ScrollViewer Margin="5" Visibility="{Binding IsHierarchy,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2">
                 <Grid>
                     <TreeView Grid.Row="2" Visibility="{Binding IsList,Converter={local:BooleanToVisiblityConverter}}"  ItemContainerStyle="{DynamicResource TreeViewItemContainerStyle1}" 
                           ItemsSource="{Binding FilterEquipmentTreeViewItems}"   >
@@ -234,7 +281,7 @@
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
-            </ScrollViewer>
+            </ScrollViewer>-->
 
         </Grid>
 

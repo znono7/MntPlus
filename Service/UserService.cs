@@ -151,7 +151,7 @@ namespace Service
                 {
                     return new ApiNotFoundResponse("");
                 }
-                userEntity.TeamId = teamId;
+                userEntity.Id = teamId;
                 await _repository.SaveAsync();
                 var userToReturn = _mapper.Map<UserDto>(userEntity);
                 return new ApiOkResponse<UserDto>(userToReturn);

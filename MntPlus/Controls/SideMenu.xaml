@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Border  Grid.RowSpan="11"  BorderThickness="0 0 1 0"  BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}" />
+        <Border  Grid.RowSpan="11"  BorderThickness="0 0 1 0"  BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource SideMenuBackground}" />
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

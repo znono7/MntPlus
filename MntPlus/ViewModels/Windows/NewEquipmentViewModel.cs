@@ -45,8 +45,9 @@ namespace MntPlus.WPF
         public BitmapImage? MyImageSource { get;  set; }
         public bool IsHaveImage { get; set; }
         public ICommand DeleteImgCommand { get; set; }
+        public AssetStore AssetStore { get; }
 
-        public NewEquipmentViewModel(Window window) : base(window)
+        public NewEquipmentViewModel(Window window, AssetStore assetStore) : base(window)
         {
             TitleHeight = 56;
             AssetStatuses = new AssetStatuses();
@@ -55,7 +56,7 @@ namespace MntPlus.WPF
             OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);
             BrowseCommand = new RelayCommand(async () => await Browse());
             DeleteImgCommand = new RelayCommand(RemoveImage);
-
+            AssetStore = assetStore;
         }
 
         public async Task Browse()

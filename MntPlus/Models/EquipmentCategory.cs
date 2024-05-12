@@ -14,7 +14,7 @@ namespace MntPlus.WPF
     //generate a list of equipment category
     public class EquipmentCategories
     {
-        public List<EquipmentCategory> EquipmentCategoryList { get; set; }
+        public List<EquipmentCategory> EquipmentCategoryList { get; set; } 
         public EquipmentCategories()
         {
             EquipmentCategoryList = new List<EquipmentCategory>

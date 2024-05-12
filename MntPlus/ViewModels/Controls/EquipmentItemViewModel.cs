@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Shared;
+using System.Collections.ObjectModel;
 
 namespace MntPlus.WPF
 {
@@ -22,12 +23,25 @@ namespace MntPlus.WPF
         public string? AssetCommissionDate { get; set; }
         public string? CreatedDate { get; set; }
         public string? PurchaseDate { get; set; }
-        public AssetDto Asset { get;  }
+        public AssetDto? Asset { get; set; }
 
-        public EquipmentItemViewModel(AssetDto asset)
+        private ObservableCollection<EquipmentItemViewModel>? _children;
+
+        public ObservableCollection<EquipmentItemViewModel>? Children
+        {
+            get { return _children; }
+            set
+            {
+                _children = value;
+                OnPropertyChanged(nameof(Children));
+            }
+        }
+        public int ChildrenCount { get; set; }
+        public EquipmentItemViewModel(AssetDto? asset)
         {
             Asset = asset;
             MapProperties();
+            Children = new ObservableCollection<EquipmentItemViewModel>();
         }
 
         //map the properties

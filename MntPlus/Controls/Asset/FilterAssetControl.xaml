@@ -15,12 +15,23 @@
         </Border>
         <Grid Margin="2 20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel>
-                <Button Command="{Binding CategoryPopupCommand}" x:Name="CategoryBtn" Content="Catégorie" Style="{StaticResource FilterButton}"/>
-            </StackPanel>
+            <Button Command="{Binding CategoryPopupCommand}" x:Name="CategoryBtn" Content="Catégorie" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="1" Command="{Binding CategoryPopupCommand}" x:Name="LocationBtn" Content="Localisation" Style="{StaticResource PopupButton}"/>
+            <Button Grid.Row="2" Command="{Binding CategoryPopupCommand}" x:Name="StatusBtn" Content="Statut" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="3" Command="{Binding CategoryPopupCommand}" x:Name="SerialNbrBtn" Content="Numéro de série" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="4" Command="{Binding CategoryPopupCommand}" x:Name="ModelBtn" Content="Modèle" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="5" Command="{Binding CategoryPopupCommand}" x:Name="MakeBtn" Content="Fabricant" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="6" Command="{Binding CategoryPopupCommand}" x:Name="ServiceBtn" Content="Date de mise en service" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="7" Command="{Binding CategoryPopupCommand}" x:Name="CreatedBtn" Content="Date Créée" Style="{StaticResource FilterButton}"/>
         </Grid>
         <Popup StaysOpen="True" Placement="Right" PlacementTarget="{Binding ElementName=CategoryBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsCategoryPopupOpen}" x:Name="CategoryPopup">
             <Grid>
@@ -30,11 +41,30 @@
                                         Color="LightSlateGray" Opacity="0.2" />
                     </Border.Effect>
                 </Border>
+                <StackPanel>
+                    <TextBlock Text="Catégorie" Style="{StaticResource LabelTextBlockStyle}"/>
+                    <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding EquipmentCategories.EquipmentCategoryList}" SelectedItem="{Binding SelectedEquipmentCategory}" Style="{StaticResource ComboBoxStyle3}" Margin="4 0 4 20" Width="280"/>
+                </StackPanel>
+            </Grid>
+        </Popup>
+        <!--<Popup StaysOpen="True" Placement="Right" PlacementTarget="{Binding ElementName=CategoryBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsCategoryPopupOpen}" >
+            <Grid>
+                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                                 Color="LightSlateGray" Opacity="0.2" />
+                    </Border.Effect>
+                </Border>
                 <StackPanel >
                     <TextBlock Text="Catégorie" Style="{StaticResource LabelTextBlockStyle}"/>
                     <TextBox Style="{StaticResource InputTextBoxStyle}"/>
                 </StackPanel>
             </Grid>
         </Popup>
+        <TextBox.InputBindings>
+      <KeyBinding Key="Enter" Command="{Binding EnterKeyCommand}"/>
+      <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}"/>
+  </TextBox.InputBindings>
+        -->
     </Grid>
 </UserControl>

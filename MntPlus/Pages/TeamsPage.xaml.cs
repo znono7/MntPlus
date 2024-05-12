@@ -10,24 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MntPlus.WPF
 {
     /// <summary>
-    /// Interaction logic for NewEquipmentWindow.xaml
+    /// Interaction logic for TeamsPage.xaml
     /// </summary>
-    public partial class NewEquipmentWindow : Window
+    public partial class TeamsPage : BasePage<TeamsPageViewModel>
     {
-        public NewEquipmentWindow(AssetStore assetStore)
+        public TeamsPage()
         {
             InitializeComponent();
-            DataContext = new NewEquipmentViewModel(this,assetStore);
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public TeamsPage(TeamsPageViewModel viewModel) : base(viewModel)
         {
-            Close();
+            InitializeComponent();
         }
     }
 }

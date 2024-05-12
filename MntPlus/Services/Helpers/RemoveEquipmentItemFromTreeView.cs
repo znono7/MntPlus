@@ -9,14 +9,14 @@ namespace MntPlus.WPF
 {
     public class RemoveEquipmentItemFromTreeView
     {
-        public ObservableCollection<AssetItemViewModel>? EquipmentTreeViewItems { get; set; }
+        public ObservableCollection<EquipmentItemViewModel>? EquipmentTreeViewItems { get; set; }
 
-        public RemoveEquipmentItemFromTreeView(ObservableCollection<AssetItemViewModel>? equipmentTreeViewItems)
+        public RemoveEquipmentItemFromTreeView(ObservableCollection<EquipmentItemViewModel>? equipmentTreeViewItems)
         {
-            EquipmentTreeViewItems = equipmentTreeViewItems;
+            EquipmentTreeViewItems = equipmentTreeViewItems; 
         }
 
-        public void RemoveItemFromTreeView(AssetItemViewModel? itemToRemove)
+        public void RemoveItemFromTreeView(EquipmentItemViewModel? itemToRemove)
         {
             if (itemToRemove is null) return;
             // Find the parent of the item to remove
@@ -31,7 +31,7 @@ namespace MntPlus.WPF
                 EquipmentTreeViewItems?.Remove(itemToRemove);
             }
         }
-        private AssetItemViewModel? FindParentViewModel(AssetItemViewModel? itemToRemove)
+        private EquipmentItemViewModel? FindParentViewModel(EquipmentItemViewModel? itemToRemove)
         {
             if (itemToRemove is null) return null;
 
@@ -49,7 +49,7 @@ namespace MntPlus.WPF
             return null; // Parent not found
         }
 
-        private AssetItemViewModel? FindParentViewModelRecursive(AssetItemViewModel? viewModel, AssetItemViewModel? itemToRemove)
+        private EquipmentItemViewModel? FindParentViewModelRecursive(EquipmentItemViewModel? viewModel, EquipmentItemViewModel? itemToRemove)
         {
             if (itemToRemove is null) return null;
 

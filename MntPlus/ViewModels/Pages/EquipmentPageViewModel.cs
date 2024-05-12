@@ -1,15 +1,7 @@
 ﻿using Entities;
-using MntPlus.WPF;
 using Shared;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MntPlus.WPF
@@ -19,49 +11,27 @@ namespace MntPlus.WPF
         #region protected
         protected string? mLastSearchText;
         protected string? mSearchText;
-         
+
         #endregion
         #region Public Properties
 
-       
-        public ObservableCollection<AssetItemViewModel>? FilterEquipmentTreeViewItems { get; set; }
+        public ObservableCollection<TagControlViewModel>? FilterTags { get; set; }
+        public ObservableCollection<FilterCriteria> AppliedFilters { get; set; } 
 
-
-        private ObservableCollection<AssetItemViewModel>? _equipmentTreeViewItems;
-        public ObservableCollection<AssetItemViewModel>? EquipmentTreeViewItems
+        private ObservableCollection<EquipmentItemViewModel>? equipmentItemViewModels { get; set; }
+        public ObservableCollection<EquipmentItemViewModel>? EquipmentItemViewModels
         {
-            get { return _equipmentTreeViewItems; }
+            get { return equipmentItemViewModels; }
             set
             {
-                if (_equipmentTreeViewItems == value)
+                if (equipmentItemViewModels == value)
                     return;
-                _equipmentTreeViewItems = value;
-                FilterEquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>(_equipmentTreeViewItems!);
-                OnPropertyChanged(nameof(EquipmentTreeViewItems));
+                equipmentItemViewModels = value;
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>(equipmentItemViewModels!);
+                OnPropertyChanged(nameof(EquipmentItemViewModels));
             }
         }
-
-
-        public ObservableCollection<AssetItemViewModel>? FilterEquipmentItems { get; set; }
-
-        private ObservableCollection<AssetItemViewModel>? _equipmentListItems;
-        public ObservableCollection<AssetItemViewModel>? EquipmentListItems
-        {
-            get { return _equipmentListItems; }
-            set
-            {
-                if (_equipmentListItems == value)
-                    return;
-                _equipmentListItems = value;
-                FilterEquipmentItems = new ObservableCollection<AssetItemViewModel>(_equipmentListItems!);
-
-                OnPropertyChanged(nameof(EquipmentListItems));
-            }
-        }
-
-
-
-
+        public ObservableCollection<EquipmentItemViewModel>? FilterEquipmentItemViewModels { get; set; }
 
         public ObservableCollection<AssetDto>? AssetDtos { get; set; }
         public bool IsMenuOpen { get; set; }
@@ -76,6 +46,7 @@ namespace MntPlus.WPF
         public bool IsFilterOpen { get; set; }
         public ICommand OpenFilterCommand { get; set; }
 
+       
 
         #endregion
 
@@ -118,81 +89,92 @@ namespace MntPlus.WPF
             _equipmentStore = new AssetStore();
             _equipmentStore.AssetCreated += OnEquipmentCreated;
             _equipmentStore.AssetUpdated += OnEquipmentUpdated;
-            EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
-            EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
-            ToListCommand = new RelayCommand(() =>
+          
+           
+           // _ = LoadDataAsync();
+            GenerateData();
+           
+            if (AssetDtos is not null && AssetDtos.Count > 0)
             {
-                IsList = true;
-                IsHierarchy = false;
-              
-            });
-            TohierarchyCommand = new RelayCommand(() =>
-            {
-                IsList = false;
-                IsHierarchy = true;
-                
-            });
-            _ = LoadDataAsync();
-            
-            if(AssetDtos is not null && AssetDtos.Count > 0)
-            {
-                CreateEquipmentTreeViewItems treeViewItems = new();
-                CreateEquipmentListItems equipmentListItems = new();
-                IsHierarchy = true;
-                EquipmentTreeViewItems = treeViewItems.CreateTreeViewItems(AssetDtos.ToList());
-                EquipmentListItems = equipmentListItems.CreateListItems(AssetDtos.ToList());
-                IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);
-                IterateEquipmentItemsAndChildren(EquipmentListItems);
-                IsHeaderVisible = true;
-                IsEmpty = false;
+                CreateEquipmentTree equipmentTree = new();
+                EquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                EquipmentItemViewModels = equipmentTree.CreateTreeViewItems(AssetDtos.ToList());
             }
             FilterAssetControl = new FilterAssetControlViewModel();
+            FilterAssetControl.FilterByCategoryFonction = FilterByCategory;
             OpenFilterCommand = new RelayCommand(() => IsFilterOpen = !IsFilterOpen);
+            FilterTags = new ObservableCollection<TagControlViewModel>();
+            AppliedFilters = new ObservableCollection<FilterCriteria>();
 
 
         }
 
+        private async Task FilterByCategory(EquipmentCategory category)
+        {
+            if(EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Category:", category.Name,EquipmentFilterType.Category);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.Category == category.Name).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.Category, category.Name);
+                AppliedFilters.Add(filterCriteria);
+               
+            }else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
+        }
+
+        private async Task RemoveTag(EquipmentFilterType arg)
+        {
+            if(FilterTags is not null && FilterTags.Count > 0)
+            {
+                var tag = FilterTags.FirstOrDefault(t => t.EquipmentFilterType == arg);
+                var filt = AppliedFilters.FirstOrDefault(f => f.EquipmentFilterType == arg);
+                if (tag is not null && filt is not null)
+                {
+                    FilterTags.Remove(tag);
+                    RemoveFilter(filt);
+                    //if(FilterTags.Count == 0)
+                    //{
+                    //    FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>(EquipmentItemViewModels ?? Enumerable.Empty<EquipmentItemViewModel>());
+                    //}
+                }
+            }
+            await Task.Delay(1);
+        }
+
+        private void GenerateData()
+        {
+            AssetDtos = new ObservableCollection<AssetDto>
+            {
+                new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                new AssetDto(Guid.Parse("5DD77287-1606-4336-8D2C-BAAE9F49534F"),null,null,"Asset 2","Description 2","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                new AssetDto(Guid.Parse("C3D3D3D3-3D3D-3D3D-3D3D-3D3D3D3D3D3D"),null,null,"Asset 3","Description 3","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+               
+                
+                new AssetDto(Guid.Parse("BB96AA0A-D6C4-468B-BC0F-FBB404B79469"),Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),
+                             new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                "Asset 4","Description 4","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                new AssetDto(Guid.Parse("59C1F0CC-46C6-4104-B0A9-31E2A6DA3A1C"),Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),
+                             new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null)
+                ,"Asset 5","Description 5","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+            };
+        }
         private void OnEquipmentUpdated(AssetDto? dto)
         {
-            if(IsList)
+            //EquipmentItemViewModels
+            EquipmentItemViewModel? EquipmentItem = EquipmentItemViewModels?.FirstOrDefault(e => e.Asset?.Id == dto?.Id);
+            if (EquipmentItem is not null && dto is not null)
             {
-                AssetItemViewModel? item = EquipmentListItems?.FirstOrDefault(e => e.Asset?.Id == dto?.Id);
-                
-                AssetItemViewModel? itemF = FilterEquipmentItems?.FirstOrDefault(e => e.Asset?.Id == dto?.Id);
-                if (item is not null)
-                {
-                    item.Asset = dto;
-                    item.AssetName = dto?.Name;
-                    item.Description = dto?.Description;
-                    item.AssetImage = dto?.ImagePath;
-                }
-                if (itemF is not null)
-                {
-                    itemF.Asset = dto;
-                    itemF.AssetName = dto?.Name;
-                    itemF.Description = dto?.Description;
-                    itemF.AssetImage = dto?.ImagePath;
-                }
+                EquipmentItem.Asset = dto;
+              
             }
-            else if(IsHierarchy)
-            {
-                AssetItemViewModel? item = EquipmentTreeViewItems?.FirstOrDefault(e => e.Asset?.Id == dto?.Id);
-                AssetItemViewModel? itemF = FilterEquipmentTreeViewItems?.FirstOrDefault(e => e.Asset?.Id == dto?.Id);
-                if (item is not null)
-                {
-                    item.Asset = dto;
-                    item.AssetName = dto?.Name;
-                    item.Description = dto?.Description;
-                    item.AssetImage = dto?.ImagePath;
-                }
-                if (itemF is not null)
-                {
-                    itemF.Asset = dto;
-                    itemF.AssetName = dto?.Name;
-                    itemF.Description = dto?.Description;
-                    itemF.AssetImage = dto?.ImagePath;
-                }
-            }
+           
             IsHeaderVisible = true;
             IsEmpty = false;
 
@@ -207,53 +189,31 @@ namespace MntPlus.WPF
 
             SearchEquipmentHelper searchHelper = new();
 
-            // If we have no search text, or no items
-            if (IsList)
-            {
-                if (string.IsNullOrEmpty(SearchText) || EquipmentListItems is null || EquipmentListItems.Count <= 0)
+            
+                if (string.IsNullOrEmpty(SearchText) || EquipmentItemViewModels is null || EquipmentItemViewModels.Count <= 0)
                 {
                     // Make filtered list the same
-                    FilterEquipmentItems = new ObservableCollection<AssetItemViewModel>(EquipmentListItems ?? Enumerable.Empty<AssetItemViewModel>());
+                    FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>(EquipmentItemViewModels ?? Enumerable.Empty<EquipmentItemViewModel>());
 
                     // Set last search text
                     mLastSearchText = SearchText;
 
                     return;
                 }
-                FilterEquipmentItems = new ObservableCollection<AssetItemViewModel>( searchHelper.SearchItems(EquipmentListItems, SearchText) );
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>( searchHelper.SearchItems(EquipmentItemViewModels, SearchText) );
                 // Set last search text
                 mLastSearchText = SearchText;
-            }
            
-            else if(IsHierarchy)
-            {
-                if (string.IsNullOrEmpty(SearchText) || EquipmentTreeViewItems is null || EquipmentTreeViewItems.Count <= 0)
-                {
-                    // Make filtered list the same
-                    FilterEquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>(EquipmentTreeViewItems ?? Enumerable.Empty<AssetItemViewModel>());
-
-                    // Set last search text
-                    mLastSearchText = SearchText;
-
-                    return;
-                }
-
-                FilterEquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>(searchHelper.SearchItems(EquipmentTreeViewItems, SearchText));
-                // Set last search text
-                mLastSearchText = SearchText;
-            }
         }
 
         private void OnEquipmentCreated(AssetDto? newEquipment)
         {
-            var newItemViewModel = new AssetItemViewModel(newEquipment);
-            FindEquipmentParentViewModel findEquipmentParentViewModel = new(EquipmentTreeViewItems);
+            var newItemViewModel = new EquipmentItemViewModel(newEquipment);
+            FindEquipmentParentViewModel findEquipmentParentViewModel = new(EquipmentItemViewModels);
 
 
             var parentViewModel = findEquipmentParentViewModel.FindParentViewModel(newEquipment?.AssetParent);
-            newItemViewModel.AddChildFunc = AddNewChild;
-            newItemViewModel.RemoveItemFunc = RemoveItem;
-            newItemViewModel.ViewFunc = ViewItem;
+           
 
             if (parentViewModel is not null)
             {
@@ -261,12 +221,10 @@ namespace MntPlus.WPF
             }
             else
             {
-                EquipmentTreeViewItems?.Add(newItemViewModel);
-                FilterEquipmentTreeViewItems?.Add(newItemViewModel);
+                EquipmentItemViewModels?.Add(newItemViewModel);
             }
 
-            EquipmentListItems?.Add(newItemViewModel);
-            FilterEquipmentItems?.Add(newItemViewModel);
+          
 
         }
 
@@ -282,9 +240,7 @@ namespace MntPlus.WPF
                 {
                     AssetDtos = new ObservableCollection<AssetDto>(okResponse.Result!);
 
-                    EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
-
-                    EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                    
                    
                 }
                 
@@ -293,9 +249,7 @@ namespace MntPlus.WPF
                     IsEmpty = true;
                     AssetDtos = new ObservableCollection<AssetDto>();
 
-                    EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
-
-                    EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                   
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
 
                 }
@@ -303,9 +257,7 @@ namespace MntPlus.WPF
                 {
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, response1.Message));
 
-                    EquipmentTreeViewItems = new ObservableCollection<AssetItemViewModel>();
-
-                    EquipmentListItems = new ObservableCollection<AssetItemViewModel>();
+                  
                 }
             });
            
@@ -314,25 +266,12 @@ namespace MntPlus.WPF
         private void AddEquipment()
         {
                 
-            InitialEquipmentWindow window = new();
-            InitialAssetViewModel model = new(_equipmentStore);
-          
-            window.DataContext = model;
+            NewEquipmentWindow window = new(_equipmentStore);          
             window.ShowDialog();
         }
 
-      
 
-        private async Task AddNewChild(AssetItemViewModel cmodel)
-        {
-            InitialEquipmentWindow window = new();
-            InitialAssetViewModel model = new(_equipmentStore,cmodel.Asset?.Id);
-          
-            window.DataContext = model;
-            window.ShowDialog();
-            await Task.Delay(1);
-        }
-        private async Task RemoveItem(AssetItemViewModel cmodel)
+        private async Task RemoveItem(EquipmentItemViewModel cmodel)
         {
             if(cmodel.ChildrenCount > 0 && cmodel.Children?.Count > 0)
             {
@@ -346,14 +285,14 @@ namespace MntPlus.WPF
                 var response = await AppServices.ServiceManager.AssetService.DeleteAsset(cmodel.Asset.Id,false);
                 if (response is ApiOkResponse<AssetDto> && response.Success)
                 {
-                    RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentTreeViewItems);
+                    RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentItemViewModels);
                     // Remove the item from the tree view
                     removeEquipmentItem.RemoveItemFromTreeView(cmodel);
 
                     // Remove the item from the list view
-                    EquipmentListItems?.Remove(cmodel);
+                    EquipmentItemViewModels?.Remove(cmodel);
                     
-                    if (EquipmentListItems?.Count == 0)
+                    if (EquipmentItemViewModels?.Count == 0)
                     {
                         IsHeaderVisible = false;
                         IsEmpty = true;
@@ -376,13 +315,11 @@ namespace MntPlus.WPF
         }
        
 
-        void IterateEquipmentItemsAndChildren(ObservableCollection<AssetItemViewModel> equipmentItems)
+        void IterateEquipmentItemsAndChildren(ObservableCollection<EquipmentItemViewModel> equipmentItems)
         {
             foreach (var equipmentItem in equipmentItems)
             {
-                equipmentItem.AddChildFunc = AddNewChild;
-                equipmentItem.RemoveItemFunc = RemoveItem;
-                equipmentItem.ViewFunc = ViewItem;
+                
                 // Check if the current equipmentItem has children
                 if (equipmentItem.Children != null && equipmentItem.Children.Any())
                 {
@@ -392,17 +329,7 @@ namespace MntPlus.WPF
             }
         }
 
-        private async Task ViewItem(AssetItemViewModel model)
-        {
-            EquipmentDataViewModel modelEquip = new(model.Asset , _equipmentStore , model.Children);
-            EquipmentDataWindow window = new(modelEquip);
-            window.DataContext = modelEquip;
-            window.ShowDialog();
-            await Task.Delay(1);
-        } 
-
-      
-
+       
 
        
         public override void Dispose()
@@ -412,17 +339,67 @@ namespace MntPlus.WPF
 
         }
 
-      
 
 
-      
-       
+        #region FilterMethods
+        public void RemoveFilter(FilterCriteria filterToRemove)
+        {
+            AppliedFilters.Remove(filterToRemove);
+            
+            if(AppliedFilters.Count == 0)
+            {
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>(EquipmentItemViewModels ?? Enumerable.Empty<EquipmentItemViewModel>());
+            }
+            else
+            {
+                ApplyFilters();
+            }
+            
+        }
 
-       
-       
+        public void ApplyFilters()
+        {
+            if(AssetDtos == null || AssetDtos.Count == 0)
+            {
+                return;
+            }
+            // Get the original data source (AssetDtos in your case)
+            var filteredItems = AssetDtos.ToList(); // Make a copy to preserve the original data
 
-       
+            // Apply each filter in the list of applied filters
+            foreach (var filter in AppliedFilters)
+            {
+                // Apply the filter to the filteredItems collection
+                filteredItems = ApplyFilter(filteredItems, filter);
+            }
 
-       
+            CreateEquipmentListItems listItems = new();
+
+            // Update the FilterEquipmentItemViewModels collection with the filtered items
+            FilterEquipmentItemViewModels = listItems.CreateListItems(filteredItems);
+        }
+
+        private List<AssetDto> ApplyFilter(List<AssetDto> items, FilterCriteria filter)
+        {
+            // Apply the filter based on the filter criteria
+            switch (filter.EquipmentFilterType)
+            {
+                case EquipmentFilterType.Category:
+                    return items.Where(e => e.Category == filter.FilterValue).ToList();
+                // Add cases for other filter types (e.g., by name, by date, etc.)
+                default:
+                    return items; // If the filter type is unknown or not supported, return the original collection
+            }
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
     }
 }

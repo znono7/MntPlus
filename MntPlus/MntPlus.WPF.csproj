@@ -85,6 +85,9 @@
     <Compile Update="Pages\LocationsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\TeamsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\RoleWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +98,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\TaskManageWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\UserTeam\AddTeamWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\UserTeam\AddUserWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

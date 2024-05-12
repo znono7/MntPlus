@@ -10,6 +10,7 @@
     <SolidColorBrush x:Key="BackSubButtons" Color="#EFEBFD"/>
     <SolidColorBrush x:Key="BackgroundLight" Color="#E5E5E5"/>
     <SolidColorBrush x:Key="btnBackgroundLight" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SideMenuBackground" Color="#E3E4E8"/>
 
 
     <!-- System Colors --> 
@@ -19,6 +20,8 @@
     <SolidColorBrush x:Key="SecundaryTextColor" Color="#102341"/>
     <SolidColorBrush x:Key="TertiaryTextColor" Color="#1C3254"/>
     <SolidColorBrush x:Key="FourthTextColor" Color="#313233"/>
+    <SolidColorBrush x:Key="FifthTextColor" Color="#B3B3B3"/>
+
 
     <!-- Blue Colors-->
     <SolidColorBrush x:Key="PrimaryBlueColor" Color="#004FC4"/>

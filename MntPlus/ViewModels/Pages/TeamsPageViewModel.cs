@@ -1,22 +1,28 @@
-﻿using Entities;
-using Shared;
+﻿using Shared;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MntPlus.WPF
 {
-    public class UsersPageViewModel : BaseViewModel
+    public class TeamsPageViewModel : BaseViewModel
     {
-        public ObservableCollection<UserDto>? FilterUsers { get; set; }
-        private ObservableCollection<UserDto>? users { get; set; }
-        public ObservableCollection<UserDto>? Users
-        { 
-            get => users; 
-            set {
-                users = value; 
-                if (users is not null)
-                    FilterUsers = new ObservableCollection<UserDto>(users);
-            } }
+        public ObservableCollection<TeamDto>? FilterTeams { get; set; }
+        private ObservableCollection<TeamDto>? teams { get; set; }
+        public ObservableCollection<TeamDto>? Teams
+        {
+            get => teams;
+            set
+            {
+                teams = value;
+                if (teams is not null)
+                    FilterTeams = new ObservableCollection<TeamDto>(teams);
+            }
+        }
         private ApplicationPage _currentPage;
 
         public ApplicationPage CurrentPage
@@ -58,25 +64,23 @@ namespace MntPlus.WPF
         public ICommand ToUsersPageCommand { get; set; }
         public ICommand ToTeamsPageCommand { get; set; }
         public ICommand OpenWindowCommand { get; set; }
-        public ICommand DeleteUsersCommand { get; set; }
-        public UsersPageViewModel()
+        public ICommand DeleteTeamsCommand { get; set; }
+        public TeamsPageViewModel()
         {
             MenuActionCommand = new RelayCommand(() => IsMenuActionOpen = !IsMenuActionOpen);
             ToUsersPageCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Users));
             ToTeamsPageCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Teams));
-            OpenWindowCommand = new RelayCommand(OpenUserWindow);
-            DeleteUsersCommand = new RelayCommand(RemoveSelectedItems);
+            OpenWindowCommand = new RelayCommand(OpenTeamWindow);
+            DeleteTeamsCommand = new RelayCommand(RemoveSelectedItems);
             SearchCommand = new RelayCommand(Search);
 
         }
-
-        private void OpenUserWindow()
+        private void OpenTeamWindow()
         {
-            AddUserWindow addUserWindow = new () { DataContext = new AddUserViewModel()};
+            AddUserWindow addUserWindow = new() { DataContext = new AddUserViewModel() };
             addUserWindow.ShowDialog();
-            
-        }
 
+        }
         private async Task NavigateToPageAsync(ApplicationPage page)
         {
             if (CurrentPage == page)
@@ -88,15 +92,14 @@ namespace MntPlus.WPF
 
         private void RemoveSelectedItems()
         {
-            if (FilterUsers is null || FilterUsers.Count == 0)
+            if (FilterTeams is null || FilterTeams.Count == 0)
                 return;
-            var selectedItems = FilterUsers.Where(item => item.IsChecked).ToList();
+            var selectedItems = FilterTeams.Where(item => item.IsChecked).ToList();
             foreach (var item in selectedItems)
             {
-                FilterUsers.Remove(item);
+                FilterTeams.Remove(item);
             }
         }
-
         private void Search()
         {
             // Make sure we don't re-search the same text
@@ -104,19 +107,18 @@ namespace MntPlus.WPF
                 string.Equals(mLastSearchText, SearchText))
                 return;
 
-            if (string.IsNullOrEmpty(SearchText) || Users is null || Users.Count <= 0)
+            if (string.IsNullOrEmpty(SearchText) || Teams is null || Teams.Count <= 0)
             {
                 // Make filtered list the same
-                FilterUsers = new ObservableCollection<UserDto>(Users ?? Enumerable.Empty<UserDto>());
+                FilterTeams = new ObservableCollection<TeamDto>(Teams ?? Enumerable.Empty<TeamDto>());
 
                 // Set last search text
                 mLastSearchText = SearchText;
 
                 return;
             }
-            FilterUsers = new ObservableCollection<UserDto>(
-                Users.Where(item => item.FirstName is not null && item.FirstName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-               item.LastName is not null && item.FirstName is not null && item.LastName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+            FilterTeams = new ObservableCollection<TeamDto>(
+                Teams.Where(item => item.Name is not null && item.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
             // Set last search text
             mLastSearchText = SearchText;
 
@@ -124,3 +126,4 @@ namespace MntPlus.WPF
 
     }
 }
+ 

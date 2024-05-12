@@ -9,6 +9,6 @@ namespace Entities
         [Key]
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        public ICollection<User>? TeamMembers { get; set; }
+        public ICollection<UserTeam>? UserTeams { get; set; }
     }
 }

@@ -10,11 +10,11 @@ namespace MntPlus.WPF
 {
     public class CreateEquipmentListItems
     {
-        public ObservableCollection<AssetItemViewModel> CreateListItems(List<AssetDto> equipmentData)
+        public ObservableCollection<EquipmentItemViewModel> CreateListItems(List<AssetDto> equipmentData)
         {
             // For the list view, simply convert the equipment data to view models
-            return new ObservableCollection<AssetItemViewModel>(
-                                equipmentData.Select(e => new AssetItemViewModel(e)));
+            return new ObservableCollection<EquipmentItemViewModel>(
+                                equipmentData.Select(e => new EquipmentItemViewModel(e)));
 
 
         }

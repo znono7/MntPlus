@@ -10,6 +10,7 @@ namespace MntPlus.WPF
         Users = 3,
         Settings = 4,
         Locations = 5,
+        Teams = 6,
        
     }
 }

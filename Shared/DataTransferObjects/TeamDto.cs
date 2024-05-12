@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public record TeamDto (Guid Id,string Name);
+    public record TeamDto (Guid Id,string Name,bool IsChecked);
 
     public record TeamCreatedDto(string Name);
     
