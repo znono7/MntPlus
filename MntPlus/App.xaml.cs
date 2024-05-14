@@ -20,7 +20,7 @@ namespace MntPlus.WPF
 
 
 
-            Current.MainWindow =/* new AddTeamWindow{ DataContext = new AddTeamViewModel()};*/ new MainWindow();
+            Current.MainWindow = new MainWindow();
 
 
             Current.MainWindow.Show();

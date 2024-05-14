@@ -12,13 +12,13 @@ namespace Entities
     {
         [Key]
         public Guid Id { get; set; }
+        public string? Notes { get; set; }
         public string? Status { get; set; }
         public DateTime? DateChanged { get; set; }
 
         [ForeignKey(nameof(ChangedBy))]
         public Guid? ChangedById { get; set; }
         public User? ChangedBy { get; set; }
-        public string? Notes { get; set; }
 
         [ForeignKey(nameof(WorkOrder))]
         public Guid? WorkOrderId { get; set; }

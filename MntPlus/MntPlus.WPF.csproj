@@ -85,6 +85,9 @@
     <Compile Update="Pages\LocationsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\PreventiveMaintenancePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\TeamsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +98,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\SelectUserTeamWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\TaskManageWindow.xaml.cs">

@@ -12,8 +12,9 @@ namespace MntPlus.WPF
     {
         public WorkOrderDto? WorkOrderDto { get; set; }
 
-        public string WorkOrderName { get; set; } 
-        public string PriorityBackground { get; set; }
+        public string WorkOrderNumber =>  $"00{WorkOrderDto?.Number}";
+        public string WorkOrderName { get; set; }
+        public string PriorityBackground { get; set; } 
 
         private string _orderWorkPriority = "3";
         public string Priority { get; set; }
@@ -36,6 +37,10 @@ namespace MntPlus.WPF
                     case "3":
                         PriorityBackground = "429b1f";
                         Priority = "Basse";
+                        break;
+                    case "Aucune":
+                        PriorityBackground = "53667B";
+                        Priority = "Aucune";
                         break;
                 }
             }

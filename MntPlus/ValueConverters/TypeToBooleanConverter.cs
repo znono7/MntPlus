@@ -17,7 +17,7 @@ namespace MntPlus.WPF
         public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if ((bool)value)
-                return parameter?.ToString();
+                return parameter?.ToString(); 
             return Binding.DoNothing;
         }
     }

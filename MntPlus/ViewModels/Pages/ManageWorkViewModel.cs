@@ -32,11 +32,14 @@ namespace MntPlus.WPF
         public ICommand AddWorkOrderCommand { get; set; }
 
         public bool TaskPopupIsOpen { get; set; }
+        public bool AddWorkOrderPopupIsOpen { get; set; }
+
 
         public ICommand TaskPopupCommand { get; set; }
         public ICommand ViewOrderWorkCommand { get; set; }
 
         public ViewTaskViewModel TaskViewModel { get; set; } 
+        public AddWorkOrderViewModel AddWorkOrderViewModel { get; set; }
 
         public WorkOrderStore WorkOrderStore { get; set; }
 
@@ -73,8 +76,10 @@ namespace MntPlus.WPF
         }
         private void WorkOrderStore_WorkOrderCreated(WorkOrderDto? dto)
         {
+            if(dto is null) return;
             WorkOrderDtos.Add(dto);
             WorkOrders.Add(new WorkOrderItemsViewModel(dto));
+            FilterWorkOrders ??= new ObservableCollection<WorkOrderItemsViewModel>();
             FilterWorkOrders.Add(new WorkOrderItemsViewModel(dto));
 
 
@@ -88,8 +93,12 @@ namespace MntPlus.WPF
 
         private void AddWorkOrder() 
         {
-           var wind =  new SelectEquipmentWindow { DataContext = new SelectEquipmentViewModel(WorkOrderStore) };
-            wind.ShowDialog();
+            AddWorkOrderViewModel = new AddWorkOrderViewModel();
+            AddWorkOrderViewModel.CloseAction = async () =>  { AddWorkOrderPopupIsOpen = false; DimmableOverlayVisible = false; await Task.Delay(1);  };
+            AddWorkOrderPopupIsOpen = true;
+            DimmableOverlayVisible = true;
+           //var wind =  new SelectEquipmentWindow { DataContext = new SelectEquipmentViewModel(WorkOrderStore) };
+           // wind.ShowDialog();
         }
 
         public void OrganizeWorkOrders()

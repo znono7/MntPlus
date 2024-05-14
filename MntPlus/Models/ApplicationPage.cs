@@ -11,6 +11,8 @@ namespace MntPlus.WPF
         Settings = 4,
         Locations = 5,
         Teams = 6,
+        Requests = 7,
+        PreventiveMaintenance = 8,
        
     }
 }

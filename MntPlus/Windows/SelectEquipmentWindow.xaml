@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF" x:Name="SelectEquipmentWind"
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
-        Title="SelectEquipmentWindow" Height="490" Width="1000">
+        Title="SelectEquipmentWindow" Height="640" Width="720">
     <Grid>
         <!-- Opacity mask for corners on grid -->
         <Border x:Name="Container"
@@ -43,7 +43,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Title -->
-                <TextBlock FontSize="22" Grid.Column="0" Text="Sélectionner l'actif" Margin="20 20 0 0" Style="{DynamicResource TitleTextBlockStyle}"/>
+                <TextBlock FontSize="22" Grid.Column="0" Text="Sélectionner l'Équipement" Margin="20 20 0 0" Style="{DynamicResource TitleTextBlockStyle}"/>
                 <!-- Window Buttons -->
 
 
@@ -59,18 +59,26 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TreeView x:Name="MyTreeView" Grid.Row="1" Margin="20" HorizontalAlignment="Left"   ItemContainerStyle="{DynamicResource TreeViewItemContainerStyle1}" 
+                        <Grid HorizontalAlignment="Left" Margin="20 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Tag="Recherche par Nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle}"/>
+                            <Button Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
+                        </Grid>
+                        <local:StretchingTreeView x:Name="MyTreeView" Grid.Row="1" Margin="20" HorizontalAlignment="Left"   ItemContainerStyle="{DynamicResource TreeViewItemContainerStyle1}" 
                                     ItemsSource="{Binding FilterEquipmentTreeViewItems}" >
-                            <TreeView.ItemTemplate>
+                            <local:StretchingTreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal">
-                                        <RadioButton Command="{Binding SelectEquipmentCommand}" GroupName="EquipmentGroup" Style="{StaticResource SelectEquipmentRadioButtonStyle}" Content="{Binding EquipmentName}"   />
+                                        <RadioButton Width="500" Command="{Binding SelectEquipmentCommand}" GroupName="EquipmentGroup" Style="{StaticResource SelectEquipmentRadioButtonStyle}" Content="{Binding EquipmentName}"   />
                                         
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
+                            </local:StretchingTreeView.ItemTemplate>
                            
-                        </TreeView>
+                        </local:StretchingTreeView>
                     </Grid>
                    
                 </ScrollViewer>

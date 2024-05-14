@@ -43,6 +43,10 @@ namespace MntPlus.WPF
                         return new LocationsPage(viewModel as LocationsPageViewModel);
                     case ApplicationPage.Teams:
                         return new TeamsPage(viewModel as TeamsPageViewModel);
+                    case ApplicationPage.Requests:
+                        return new RequestsPage(viewModel as RequestsPageViewModel);
+                    case ApplicationPage.PreventiveMaintenance:
+                        return new PreventiveMaintenancePage(viewModel as PreventiveMaintenanceViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -69,6 +73,10 @@ namespace MntPlus.WPF
                 return ApplicationPage.Locations;
             if (page is TeamsPage)
                 return ApplicationPage.Teams;
+            if (page is RequestsPage)
+                return ApplicationPage.Requests;
+            if (page is PreventiveMaintenancePage)
+                return ApplicationPage.PreventiveMaintenance;
 
             // Alert developer of issue
             Debugger.Break();

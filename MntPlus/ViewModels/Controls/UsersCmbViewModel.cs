@@ -38,21 +38,21 @@ namespace MntPlus.WPF
         {
             Users = new ObservableCollection<UserWithRolesDto>
             {
-                new UserWithRolesDto(Guid.Empty , "User 1" , new List<RoleDto>
-                {
-                    new RoleDto(Guid.Empty,"Manager",true),
-                    new RoleDto(Guid.Empty,"Admin",true),
-                } , "Manager, Admin"),
-                new UserWithRolesDto(Guid.Empty , "User 2" , new List<RoleDto>
-                {
-                    new RoleDto(Guid.Empty,"Manager",true),
-                    new RoleDto(Guid.Empty,"Admin",true),
-                } , "Manager, Admin"),
-                new UserWithRolesDto(Guid.Empty , "User 3" , new List<RoleDto>
-                {
-                    new RoleDto(Guid.Empty,"Manager",true),
-                    new RoleDto(Guid.Empty,"Admin",true),
-                } , "Manager, Admin"),
+                //new UserWithRolesDto(Guid.Empty , "User 1" , new List<RoleDto>
+                //{
+                //    new RoleDto(Guid.Empty,"Manager",true),
+                //    new RoleDto(Guid.Empty,"Admin",true),
+                //} , "Manager, Admin"),
+                //new UserWithRolesDto(Guid.Empty , "User 2" , new List<RoleDto>
+                //{
+                //    new RoleDto(Guid.Empty,"Manager",true),
+                //    new RoleDto(Guid.Empty,"Admin",true),
+                //} , "Manager, Admin"),
+                //new UserWithRolesDto(Guid.Empty , "User 3" , new List<RoleDto>
+                //{
+                //    new RoleDto(Guid.Empty,"Manager",true),
+                //    new RoleDto(Guid.Empty,"Admin",true),
+                //} , "Manager, Admin"),
                 
             };
         }

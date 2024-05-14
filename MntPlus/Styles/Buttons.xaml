@@ -388,9 +388,9 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="20 5"/>
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBlueColor}"/>
         <Setter Property="Height" Value="33"/>
-        <Setter Property="Width" Value="180"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -403,7 +403,7 @@
                             </Border.Effect>
                         </Border>
 
-                        <Grid>
+                        <Grid HorizontalAlignment="Center" Margin="{TemplateBinding Padding}">
                                 <!-- Drop shadow -->
 
                                 <Grid.ColumnDefinitions>
@@ -413,7 +413,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Icon -->
-                                <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Height="11" Width="11" Stretch="Uniform" Fill="#F8F8F8" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15 0 5 0"/>
+                                <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                       Height="11" Width="11" Stretch="Uniform" Fill="#F8F8F8" VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left" Margin="0 0 5 0"/>
 
                                 <!-- Text -->
                                 <TextBlock  Grid.Column="1" x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
@@ -463,7 +465,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBlueColor}"/>
         <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="0"/> 
         <Setter Property="FontSize" Value="12"/>
 
         <Setter Property="Height" Value="33"/>
@@ -485,7 +487,7 @@
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
 
                             </Grid.ColumnDefinitions>
 
@@ -1272,4 +1274,149 @@
         </Setter>
     </Style>
     <!-- End: VerticalMenuStyle -->
+
+
+    <Style x:Key="FiltersPrimeButton" TargetType="{x:Type Button}" BasedOn="{StaticResource DefaultButton}">
+        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBlueColor}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource FifthTextColor}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="20 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Grid>
+
+                        <Border  x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <!--<Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="5" Color="Gray" Opacity="0.5"/>
+                            </Border.Effect>-->
+                        </Border>
+
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <!-- Drop shadow -->
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon -->
+                            <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
+                                   Height="16" Width="16" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0"/>
+                            
+                            <TextBlock x:Name="txtName" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                       Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                      FontWeight="{TemplateBinding FontWeight}"
+                                      FontSize="{TemplateBinding FontSize}"  />
+
+
+                        </Grid>
+                      
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                       
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource TertiaryBackgroundColor}"/>
+                            <Setter Property="BorderThickness" TargetName="border" Value="0"/>
+                            <Setter Property="Foreground"  Value="#0760FF"/>
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect  ShadowDepth="0" Color="#0760FF" BlurRadius="10" Opacity="0.3"/>
+                                </Setter.Value>
+                            </Setter>
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource LineColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="PriorityButton" TargetType="{x:Type Button}" BasedOn="{StaticResource DefaultButton}">
+        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBlueColor}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="12"/>
+
+        <Setter Property="Height" Value="33"/>
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Grid>
+
+                        <Border  x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="5" Color="Gray" Opacity="0.5"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <Grid>
+                            <!-- Drop shadow -->
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon -->
+                            <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
+                                   Height="16" Width="16" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="18 0 5 0"/>
+
+
+                                <!-- Text -->
+                                <TextBlock x:Name="txtName" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                              Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                             FontWeight="{TemplateBinding FontWeight}"
+                                             FontSize="{TemplateBinding FontSize}"  Margin="0 0 5 0"/>
+                              
+
+
+                            <!-- expand Icon -->
+                            <Path   x:Name="expandIcon" Data="{DynamicResource expand}" Height="11" Width="11" 
+                                     Stretch="Uniform" Fill="{DynamicResource PrimaryTextColor}" VerticalAlignment="Center"
+                                     HorizontalAlignment="Right" Margin="0 0 18 0" Grid.Column="2"/>
+                        </Grid>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Name" Value="BulkBtn">
+                            <Setter TargetName="expandIcon" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="Name" Value="uploadBtn">
+                            <Setter TargetName="expandIcon" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource LineColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource LineColor2}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

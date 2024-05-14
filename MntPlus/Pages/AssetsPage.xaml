@@ -116,7 +116,7 @@
         </Grid>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Rectangle Grid.Row="1" Grid.ColumnSpan="4" Height="1" Fill="{DynamicResource LineColor}" Margin="20 0"/>

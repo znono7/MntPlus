@@ -71,6 +71,8 @@ namespace MntPlus.WPF
 
         public ICommand SettingsCommand { get; set; }
         public ICommand LocationCommand { get; set; }
+        public ICommand RequestsCommand { get; set; }
+        public ICommand PmCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -83,6 +85,8 @@ namespace MntPlus.WPF
             TeamsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Users));
             SettingsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Settings));
             LocationCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Locations));
+            RequestsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Requests));
+            PmCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.PreventiveMaintenance));
 
         }
 

@@ -46,10 +46,10 @@
        
         <Rectangle Margin="0 15 0 5" Height="1" Grid.Row="2" Fill="{DynamicResource LineColor}"/>
         <!-- Menu -->
-        <StackPanel Margin="5 0" Grid.Row="3" >
+        <StackPanel  Grid.Row="3" >
             <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdWork"  Content="Ordres de Travail" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource workorder}" />
-            <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup"  Content="Maintenance Préventive" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource preventive}" />
-            <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup"  Content="Demandes" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource headphones}" />
+            <RadioButton Command="{Binding PmCommand}" GroupName="MyGroup"  Content="Maintenance Préventive" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource preventive}" />
+            <RadioButton Command="{Binding RequestsCommand}" GroupName="MyGroup"  Content="Demandes" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource headphones}" />
             <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup"  Content="Analytique" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource analytics}" />
         </StackPanel>
         <Rectangle Margin="0 5" Height="1" Grid.Row="4" Fill="{DynamicResource LineColor}"/>

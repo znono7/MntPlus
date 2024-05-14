@@ -90,9 +90,9 @@
         <Setter Property="BorderBrush" Value="{DynamicResource LineColor2}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="5 0"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontFamily" Value="{StaticResource ClarityCity-Regular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ClarityCity-Regular}"/> 
         <Setter Property="Margin" Value="24 0 20 20"/>
         <Setter Property="Width" Value="360"/>
         <Setter Property="Height" Value="38"/>
@@ -109,10 +109,12 @@
                             Background="{TemplateBinding Background}"  Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                             SnapsToDevicePixels="True" CornerRadius="4" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalAlignment}" >
-                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="{TemplateBinding VerticalAlignment}" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          Padding="{TemplateBinding Padding}"/>
                             
                         </Border>
-                        <Grid Margin="10 2 2 2" Panel.ZIndex="2">
+                        <Grid  Panel.ZIndex="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -122,9 +124,9 @@
                                       x:Name="placeholder"
                                       FontFamily="{StaticResource ClarityCity-Regular}"
              
-                                      VerticalAlignment="Center"
+                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                       Panel.ZIndex="1"
-                                      Foreground="{DynamicResource FourthTextColor}" Margin="5 0"
+                                      Foreground="{DynamicResource FourthTextColor}" Margin="{TemplateBinding Padding}"
                                         > 
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -170,6 +172,91 @@
         </Setter>
     </Style>
 
+
+    <Style x:Key="InputRichTextBoxStyle" TargetType="{x:Type RichTextBox}">
+        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor }"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LineColor2}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="{StaticResource ClarityCity-Regular}"/>
+        <Setter Property="Margin" Value="24 0 20 20"/>
+        <Setter Property="Width" Value="360"/>
+        <Setter Property="Height" Value="96"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RichTextBox}">
+                    <Grid>
+                        <Border Panel.ZIndex="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{TemplateBinding Background}"  Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                            SnapsToDevicePixels="True" CornerRadius="4" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}" >
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+
+                        </Border>
+                        <Grid Margin="10 2 2 2" Panel.ZIndex="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  IsHitTestVisible="False" Grid.Column="1"
+                                      Text="{TemplateBinding Tag}"
+                                      x:Name="placeholder"
+                                      FontFamily="{StaticResource ClarityCity-Regular}"
+             
+                                      VerticalAlignment="Center"
+                                      Panel.ZIndex="1"
+                                      Foreground="{DynamicResource FourthTextColor}" Margin="5 0"
+                                        >
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                        </Grid>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" TargetName="Border" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource FourthTextColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect  ShadowDepth="0" Color="#0760FF" BlurRadius="10" Opacity="0.3"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderBrush" TargetName="Border" Value="#0760FF"/>
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource SecundaryRedColor}"/>
+                            <Setter TargetName="Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect  ShadowDepth="0" Color="#FFD8000C" BlurRadius="10" Opacity="0.3"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 </ResourceDictionary>

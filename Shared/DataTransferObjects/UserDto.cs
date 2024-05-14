@@ -31,6 +31,7 @@ namespace Shared
     public record UserWithRolesDto(
                Guid Id,
                string? FullName,
+               string? FullNameAndRoles,
                //string? Email,
                //string? PhoneNumber,
                //string? UserName,

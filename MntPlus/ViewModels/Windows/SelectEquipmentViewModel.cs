@@ -59,25 +59,67 @@ namespace MntPlus.WPF
 
         public ICommand GetSelectedEquipmentCommand { get; set; }
         public WorkOrderStore? WorkOrderStore { get; set; }
+        public AssetStore? AssetStore { get; set; }
 
-        public SelectEquipmentViewModel(WorkOrderStore? workOrderStore)
+        protected string? mLastSearchText;
+        protected string? mSearchText;
+        public ICommand SearchCommand { get; set; }
+
+        public string? SearchText
         {
-            WorkOrderStore = workOrderStore;
-            _ = LoadDataAsync();
+            get => mSearchText;
+            set
+            {
+                // Check value is different
+                if (mSearchText == value)
+                    return;
+
+                // Update value
+                mSearchText = value;
+
+                // If the search text is empty...
+                if (string.IsNullOrEmpty(SearchText))
+                    // Search to restore messages
+                    Search();
+            }
+        }
+        public SelectEquipmentViewModel(AssetStore? assetStore)
+        {
+            AssetStore = assetStore;
+            GenerateData();
+            //_ = LoadDataAsync();
             if (EquipmentDtos is not null)
             {
                 EquipmentTreeViewItems = CreateTreeViewItems(EquipmentDtos.ToList());
                 IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);
             }
             GetSelectedEquipmentCommand = new RelayParameterizedCommand((p) => TheSelectedEquipment(p));
+            SearchCommand = new RelayCommand(Search);
 
         }
 
-       
+        private void GenerateData()
+        {
+            EquipmentDtos = new ObservableCollection<AssetDto>
+            {
+                new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                new AssetDto(Guid.Parse("5DD77287-1606-4336-8D2C-BAAE9F49534F"),null,null,"Asset 2","Description 2","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                new AssetDto(Guid.Parse("C3D3D3D3-3D3D-3D3D-3D3D-3D3D3D3D3D3D"),null,null,"Asset 3","Description 3","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+
+
+                new AssetDto(Guid.Parse("BB96AA0A-D6C4-468B-BC0F-FBB404B79469"),Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),
+                             new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                "Asset 4","Description 4","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+                new AssetDto(Guid.Parse("59C1F0CC-46C6-4104-B0A9-31E2A6DA3A1C"),Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),
+                             new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null)
+                ,"Asset 5","Description 5","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
+            };
+        }
+
 
         private void TheSelectedEquipment(object? p)
         {
-            if (SelectedViewModel is null || !(p is Window wind))
+            if (SelectedViewModel is null || !(p is Window wind) || SelectedViewModel == null)
                 return;
 
             SelectedViewModel.IsSelected = true;
@@ -85,9 +127,10 @@ namespace MntPlus.WPF
             if (p is not Window)
                 return;
 
-            var window = new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel(SelectedViewModel.Equipment,WorkOrderStore) }; 
+            AssetStore?.CreateAsset(SelectedViewModel.Equipment);
+            //var window = new StartManageWorkWindow { DataContext = new StartManageWorkWindowViewModel(SelectedViewModel.Equipment,WorkOrderStore) }; 
             
-            window.ShowDialog();
+            //window.ShowDialog();
             
 
             wind.Close();
@@ -164,6 +207,37 @@ namespace MntPlus.WPF
                     IterateEquipmentItemsAndChildren(equipmentItem.Children);
                 }
             }
+        }
+
+        private void Search()
+        {
+            // Make sure we don't re-search the same text
+            if ((string.IsNullOrEmpty(mLastSearchText) && string.IsNullOrEmpty(SearchText)) ||
+                string.Equals(mLastSearchText, SearchText))
+                return;
+
+            SearchEquipmentHelper searchHelper = new();
+
+
+            if (string.IsNullOrEmpty(SearchText) || EquipmentTreeViewItems is null || EquipmentTreeViewItems.Count <= 0)
+            {
+                // Make filtered list the same
+                FilterEquipmentTreeViewItems = new ObservableCollection<SelectEquipmentItemViewModel>(EquipmentTreeViewItems ?? Enumerable.Empty<SelectEquipmentItemViewModel>());
+
+                // Set last search text
+                mLastSearchText = SearchText;
+
+                return;
+            }
+            SearchEquipmentHelper search = new();
+            CreateEquipmentListItems listItems = new();
+            FilterEquipmentTreeViewItems = new ObservableCollection<SelectEquipmentItemViewModel>();
+            var EquipmentSearched = search.SearchItems(EquipmentDtos.ToList(), SearchText);
+            FilterEquipmentTreeViewItems = listItems.CreateListItemsForSelection(EquipmentSearched.ToList());
+
+            // Set last search text
+            mLastSearchText = SearchText;
+
         }
     }
 }
