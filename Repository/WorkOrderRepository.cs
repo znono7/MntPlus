@@ -26,7 +26,13 @@ namespace Repository
             .Include(w => w.Asset)
             .OrderBy(c => c.Name)
             .ToListAsync();
-       
+
+        public async Task<int> GetNextWorkOrderNumberAsync()
+        {
+            var maxNumber = await FindByCondition(w => true, false)
+                            .MaxAsync(wo => (int?)wo.Number) ?? 0; 
+            return maxNumber + 1;
+        }
 
         public async Task<WorkOrder?> GetWorkOrderAsync(Guid workOrderId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(workOrderId), trackChanges)

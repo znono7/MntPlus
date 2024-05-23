@@ -13,6 +13,11 @@ namespace MntPlus.WPF
         Teams = 6,
         Requests = 7,
         PreventiveMaintenance = 8,
-       
+        PartsInventory = 9,
+        NewPreventiveMaintenance = 10,
+        Checklists = 11,
+        Meters = 12,
+
+
     }
 }

@@ -46,7 +46,7 @@
 
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Maintenance Préventive" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
-                    <Button  Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding OpenWindowCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Créer PM" Tag="{StaticResource plus}"/>
+                    <Button  Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding CreatePmCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Créer PM" Tag="{StaticResource plus}"/>
                 </Grid>
 
             </Grid>

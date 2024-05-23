@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MntPlus.WPF
 {
@@ -117,7 +119,51 @@ namespace MntPlus.WPF
 
         private async Task SaveAsync()
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(Name))
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Le Nom est obligatoire"));
+                return;
+
+            }
+            await RunCommandAsync(() => SaveIsRunning, async () =>
+            {
+                WorkOrderForCreationDto workOrderForCreationDto = new
+                (
+                    Name : Name,
+                    Number: null,
+                    Description : Description,
+                    Priority : OrderWorkPriority,
+                    StartDate : StartDate,
+                    DueDate : DueDate,
+                    Type : Type,
+                    Status : "En attente",
+                    Requester : "Moi",
+                    CreatedOn : DateTime.Now,
+                    UserCreatedId : Guid.Empty,
+                    UserAssignedToId : UserGuid,
+                    TeamAssignedToId : TeamGuid,
+                    AssetId : SelectedAsset?.Id
+                );
+                var Response = await AppServices.ServiceManager.WorkOrderService.CreateWorkOrder(workOrderForCreationDto);
+                if (Response.Success && Response is ApiOkResponse<WorkOrderDto> result)
+                {
+
+                    WorkOrderHistoryCreateDto historyCreateDto = new
+                    (
+                        Notes: "Création de l'ordre de travail",
+                        Status: "En attente",
+                        DateChanged: DateTime.Now,
+                        ChangedById: null,//IoContainer.CurrentUser.Id,
+                        WorkOrderId: result.Result?.Id
+                    ) ;
+                    await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto);
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Ordre de travail créé avec succès"));
+                }else if (Response is ApiBadRequestResponse badRequestResponse)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
+                }
+            });
+            
         }
 
         private async Task CloseAsync()
@@ -137,18 +183,18 @@ namespace MntPlus.WPF
 
         private void OnSelectedAssigned(UserTeamDto? dto)
         {
-            if(dto?.User is null)
+            if (dto?.User is null)
             {
                 SelectedAssignedTo = $"Équipe : {dto?.Team?.Name}";
                 TeamGuid = dto?.Team?.Id ?? Guid.Empty;
                 browseToAssignedVisible = false;
             }
-            else if(dto?.Team is null)
+            else if (dto?.Team is null)
             {
-                SelectedAssignedTo = $"Utilisateur : {dto?.User?.FullName} - {dto?.User ?.RoleNames}";
-                UserGuid = dto?.User?.Id ?? Guid.Empty;
+                SelectedAssignedTo = $"Utilisateur : {dto?.User?.UserDto.FullName} ";
+                UserGuid = dto?.User?.UserDto?.Id ?? Guid.Empty;
                 browseToAssignedVisible = false;
-                
+
             }
         }
 

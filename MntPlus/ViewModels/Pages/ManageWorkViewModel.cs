@@ -17,7 +17,7 @@ namespace MntPlus.WPF
 
         private ObservableCollection<WorkOrderItemsViewModel> _workOrders { get; set; }
         public ObservableCollection<WorkOrderItemsViewModel>? FilterWorkOrders { get; set; }
-        public ObservableCollection<WorkOrderItemsViewModel> WorkOrders
+        public ObservableCollection<WorkOrderItemsViewModel> WorkOrders 
         { 
             get => _workOrders; 
             set 

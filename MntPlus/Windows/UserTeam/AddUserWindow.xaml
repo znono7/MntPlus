@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF" 
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
-        Title="AddUserWindow" Height="720" Width="510" Loaded="Window_Loaded" x:Name="WindLoc">
+        Title="AddUserWindow" d:DesignHeight="1000"  Height="720" Width="510" Loaded="Window_Loaded" x:Name="WindUser">
     <Window.Resources>
         <Style TargetType="{x:Type local:AddUserWindow}">
             <Setter Property="Template">
@@ -138,11 +138,11 @@
 Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
 
                 </StackPanel>
-                <StackPanel Grid.Row="4" Orientation="Vertical">
+                <!--<StackPanel Grid.Row="4" Orientation="Vertical">
                     <TextBlock Text="Rôle" Style="{DynamicResource LabelTextBlockStyle}" />
-                    <ComboBox  ItemsSource="{Binding UserRolesList.UserRoles}" SelectedItem="{Binding UserRoles}" Style="{StaticResource ComboBoxStyle3}" Margin="24 0 0 20" Width="320"/>
+                    <ComboBox  DisplayMemberPath="Name" SelectedValuePath="Id"  ItemsSource="{Binding RoleDtos}" SelectedItem="{Binding SelectedRole}" Style="{StaticResource ComboBoxStyle3}" Margin="24 0 0 20" Width="320"/>
 
-                </StackPanel>
+                </StackPanel>-->
                 <Rectangle Height="1" Grid.Row="5" Fill="{DynamicResource LineColor}"/>
                 <StackPanel Grid.Row="6" Orientation="Vertical">
                     <TextBlock Text="Nom d'utilisateur" Style="{DynamicResource LabelTextBlockStyle}" />
@@ -152,12 +152,12 @@ Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="7" Orientation="Vertical">
                     <TextBlock Text="Mot de passe" Style="{DynamicResource LabelTextBlockStyle}" />
-                    <TextBox Text="{Binding Password}"  Margin="24 0 0 20" Style="{DynamicResource InputTextBoxStyle}"/>
+                    <PasswordBox x:Name="PasswordText"  Margin="24 0 0 20" Style="{DynamicResource PasswordTextBoxStyle}"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
         <Button Grid.Row="1"  Command="{Binding AddCommand}" 
-           CommandParameter="{Binding ElementName=WindLoc}"
+           CommandParameter="{Binding ElementName=WindUser}"
            local:IsBusyProperty.Value="{Binding SaveIsRunning}" 
            Tag="{StaticResource done}" HorizontalAlignment="Right"
            Style="{DynamicResource RegullarPrimeButton}" 

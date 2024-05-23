@@ -1,0 +1,291 @@
+﻿<local:BasePage x:TypeArguments="local:NewPreventiveMaintenanceViewModel" 
+                x:Class="MntPlus.WPF.NewPreventiveMaintenancePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MntPlus.WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="1400" d:DesignWidth="1200"
+      Title="NewPreventiveMaintenance">
+
+    <Grid Background="{DynamicResource TertiaryBackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource LineColor}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button ToolTipService.InitialShowDelay="1"  Grid.Column="0" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource sidemenu}"
+                  Command="{Binding ApplicationViewModel.SideMenuCommand,Source={x:Static local:ViewModelLocator.Instance}}">
+                    <Button.ToolTip>
+                        <ToolTip Style="{StaticResource ToolTipStyle}">
+                            <TextBlock Text="{Binding ApplicationViewModel.SideBarStatus,Source={x:Static local:ViewModelLocator.Instance}}" />
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <Rectangle Width="1" Grid.Column="1" Fill="{DynamicResource LineColor}"/>
+                <Button  Grid.Column="2" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource Prev}"
+                        Command="{Binding BackPageCommand}"/>
+                <Rectangle Width="1" Grid.Column="3" Fill="{DynamicResource LineColor}"/>
+
+                <Grid VerticalAlignment="Center" Grid.Column="4" Margin="10 0" >
+                    <TextBlock Text="Nouveau Modèle de Maintenance Préventive" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto">
+            <Grid Background="{DynamicResource FourthBackgroundColor}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="1" Width="1" Fill="{DynamicResource LineColor3}"/>
+                <Grid Grid.Column="0" Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                      
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Height="145">
+                        <Border CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor3}"/>
+                        <StackPanel VerticalAlignment="Center" Margin="25 0 10 10">
+                            <TextBlock Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 10 10">
+                           <Run Text="Nom du Modèle"/>  <Run Text="*" Foreground="Red"/>
+                            </TextBlock>
+                            <TextBox Text="{Binding ModelName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource InputTextBoxStyle}" HorizontalAlignment="Stretch"  Margin="0 0 20 0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0 10 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.RowSpan="13" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor3}"/>
+                        <StackPanel VerticalAlignment="Top" Margin="25 15 10 10">
+                            <TextBlock Text="Description" Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 10 10"/>
+                            <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Height="94" Padding="5 10" VerticalAlignment="Top" Background="{DynamicResource BackSubButtons}" Text="{Binding Description}" Style="{StaticResource InputTextBoxStyle}" HorizontalAlignment="Stretch"  Margin="0 0 20 0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" VerticalAlignment="Top" Margin="25 15 10 10">
+                            <TextBlock Text="Priorité"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Button Foreground="{Binding ForgroundColor,Converter={local:StringRGBToBrushConverter}}" Tag="{StaticResource priority}" Content="{Binding OrderWorkPriority}" Command="{Binding OpenMenuPriorityCommand}" HorizontalAlignment="Left" x:Name="uploadBtn" Style="{DynamicResource PriorityButton}" Width="240"    Margin="0 0"/>
+                            <Popup StaysOpen="True" PopupAnimation="Scroll" HorizontalAlignment="Center" Width="185"  IsOpen="{Binding IsMenuPrioprityOpen}" PlacementTarget="{Binding ElementName=uploadBtn}" Placement="Bottom" AllowsTransparency="True" >
+                                <Grid>
+                                    <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                                    <StackPanel Margin="1 20 1 20">
+                                        <Button Command="{Binding HighPriorityCommand}" Style="{DynamicResource PopupButton}" Content="1- Haute Priorité"/>
+                                        <Button Command="{Binding MediumPriorityCommand}" Style="{DynamicResource PopupButton}" Content="2- Priorité Moyenne"/>
+                                        <Button Command="{Binding LowPriorityCommand}" Style="{DynamicResource PopupButton}" Content="3- Faible Priorité"/>
+                                        <Button Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton}" Content="Aucune"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Popup>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="25 15 10 20">
+                            <TextBlock Text="Type"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <StackPanel Margin="0 10" Orientation="Horizontal">
+                                <ComboBox  DisplayMemberPath="TypeName" ItemsSource="{Binding TypesColllection.PmTypesList}" SelectedItem="{Binding SelectedType}" Style="{StaticResource ComboBoxStyle3}" Margin="0" Width="450"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="3"/>
+                        <StackPanel Grid.Row="4" Orientation="Vertical" Margin="25 20 10 10">
+                            <TextBlock Text="Équipement"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Grid Margin="0 20 0 20">
+                                <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource box}" Content="Attribuer l'équipement"/>
+                            </Grid>
+                        </StackPanel>
+                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="5"/>
+                        <StackPanel Grid.Row="6" Orientation="Vertical" Margin="25 20 10 10">
+                            <TextBlock Text="Pièces"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Grid Margin="0 20 0 20">
+                                <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource parts}" Content="Ajouter des Pièces"/>
+                            </Grid>
+                        </StackPanel>
+                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="7"/>
+                        <StackPanel HorizontalAlignment="Stretch" Grid.Row="8" Orientation="Vertical" Margin="25 20 10 10">
+                            <TextBlock Text="Assigné à"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox  HorizontalAlignment="Stretch" Background="{DynamicResource BackSubButtons}" IsReadOnly="True"   Margin="0 0 20 0" Style="{DynamicResource InputTextBoxStyle}" 
+             Text="{Binding SelectedAssignedTo, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                                <Button Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding browseToAssignedVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True}"  Command="{Binding BrowseToAssignedCommand}"   Style="{DynamicResource IconPathButton}" Margin="2 0 0 0">
+                                    <Path  Width="12" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource dots}"/>
+                                </Button>
+                                <Button Grid.Column="2" Visibility="{Binding browseToAssignedVisible,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding ClearAssignedCommand}"   Style="{DynamicResource IconPathButton}" Margin="0 0 0 0">
+                                    <Path  Width="12" Fill="{DynamicResource PrimaryRedColor}" Stretch="Uniform" Data="{DynamicResource close}"/>
+                                </Button>
+                            </Grid>
+                           
+                        </StackPanel>
+                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="9"/>
+
+                        <StackPanel  Orientation="Vertical" Grid.Row="10" Margin="25 20 10 10">
+                            <TextBlock Text="Image"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+
+                            <Button Command="{Binding BrowseCommand}" Style="{StaticResource PrimeButton3}" HorizontalAlignment="Left" Tag="{StaticResource image}" Content="Parcourir"/>
+                            <Grid Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToCollapsedConverter},ConverterParameter=true,FallbackValue=Collapsed}" Width="80" Height="60" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Border Background="{DynamicResource LineColor}" CornerRadius="4"  >
+                                    <Image  Height="58"  Source="{Binding MyImageSource,UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform" >
+                                        <Image.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation To="1" 
+                                               Duration="0:0:0.4" 
+                                               Storyboard.TargetName="deleteImg"
+                                               Storyboard.TargetProperty="Opacity" />
+
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                </Border>
+
+                                <Button Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}"
+                                      Command="{Binding DeleteImgCommand}" x:Name="deleteImg" Margin="0 2 2 0 "  Opacity="0" Panel.ZIndex="1"
+                                              Tag="{StaticResource close}" Foreground="{DynamicResource PrimaryRedColor}"
+                                              Style="{DynamicResource PrimeIconButton}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                <Grid.Triggers>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+
+                                                <DoubleAnimation To="0" 
+                                    Duration="0:0:0.4" 
+                                    Storyboard.TargetName="deleteImg"
+                                    Storyboard.TargetProperty="Opacity" />
+
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Grid.Triggers>
+                            </Grid>
+
+                        </StackPanel>
+                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="11"/>
+                        <StackPanel Grid.Row="12" Orientation="Vertical" Margin="25 20 10 10">
+                            <TextBlock Text="Tâches &amp; Listes de Contrôle"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Grid Margin="0 20 0 20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Button Foreground="{DynamicResource FourthTextColor}" Margin="10 0" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Listes de Contrôle"/>
+                                <Button Grid.Row="1" Foreground="{DynamicResource FourthTextColor}" Margin="0 20" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Tâches Individuelles"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Column="2" Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="45"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.RowSpan="5" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor3}"/>
+                    <StackPanel VerticalAlignment="Center" Margin="25 20 10 10">
+                            <TextBlock  Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 10 10">
+                                <Run Text="Déclencheurs de Création d’Ordre de Travail"/><Run Text="*" Foreground="Red"/>
+                            </TextBlock>
+                            <Grid Margin="0 20 0 0">
+                                <Button Command="{Binding ScheduleWindCommand}" Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource time}" Content="Modifier le Déclencheur Temporel"/>
+                            </Grid>
+                            <Grid Margin="0 20 0 20">
+                                <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource usage}" Content="Modifier le Déclencheur Basé sur l'utilisation"/>
+                            </Grid>
+                        </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="1" Margin="0 20"/>
+                    <StackPanel  Orientation="Vertical" Grid.Row="2" Margin="10 0 0 0">
+                        <Grid Margin="0 0 40 0">
+                            <TextBlock  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" >
+                                <Run Text="Date de Début"/> <Run Text="*" Foreground="Red"/>
+                            </TextBlock>
+                            <Button  Command="{Binding ClearStartDateCommand}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" Content="Vider"/>
+                        </Grid>
+                        <Grid Width="450" HorizontalAlignment="Left" Margin="10 0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="36" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="DateBorder" Background="{DynamicResource BackSubButtons}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="37" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Border Grid.Column="1"  Height="37" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="0 4 4 0"/>
+                            <Button Grid.Column="1"  Command="{Binding OpenMenuStartDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                            </Button>
+
+                            <TextBlock Text="{Binding ShortStartDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                            <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding IsMenuStartDateOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup">
+                                <Grid >
+
+                                    <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                            SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+
+                    </StackPanel>
+                    <StackPanel  Orientation="Vertical" Grid.Row="3" Margin="10 30 0 20">
+                        <Grid Margin="0 0 40 0">
+                            <TextBlock  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" >
+                                <Run Text="Se Termine le"/> 
+                            </TextBlock>
+                            <Button  Command="{Binding ClearStartDateCommand}" Style="{StaticResource TextButton}" HorizontalAlignment="Right" Content="Vider"/>
+                        </Grid>
+                        <Grid Width="450" HorizontalAlignment="Left" Margin="10 0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="36" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="DateBorder2" Background="{DynamicResource BackSubButtons}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="37" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Border Grid.Column="1"  Height="37" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="0 4 4 0"/>
+                            <Button Grid.Column="1"  Command="{Binding OpenMenuStartDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                            </Button>
+
+                            <TextBlock Text="{Binding ShortStartDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                            <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding IsMenuStartDateOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup2">
+                                <Grid >
+
+                                    <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                            SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</local:BasePage>

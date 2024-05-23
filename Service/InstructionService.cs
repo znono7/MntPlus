@@ -24,7 +24,7 @@ namespace Service
         {
             try
             { 
-                var instructionEntity = _mapper.Map<Instruction>(instruction);
+                var instructionEntity = _mapper.Map<Entities.WorkTask>(instruction);
                 _repository.Instruction.CreateInstruction(instructionEntity);
                 await _repository.SaveAsync();
                 var instructionToReturn = _mapper.Map<InstructionDto>(instructionEntity);

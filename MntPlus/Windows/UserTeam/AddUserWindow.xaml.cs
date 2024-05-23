@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,12 +18,14 @@ namespace MntPlus.WPF
     /// <summary>
     /// Interaction logic for AddEquipmentWindow.xaml
     /// </summary>
-    public partial class AddUserWindow : Window
-    {
+    public partial class AddUserWindow : Window , IHavePassword
+    { 
         public AddUserWindow()
         {
             InitializeComponent();
         }
+
+        public SecureString SecurePassword => PasswordText.SecurePassword;
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

@@ -47,6 +47,10 @@ namespace MntPlus.WPF
                         return new RequestsPage(viewModel as RequestsPageViewModel);
                     case ApplicationPage.PreventiveMaintenance:
                         return new PreventiveMaintenancePage(viewModel as PreventiveMaintenanceViewModel);
+                    case ApplicationPage.PartsInventory:
+                        return new PartsInventoryPage(viewModel as PartsInventoryViewModel);
+                    case ApplicationPage.NewPreventiveMaintenance:
+                        return new NewPreventiveMaintenancePage(viewModel as NewPreventiveMaintenanceViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -77,6 +81,10 @@ namespace MntPlus.WPF
                 return ApplicationPage.Requests;
             if (page is PreventiveMaintenancePage)
                 return ApplicationPage.PreventiveMaintenance;
+            if (page is PartsInventoryPage)
+                return ApplicationPage.PartsInventory;
+            if (page is NewPreventiveMaintenancePage)
+                return ApplicationPage.NewPreventiveMaintenance;
 
             // Alert developer of issue
             Debugger.Break();

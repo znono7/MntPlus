@@ -6,22 +6,24 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public record WorkOrderHistoryDto (
+    public record WorkOrderHistoryDto 
+        (
         Guid Id,
-               string? Status,
-                      DateTime? DateChanged,
-                             UserDto? ChangedBy,
-                                    string? Notes,
-                                           Guid? WorkOrderId
-                                                 
-           );
+            string? Notes,
+            string? Status,
+            DateTime? DateChanged,
+            UserDto? ChangedBy,
+            Guid? WorkOrderId
+        );
+        
 
-    public record WorkOrderHistoryCreateDto(
-        string? Status, 
-                      DateTime? DateChanged,
-                                           UserDto? ChangedBy,
-                                                                       string? Notes,
-                                                                                                          Guid? WorkOrderId
-                  );
-    
+    public record WorkOrderHistoryCreateDto
+     (
+        
+            string? Notes,
+            string? Status,
+            DateTime? DateChanged,
+            Guid? ChangedById,
+            Guid? WorkOrderId
+        );
 }

@@ -9,7 +9,8 @@ namespace Shared
     public record WorkOrderDto (
         Guid Id, 
         string? Name, 
-        string? Number,  
+        int? Number, 
+        string? Description,
         string? Priority, 
         DateTime? StartDate, 
         DateTime? DueDate,
@@ -26,15 +27,22 @@ namespace Shared
         Guid? AssetId,
         AssetDto? Asset); 
 
-    public record WorkOrderForCreationDto(
-               string? Name, 
-                      string? Instructions, 
-                             string? Priority, 
-                                    DateTime? DueDate, 
-                                           string? Type, 
-                                                  string? Status, 
-                                                         Guid? UserAssignedToId, 
-                                                                Guid? TeamAssignedToId, 
-                                                                       Guid? AssetId);
+    public record WorkOrderForCreationDto
+        (
+          string? Name,
+        int? Number,
+        string? Description,
+        string? Priority,
+        DateTime? StartDate,
+        DateTime? DueDate,
+        string? Type,
+        string? Status,
+        string? Requester,
+        DateTime? CreatedOn,
+        Guid? UserCreatedId,
+        Guid? UserAssignedToId,
+        Guid? TeamAssignedToId,
+        Guid? AssetId
+             );
     
 }

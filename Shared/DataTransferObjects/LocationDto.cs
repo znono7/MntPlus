@@ -12,11 +12,12 @@ namespace Shared
                string? Address,
                bool IsPrimaryLocation,
                Guid? IdParent,
-               DateTime CreatedAt
+               LocationDto? Parent,
+               DateTime CreatedAt 
                );
-
+     
     public record LocationForCreationDto
-        (
+        ( 
                string Name,
                string? Address,
                bool IsPrimaryLocation,

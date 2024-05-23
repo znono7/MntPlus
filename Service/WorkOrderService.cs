@@ -22,9 +22,28 @@ namespace Service
         }
         public async Task<ApiBaseResponse> CreateWorkOrder(WorkOrderForCreationDto workOrder)
         {
-            try
-            { 
-                var workOrderEntity = _mapper.Map<WorkOrder>(workOrder);
+            try 
+            {
+                int? Num = await _repository.WorkOrder.GetNextWorkOrderNumberAsync();
+                var workOrderCreation = new WorkOrderForCreationDto
+                (
+                    Name : workOrder.Name,
+                    Number : Num,
+                    Description : workOrder.Description,
+                    Priority : workOrder.Priority,
+                    StartDate : workOrder.StartDate,
+                    DueDate : workOrder.DueDate,
+                    Type : workOrder.Type,
+                    Status : workOrder.Status,
+                    Requester : workOrder.Requester,
+                    CreatedOn : workOrder.CreatedOn,
+                    UserCreatedId : workOrder.UserCreatedId,
+                    UserAssignedToId : workOrder.UserAssignedToId,
+                    TeamAssignedToId : workOrder.TeamAssignedToId,
+                    AssetId: workOrder.AssetId
+                );
+                
+                var workOrderEntity = _mapper.Map<WorkOrder>(workOrderCreation);
                 _repository.WorkOrder.CreateWorkOrder(workOrderEntity);
                 await _repository.SaveAsync();
                 var workOrderToReturn = _mapper.Map<WorkOrderDto>(workOrderEntity);

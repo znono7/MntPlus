@@ -106,7 +106,7 @@ namespace MntPlus.WPF
             if(WorkOrderDto?.UserAssignedTo is not null)
             {
                 WorkAssigned = "user";
-                WorkAssignedName = $"{WorkOrderDto?.UserAssignedTo?.FirstName} {WorkOrderDto?.UserAssignedTo?.LastName}" ?? string.Empty;
+                WorkAssignedName = $"{WorkOrderDto?.UserAssignedTo?.FullName}" ?? string.Empty;
             }else if(WorkOrderDto?.TeamAssignedTo is not null)
             {
                 WorkAssigned = "team";

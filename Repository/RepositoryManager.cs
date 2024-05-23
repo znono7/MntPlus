@@ -18,13 +18,8 @@ namespace Repository
         private readonly Lazy<IWorkOrderRepository> workOrderRepository;
         private readonly Lazy<IWorkOrderHistoryRepository> workOrderHistoryRepository;
         private readonly Lazy<IInstructionRepository> instructionRepository;
-
-
-
-
-
-
-
+        private readonly Lazy<IRoleRepository> roleRepository;
+        private readonly Lazy<IUserRoleRepository> userRoleRepository;
 
 
         public RepositoryManager(RepositoryContext repositoryContext)
@@ -37,6 +32,8 @@ namespace Repository
             workOrderRepository = new Lazy<IWorkOrderRepository>(() => new WorkOrderRepository(repositoryContext));
             workOrderHistoryRepository = new Lazy<IWorkOrderHistoryRepository>(() => new WorkOrderHistoryRepository(repositoryContext));
             instructionRepository = new Lazy<IInstructionRepository>(() => new InstructionRepository(repositoryContext));
+            roleRepository = new Lazy<IRoleRepository>(() => new RoleRepository(repositoryContext));
+            userRoleRepository = new Lazy<IUserRoleRepository>(() => new UserRoleRepository(repositoryContext));
               
         }
       
@@ -54,6 +51,10 @@ namespace Repository
         public IWorkOrderHistoryRepository WorkOrderHistory => workOrderHistoryRepository.Value;
 
         public IInstructionRepository Instruction => instructionRepository.Value;
+
+        public IRoleRepository Role => roleRepository.Value;
+
+        public IUserRoleRepository UserRole => userRoleRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

@@ -103,26 +103,7 @@ namespace MntPlus.WPF
             var window = (System.Windows.Window)parameter!;
             await RunCommandAsync(() => SaveIsRunning, async () =>
             {
-                var workOrder = await AppServices.ServiceManager.WorkOrderService.CreateWorkOrder(new WorkOrderForCreationDto
-               (
-               Name, Instructions, OrderWorkPriority, DueDate, Type, "En attente", null, null, Equipment.Id
-               ));
-                if (workOrder is not null && workOrder is ApiOkResponse<WorkOrderDto> okRespons)
-                {
-                    await Task.Delay(1000);
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Ordre de travail créé avec succès"));
-                    WorkOrderStore?.CreateWorkOrder(okRespons.Result);
-                    window.Close();
-
-                }
-                else if (workOrder is not null && workOrder is ApiBadRequestResponse badRequest)
-                {
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequest.Message));
-                }
-                else
-                {
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Une erreur s'est produite lors de la création de l'ordre de travail"));
-                }
+              
             }
             );
            

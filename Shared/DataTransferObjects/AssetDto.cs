@@ -27,24 +27,25 @@ namespace Shared
         DateTime? CreatedDate,
         DateTime? PurchaseDate
     );
-
-    public record AssetForCreationDto(
-        Guid? AssetParent,
-               string? Name, 
-                      string? Description,
-                             string? Status,
-                                    string? Category,
-                                           Guid? LocationId,
-                                                  string? SerialNumber,
-                                                         string? Model,
-                                                                string? Make,
-                                                                       double? PurchaseCost,
-                                                                              string? ImagePath,
-                                                                                     byte[]? AssetImage,
-                                                                                            DateTime? AssetCommissionDate,
-                                                                                            DateTime? CreatedDate,
-                                                                                                             DateTime? PurchaseDate
-           );
+     
+    public record AssetForCreationDto
+        (
+         Guid? AssetParent,
+        string? Name,
+        string? Description,
+        string? Status,
+        string? Category,
+        Guid? LocationId,
+        string? SerialNumber,
+        string? Model,
+        string? Make,
+        double? PurchaseCost,
+        string? ImagePath,
+        byte[]? AssetImage,
+        DateTime? AssetCommissionDate,
+        DateTime? CreatedDate,
+        DateTime? PurchaseDate
+        );
 
     public record AssetForUpdateImage(
                string? ImagePath,

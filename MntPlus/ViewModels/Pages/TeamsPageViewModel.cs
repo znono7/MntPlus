@@ -77,7 +77,7 @@ namespace MntPlus.WPF
         }
         private void OpenTeamWindow()
         {
-            AddUserWindow addUserWindow = new() { DataContext = new AddUserViewModel() };
+            AddTeamWindow addUserWindow = new() { DataContext = new AddTeamViewModel() };
             addUserWindow.ShowDialog();
 
         }

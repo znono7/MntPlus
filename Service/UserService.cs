@@ -5,6 +5,7 @@ using Service.Contracts;
 using Shared;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,13 +65,34 @@ namespace Service
         {
             try
             {
-                var users = await _repository.User.GetAllUsersAsync(trackChanges);
+                IEnumerable<User>? users = await _repository.User.GetAllUsersAsync(trackChanges);
                 if (users is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
-                var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(users);
-                return new ApiOkResponse<IEnumerable<UserDto>>(usersToReturn);
+                List<UserWithRolesDto> usersWithRoles = new List<UserWithRolesDto>();
+               
+                foreach (var item in users)
+                {
+                    if(item.UserRoles != null)
+                    {
+                        List<RoleDto> roles = new List<RoleDto>();
+                        foreach (var item1 in item.UserRoles)
+                        {
+                            roles.Add(new RoleDto(item1.Role!.Id, item1.Role!.Name, item1.Role!.IsSeeded));
+                        }
+                        var userDto = new UserDto(item.Id, $"{item.FirstName} {item.LastName}", item.Email, item.PhoneNumber, item.UserName, item.Status, item.CreatedAt, false);
+                        var userWithRoles = new UserWithRolesDto(userDto, roles);
+                        usersWithRoles.Add(userWithRoles);
+                    }
+                    else
+                    {
+                        var userDto = new UserDto(item.Id, $"{item.FirstName} {item.LastName}", item.Email, item.PhoneNumber, item.UserName, item.Status, item.CreatedAt, false);
+                        var userWithRoles = new UserWithRolesDto(userDto, null);
+                        usersWithRoles.Add(userWithRoles);
+                    }
+                }
+                return new ApiOkResponse<IEnumerable<UserWithRolesDto>>(usersWithRoles);
             }
             catch (Exception ex)
             {

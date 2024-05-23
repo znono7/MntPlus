@@ -85,10 +85,22 @@
     <Compile Update="Pages\LocationsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\PartsInventoryPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\NewPreventiveMaintenancePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\PreventiveMaintenancePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\TeamsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\ScheduleTimeWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\Locations\SelectEquipmentLocationWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\RoleWindow.xaml.cs">
@@ -107,6 +119,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\UserTeam\AddTeamWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\UserTeam\AssignNewRole.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\UserTeam\AddUserWindow.xaml.cs">

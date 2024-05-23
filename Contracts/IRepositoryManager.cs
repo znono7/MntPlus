@@ -15,8 +15,10 @@ namespace Contracts
         IWorkOrderRepository WorkOrder { get; }
         IWorkOrderHistoryRepository WorkOrderHistory { get; }
         IInstructionRepository Instruction { get; }
-       
+        IRoleRepository Role { get; }
+        IUserRoleRepository UserRole { get; }
 
-       Task SaveAsync(); 
+
+        Task SaveAsync(); 
     }
 }

@@ -166,7 +166,7 @@
                         <Rectangle Height="1" Grid.Row="4" Fill="{DynamicResource LineColor}" Margin="10,20,0,20" Width="450" HorizontalAlignment="Left"/>
                         <StackPanel Orientation="Vertical" Grid.Row="5" Margin="10 20 0 0">
                             <TextBlock Text="Catégorie"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
-                            <ComboBox ItemsSource="{Binding EquipmentCategories.EquipmentCategoryList}" SelectedItem="{Binding SelectedEquipmentCategory}" Style="{StaticResource ComboBoxStyle3}" Margin="0" Width="450"/>
+                            <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding EquipmentCategories.EquipmentCategoryList}" SelectedItem="{Binding SelectedEquipmentCategory}" Style="{StaticResource ComboBoxStyle3}" Margin="0" Width="450"/>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Grid.Row="6" Margin="10 20 0 0">
                             <TextBlock Text="Fabricant"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
@@ -325,14 +325,49 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Border Grid.RowSpan="8" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="1 0 0 0" BorderBrush="{DynamicResource LineColor}"/>
-                        <StackPanel>
+                        <Grid Visibility="{Binding IsHaveParent,Converter={local:BooleanToCollapsedConverter},ConverterParameter=True}" Height="180">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel HorizontalAlignment="Center" Grid.RowSpan="3" Grid.Row="1">
+                                <Path Width="16" Height="16" Data="{StaticResource target}" Fill="{DynamicResource LineColor2}" Stretch="UniformToFill"/>
+                                <Rectangle Height="100" Width="3"  Fill="{DynamicResource LineColor2}"  Grid.Row="1"  HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <TextBlock Grid.ColumnSpan="2" FontSize="16" Text="Equipment Hierarchy" Style="{StaticResource TitleTextBlockStyle}" Margin="10 0 0 10"/>
+                            <TextBlock Text="{Binding Parent.Name,FallbackValue=Asset3,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBlockStyle}" VerticalAlignment="Top"/>
+                            <TextBlock Text="Cet équipement" Grid.Column="1" Grid.Row="3" Style="{StaticResource TextBlockStyle}" VerticalAlignment="Bottom"/>
+                            <Button FontSize="10" VerticalAlignment="Top"  Height="24" Grid.Column="1" Grid.Row="0" Width="64"  HorizontalAlignment="Right" Command="{Binding ClearParentCommand}"  Style="{DynamicResource CPrime2}" Content="Annuler" Margin="0 5 10 0"/>
+                        </Grid>
+                        <StackPanel Visibility="{Binding IsHaveParent,Converter={local:BooleanToCollapsedConverter},FallbackValue=Collapsed}">
                             <TextBlock FontSize="16" Text="Equipment Hierarchy" Style="{StaticResource TitleTextBlockStyle}" Margin="10 0 0 10"/>
-                            <Button HorizontalAlignment="Left"  Command="{Binding CancelOrderWorkCommand}" CommandParameter="{Binding ElementName=WorkWind}" Style="{DynamicResource CPrime2}" Content="Définir le Parent" Margin="10 0"/>
+                            <Button HorizontalAlignment="Left"  Command="{Binding SelectParentCommand}"  Style="{DynamicResource CPrime2}" Content="Définir le Parent" Margin="10 0"/>
                         </StackPanel>
                         <Rectangle Height="1" Grid.Row="1" Fill="{DynamicResource LineColor}" Margin="0,20,0,20" Width="450" HorizontalAlignment="Left"/>
-                        <StackPanel Grid.Row="2" Margin="10 20 0 0">
+                        <Grid Margin="20 10" Grid.Row="2" Visibility="{Binding IsHaveLocation,Converter={local:BooleanToCollapsedConverter},ConverterParameter=True}" Height="180">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
                             <TextBlock FontSize="16" Text="Localisation"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
-                            <Button HorizontalAlignment="Left"  Command="{Binding CancelOrderWorkCommand}" CommandParameter="{Binding ElementName=WorkWind}" Style="{DynamicResource CPrime2}" Content="Définir la localisation" Margin="10 0"/>
+                            <TextBlock Grid.Row="1" Text="{Binding Location.Name,UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <TextBlock Grid.Row="2" Text="{Binding Location.Address}"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Button  FontSize="10"   Height="24"  Grid.Row="3" Width="64"  HorizontalAlignment="Right" Command="{Binding ClearLocationCommand}"  Style="{DynamicResource CPrime2}" Content="Annuler" Margin="0 5 10 0"/>
+
+                        </Grid>
+                        <StackPanel Visibility="{Binding IsHaveLocation,Converter={local:BooleanToCollapsedConverter},FallbackValue=Collapsed}" Grid.Row="2" Margin="10 20 0 0">
+                            <TextBlock FontSize="16" Text="Localisation"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                            <Button HorizontalAlignment="Left"  Command="{Binding SelectEquipmentLocationCommand}"  Style="{DynamicResource CPrime2}" Content="Définir la localisation" Margin="0"/>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>

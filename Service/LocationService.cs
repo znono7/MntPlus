@@ -3,12 +3,6 @@ using Contracts;
 using Entities;
 using Service.Contracts;
 using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Quic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {

@@ -137,14 +137,14 @@ namespace MntPlus.WPF
 
         private void GenerateUsers()
         {
-            Users = new ObservableCollection<UserWithRolesDto>
-            {
-                new UserWithRolesDto(Guid.Parse("9199CE73-0AEB-4A69-9D33-1BBB5CE36A38"), "John Doe", "John Doe - Admin", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "Admin", true) }, "Admin"),
-                new UserWithRolesDto(Guid.Parse("B3D8290F-FBE8-4E83-BEB6-91932594774B"), "Jane Doe", "Jane Doe - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
-                new UserWithRolesDto(Guid.Parse("53510025-106F-43DE-A759-EF4A94F0013A"), "John Smith", "John Smith - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
-                new UserWithRolesDto(Guid.Parse("06D0E2E3-97FF-4645-AE55-5AD3BBDCCB52"), "Jane Smith", "Jane Smith - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
+            //Users = new ObservableCollection<UserWithRolesDto>
+            //{
+            //    new UserWithRolesDto(Guid.Parse("9199CE73-0AEB-4A69-9D33-1BBB5CE36A38"), "John Doe", "John Doe - Admin", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "Admin", true) }, "Admin"),
+            //    new UserWithRolesDto(Guid.Parse("B3D8290F-FBE8-4E83-BEB6-91932594774B"), "Jane Doe", "Jane Doe - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
+            //    new UserWithRolesDto(Guid.Parse("53510025-106F-43DE-A759-EF4A94F0013A"), "John Smith", "John Smith - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
+            //    new UserWithRolesDto(Guid.Parse("06D0E2E3-97FF-4645-AE55-5AD3BBDCCB52"), "Jane Smith", "Jane Smith - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
 
-            };
+            //};
 
         }
         private void GenerateTeams()
@@ -179,7 +179,7 @@ namespace MntPlus.WPF
 
                 return;
             }
-            FilterUsers = new ObservableCollection<UserWithRolesDto>(Users.Where(s => s.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+            FilterUsers = new ObservableCollection<UserWithRolesDto>(Users.Where(s => s.UserDto.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
             // Set last search text
             mLastSearchText = SearchText;
 

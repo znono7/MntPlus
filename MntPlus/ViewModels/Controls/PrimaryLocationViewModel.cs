@@ -27,7 +27,7 @@ namespace MntPlus.WPF
 
     public class PrimarySelectLocationViewModel : PrimaryLocationViewModel
     {
-        public ICommand SelectLocationCommand { get; set; }
+        public ICommand SelectLocationCommand { get; set; } 
         public Func<PrimarySelectLocationViewModel?, Task>? SelectLocationFunc { get; set; }
         public PrimarySelectLocationViewModel(LocationDto? location) : base(location)
         {

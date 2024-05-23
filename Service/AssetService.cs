@@ -19,7 +19,7 @@ namespace Service
         {
             try
             {
-                var assetEntity = _mapper.Map<Asset>(asset); 
+                var assetEntity = _mapper.Map<Asset>(asset);  
                 _repository.Asset.CreateAsset(assetEntity); 
                 await _repository.SaveAsync();
                 var assetToReturn = _mapper.Map<AssetDto>(assetEntity);

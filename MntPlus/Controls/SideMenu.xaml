@@ -18,9 +18,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Border  Grid.RowSpan="11"  BorderThickness="0 0 1 0"  BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource SideMenuBackground}" />
+        <Border  Grid.RowSpan="12"  BorderThickness="0 0 1 0"  BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource SideMenuBackground}" />
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -40,7 +41,7 @@
             <StackPanel Margin="5 0" VerticalAlignment="Top" Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                 <Button Style="{StaticResource PrimeIconButton}" Margin="0 0 5 0" Height="33" Tag="{StaticResource notifications}" />
 
-                <Button Content="ZN" Style="{StaticResource IconMenuButton}"/>
+                <Button Content="LB" Style="{StaticResource IconMenuButton}"/>
             </StackPanel>
         </Grid>
        
@@ -50,21 +51,29 @@
             <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdWork"  Content="Ordres de Travail" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource workorder}" />
             <RadioButton Command="{Binding PmCommand}" GroupName="MyGroup"  Content="Maintenance Préventive" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource preventive}" />
             <RadioButton Command="{Binding RequestsCommand}" GroupName="MyGroup"  Content="Demandes" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource headphones}" />
-            <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup"  Content="Analytique" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource analytics}" />
+            <!--<RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup"  Content="Analytique" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource analytics}" />-->
         </StackPanel>
         <Rectangle Margin="0 5" Height="1" Grid.Row="4" Fill="{DynamicResource LineColor}"/>
         <StackPanel Grid.Row="5">
             <RadioButton Command="{Binding LocationCommand}" GroupName="MyGroup"  Content="Localisations" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource loc}"  />
             <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" Content="Équipements" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource box}" />
-            <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" Content="Pièces" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource part}"  />
+            <RadioButton Command="{Binding PartsInventoryCommand}" GroupName="MyGroup" Content="Pièces &amp; Inventaire" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource part}"  />
+            <RadioButton Command="{Binding MetersCommand}" GroupName="MyGroup" Content="Mètres" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource metre}"  />
         </StackPanel>
         <Rectangle Margin="0 5" Height="1" Grid.Row="6" Fill="{DynamicResource LineColor}"/>
         <StackPanel  Grid.Row="7" >
-            <RadioButton Command="{Binding TeamsCommand}" GroupName="MyGroup"  Content="Utilisateurs et Équipes" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource users2}" Margin="0 5 0 5" />
+            <RadioButton Command="{Binding TeamsCommand}" GroupName="MyGroup"  Content="Utilisateurs &amp; Équipes" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource users2}" Margin="0 5 0 5" />
+
+        </StackPanel>
+        <Rectangle Margin="0 5" Height="1" Grid.Row="8" Fill="{DynamicResource LineColor}"/>
+        <StackPanel  Grid.Row="9" >
+
+            <RadioButton Command="{Binding CheckListCommand}" GroupName="MyGroup"   Content="Listes de Contrôle" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource checklist}" />
+        </StackPanel>
+        <Rectangle Margin="0 5" Height="1" Grid.Row="10" Fill="{DynamicResource LineColor}"/>
+        <StackPanel  Grid.Row="11" >
 
             <RadioButton Command="{Binding SettingsCommand}" GroupName="MyGroup"   Content="Paramètres" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource settings}" />
         </StackPanel>
-        <Rectangle Margin="0 5" Height="1" Grid.Row="8" Fill="{DynamicResource LineColor}"/>
-
     </Grid>
 </UserControl>

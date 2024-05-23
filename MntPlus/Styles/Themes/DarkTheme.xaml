@@ -5,7 +5,10 @@
     <SolidColorBrush x:Key="PrimaryBackgroundColor" Color="#121212"/>
     <SolidColorBrush x:Key="SecundaryBackgroundColor" Color="#242526"/>
     <SolidColorBrush x:Key="TertiaryBackgroundColor" Color="#1E1E1E"/>
+    <SolidColorBrush x:Key="FourthBackgroundColor" Color="#0A0B0B"/>
+
     <SolidColorBrush x:Key="LineColor" Color="#444444"/>
+    <SolidColorBrush x:Key="LineColor3" Color="#444444"/>
     <SolidColorBrush x:Key="LineColor2" Color="#5D5D5D"/>
     <SolidColorBrush x:Key="BackSubButtons" Color="#2A2247"/>
     <SolidColorBrush x:Key="BackgroundLight" Color="#272727"/>

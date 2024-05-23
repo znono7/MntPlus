@@ -15,6 +15,8 @@ namespace Service.Contracts
         IWorkOrderService WorkOrderService { get;}
         IWorkOrderHistoryService WorkOrderHistoryService { get; }
         IInstructionService InstructionService { get; }
+        IRoleService RoleService { get; }
+        IUserRoleService UserRoleService { get; }
       
 
     }

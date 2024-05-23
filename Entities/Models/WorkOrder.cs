@@ -11,7 +11,7 @@ namespace Entities
         public int? Number { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? Priority { get; set; }
+        public string? Priority { get; set; } 
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
         public string? Type { get; set; }
@@ -36,6 +36,5 @@ namespace Entities
         public Guid? AssetId { get; set; }
         public Asset? Asset { get; set; }
         public ICollection<WorkOrderHistory>? WorkOrderHistories { get; set; }
-        public ICollection<Instruction>? Instructions { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Entities
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
-        public bool IsPrimaryLocation { get; set; }
+        public bool IsPrimaryLocation { get; set; }  
 
 
         [ForeignKey(nameof(Parent))]
@@ -22,6 +22,5 @@ namespace Entities
         public Location? Parent { get; set; }
         public DateTime? CreatedAt { get; set; }
 
-       public ICollection<Location>? Children { get; set; }
     }
 }

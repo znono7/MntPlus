@@ -810,7 +810,7 @@
                         <Border  x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
                            
                         </Border>
-
+ 
                         <Grid>
                             <!-- Drop shadow -->
 
@@ -822,14 +822,14 @@
 
                             <!-- Icon -->
                             <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
-                                   Height="11" Width="11" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
+                                   Height="24" Width="24" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
                                    VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15 0 5 0"/>
 
                             <!-- Text -->
                             <TextBlock  Grid.Column="1" x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                        Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
                                       FontWeight="{TemplateBinding FontWeight}"
-                                      FontSize="{TemplateBinding FontSize}"  Margin="0"/>
+                                      FontSize="{TemplateBinding FontSize}"  Margin="10 0"/>
 
                         </Grid>
                        

@@ -37,7 +37,7 @@ namespace MntPlus.WPF
             }
         }
         public int ChildrenCount { get; set; }
-        public EquipmentItemViewModel(AssetDto? asset)
+        public EquipmentItemViewModel(AssetDto? asset) 
         {
             Asset = asset;
             MapProperties();

@@ -33,32 +33,7 @@ namespace MntPlus.WPF
         private async Task Add()
         {
             var result = default(bool);
-            await RunCommandAsync(() => Working, async () =>
-            {
-                var Response = await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(
-                    new WorkOrderHistoryCreateDto( Status ,DateTime.Now , ChangedBy , Comment , WorkOrderId)
-                    );
-                
-                if (Response is not null && Response is ApiOkResponse<WorkOrderHistoryDto> response)
-                {
-                    result = true;
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Instruction ajoutée avec succès"));
-                }
-                else
-                {
-                    result = false;
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de l'ajout de l'instruction"));
-
-                }
-
-            }).ContinueWith(t =>
-            {
-                if (result)
-                {
-                    CommitAction();
-                }
-
-            });
+           
         }
     }
 }

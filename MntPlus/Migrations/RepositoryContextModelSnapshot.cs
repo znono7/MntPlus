@@ -74,26 +74,68 @@ namespace MntPlus.WPF.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Asset");
+                    b.ToTable("Assets");
                 });
 
-            modelBuilder.Entity("Entities.Instruction", b =>
+            modelBuilder.Entity("Entities.Inventory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<int?>("AvailableQuantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("Cost")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("WorkOrderID")
+                    b.Property<string>("Location")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("MaxQuantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MinimumQuantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("PartID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkOrderID");
+                    b.HasIndex("PartID");
 
-                    b.ToTable("Instruction");
+                    b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("Entities.LinkPart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PartId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("PartId");
+
+                    b.ToTable("LinkParts");
                 });
 
             modelBuilder.Entity("Entities.Location", b =>
@@ -124,6 +166,129 @@ namespace MntPlus.WPF.Migrations
                     b.ToTable("Locations");
                 });
 
+            modelBuilder.Entity("Entities.Part", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PartNumber")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Parts");
+                });
+
+            modelBuilder.Entity("Entities.PreventiveMaintenance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ScheduleId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.ToTable("PreventiveMaintenances");
+                });
+
+            modelBuilder.Entity("Entities.PreventiveMaintenanceHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ChangedById")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateChanged")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PreventiveMaintenanceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangedById");
+
+                    b.HasIndex("PreventiveMaintenanceId");
+
+                    b.ToTable("PreventiveMaintenanceHistories");
+                });
+
+            modelBuilder.Entity("Entities.Request", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Requester")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("SubmittedById")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubmittedById");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -139,7 +304,33 @@ namespace MntPlus.WPF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Entities.Schedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Interval")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastScheduledDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("NextScheduledDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ScheduleType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("Entities.Team", b =>
@@ -209,7 +400,7 @@ namespace MntPlus.WPF.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Entities.UserTeam", b =>
@@ -242,13 +433,28 @@ namespace MntPlus.WPF.Migrations
                     b.Property<Guid?>("AssetId")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("Number")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Priority")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Requester")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
@@ -263,6 +469,9 @@ namespace MntPlus.WPF.Migrations
                     b.Property<Guid?>("UserAssignedToId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("UserCreatedId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssetId");
@@ -271,7 +480,9 @@ namespace MntPlus.WPF.Migrations
 
                     b.HasIndex("UserAssignedToId");
 
-                    b.ToTable("WorkOrder");
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("WorkOrders");
                 });
 
             modelBuilder.Entity("Entities.WorkOrderHistory", b =>
@@ -304,6 +515,28 @@ namespace MntPlus.WPF.Migrations
                     b.ToTable("WorkOrderHistories");
                 });
 
+            modelBuilder.Entity("Entities.WorkTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PreventiveID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PreventiveMaintenanceId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PreventiveMaintenanceId");
+
+                    b.ToTable("WorkTasks");
+                });
+
             modelBuilder.Entity("Entities.Asset", b =>
                 {
                     b.HasOne("Entities.Asset", "Parent")
@@ -319,13 +552,34 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Entities.Instruction", b =>
+            modelBuilder.Entity("Entities.Inventory", b =>
                 {
-                    b.HasOne("Entities.WorkOrder", "WorkOrder")
-                        .WithMany("Instructions")
-                        .HasForeignKey("WorkOrderID");
+                    b.HasOne("Entities.Part", "Part")
+                        .WithMany()
+                        .HasForeignKey("PartID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("WorkOrder");
+                    b.Navigation("Part");
+                });
+
+            modelBuilder.Entity("Entities.LinkPart", b =>
+                {
+                    b.HasOne("Entities.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Part", "Part")
+                        .WithMany()
+                        .HasForeignKey("PartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Part");
                 });
 
             modelBuilder.Entity("Entities.Location", b =>
@@ -335,6 +589,45 @@ namespace MntPlus.WPF.Migrations
                         .HasForeignKey("IdParent");
 
                     b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Entities.PreventiveMaintenance", b =>
+                {
+                    b.HasOne("Entities.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId");
+
+                    b.HasOne("Entities.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleId");
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("Entities.PreventiveMaintenanceHistory", b =>
+                {
+                    b.HasOne("Entities.User", "ChangedBy")
+                        .WithMany()
+                        .HasForeignKey("ChangedById");
+
+                    b.HasOne("Entities.PreventiveMaintenance", "PreventiveMaintenance")
+                        .WithMany("PreventiveMaintenanceHistories")
+                        .HasForeignKey("PreventiveMaintenanceId");
+
+                    b.Navigation("ChangedBy");
+
+                    b.Navigation("PreventiveMaintenance");
+                });
+
+            modelBuilder.Entity("Entities.Request", b =>
+                {
+                    b.HasOne("Entities.User", "SubmittedBy")
+                        .WithMany()
+                        .HasForeignKey("SubmittedById");
+
+                    b.Navigation("SubmittedBy");
                 });
 
             modelBuilder.Entity("Entities.UserRole", b =>
@@ -389,11 +682,17 @@ namespace MntPlus.WPF.Migrations
                         .WithMany()
                         .HasForeignKey("UserAssignedToId");
 
+                    b.HasOne("Entities.User", "UserCreatedBy")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
                     b.Navigation("Asset");
 
                     b.Navigation("TeamAssignedTo");
 
                     b.Navigation("UserAssignedTo");
+
+                    b.Navigation("UserCreatedBy");
                 });
 
             modelBuilder.Entity("Entities.WorkOrderHistory", b =>
@@ -411,9 +710,25 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("WorkOrder");
                 });
 
+            modelBuilder.Entity("Entities.WorkTask", b =>
+                {
+                    b.HasOne("Entities.PreventiveMaintenance", "PreventiveMaintenance")
+                        .WithMany("Tasks")
+                        .HasForeignKey("PreventiveMaintenanceId");
+
+                    b.Navigation("PreventiveMaintenance");
+                });
+
             modelBuilder.Entity("Entities.Location", b =>
                 {
                     b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("Entities.PreventiveMaintenance", b =>
+                {
+                    b.Navigation("PreventiveMaintenanceHistories");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("Entities.Role", b =>
@@ -435,8 +750,6 @@ namespace MntPlus.WPF.Migrations
 
             modelBuilder.Entity("Entities.WorkOrder", b =>
                 {
-                    b.Navigation("Instructions");
-
                     b.Navigation("WorkOrderHistories");
                 });
 #pragma warning restore 612, 618

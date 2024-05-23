@@ -73,11 +73,14 @@ namespace MntPlus.WPF
         public ICommand LocationCommand { get; set; }
         public ICommand RequestsCommand { get; set; }
         public ICommand PmCommand { get; set; }
+        public ICommand PartsInventoryCommand { get; set; }
+        public ICommand CheckListCommand { get; set; }
+        public ICommand MetersCommand { get; set; }
         #endregion
 
         #region Constructor
         public SideMenuViewModel()
-        { 
+        {  
             TravailCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.ManageWork) /*TravailMenuEnabled = true*/);//^
             ToggleCommand = new RelayCommand(async () => await ToggleAction());
             DashboardCommand = new RelayCommand(async () => await ToDashPage());
@@ -87,6 +90,9 @@ namespace MntPlus.WPF
             LocationCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Locations));
             RequestsCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Requests));
             PmCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.PreventiveMaintenance));
+            PartsInventoryCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.PartsInventory));
+            CheckListCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Checklists));
+            MetersCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Meters));
 
         }
 

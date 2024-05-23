@@ -13,5 +13,7 @@ namespace Contracts
         Task<WorkOrder?> GetWorkOrderAsync(Guid workOrderId, bool trackChanges);
         void CreateWorkOrder(WorkOrder workOrder);
         void DeleteWorkOrder(WorkOrder workOrder);
+        Task<int> GetNextWorkOrderNumberAsync();
+
     }
 }

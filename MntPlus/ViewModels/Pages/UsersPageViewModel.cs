@@ -1,22 +1,24 @@
 ﻿using Entities;
 using Shared;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MntPlus.WPF
 {
     public class UsersPageViewModel : BaseViewModel
     {
-        public ObservableCollection<UserDto>? FilterUsers { get; set; }
-        private ObservableCollection<UserDto>? users { get; set; }
-        public ObservableCollection<UserDto>? Users
+        public ObservableCollection<UserWithRolesDto>? FilterUsers { get; set; }
+        private ObservableCollection<UserWithRolesDto>? users { get; set; }
+        public ObservableCollection<UserWithRolesDto>? Users
         { 
             get => users; 
             set {
                 users = value; 
                 if (users is not null)
-                    FilterUsers = new ObservableCollection<UserDto>(users);
-            } }
+                    FilterUsers = new ObservableCollection<UserWithRolesDto>(users);
+            } 
+        } 
         private ApplicationPage _currentPage;
 
         public ApplicationPage CurrentPage
@@ -59,6 +61,11 @@ namespace MntPlus.WPF
         public ICommand ToTeamsPageCommand { get; set; }
         public ICommand OpenWindowCommand { get; set; }
         public ICommand DeleteUsersCommand { get; set; }
+        public ICommand AssigneRoleCommand { get; set; }
+
+        public UserStore? UserStore { get; set; }
+        public RoleStore? RoleStore { get; set; }
+
         public UsersPageViewModel()
         {
             MenuActionCommand = new RelayCommand(() => IsMenuActionOpen = !IsMenuActionOpen);
@@ -67,12 +74,63 @@ namespace MntPlus.WPF
             OpenWindowCommand = new RelayCommand(OpenUserWindow);
             DeleteUsersCommand = new RelayCommand(RemoveSelectedItems);
             SearchCommand = new RelayCommand(Search);
-
+            AssigneRoleCommand = new RelayParameterizedCommand((p) => AssigneRole(p));
+            //_ = GetUsers();
+            GetUsers().GetAwaiter().GetResult();
+            UserStore = new UserStore();
+            UserStore.UserCreated += UserStore_UserCreated;
+            RoleStore = new RoleStore();
+            RoleStore.UserRoleAssigned += RoleStore_UserRoleAssigned;
         }
 
+        private void AssigneRole(object? p)
+        {
+            var user = p as UserWithRolesDto;
+            if (user is null) { return; }
+            AssignNewRole assignNewRole = new AssignNewRole() { DataContext = new AssignNewRoleViewModel(user.UserDto.Id, RoleStore,user.UserRoles) };
+            assignNewRole.ShowDialog();
+        }
+
+        private void RoleStore_UserRoleAssigned(UserRoleDto? dto)
+        {
+            var user = Users?.FirstOrDefault(u => u.UserDto?.Id == dto?.UserId);
+            if (user is null) { return; }
+            user.UserRoles?.Add(dto?.Role);
+        }
+
+        private void UserStore_UserCreated(UserWithRolesDto? dto)
+        {
+            if (dto == null) { return; }
+            Users ??= new ObservableCollection<UserWithRolesDto>();
+            FilterUsers ??= new ObservableCollection<UserWithRolesDto>();
+            Users.Add(dto);
+            FilterUsers.Add(dto);
+            
+        }
+
+        private async Task GetUsers()
+        {
+            var result = await AppServices.ServiceManager.UserService.GetAllUsersAsync(false);
+            if (result.Success && result is ApiOkResponse<IEnumerable<UserWithRolesDto>> response )
+            {
+                Users = new ObservableCollection<UserWithRolesDto>(response.Result!);
+            }
+            else if ( result is ApiBadRequestResponse r)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la récupération des utilisateurs"));
+                Users = new ObservableCollection<UserWithRolesDto>();
+
+            }else if ( result is ApiNotFoundResponse n)
+            {
+                MessageBox.Show("Aucun utilisateur trouvé");
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info,"Aucun utilisateur trouvé"));
+                Users = new ObservableCollection<UserWithRolesDto>();
+            }
+           
+        }
         private void OpenUserWindow()
         {
-            AddUserWindow addUserWindow = new () { DataContext = new AddUserViewModel()};
+            AddUserWindow addUserWindow = new () { DataContext = new AddUserViewModel(UserStore)};
             addUserWindow.ShowDialog();
             
         }
@@ -90,7 +148,7 @@ namespace MntPlus.WPF
         {
             if (FilterUsers is null || FilterUsers.Count == 0)
                 return;
-            var selectedItems = FilterUsers.Where(item => item.IsChecked).ToList();
+            var selectedItems = FilterUsers.Where(item => item.UserDto.IsChecked).ToList();
             foreach (var item in selectedItems)
             {
                 FilterUsers.Remove(item);
@@ -107,16 +165,15 @@ namespace MntPlus.WPF
             if (string.IsNullOrEmpty(SearchText) || Users is null || Users.Count <= 0)
             {
                 // Make filtered list the same
-                FilterUsers = new ObservableCollection<UserDto>(Users ?? Enumerable.Empty<UserDto>());
+                FilterUsers = new ObservableCollection<UserWithRolesDto>(Users ?? Enumerable.Empty<UserWithRolesDto>());
 
                 // Set last search text
                 mLastSearchText = SearchText;
 
                 return;
             }
-            FilterUsers = new ObservableCollection<UserDto>(
-                Users.Where(item => item.FirstName is not null && item.FirstName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-               item.LastName is not null && item.FirstName is not null && item.LastName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+            FilterUsers = new ObservableCollection<UserWithRolesDto>(
+                Users.Where(item => item.UserDto.FullName is not null && item.UserDto.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
             // Set last search text
             mLastSearchText = SearchText;
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class MaintenanceActivities
+    public class PreventiveMaintenance
     {
         [Key]
         public Guid Id { get; set; }
@@ -23,6 +23,9 @@ namespace Entities
         [ForeignKey(nameof(Schedule))]
         public Guid? ScheduleId { get; set; }
         public Schedule? Schedule { get; set; }
+
+        public ICollection<WorkTask>? Tasks { get; set; }
+        public ICollection<PreventiveMaintenanceHistory>? PreventiveMaintenanceHistories { get; set; }
 
     }
 }
