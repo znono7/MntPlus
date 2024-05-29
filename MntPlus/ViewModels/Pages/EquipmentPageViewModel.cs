@@ -102,11 +102,103 @@ namespace MntPlus.WPF
             }
             FilterAssetControl = new FilterAssetControlViewModel();
             FilterAssetControl.FilterByCategoryFonction = FilterByCategory;
+            FilterAssetControl.FilterByStatutFonction = FilterByStatut;
+            FilterAssetControl.FilterBySerialNumberFonction = FilterBySerialNumber;
+            FilterAssetControl.FilterByModelFonction = FilterByModel;
+            FilterAssetControl.FilterByMakeFonction = FilterByMake;
             OpenFilterCommand = new RelayCommand(() => IsFilterOpen = !IsFilterOpen);
             FilterTags = new ObservableCollection<TagControlViewModel>();
             AppliedFilters = new ObservableCollection<FilterCriteria>();
 
 
+        }
+
+        private async Task FilterByMake(string? arg)
+        {
+            if (EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Marque:", arg, EquipmentFilterType.Make);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(
+                    e => e.Make != null && e.Make.Contains(arg!, StringComparison.OrdinalIgnoreCase)).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.Make, arg);
+                AppliedFilters.Add(filterCriteria);
+
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
+        }
+
+        private async Task FilterByModel(string? arg)
+        {
+            if (EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Modèle:", arg, EquipmentFilterType.Model);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(
+                    e => e.Model!=null && e.Model.Contains(arg!,StringComparison.OrdinalIgnoreCase)).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.Model, arg);
+                AppliedFilters.Add(filterCriteria);
+
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
+            
+        }
+
+        private async Task FilterBySerialNumber(string? arg)
+        {
+            if (EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Numéro de série:", arg, EquipmentFilterType.SerialNumber);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.SerialNumber == arg).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.SerialNumber, arg);
+                AppliedFilters.Add(filterCriteria);
+
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
+            
+        }
+
+        private async Task FilterByStatut(AssetStatus status)
+        {
+            if (EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Category:", status.Name, EquipmentFilterType.Statut);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.Status == status.Name).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.Statut, status.Name);
+                AppliedFilters.Add(filterCriteria);
+
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
         }
 
         private async Task FilterByCategory(EquipmentCategory category)

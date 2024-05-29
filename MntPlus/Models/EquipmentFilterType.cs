@@ -10,5 +10,9 @@ namespace MntPlus.WPF
     {
         None = 0,
         Category = 1,
+        Statut = 2,
+        SerialNumber = 3,
+        Model = 4,
+        Make = 5
     }
 }

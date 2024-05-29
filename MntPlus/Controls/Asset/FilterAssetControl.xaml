@@ -23,17 +23,19 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Button Command="{Binding CategoryPopupCommand}" x:Name="CategoryBtn" Content="Catégorie" Style="{StaticResource FilterButton}"/>
             <Button Grid.Row="1" Command="{Binding CategoryPopupCommand}" x:Name="LocationBtn" Content="Localisation" Style="{StaticResource PopupButton}"/>
-            <Button Grid.Row="2" Command="{Binding CategoryPopupCommand}" x:Name="StatusBtn" Content="Statut" Style="{StaticResource FilterButton}"/>
-            <Button Grid.Row="3" Command="{Binding CategoryPopupCommand}" x:Name="SerialNbrBtn" Content="Numéro de série" Style="{StaticResource FilterButton}"/>
-            <Button Grid.Row="4" Command="{Binding CategoryPopupCommand}" x:Name="ModelBtn" Content="Modèle" Style="{StaticResource FilterButton}"/>
-            <Button Grid.Row="5" Command="{Binding CategoryPopupCommand}" x:Name="MakeBtn" Content="Fabricant" Style="{StaticResource FilterButton}"/>
-            <Button Grid.Row="6" Command="{Binding CategoryPopupCommand}" x:Name="ServiceBtn" Content="Date de mise en service" Style="{StaticResource FilterButton}"/>
-            <Button Grid.Row="7" Command="{Binding CategoryPopupCommand}" x:Name="CreatedBtn" Content="Date Créée" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="2" Command="{Binding StatutPopupCommand}" x:Name="StatusBtn" Content="Statut" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="3" Command="{Binding SerialNumberPopupCommand}" x:Name="SerialNbrBtn" Content="Numéro de série" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="4" Command="{Binding ModelPopupCommand}" x:Name="ModelBtn" Content="Modèle" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="5" Command="{Binding MakePopupCommand}" x:Name="MakeBtn" Content="Fabricant" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="6" Command="{Binding DayeServicePopupCommand}" x:Name="ServiceBtn" Content="Date de mise en service" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="7" Command="{Binding DayeCreatedPopupCommand}" x:Name="CreatedBtn" Content="Date Créée" Style="{StaticResource FilterButton}"/>
+            <Button Grid.Row="8" Margin="0 15" Command="{Binding ResetCommand}" x:Name="restBtn" Content="Effacer Tout" Style="{StaticResource TextButton}" Foreground="{DynamicResource PrimaryBlueColor}"/>
         </Grid>
-        <Popup StaysOpen="True" Placement="Right" PlacementTarget="{Binding ElementName=CategoryBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsCategoryPopupOpen}" x:Name="CategoryPopup">
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=CategoryBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsCategoryPopupOpen}" x:Name="CategoryPopup">
             <Grid>
                 <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
                     <Border.Effect>
@@ -47,7 +49,21 @@
                 </StackPanel>
             </Grid>
         </Popup>
-        <!--<Popup StaysOpen="True" Placement="Right" PlacementTarget="{Binding ElementName=CategoryBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsCategoryPopupOpen}" >
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=StatusBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsStatutPopupOpen}" x:Name="StatusPopup">
+            <Grid>
+                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                                 Color="LightSlateGray" Opacity="0.2" />
+                    </Border.Effect>
+                </Border>
+                <StackPanel>
+                    <TextBlock Text="Statut" Style="{StaticResource LabelTextBlockStyle}"/>
+                    <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding AssetStatuses.AssetStatusList}" SelectedItem="{Binding SelectedEquipmentCategory}" Style="{StaticResource ComboBoxStyle3}" Margin="4 0 4 20" Width="280"/>
+                </StackPanel>
+            </Grid>
+        </Popup>
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=SerialNbrBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsSerialNumberPopupOpen}" >
             <Grid>
                 <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
                     <Border.Effect>
@@ -56,15 +72,180 @@
                     </Border.Effect>
                 </Border>
                 <StackPanel >
-                    <TextBlock Text="Catégorie" Style="{StaticResource LabelTextBlockStyle}"/>
-                    <TextBox Style="{StaticResource InputTextBoxStyle}"/>
+                    <TextBlock Text="Numéro de série" Style="{StaticResource LabelTextBlockStyle}"/>
+                    <TextBox Text="{Binding SerialNumber,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding FilterSerialNumberCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
                 </StackPanel>
             </Grid>
         </Popup>
-        <TextBox.InputBindings>
-      <KeyBinding Key="Enter" Command="{Binding EnterKeyCommand}"/>
-      <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}"/>
-  </TextBox.InputBindings>
-        -->
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=ModelBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsModelPopupOpen}" >
+            <Grid>
+                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                          Color="LightSlateGray" Opacity="0.2" />
+                    </Border.Effect>
+                </Border>
+                <StackPanel >
+                    <TextBlock Text="Modèle" Style="{StaticResource LabelTextBlockStyle}"/>
+                    <TextBox Text="{Binding Model,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding FilterByModelCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+        </Popup>
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=MakeBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsMakePopupOpen}" >
+            <Grid>
+                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                   Color="LightSlateGray" Opacity="0.2" />
+                    </Border.Effect>
+                </Border>
+                <StackPanel >
+                    <TextBlock Text="Modèle" Style="{StaticResource LabelTextBlockStyle}"/>
+                    <TextBox Text="{Binding Make,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding FilterByMakeCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+        </Popup>
+
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=ServiceBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsDayeServicePopupOpen}" >
+            <Grid>
+                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+           Color="LightSlateGray" Opacity="0.2" />
+                    </Border.Effect>
+                </Border>
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="5">
+                        <TextBlock Text="Depuis"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                        <Grid Width="120" HorizontalAlignment="Left" Margin="0 0 0 0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="DateBorder2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Border Grid.Column="0" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Button  Command="{Binding OpenMenuFromDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                            </Button>
+                            <TextBlock Text="{Binding FromDateServiceText,UpdateSourceTrigger=PropertyChanged}" Margin="4 0" Grid.Column="1" Style="{StaticResource TextBlockStyle}"/>
+                            <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuFromDateOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup2">
+                                <Grid >
+
+                                    <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                    SelectedDate="{Binding FromDateService, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="2" Margin="5">
+                        <TextBlock Text="à"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                        <Grid Width="120" HorizontalAlignment="Left" Margin="0 0 0 0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="DateBorder3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Border Grid.Column="0" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Button  Command="{Binding OpenMenuToDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                            </Button>
+                            <TextBlock Text="{Binding ToDateServiceText,UpdateSourceTrigger=PropertyChanged}" Margin="4 0" Grid.Column="1" Style="{StaticResource TextBlockStyle}"/>
+                            <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuToDateOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder3}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup3">
+                                <Grid >
+
+                                    <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                    SelectedDate="{Binding ToDateService, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </Popup>
+
+
+        <Popup StaysOpen="False" Placement="Right" PlacementTarget="{Binding ElementName=CreatedBtn}" AllowsTransparency="True" HorizontalOffset="5" IsOpen="{Binding IsDayeCreatedPopupOpen}" >
+            <Grid>
+                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+           Color="LightSlateGray" Opacity="0.2" />
+                    </Border.Effect>
+                </Border>
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="5">
+                        <TextBlock Text="Depuis"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                        <Grid Width="120" HorizontalAlignment="Left" Margin="0 0 0 0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="DateBorderCreate1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Border Grid.Column="0" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Button  Command="{Binding OpenMenuFromDateCreatedCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                            </Button>
+                            <TextBlock Text="{Binding FromDateCreatedText,UpdateSourceTrigger=PropertyChanged}" Margin="4 0" Grid.Column="1" Style="{StaticResource TextBlockStyle}"/>
+                            <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsFromDayeCreatedPopupOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderCreate1}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarCreatedPopup">
+                                <Grid >
+
+                                    <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                    SelectedDate="{Binding FromDateCreated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="2" Margin="5">
+                        <TextBlock Text="à"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
+                        <Grid Width="120" HorizontalAlignment="Left" Margin="0 0 0 0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="DateBorderCreate2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Border Grid.Column="0" HorizontalAlignment="Left" Height="37" Width="120" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="4"/>
+                            <Button  Command="{Binding OpenMenuToDateCreatedCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                            </Button>
+                            <TextBlock Text="{Binding ToDateCreatedText,UpdateSourceTrigger=PropertyChanged}" Margin="4 0" Grid.Column="1" Style="{StaticResource TextBlockStyle}"/>
+                            <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsToDayeCreatedPopupOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderCreate2}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarCreatedPopup2">
+                                <Grid >
+
+                                    <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                    SelectedDate="{Binding ToDateCreated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </Popup>
+
     </Grid>
 </UserControl>

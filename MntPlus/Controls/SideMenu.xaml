@@ -49,8 +49,11 @@
         <!-- Menu -->
         <StackPanel  Grid.Row="3" >
             <RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup" x:Name="rdWork"  Content="Ordres de Travail" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource workorder}" />
-            <RadioButton Command="{Binding PmCommand}" GroupName="MyGroup"  Content="Maintenance Préventive" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource preventive}" />
             <RadioButton Command="{Binding RequestsCommand}" GroupName="MyGroup"  Content="Demandes" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource headphones}" />
+
+            <RadioButton Command="{Binding PmCommand}" GroupName="MyGroup"  Content="Maintenance Préventive" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource preventive}" />
+            <RadioButton Command="{Binding MetersCommand}" GroupName="MyGroup" Content="Compteur" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource metre}"  />
+
             <!--<RadioButton Command="{Binding TravailCommand}" GroupName="MyGroup"  Content="Analytique" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource analytics}" />-->
         </StackPanel>
         <Rectangle Margin="0 5" Height="1" Grid.Row="4" Fill="{DynamicResource LineColor}"/>
@@ -58,7 +61,6 @@
             <RadioButton Command="{Binding LocationCommand}" GroupName="MyGroup"  Content="Localisations" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource loc}"  />
             <RadioButton Command="{Binding EquipementCommand}" GroupName="MyGroup" Content="Équipements" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource box}" />
             <RadioButton Command="{Binding PartsInventoryCommand}" GroupName="MyGroup" Content="Pièces &amp; Inventaire" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource part}"  />
-            <RadioButton Command="{Binding MetersCommand}" GroupName="MyGroup" Content="Mètres" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource metre}"  />
         </StackPanel>
         <Rectangle Margin="0 5" Height="1" Grid.Row="6" Fill="{DynamicResource LineColor}"/>
         <StackPanel  Grid.Row="7" >
