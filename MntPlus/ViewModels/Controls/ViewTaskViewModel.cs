@@ -171,16 +171,13 @@ namespace MntPlus.WPF
             RemoveInstructionCommand = new RelayParameterizedCommand(async(p) => await RemoveInstruction(p));
 
 
-            CommentControlViewModel = new CommentControlViewModel("Ouvrir", null, dto?.Id);
-            CommentControlViewModel.CommitAction = MenuComment;
-            OpenCommentControlCommand = new RelayCommand(async () => await MenuComment());
+           
 
         }
 
         private async Task MenuComment()
         {
-            CommentControlViewModel = new CommentControlViewModel("Ouvrir", null, Dto?.Id);
-            CommentControlViewModel.CommitAction = MenuComment;
+           
             IsCommentControlOpen = !IsCommentControlOpen;
             DimmableOverlayVisible = IsCommentControlOpen ? true : false;
             await Task.Delay(1);

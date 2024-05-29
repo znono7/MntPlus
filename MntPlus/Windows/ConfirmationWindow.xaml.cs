@@ -28,7 +28,7 @@ namespace MntPlus.WPF
            
             Confirmed = false;
             EquipmentName = _EquipmentName;
-            TitleWindow = $"Supprimer l'équipement - {EquipmentName}";
+            TitleWindow = $"Supprimer  {EquipmentName}";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

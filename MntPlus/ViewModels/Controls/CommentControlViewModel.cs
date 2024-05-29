@@ -12,28 +12,23 @@ namespace MntPlus.WPF
     public class CommentControlViewModel : BaseViewModel
     {
         public string? Comment { get; set; }
-        public Func<Task> CommitAction { get; set; }
-        public ICommand AddCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
+        public Func<CommentControlViewModel, Task>? RemoveItemFunc { get; set; }
 
         public bool Working { get; set; }
-        public string? Status { get; }
-        public UserDto? ChangedBy { get; }
-        public Guid? WorkOrderId { get; }
+        public WorkOrderHistoryDto? WorkOrderHistoryDto { get; }
 
-        public CommentControlViewModel(string? Status, UserDto? ChangedBy, Guid? WorkOrderId)
+        public CommentControlViewModel(WorkOrderHistoryDto? workOrderHistoryDto)
         {
-            AddCommand = new RelayCommand(async () => await Add());
-            CancelCommand = new RelayCommand(() => CommitAction());
-            this.Status = Status;
-            this.ChangedBy = ChangedBy;
-            this.WorkOrderId = WorkOrderId;
+            RemoveCommand = new RelayCommand(async () => await Remove());
+            WorkOrderHistoryDto = workOrderHistoryDto;
         }
 
-        private async Task Add()
+        private async Task Remove()
         {
-            var result = default(bool);
-           
+            if(RemoveItemFunc == null)
+                return;
+            await RemoveItemFunc(this);
         }
     }
 }

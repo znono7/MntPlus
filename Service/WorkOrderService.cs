@@ -20,9 +20,24 @@ namespace Service
             _repository = repository;
             _mapper = mapper;
         }
+
+        public async Task<ApiBaseResponse> CreateLastNumberWorkOrder()
+        {
+            try
+            {
+                int? Num = await _repository.WorkOrder.GetNextWorkOrderNumberAsync();
+                return new ApiOkResponse<int?>(Num);
+            }
+            catch (Exception ex)
+            {
+                return new ApiBadRequestResponse(ex.Message);
+            }
+            
+        }
+
         public async Task<ApiBaseResponse> CreateWorkOrder(WorkOrderForCreationDto workOrder)
         {
-            try 
+            try  
             {
                 int? Num = await _repository.WorkOrder.GetNextWorkOrderNumberAsync();
                 var workOrderCreation = new WorkOrderForCreationDto

@@ -221,13 +221,14 @@
                         </StackPanel>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBlock Margin="10 0" Text="Sur" Style="{DynamicResource LabelTextBlockStyle}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Dimanche"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Lundi"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mardi"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mercredi"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Jeudi"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Vendredi"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Samedi"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Dimanche" IsChecked="{Binding IsDimancheChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Lundi" IsChecked="{Binding IsLundiChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mardi" IsChecked="{Binding IsMardiChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mercredi" IsChecked="{Binding IsMercrediChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Jeudi" IsChecked="{Binding IsJeudiChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Vendredi" IsChecked="{Binding IsVendrediChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Samedi" IsChecked="{Binding IsSamediChecked}"/>
+
                         </StackPanel>
 
                     </Grid>
@@ -275,7 +276,7 @@
                             </StackPanel>
                             <StackPanel Margin="20 0" Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock Text="Sur le" Style="{DynamicResource LabelTextBlockStyle}"/>
-                                <ComboBox  ItemsSource="{Binding MonthlyWeekDay}" SelectedItem="{Binding SelectedMonthWeekDay}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="70"/>
+                                <ComboBox  ItemsSource="{Binding MonthlyWeekDay}" SelectedItem="{Binding SelectedMonthlyWeekDay}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="70"/>
                                 <ComboBox  ItemsSource="{Binding WeekDay}" SelectedItem="{Binding SelectedWeekDay}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="100"/>
 
                             </StackPanel>
@@ -320,6 +321,93 @@
                 </StackPanel>
                 <StackPanel Margin="0 10" Grid.Row="3">
                     <RadioButton HorizontalAlignment="Left" GroupName="ScheduleGrp" IsChecked="{Binding IsYearly}" Content="Annuel" Style="{StaticResource ScheduleBtn}"/>
+                    <Grid local:AnimateSlideInFromTopProperty.Value="{Binding IsYearly,FallbackValue=True}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Margin="30 10" Orientation="Horizontal">
+                            <RadioButton HorizontalAlignment="Left" GroupName="ScheduleYearlyGrp" IsChecked="{Binding IsYearlyOrdinal}" Content="Ordinal" Margin="10 0" Style="{StaticResource ScheduleBtn}"/>
+                            <RadioButton HorizontalAlignment="Left" GroupName="ScheduleYearlyGrp" IsChecked="{Binding IsYearlyNumeric}" Content="Numérique" Margin="10 0" Style="{StaticResource ScheduleBtn}"/>
+                        </StackPanel>
+                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsYearlyOrdinal,FallbackValue=True}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="20 10" Grid.Row="0">
+                                <TextBlock Text="Répéter Tous les" Style="{DynamicResource LabelTextBlockStyle}"/>
+                                <Grid Margin="10 0 0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Years}" Style="{DynamicResource TextBlockStyle}" HorizontalAlignment="Center" Grid.Column="2"/>
+                                    <Rectangle Fill="{DynamicResource LineColor}" Width="1" Height="34" Grid.Column="1"/>
+                                    <Rectangle Fill="{DynamicResource LineColor}" Width="1" Height="34" Grid.Column="3"/>
+                                    <Border Grid.ColumnSpan="5" BorderThickness="1" Width="106" Height="34" BorderBrush="{DynamicResource LineColor}" CornerRadius="8"/>
+                                    <Button Command="{Binding DecrementYearsCommand}" Cursor="Hand" Width="32" Style="{DynamicResource TextButton}" >
+                                        <Path Data="{StaticResource minus}" Height="2" Width="10" Stretch="Fill" Fill="{DynamicResource PrimaryTextColor}"/>
+                                    </Button>
+                                    <Button Command="{Binding IncrementYearsCommand}" Grid.Column="4" Cursor="Hand" Width="32" Style="{DynamicResource TextButton}" >
+                                        <Path Data="{StaticResource plus}" Height="10" Width="10" Stretch="Fill" Fill="{DynamicResource PrimaryTextColor}"/>
+                                    </Button>
+
+                                </Grid>
+                                <TextBlock Margin="10 0" Text="année" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Margin="20 0" Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="Sur le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                                <ComboBox  ItemsSource="{Binding MonthlyWeekDay}" SelectedItem="{Binding SelectedMonthlyWeekDay}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="70"/>
+                                <ComboBox  ItemsSource="{Binding WeekDay}" SelectedItem="{Binding SelectedWeekDay}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="100"/>
+                                <TextBlock Text="de" Style="{DynamicResource LabelTextBlockStyle}"/>
+                                <ComboBox  ItemsSource="{Binding YearMonths}" SelectedItem="{Binding SelectedYearMonth}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="100"/>
+
+                            </StackPanel>
+                        </Grid>
+                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsYearlyNumeric,FallbackValue=False}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="20 10" Grid.Row="0">
+                                <TextBlock Text="Répéter Tous les" Style="{DynamicResource LabelTextBlockStyle}"/>
+                                <Grid Margin="10 0 0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Years}" Style="{DynamicResource TextBlockStyle}" HorizontalAlignment="Center" Grid.Column="2"/>
+                                    <Rectangle Fill="{DynamicResource LineColor}" Width="1" Height="34" Grid.Column="1"/>
+                                    <Rectangle Fill="{DynamicResource LineColor}" Width="1" Height="34" Grid.Column="3"/>
+                                    <Border Grid.ColumnSpan="5" BorderThickness="1" Width="106" Height="34" BorderBrush="{DynamicResource LineColor}" CornerRadius="8"/>
+                                    <Button Command="{Binding DecrementYearsCommand}" Cursor="Hand" Width="32" Style="{DynamicResource TextButton}" >
+                                        <Path Data="{StaticResource minus}" Height="2" Width="10" Stretch="Fill" Fill="{DynamicResource PrimaryTextColor}"/>
+                                    </Button>
+                                    <Button Command="{Binding IncrementYearsCommand}" Grid.Column="4" Cursor="Hand" Width="32" Style="{DynamicResource TextButton}" >
+                                        <Path Data="{StaticResource plus}" Height="10" Width="10" Stretch="Fill" Fill="{DynamicResource PrimaryTextColor}"/>
+                                    </Button>
+
+                                </Grid>
+
+                                <TextBlock Margin="10 0" Text="année" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Margin="20 0" Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="Sur le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                                <ComboBox  ItemsSource="{Binding MonthlyNumericDay}" SelectedItem="{Binding SelectedMonthlyNumericDay}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="70"/>
+                                <TextBlock Text="de" Style="{DynamicResource LabelTextBlockStyle}"/>
+                                <ComboBox  ItemsSource="{Binding YearMonths}" SelectedItem="{Binding SelectedYearMonth}" Style="{StaticResource ComboBoxStyle3}" Margin="10 0" Width="110"/>
+
+                            </StackPanel>
+                        </Grid>
+
+                    </Grid>
                 </StackPanel>
             </Grid>
         </Grid>

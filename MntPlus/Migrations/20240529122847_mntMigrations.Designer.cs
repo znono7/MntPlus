@@ -11,8 +11,8 @@ using Repository;
 namespace MntPlus.WPF.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240515174714_MntPlusMigration")]
-    partial class MntPlusMigration
+    [Migration("20240529122847_mntMigrations")]
+    partial class mntMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -204,16 +204,31 @@ namespace MntPlus.WPF.Migrations
                     b.Property<Guid?>("AssetId")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("DateCreation")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DueDate")
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FrequencyType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastPerformed")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("NextDue")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("ScheduleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -316,20 +331,29 @@ namespace MntPlus.WPF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("DayOfMonth")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DayOfWeek")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DaysOfWeek")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("Interval")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("LastScheduledDate")
+                    b.Property<bool>("IsDaily")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Month")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("NextScheduledDate")
+                    b.Property<string>("Week")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ScheduleType")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("YearDayOfMonth")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -588,7 +612,7 @@ namespace MntPlus.WPF.Migrations
             modelBuilder.Entity("Entities.Location", b =>
                 {
                     b.HasOne("Entities.Location", "Parent")
-                        .WithMany("Children")
+                        .WithMany()
                         .HasForeignKey("IdParent");
 
                     b.Navigation("Parent");
@@ -720,11 +744,6 @@ namespace MntPlus.WPF.Migrations
                         .HasForeignKey("PreventiveMaintenanceId");
 
                     b.Navigation("PreventiveMaintenance");
-                });
-
-            modelBuilder.Entity("Entities.Location", b =>
-                {
-                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("Entities.PreventiveMaintenance", b =>

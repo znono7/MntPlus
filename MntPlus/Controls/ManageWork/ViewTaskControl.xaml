@@ -17,14 +17,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <!-- Dimmed overlay -->
-        <Border Grid.RowSpan="3" Grid.ColumnSpan="2"
+        <!--<Border Grid.RowSpan="3" Grid.ColumnSpan="2"
                    Panel.ZIndex="10"
                    Opacity="0.3">
 
             <Border Background="{StaticResource PrimaryBlackColor}"
                 local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
 
-        </Border>
+        </Border>-->
         <local:InstructionControl VerticalAlignment="Center" Panel.ZIndex="11"  Grid.ColumnSpan="2" Grid.RowSpan="3" DataContext="{Binding InstructionControlViewModel}" 
                             local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.IsMenuInstructionOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ViewTaskControl}}}" HorizontalAlignment="Right"   />
 

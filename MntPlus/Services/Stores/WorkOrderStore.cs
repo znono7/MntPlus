@@ -10,10 +10,16 @@ namespace MntPlus.WPF
     public class WorkOrderStore
     {
         public event Action<WorkOrderDto?>? WorkOrderCreated;
+        public event Action<WorkOrderDto?>? WorkOrderUpdated;
 
         public void CreateWorkOrder(WorkOrderDto? location)
         {
             WorkOrderCreated?.Invoke(location);
+        }
+
+        public void UpdateWorkOrder(WorkOrderDto? location)
+        {
+            WorkOrderUpdated?.Invoke(location);
         }
     }
 }

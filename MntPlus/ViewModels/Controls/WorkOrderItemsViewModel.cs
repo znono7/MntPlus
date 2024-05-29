@@ -12,7 +12,7 @@ namespace MntPlus.WPF
     {
         public WorkOrderDto? WorkOrderDto { get; set; }
 
-        public string WorkOrderNumber =>  $"00{WorkOrderDto?.Number}";
+        public string WorkOrderNumber =>  $"00000{WorkOrderDto?.Number}"; 
         public string WorkOrderName { get; set; }
         public string PriorityBackground { get; set; } 
 
@@ -62,23 +62,23 @@ namespace MntPlus.WPF
                 _WorkStat = value;
                 switch (value)
                 {
+                    case "Approuvé":
+                        ForgroundColorStat = "1C62B9";
+                        break;
+                    case "En attente":
+                        ForgroundColorStat = "7B68EE";
+                        break;
+                    case "En service":
+                        ForgroundColorStat = "ef6a00";
+                        break;
+                    case "Complet":
+                        ForgroundColorStat = "c22528";
+                        break;
                     case "Ouvrir":
                         ForgroundColorStat = "429b1f";
                         break;
-                    case "En Cours":
-                        ForgroundColorStat = "ef6a00";
-                        break;
-                    case "Complété":
-                        ForgroundColorStat = "32A53D";
-                        break;
-                        case "Fermé":
-                        ForgroundColorStat = "A4342F";
-                        break;
-                        case "Annulé":
-                        ForgroundColorStat = "464E47";
-                        break;
-                        case "En Attente":
-                        ForgroundColorStat = "AFC2B1";
+                    case "Non spécifique":
+                        ForgroundColorStat = "B3B3B3";
                         break;
                 }
             }
@@ -94,8 +94,8 @@ namespace MntPlus.WPF
 
         public ICommand ViewOrderWorkCommand { get; set; }
 
-        public Func<WorkOrderDto?, Task>? ViewOrderWork { get; set; }
-        public WorkOrderItemsViewModel(WorkOrderDto workOrderDto)
+        public Func<WorkOrderDto?, Task>? ViewOrderWork { get; set; } 
+        public WorkOrderItemsViewModel(WorkOrderDto? workOrderDto)
         {
             WorkOrderDto = workOrderDto;
             WorkOrderName = WorkOrderDto?.Name ?? string.Empty;

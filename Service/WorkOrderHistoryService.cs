@@ -64,9 +64,14 @@ namespace Service
                 var workOrderHistories = await _repository.WorkOrderHistory.GetWorkOrderHistoriesAsync(workOrderId, trackChanges);
                 if (workOrderHistories is null)
                 {
-                    return new ApiNotFoundResponse("");
+                    return new ApiNotFoundResponse(""); 
                 }
-                var workOrderHistoriesDto = _mapper.Map<IEnumerable<WorkOrderHistoryDto>>(workOrderHistories);
+                List<WorkOrderHistoryDto> workOrderHistoriesDto = new();
+                foreach (var item in workOrderHistories)
+                {
+                    workOrderHistoriesDto.Add(_mapper.Map<WorkOrderHistoryDto>(item));
+                }
+                //var workOrderHistoriesDto = _mapper.Map<IEnumerable<WorkOrderHistoryDto>>(workOrderHistories);
                 return new ApiOkResponse<IEnumerable<WorkOrderHistoryDto>>(workOrderHistoriesDto);
             }
             catch (Exception ex)

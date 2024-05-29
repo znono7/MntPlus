@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class MntPlusMigration : Migration
+    public partial class mntMigrations : Migration
     {
-        /// <inheritdoc /> 
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -68,7 +68,7 @@ namespace MntPlus.WPF.Migrations
                                 { Guid.NewGuid(), "Ingénieur GMAO", true },
                                 { Guid.NewGuid(), "Responsable", true },
                                 { Guid.NewGuid(), "Demandeur", true }
-                               
+
                            });
 
             migrationBuilder.CreateTable(
@@ -76,11 +76,14 @@ namespace MntPlus.WPF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ScheduleType = table.Column<string>(type: "TEXT", nullable: true),
                     Interval = table.Column<int>(type: "INTEGER", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LastScheduledDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NextScheduledDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    IsDaily = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DaysOfWeek = table.Column<string>(type: "TEXT", nullable: true),
+                    Week = table.Column<string>(type: "TEXT", nullable: true),
+                    DayOfWeek = table.Column<string>(type: "TEXT", nullable: true),
+                    DayOfMonth = table.Column<int>(type: "INTEGER", nullable: true),
+                    Month = table.Column<string>(type: "TEXT", nullable: true),
+                    YearDayOfMonth = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -286,7 +289,12 @@ namespace MntPlus.WPF.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    FrequencyType = table.Column<string>(type: "TEXT", nullable: true),
+                    LastPerformed = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    NextDue = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DateCreation = table.Column<DateTime>(type: "TEXT", nullable: true),
                     AssetId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ScheduleId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },

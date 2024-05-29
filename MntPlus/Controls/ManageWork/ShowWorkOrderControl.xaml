@@ -1,0 +1,174 @@
+﻿<UserControl x:Class="MntPlus.WPF.ShowWorkOrderControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MntPlus.WPF"
+             mc:Ignorable="d" Width="600" Background="{DynamicResource TertiaryBackgroundColor}"
+             d:DesignHeight="1000" d:DesignWidth="600">
+    <Grid  HorizontalAlignment="Center" Width="500" Background="{DynamicResource TertiaryBackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Détail du Ordre de Travail"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center"/>
+        <Button Command="{Binding CloseCommand}" Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton" HorizontalAlignment="Right"/>
+        <Rectangle Margin="0 20" Height="1" Fill="{DynamicResource LineColor}" Grid.Row="1"/>
+        <TabControl Width="480" Margin="10 0" Grid.Row="3" Style="{StaticResource TabControlStyle}">
+            <TabItem  Style="{StaticResource TabItemStyle}">
+                <TabItem.Header>
+                    <StackPanel Cursor="Hand" Orientation="Horizontal">
+                        <Path Data="{StaticResource priority}" Stretch="Fill" Fill="{DynamicResource FourthTextColor}" Width="16" Height="16"/>
+                        <TextBlock Margin="2 0" FontFamily="{StaticResource ClarityCity-Regular}" Text="Détail" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="1" Text="{Binding Number,FallbackValue=#1230}" Foreground="{DynamicResource FourthTextColor}" Style="{StaticResource LabelTextBlockStyle}" HorizontalAlignment="Right"/>
+                    <TextBlock Margin="0" Grid.Row="2" TextWrapping="Wrap" Height="Auto" Text="{Binding Name}"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Row="3" FontSize="13" Foreground="{DynamicResource FourthTextColor}" TextWrapping="Wrap" Height="Auto" Text="{Binding Description}" Margin="0 5"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                    <Grid HorizontalAlignment="Left" Grid.Row="4" Margin="0 20">
+                        <Border Background="{Binding BackgroundPriority,Converter={local:StringRGBToBrushConverter}}" CornerRadius="7"/>
+                        <TextBlock  FontSize="15" Foreground="{Binding ForgroundPriority,Converter={local:StringRGBToBrushConverter}}" TextWrapping="Wrap" Height="Auto" Text="{Binding WorkPriority}" Margin="20 10"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                    </Grid>
+                    <Rectangle Margin="0 10 0 0" Height="1" Fill="{DynamicResource LineColor}" Grid.Row="0" />
+                    <Rectangle Height="1" Fill="{DynamicResource LineColor}" Grid.Row="5"/>
+                    <Rectangle Height="1" Fill="{DynamicResource LineColor}" Grid.Row="7"/>
+                    <StackPanel x:Name="StatStack" Orientation="Horizontal" Margin="10 5" Grid.Row="6">
+                        <TextBlock  Text="Statut" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0"  Style="{StaticResource TextBlockStyle}" />
+                        <Grid Margin="20 0" HorizontalAlignment="Left" x:Name="StatGrid">
+                            <Border Background="#A79AF3" CornerRadius="7"/>
+
+                            <Button Margin="20 0" Command="{Binding OpenMenuStatCommand}" HorizontalAlignment="Stretch"  Foreground="{Binding ForgroundColorStat,FallbackValue=Black,Converter={local:StringRGBToBrushConverter}}" 
+                            Content="{Binding Status,UpdateSourceTrigger=PropertyChanged,FallbackValue=Ouvrir}">
+                                <Button.Style >
+                                    <Style TargetType="Button" BasedOn="{StaticResource PrimeButton3}">
+                                        <Setter Property="Tag" Value="{StaticResource statopen}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status}" Value="Ouvrir">
+                                                <Setter Property="Tag" Value="{StaticResource statopen}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="En service">
+                                                <Setter Property="Tag" Value="{StaticResource statinprogress}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Complet">
+                                                <Setter Property="Tag" Value="{StaticResource statcomplete}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Approuvé">
+                                                <Setter Property="Tag" Value="{StaticResource done}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="En attente">
+                                                <Setter Property="Tag" Value="{StaticResource dots}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Non spécifique">
+                                                <Setter Property="Tag" Value="{StaticResource priority}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                    <Popup StaysOpen="False" PopupAnimation="Scroll"  HorizontalAlignment="Center"   IsOpen="{Binding IsMenuStatOpen}" PlacementTarget="{Binding ElementName=StatGrid}" Placement="Bottom" AllowsTransparency="True" >
+                        <Grid>
+                            <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                            <StackPanel Margin="1 20 1 20">
+                                <Button Command="{Binding ApprovedCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource done}" Foreground="#1C62B9" Content="Approuvé"/>
+                                <Button Command="{Binding PendingCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource dots}" Foreground="#7B68EE" Content="En attente"/>
+                                <Button Command="{Binding OpenStatCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statopen}" Foreground="#429b1f" Content="Ouvrir"/>
+                                <Button Command="{Binding InServiceCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statinprogress}" Foreground="#ef6a00" Content="En service"/>
+                                <Button Command="{Binding CompleteCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource statcomplete}" Foreground="#c22528" Content="Complet"/>
+                                <Button Command="{Binding NonSpecificCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource priority}" Foreground="#B3B3B3" Content="Non spécifique"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
+                    <Grid Grid.Row="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Type : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding WorkOrder.Type}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Assigné à : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AssignedTo}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Localisation : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Location}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Équipement : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Equipment}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Créé : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Created}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem  Style="{StaticResource TabItemStyle}" Width="180">
+                <TabItem.Header>
+                    <StackPanel Cursor="Hand" Orientation="Horizontal">
+                        <Path Data="{StaticResource edit}" Stretch="Fill" Fill="{DynamicResource FourthTextColor}" Width="16" Height="16"/>
+                        <TextBlock Margin="2 0" FontFamily="{StaticResource FontAwesome2}" Text="Mises à jour" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Height="1" Fill="{DynamicResource LineColor}" Grid.Row="0"/>
+                    <StackPanel  Orientation="Vertical" Grid.Row="1" Margin="10 20 0 0">
+
+                        <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Height="94" Padding="5 10" VerticalAlignment="Top" Background="{DynamicResource BackSubButtons}" Tag="Commentaire" Text="{Binding CommentAdded}" Style="{StaticResource InputTextBoxStyle}" Margin="0" Width="450"/>
+
+                    </StackPanel>
+                    <Button  Command="{Binding SaveCommand}" Grid.Row="2" HorizontalAlignment="Right"
+                           Margin="10 20"
+                           local:IsBusyProperty.Value="{Binding SaveIsRunning}" 
+                           Tag="{StaticResource plus}" 
+                           Style="{DynamicResource RegullarPrimeButton}" Content="Envoyer"/>
+                    <Rectangle Height="1" Fill="{DynamicResource LineColor}" Grid.Row="3" Margin="0 0 0 20"/>
+                   
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"  Grid.Row="4"  >
+                        <ItemsControl  ItemsSource="{Binding Comments}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:CommentControl/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Margin" Value="1 10"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

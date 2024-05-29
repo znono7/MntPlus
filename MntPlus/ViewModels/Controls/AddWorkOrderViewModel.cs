@@ -1,17 +1,11 @@
 ﻿using Entities;
 using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MntPlus.WPF
 {
-   public class AddWorkOrderViewModel : BaseViewModel
+    public class AddWorkOrderViewModel : BaseViewModel
     {
         public string ForgroundColor { get; set; } = "53667B";
 
@@ -87,17 +81,20 @@ namespace MntPlus.WPF
         public ICommand BrowseToAssignedCommand { get; set; }
         public ICommand ClearAssignedCommand { get; set; }
         public UserTeamStore? UserTeamStore { get; set; }
-        public Guid UserGuid { get; set; }
-        public Guid TeamGuid { get; set; }
+        public Guid? UserGuid { get; set; }
+        public Guid? TeamGuid { get; set; }
 
         public bool SaveIsRunning { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public Func<Task>? CloseAction { get; set; } 
 
+        public string? Number { get; set; }
+        public WorkOrderStore WorkOrderStore { get; }
 
-        public AddWorkOrderViewModel()
+        public AddWorkOrderViewModel(WorkOrderStore workOrderStore)
         {
+            _ = GetLastNumber();
             BrowseCommand = new RelayCommand(async () => await Browse());
             DeleteImgCommand = new RelayCommand(RemoveImage);
             OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);
@@ -115,6 +112,7 @@ namespace MntPlus.WPF
             ClearAssignedCommand = new RelayCommand(() => { SelectedAssignedTo = null; browseToAssignedVisible = true; });
             SaveCommand = new RelayCommand(async () => await SaveAsync());
             CloseCommand = new RelayCommand(async () => await CloseAsync());
+            WorkOrderStore = workOrderStore;
         }
 
         private async Task SaveAsync()
@@ -132,17 +130,17 @@ namespace MntPlus.WPF
                     Name : Name,
                     Number: null,
                     Description : Description,
-                    Priority : OrderWorkPriority,
+                    Priority : OrderWorkPriority, 
                     StartDate : StartDate,
                     DueDate : DueDate,
                     Type : Type,
-                    Status : "En attente",
+                    Status : "Non spécifique",
                     Requester : "Moi",
                     CreatedOn : DateTime.Now,
-                    UserCreatedId : Guid.Empty,
-                    UserAssignedToId : UserGuid,
-                    TeamAssignedToId : TeamGuid,
-                    AssetId : SelectedAsset?.Id
+                    UserCreatedId : null,
+                    UserAssignedToId : UserGuid == null ? null : UserGuid,
+                    TeamAssignedToId : TeamGuid == null ? null : TeamGuid,
+                    AssetId : SelectedAsset?.Id == null ? null : SelectedAsset?.Id
                 );
                 var Response = await AppServices.ServiceManager.WorkOrderService.CreateWorkOrder(workOrderForCreationDto);
                 if (Response.Success && Response is ApiOkResponse<WorkOrderDto> result)
@@ -151,19 +149,43 @@ namespace MntPlus.WPF
                     WorkOrderHistoryCreateDto historyCreateDto = new
                     (
                         Notes: "Création de l'ordre de travail",
-                        Status: "En attente",
+                        Status: "Non spécifique",
                         DateChanged: DateTime.Now,
                         ChangedById: null,//IoContainer.CurrentUser.Id,
                         WorkOrderId: result.Result?.Id
                     ) ;
                     await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto);
+
+                    WorkOrderHistoryCreateDto historyCreateDto2 = new
+                   (
+                       Notes: Description,
+                       Status: "Non spécifique",
+                       DateChanged: DateTime.Now,
+                       ChangedById: null,//IoContainer.CurrentUser.Id,
+                       WorkOrderId: result.Result?.Id
+                   );
+                    await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto2);
+
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Ordre de travail créé avec succès"));
+                    WorkOrderStore.CreateWorkOrder(result.Result);
                 }else if (Response is ApiBadRequestResponse badRequestResponse)
                 {
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
                 }
             });
             
+        }
+        private async Task GetLastNumber()
+        {
+            var res = await AppServices.ServiceManager.WorkOrderService.CreateLastNumberWorkOrder();
+            if (res.Success && res is ApiOkResponse<int?> result)
+            {
+                Number = $"00000{result.Result}";
+            }else if (res is ApiBadRequestResponse badRequestResponse)
+            {
+                Number = $"00000";
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
+            }
         }
 
         private async Task CloseAsync()

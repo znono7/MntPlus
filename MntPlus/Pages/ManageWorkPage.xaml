@@ -20,11 +20,11 @@
             <Border Background="{StaticResource PrimaryBlackColor}" local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
         </Border>
         <local:AddWorkOrderControl DataContext="{Binding AddWorkOrderViewModel}" Panel.ZIndex="11" 
-               local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.AddWorkOrderPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ManageWorkPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="4" /> 
+               local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.AddWorkOrderPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ManageWorkPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="4" />
 
-       
-        <!--<local:ViewTaskControl DataContext="{Binding TaskViewModel}" Panel.ZIndex="11" 
-                               local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.TaskPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ManageWorkPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="2" />-->
+
+        <local:ShowWorkOrderControl DataContext="{Binding ShowWorkOrderViewModel}" Panel.ZIndex="11" 
+                               local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.TaskPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ManageWorkPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="4" />
         <!--<Grid Margin="20 20 20 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -178,8 +178,8 @@
                       ItemsSource="{Binding FilterWorkOrders,UpdateSourceTrigger=PropertyChanged}"
                       Style="{StaticResource DataGridStyle}"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
-                      RowStyle="{StaticResource DataGridRowStyle3}"
-                      CellStyle="{StaticResource DataGridCellStyle2}"
+                      RowStyle="{StaticResource DataGridRowStyle1}"
+                      CellStyle="{StaticResource DataGridCellStyle}"
                       AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
@@ -189,7 +189,7 @@
                                 </DataTemplate>
                             </DataGridCheckBoxColumn.HeaderTemplate>
                         </DataGridCheckBoxColumn>
-                        <DataGridTemplateColumn Header="ID#" Width="100">
+                        <DataGridTemplateColumn Header="OT#" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Height="Auto" Command="{Binding DataContext.ViewOrderWorkCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
@@ -199,7 +199,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Nom" Width="2*">
+                        <DataGridTemplateColumn Header="Description" Width="2*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Height="Auto" Command="{Binding DataContext.ViewOrderWorkCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"

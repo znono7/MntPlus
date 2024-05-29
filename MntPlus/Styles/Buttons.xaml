@@ -540,6 +540,7 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="12 6"/>
         <Setter Property="BorderBrush" Value="{DynamicResource LineColor2}"/>
         <Setter Property="Height" Value="33"/>
         <Setter Property="Width" Value="Auto"/>
@@ -553,7 +554,7 @@
                             
                         </Border>
 
-                        <Grid>
+                        <Grid HorizontalAlignment="Center" Margin="{TemplateBinding Padding}">
                             <!-- Drop shadow -->
 
                             <Grid.ColumnDefinitions>
@@ -564,14 +565,14 @@
 
                             <!-- Icon -->
                             <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
-                                   Height="16" Width="16" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
-                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15 0 5 0"/>
+                                   Height="13" Width="13" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" />
 
                             <!-- Text -->
                             <TextBlock  Grid.Column="1" x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                        Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
                                       FontWeight="{TemplateBinding FontWeight}"
-                                      FontSize="{TemplateBinding FontSize}"  Margin="0"/>
+                                      FontSize="{TemplateBinding FontSize}"  Margin="10 0"/>
 
                         </Grid>
                         <!--<Border.Effect>
@@ -799,6 +800,7 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="14 6"/>
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBlueColor}"/>
         <Setter Property="Height" Value="33"/>
         <Setter Property="Template">
@@ -811,7 +813,7 @@
                            
                         </Border>
  
-                        <Grid>
+                        <Grid  Margin="{TemplateBinding Padding}">
                             <!-- Drop shadow -->
 
                             <Grid.ColumnDefinitions>
@@ -822,8 +824,8 @@
 
                             <!-- Icon -->
                             <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
-                                   Height="24" Width="24" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
-                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15 0 5 0"/>
+                                   Height="13" Width="13" Stretch="Uniform" Fill="{TemplateBinding Foreground}" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Left" />
 
                             <!-- Text -->
                             <TextBlock  Grid.Column="1" x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
@@ -836,15 +838,15 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                        
-                        <!--<Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="{DynamicResource SecundaryBlueColor}"/>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource BackgroundLight}"/>
 
-                            <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                            <Setter Property="BorderThickness" TargetName="border" Value="1"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PrimaryBlueColor}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="{DynamicResource TertiaryBlueColor}"/>
-                        </Trigger>-->
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

@@ -86,9 +86,9 @@ namespace MntPlus.WPF
         public SelectEquipmentViewModel(AssetStore? assetStore)
         {
             AssetStore = assetStore;
-            GenerateData();
-            //_ = LoadDataAsync();
-            if (EquipmentDtos is not null)
+            //GenerateData();
+            _ = LoadDataAsync();
+            if (EquipmentDtos is not null) 
             {
                 EquipmentTreeViewItems = CreateTreeViewItems(EquipmentDtos.ToList());
                 IterateEquipmentItemsAndChildren(EquipmentTreeViewItems);

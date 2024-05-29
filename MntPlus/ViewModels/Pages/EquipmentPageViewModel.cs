@@ -91,8 +91,8 @@ namespace MntPlus.WPF
             _equipmentStore.AssetUpdated += OnEquipmentUpdated;
           
            
-           // _ = LoadDataAsync();
-            GenerateData();
+            _ = LoadDataAsync();
+           // GenerateData();
            
             if (AssetDtos is not null && AssetDtos.Count > 0)
             {
@@ -221,7 +221,10 @@ namespace MntPlus.WPF
             }
             else
             {
+                EquipmentItemViewModels ??= new ObservableCollection<EquipmentItemViewModel>();
                 EquipmentItemViewModels?.Add(newItemViewModel);
+                FilterEquipmentItemViewModels ??= new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels?.Add(newItemViewModel);
             }
 
           

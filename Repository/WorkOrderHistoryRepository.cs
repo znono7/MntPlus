@@ -21,6 +21,7 @@ namespace Repository
 
         public async Task<IEnumerable<WorkOrderHistory>?> GetWorkOrderHistoriesAsync(Guid workOrderId, bool trackChanges) =>
             await FindByCondition(c => c.WorkOrderId.Equals(workOrderId), trackChanges)
+            .Include(c => c.ChangedBy)
             .OrderBy(c => c.DateChanged)
             .ToListAsync();
        

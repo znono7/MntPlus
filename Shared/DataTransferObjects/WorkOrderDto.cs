@@ -12,11 +12,11 @@ namespace Shared
         int? Number, 
         string? Description,
         string? Priority, 
-        DateTime? StartDate, 
+        DateTime? StartDate,  
         DateTime? DueDate,
         string? Type, 
         string? Status,
-        string? Requester,
+        string? Requester, 
         DateTime? CreatedOn,
         Guid? UserCreatedId,
         UserDto? UserCreatedBy,
@@ -29,7 +29,7 @@ namespace Shared
 
     public record WorkOrderForCreationDto
         (
-          string? Name,
+          string? Name, 
         int? Number,
         string? Description,
         string? Priority,

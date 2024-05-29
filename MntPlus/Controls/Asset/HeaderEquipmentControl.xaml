@@ -26,21 +26,21 @@
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Nom" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}"  />
+            <TextBlock Grid.Column="0" Text="Équipement" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}"  />
             <TextBlock Grid.Column="1" Text="Image" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="2" Text="Description" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="3" Text="Statut" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="4" Text="Localisation" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="5" Text="Catégorie" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="6" Text="Fabricant" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="7" Text="Modèle" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="8" Text="Numéro de série" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="9" Text="" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="10" Text="Parent" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="11" Text="DM service " FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="12" Text="Date d'achat" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="13" Text="Prix d'achat" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="14" Text="Date Créée" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="2" TextWrapping="Wrap" Height="Auto" Text="Description" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="3" TextWrapping="Wrap" Height="Auto" Text="Statut" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="4" TextWrapping="Wrap" Height="Auto" Text="Localisation" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="5" TextWrapping="Wrap" Height="Auto" Text="Catégorie" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="6" TextWrapping="Wrap" Height="Auto" Text="Fabricant" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="7" TextWrapping="Wrap" Height="Auto" Text="Modèle" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="8" TextWrapping="Wrap" Height="Auto" Text="Numéro de série" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="9" TextWrapping="Wrap" Height="Auto" Text="" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="10" TextWrapping="Wrap" Height="Auto" Text="Parent" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="11" TextWrapping="Wrap" Height="Auto" Text="DM service " FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="12" TextWrapping="Wrap" Height="Auto" Text="Date d'achat" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="13" TextWrapping="Wrap" Height="Auto" Text="Prix d'achat" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock Grid.Column="14" TextWrapping="Wrap" Height="Auto" Text="Date Créée" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />
         </Grid>
     </Grid>
 </UserControl>

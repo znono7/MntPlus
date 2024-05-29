@@ -30,7 +30,7 @@ namespace MntPlus.WPF
 
         private void ScheduleWind()
         {
-            ScheduleTimeWindow scheduleTimeWindow = new () { DataContext = new ScheduleTimeViewModel() };
+            ScheduleTimeWindow scheduleTimeWindow = new () { DataContext = new ScheduleTimeViewModel(new ScheduleStore()) };
             scheduleTimeWindow.ShowDialog();
         }
     }

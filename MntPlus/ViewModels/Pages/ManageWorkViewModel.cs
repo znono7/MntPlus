@@ -13,12 +13,12 @@ namespace MntPlus.WPF
    public class ManageWorkViewModel : BaseViewModel
     {
 
-        public ObservableCollection<WorkOrderDto> WorkOrderDtos { get; set;} 
+        public ObservableCollection<WorkOrderDto> WorkOrderDtos { get; set;}  
 
         private ObservableCollection<WorkOrderItemsViewModel> _workOrders { get; set; }
-        public ObservableCollection<WorkOrderItemsViewModel>? FilterWorkOrders { get; set; }
+        public ObservableCollection<WorkOrderItemsViewModel>? FilterWorkOrders { get; set; } 
         public ObservableCollection<WorkOrderItemsViewModel> WorkOrders 
-        { 
+        {   
             get => _workOrders; 
             set 
             {
@@ -39,6 +39,7 @@ namespace MntPlus.WPF
         public ICommand ViewOrderWorkCommand { get; set; }
 
         public ViewTaskViewModel TaskViewModel { get; set; } 
+        public ShowWorkOrderViewModel ShowWorkOrderViewModel { get; set; }
         public AddWorkOrderViewModel AddWorkOrderViewModel { get; set; }
 
         public WorkOrderStore WorkOrderStore { get; set; }
@@ -46,7 +47,7 @@ namespace MntPlus.WPF
         public bool DimmableOverlayVisible { get; set; }
         public ManageWorkViewModel()
         {
-            LoadWorkOrders().GetAwaiter().GetResult();
+            _ = LoadWorkOrders();
            
             AddWorkOrderCommand = new RelayCommand(AddWorkOrder);
              
@@ -55,6 +56,15 @@ namespace MntPlus.WPF
             //TaskViewModel = new ViewTaskViewModel();
             WorkOrderStore = new WorkOrderStore();
             WorkOrderStore.WorkOrderCreated += WorkOrderStore_WorkOrderCreated;
+            WorkOrderStore.WorkOrderUpdated += WorkOrderStore_WorkOrderUpdated;
+           
+        }
+
+        private void WorkOrderStore_WorkOrderUpdated(WorkOrderDto? dto)
+        {
+            //var workOrder = WorkOrders.FirstOrDefault(x => x.WorkOrderDto?.Id == dto?.Id);
+            //workOrder = new WorkOrderItemsViewModel(dto);
+            _ = LoadWorkOrders();
         }
 
         private async Task LoadWorkOrders()
@@ -92,13 +102,12 @@ namespace MntPlus.WPF
         }
 
         private void AddWorkOrder() 
-        {
-            AddWorkOrderViewModel = new AddWorkOrderViewModel();
+        { 
+            AddWorkOrderViewModel = new AddWorkOrderViewModel(WorkOrderStore);
             AddWorkOrderViewModel.CloseAction = async () =>  { AddWorkOrderPopupIsOpen = false; DimmableOverlayVisible = false; await Task.Delay(1);  };
             AddWorkOrderPopupIsOpen = true;
             DimmableOverlayVisible = true;
-           //var wind =  new SelectEquipmentWindow { DataContext = new SelectEquipmentViewModel(WorkOrderStore) };
-           // wind.ShowDialog();
+           
         }
 
         public void OrganizeWorkOrders()
@@ -119,8 +128,8 @@ namespace MntPlus.WPF
         {
             if(dto is null) return;
             var MyDto = (WorkOrderItemsViewModel)dto;
-            TaskViewModel = new ViewTaskViewModel(MyDto.WorkOrderDto);
-            TaskViewModel.ClosePopupAction = CloseTaskPopup;
+            ShowWorkOrderViewModel = new ShowWorkOrderViewModel(MyDto.WorkOrderDto,WorkOrderStore); 
+            ShowWorkOrderViewModel.CloseAction = CloseTaskPopup;
             TaskPopupIsOpen = true;
             DimmableOverlayVisible = true;
             await Task.Delay(1);

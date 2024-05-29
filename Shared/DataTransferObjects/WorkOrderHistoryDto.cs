@@ -20,7 +20,7 @@ namespace Shared
     public record WorkOrderHistoryCreateDto
      (
         
-            string? Notes,
+            string? Notes, 
             string? Status,
             DateTime? DateChanged,
             Guid? ChangedById,
