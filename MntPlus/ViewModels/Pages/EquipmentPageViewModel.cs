@@ -41,12 +41,14 @@ namespace MntPlus.WPF
         public bool IsHierarchy { get; set; }
         public bool IsLoading { get; set; } 
         public bool IsEmpty { get; set; } //=> EquipmentListItems is null || EquipmentListItems.Count == 0 ;
+        public bool IsActionPopupOpen { get; set; }
         private AssetStore _equipmentStore { get; set; }
 
         public bool IsFilterOpen { get; set; }
         public ICommand OpenFilterCommand { get; set; }
+        public ICommand OpenActionPopupOpenCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
 
-       
 
         #endregion
 
@@ -106,11 +108,134 @@ namespace MntPlus.WPF
             FilterAssetControl.FilterBySerialNumberFonction = FilterBySerialNumber;
             FilterAssetControl.FilterByModelFonction = FilterByModel;
             FilterAssetControl.FilterByMakeFonction = FilterByMake;
+            FilterAssetControl.FilterByDateServiceFonction = FilterByDateService;
+            FilterAssetControl.FilterByDateCreatedFonction = FilterByDateCreated;
+            FilterAssetControl.ResetFunction = ApplyResetFunction;
+
+
             OpenFilterCommand = new RelayCommand(() => IsFilterOpen = !IsFilterOpen);
             FilterTags = new ObservableCollection<TagControlViewModel>();
             AppliedFilters = new ObservableCollection<FilterCriteria>();
 
+            OpenActionPopupOpenCommand = new RelayCommand(() => IsActionPopupOpen = !IsActionPopupOpen);
+            RemoveCommand = new RelayCommand(async () => await RemoveItem());
 
+
+        }
+
+        private async Task RemoveItem()
+        {
+           
+            List<EquipmentItemViewModel> itemsToRemove = new();
+            if (FilterEquipmentItemViewModels is not null && FilterEquipmentItemViewModels.Count > 0)
+            {
+                foreach (var item in FilterEquipmentItemViewModels)
+                {
+                    if(item.IsChecked)
+                    {
+                        itemsToRemove.Add(item);
+                      
+                       
+                    }
+                }
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucun équipement sélectionné"));
+                return;
+            }
+            if (!itemsToRemove.Any())
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucun équipement sélectionné"));
+                return;
+            }
+            var Dialog = new ConfirmationWindow("Supprimé Equipement");
+            Dialog.ShowDialog();
+            if (Dialog.Confirmed)
+            {
+                foreach (var item in itemsToRemove)
+                {
+                    await RemoveEquipment(item);
+                }
+            }           
+
+        }
+        private async Task RemoveEquipment(EquipmentItemViewModel equipment)
+        {
+            var response = await AppServices.ServiceManager.AssetService.DeleteAsset(equipment.Asset!.Id, false);
+            if (response is ApiOkResponse<AssetDto> && response.Success)
+            {
+                RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentItemViewModels);
+                // Remove the item from the tree view
+                removeEquipmentItem.RemoveItemFromTreeView(equipment);
+
+                // Remove the item from the list view
+                EquipmentItemViewModels?.Remove(equipment);
+                FilterEquipmentItemViewModels?.Remove(equipment);
+
+               
+            }
+           
+        }
+
+        private async Task ApplyResetFunction()
+        {
+
+            if (FilterTags is not null && FilterTags.Count > 0)
+            {
+                FilterTags.Clear();
+                AppliedFilters.Clear();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>(EquipmentItemViewModels ?? Enumerable.Empty<EquipmentItemViewModel>());
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucun filtre à réinitialiser"));
+            }
+            
+        }
+
+        private async Task FilterByDateCreated(DateTime? nullable1, DateTime? nullable2)
+        {
+            if (EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Date de Création:", $"{nullable1} - {nullable2}", EquipmentFilterType.DateCreated);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.CreatedDate >= nullable1 && e.CreatedDate <= nullable2).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.DateCreated, $"{nullable1} - {nullable2}");
+                AppliedFilters.Add(filterCriteria);
+
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
+            
+        }
+
+        private async Task FilterByDateService(DateTime? nullable1, DateTime? nullable2)
+        {
+            if (EquipmentItemViewModels is not null && EquipmentItemViewModels.Count > 0 && AssetDtos is not null)
+            {
+                TagControlViewModel tagControlViewModel = new("Date de Mise en Service:", $"{nullable1} - {nullable2}", EquipmentFilterType.DateService);
+                tagControlViewModel.CancelTagFonction = RemoveTag;
+                FilterTags ??= [];
+                FilterTags.Add(tagControlViewModel);
+                CreateEquipmentListItems listItems = new();
+                FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.AssetCommissionDate >= nullable1 && e.AssetCommissionDate <= nullable2).ToList());
+                FilterCriteria filterCriteria = new(EquipmentFilterType.DateService, $"{nullable1} - {nullable2}");
+                AppliedFilters.Add(filterCriteria);
+
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Liste est Vide"));
+            }
+            
         }
 
         private async Task FilterByMake(string? arg)
@@ -168,7 +293,8 @@ namespace MntPlus.WPF
                 FilterTags.Add(tagControlViewModel);
                 CreateEquipmentListItems listItems = new();
                 FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
-                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.SerialNumber == arg).ToList());
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.SerialNumber != null && arg != null &&
+                e.SerialNumber.Contains(arg)).ToList());
                 FilterCriteria filterCriteria = new(EquipmentFilterType.SerialNumber, arg);
                 AppliedFilters.Add(filterCriteria);
 
@@ -190,7 +316,8 @@ namespace MntPlus.WPF
                 FilterTags.Add(tagControlViewModel);
                 CreateEquipmentListItems listItems = new();
                 FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
-                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.Status == status.Name).ToList());
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.Status != null && status.Name != null &&
+                e.Status.Contains(status.Name, StringComparison.OrdinalIgnoreCase)).ToList());
                 FilterCriteria filterCriteria = new(EquipmentFilterType.Statut, status.Name);
                 AppliedFilters.Add(filterCriteria);
 
@@ -211,7 +338,8 @@ namespace MntPlus.WPF
                 FilterTags.Add(tagControlViewModel);
                 CreateEquipmentListItems listItems = new();
                 FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
-                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.Category == category.Name).ToList());
+                FilterEquipmentItemViewModels = listItems.CreateListItems(AssetDtos.Where(e => e.Category != null && category.Name != null &&
+                e.Category.Contains(category.Name, StringComparison.OrdinalIgnoreCase)).ToList());
                 FilterCriteria filterCriteria = new(EquipmentFilterType.Category, category.Name);
                 AppliedFilters.Add(filterCriteria);
                
@@ -366,7 +494,7 @@ namespace MntPlus.WPF
         }
 
 
-        private async Task RemoveItem(EquipmentItemViewModel cmodel)
+        private async Task RemoveEquipItem(EquipmentItemViewModel cmodel)
         {
             if(cmodel.ChildrenCount > 0 && cmodel.Children?.Count > 0)
             {
@@ -480,10 +608,36 @@ namespace MntPlus.WPF
             switch (filter.EquipmentFilterType)
             {
                 case EquipmentFilterType.Category:
-                    return items.Where(e => e.Category == filter.FilterValue).ToList();
-                // Add cases for other filter types (e.g., by name, by date, etc.)
+                    return items.Where(e => e.Category!= null && filter.FilterValue != null && e.Category.Contains(filter.FilterValue, StringComparison.OrdinalIgnoreCase)).ToList();
+                    case EquipmentFilterType.Statut:
+                        return items.Where(e => e.Status != null && filter.FilterValue != null && e.Status.Contains(filter.FilterValue, StringComparison.OrdinalIgnoreCase)).ToList();
+                    case EquipmentFilterType.SerialNumber:
+                        return items.Where(e => e.SerialNumber != null && filter.FilterValue != null && e.SerialNumber.Contains(filter.FilterValue, StringComparison.OrdinalIgnoreCase)).ToList();
+                    case EquipmentFilterType.Model:
+                        return items.Where(e => e.Model != null && filter.FilterValue != null && e.Model.Contains(filter.FilterValue, StringComparison.OrdinalIgnoreCase)).ToList();
+                    case EquipmentFilterType.Make:
+                        return items.Where(e => e.Make != null && filter.FilterValue != null && e.Make.Contains(filter.FilterValue, StringComparison.OrdinalIgnoreCase)).ToList();
+                    case EquipmentFilterType.DateService:
+                        var dateService = filter.FilterValue!.Split(" - ");
+                        if (dateService.Length == 2)
+                    {
+                            var date1 = DateTime.Parse(dateService[0]);
+                            var date2 = DateTime.Parse(dateService[1]);
+                            return items.Where(e => e.AssetCommissionDate >= date1 && e.AssetCommissionDate <= date2).ToList();
+                        }
+                        return items;
+                    case EquipmentFilterType.DateCreated:
+                        var dateCreated = filter.FilterValue!.Split(" - ");
+                        if (dateCreated.Length == 2)
+                    {
+                            var date1 = DateTime.Parse(dateCreated[0]);
+                            var date2 = DateTime.Parse(dateCreated[1]);
+                            return items.Where(e => e.CreatedDate >= date1 && e.CreatedDate <= date2).ToList();
+                        }
+                        return items;
+                
                 default:
-                    return items; // If the filter type is unknown or not supported, return the original collection
+                    return items; 
             }
         }
         #endregion

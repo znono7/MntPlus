@@ -39,8 +39,8 @@ namespace MntPlus.WPF
             EquipmentImageBytes = equipment.AssetImage;
             ReadImage();
             BrowseCommand = new RelayCommand(async () => await Browse());
-            EquipmentInfoViewModel = new EquipmentInfoViewModel(equipment, equipmentStore);
-            EquipmentChildrenViewModel = new AssetChildrenViewModel(equipment.Id, equipmentStore,Children);
+            EquipmentInfoViewModel = new EquipmentInfoViewModel(/*equipment, equipmentStore*/);
+            EquipmentChildrenViewModel = new AssetChildrenViewModel();
             DeleteImgCommand = new RelayCommand(async () => await RemoveImage());
 
         }

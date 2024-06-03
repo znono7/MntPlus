@@ -31,7 +31,7 @@ namespace MntPlus.WPF
         public byte[]? AssetImage { get; set; }
         public DateTime? AssetCommissionDate { get; set; }
         public string? ShortAssetCommissionDate => AssetCommissionDate?.ToString("d");
-        public DateTime? CreatedDate { get; set; }
+        public DateTime? CreatedDate => DateTime.Now;
         public DateTime? PurchaseDate { get; set; }
         public string? ShortPurchaseDate => PurchaseDate?.ToString("d");
 
@@ -60,7 +60,7 @@ namespace MntPlus.WPF
         public bool IsHaveLocation { get; set; }
         public ICommand ClearLocationCommand { get; set; }
 
-
+         
         public NewEquipmentViewModel(Window window, AssetStore assetStore) : base(window)
         {
             TitleHeight = 56;

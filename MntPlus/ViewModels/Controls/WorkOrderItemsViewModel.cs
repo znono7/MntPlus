@@ -8,13 +8,13 @@ using System.Windows.Input;
 
 namespace MntPlus.WPF
 {
-    public class WorkOrderItemsViewModel 
+    public class WorkOrderItemsViewModel : BaseViewModel
     {
         public WorkOrderDto? WorkOrderDto { get; set; }
 
         public string WorkOrderNumber =>  $"00000{WorkOrderDto?.Number}"; 
         public string WorkOrderName { get; set; }
-        public string PriorityBackground { get; set; } 
+        public string PriorityBackground { get; set; }  
 
         private string _orderWorkPriority = "3";
         public string Priority { get; set; }
@@ -94,7 +94,19 @@ namespace MntPlus.WPF
 
         public ICommand ViewOrderWorkCommand { get; set; }
 
-        public Func<WorkOrderDto?, Task>? ViewOrderWork { get; set; } 
+        public Func<WorkOrderDto?, Task>? ViewOrderWork { get; set; }
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
         public WorkOrderItemsViewModel(WorkOrderDto? workOrderDto)
         {
             WorkOrderDto = workOrderDto;

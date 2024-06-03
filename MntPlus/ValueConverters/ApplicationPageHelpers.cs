@@ -23,7 +23,7 @@ namespace MntPlus.WPF
         
         public static BasePage? ToBasePage(this ApplicationPage page, object? viewModel = null)
         {
-            if(viewModel is null)
+            if(viewModel == null)
             {
                 viewModel = new ();
             }
@@ -51,6 +51,10 @@ namespace MntPlus.WPF
                         return new PartsInventoryPage(viewModel as PartsInventoryViewModel);
                     case ApplicationPage.NewPreventiveMaintenance:
                         return new NewPreventiveMaintenancePage(viewModel as NewPreventiveMaintenanceViewModel);
+                    case ApplicationPage.Equipment:
+                        return new EquipmentPage(viewModel as ViewEquipmentPageViewModel);
+                    case ApplicationPage.Inventory:
+                        return new InventoryPage(viewModel as InventoryPageViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -85,6 +89,10 @@ namespace MntPlus.WPF
                 return ApplicationPage.PartsInventory;
             if (page is NewPreventiveMaintenancePage)
                 return ApplicationPage.NewPreventiveMaintenance;
+            if (page is EquipmentPage)
+                return ApplicationPage.Equipment;
+            if (page is InventoryPage)
+                return ApplicationPage.Inventory;
 
             // Alert developer of issue
             Debugger.Break();

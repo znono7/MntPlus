@@ -10,21 +10,21 @@
         <Border Height="64" BorderThickness="0 0 0 1.2" BorderBrush="{DynamicResource LineColor}"/>
         <Grid TextBlock.TextAlignment="Left">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Équipement" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}"  />
             <TextBlock Grid.Column="1" Text="Image" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource ColumnHeaderStyle}" />

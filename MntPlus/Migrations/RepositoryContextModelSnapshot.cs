@@ -89,10 +89,7 @@ namespace MntPlus.WPF.Migrations
                     b.Property<double?>("Cost")
                         .HasColumnType("REAL");
 
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Location")
+                    b.Property<DateTime?>("DateReceived")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("MaxQuantity")
@@ -103,9 +100,6 @@ namespace MntPlus.WPF.Migrations
 
                     b.Property<Guid>("PartID")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .HasColumnType("TEXT");
@@ -564,8 +558,9 @@ namespace MntPlus.WPF.Migrations
             modelBuilder.Entity("Entities.Asset", b =>
                 {
                     b.HasOne("Entities.Asset", "Parent")
-                        .WithMany()
-                        .HasForeignKey("AssetParent");
+                        .WithMany("Assets")
+                        .HasForeignKey("AssetParent")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Entities.Location", "Location")
                         .WithMany()
@@ -579,7 +574,7 @@ namespace MntPlus.WPF.Migrations
             modelBuilder.Entity("Entities.Inventory", b =>
                 {
                     b.HasOne("Entities.Part", "Part")
-                        .WithMany()
+                        .WithMany("Inventories")
                         .HasForeignKey("PartID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -590,13 +585,13 @@ namespace MntPlus.WPF.Migrations
             modelBuilder.Entity("Entities.LinkPart", b =>
                 {
                     b.HasOne("Entities.Asset", "Asset")
-                        .WithMany()
+                        .WithMany("LinkParts")
                         .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Part", "Part")
-                        .WithMany()
+                        .WithMany("LinkParts")
                         .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -741,6 +736,20 @@ namespace MntPlus.WPF.Migrations
                         .HasForeignKey("PreventiveMaintenanceId");
 
                     b.Navigation("PreventiveMaintenance");
+                });
+
+            modelBuilder.Entity("Entities.Asset", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("LinkParts");
+                });
+
+            modelBuilder.Entity("Entities.Part", b =>
+                {
+                    b.Navigation("Inventories");
+
+                    b.Navigation("LinkParts");
                 });
 
             modelBuilder.Entity("Entities.PreventiveMaintenance", b =>

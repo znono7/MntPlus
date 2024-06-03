@@ -61,9 +61,9 @@ namespace Service
             { 
                 var locations = await _repository.Location.GetAllLocationsAsync(trackChanges);
                 if(locations is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
-                }
+                }  
                 var locationsDto = _mapper.Map<IEnumerable<LocationDto>>(locations);
                 return new ApiOkResponse<IEnumerable<LocationDto>>(locationsDto);
             }

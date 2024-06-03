@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,19 +50,34 @@ namespace MntPlus.WPF
         public ICommand GetSelectedLocationCommand { get; set; }
         public ICommand SelecteLocationCommand { get; set; }
 
-        public LocationStore? LocationStore { get; }
+        public LocationStore? LocationStore { get; set; }
 
         public SelectEquipmentLocationViewModel(LocationStore? locationStore)
-        {
+        { 
             LocationStore = locationStore;
             GetSelectedLocationCommand = new RelayParameterizedCommand( (p) => GetSelectedLocation(p));
             SelecteLocationCommand = new RelayParameterizedCommand(async (p) => await SelectLocation(p));
-            //_ = GetLocations();
-            LocationDtos = new ObservableCollection<LocationDto>
-            {
-                new LocationDto(Guid.Parse("7C4D383E-0BB0-4860-9B7C-A83FDD6967C0"),"First Location","Aflou" , true,null,null,DateTime.Now)
-            };
+            _ = GetLocations();
+            //LocationDtos = new ObservableCollection<LocationDto>
+            //{
+            //    new LocationDto(Guid.Parse("7C4D383E-0BB0-4860-9B7C-A83FDD6967C0"),"First Location","Aflou" , true,null,null,DateTime.Now)
+            //};
             Primaries = new CreateLocationsTree().CreateTreeViewItems(LocationDtos?.ToList());
+        }
+
+        private async Task GetLocations()
+        {
+            var response = await AppServices.ServiceManager.LocationService.GetAllLocationsAsync(false);
+            if (response.Success && response is ApiOkResponse<IEnumerable<LocationDto>> result)
+            {
+                LocationDtos = new ObservableCollection<LocationDto>(result.Result!);
+                Primaries = new CreateLocationsTree().CreateTreeViewItems(LocationDtos?.ToList());
+            }else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la récupération des localisations"));
+                Primaries = new ObservableCollection<LocationItemViewModel>();  
+            }
+            
         }
 
         private async Task  SelectLocation(object? p)

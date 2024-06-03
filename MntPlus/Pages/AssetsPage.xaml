@@ -216,14 +216,17 @@
                     <RadioButton Command="{Binding ToListCommand}" Style="{DynamicResource MenuListButtonStyle}" Tag="{DynamicResource list}"  Content="Liste" Margin="0 0 25 0"  />
                     </StackPanel>-->
                 </Grid>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible" Grid.Row="1">
+            <ScrollViewer  HorizontalScrollBarVisibility="Visible" Grid.Row="1">
                 <Grid Width="3200" Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <local:HeaderEquipmentControl Margin="5 0"/>
-                    <local:StretchingTreeView Grid.Row="1" ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"  
+                    <Button Command="{Binding OpenActionPopupOpenCommand}" x:Name="ActBtn" HorizontalAlignment="Left" Style="{DynamicResource ActionButton}"  Content="Actions"   Margin="15 10 15 10"/>
+
+                    <local:HeaderEquipmentControl Grid.Row="1" Margin="5 0"/>
+                    <local:StretchingTreeView Grid.Row="2" ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"  
                                 ItemsSource="{Binding FilterEquipmentItemViewModels}"   >
                         <local:StretchingTreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
@@ -235,6 +238,19 @@
                     </local:StretchingTreeView>
                 </Grid>
             </ScrollViewer>
+            <Popup StaysOpen="False" Placement="Bottom" PlacementTarget="{Binding ElementName=ActBtn}" AllowsTransparency="True" HorizontalOffset="5" VerticalOffset="5" IsOpen="{Binding IsActionPopupOpen}" x:Name="ActionsPopup">
+                <Grid >
+                    <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                          Color="LightSlateGray" Opacity="0.2" />
+                        </Border.Effect>
+                    </Border>
+                    <StackPanel Margin="5 15">
+                        <Button Command="{Binding RemoveCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource delete}" Foreground="#C22528" Content="Supprimer"/>
+                    </StackPanel>
+                </Grid>
+            </Popup>
             <!--<Grid Visibility="{Binding IsHeaderVisible,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Grid.Row="1" Height="42">
                     <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>

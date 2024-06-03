@@ -3,24 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MntPlus.WPF"
-             mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="800" Width="800">
+             xmlns:local="clr-namespace:MntPlus.WPF" Width="960"
+             mc:Ignorable="d" Background="Transparent" HorizontalAlignment="Stretch"
+             d:DesignHeight="1000"  >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
+            <RowDefinition Height="0"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <!--<Grid>
             <Border  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Command="{Binding UpdateCommand}" Margin="20 0" Style="{StaticResource CPrimeButton}" Content="Enregistrer les Modifications"/>
-                <!--<Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />-->
+                <Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />
             </StackPanel>
-        </Grid>
+        </Grid>-->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <Grid>
+            <Grid HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="10"/>
@@ -42,71 +42,67 @@
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="20"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.RowSpan="20" Grid.ColumnSpan="2" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Type d'Actif" Style="{DynamicResource TextBlockStyle}" Margin="20 20 0 0"/>
-                <ComboBox Grid.Column="1" Margin="13 20 0 0"  IsEditable="False"  ItemsSource="{Binding AssetTypes.AssetTypeList}" 
-                          DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding SelectedAssetType, UpdateSourceTrigger=PropertyChanged}"
-                          Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0" Text="Nom de l'Actif" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox  Grid.Row="2" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Asset.Name, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0" Text="Description" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="4" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Asset.Description, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="540"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0" Text="Emplacement" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <StackPanel x:Name="OrganText" Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
-                    <ComboBox  Margin="13 0"  IsEditable="False"  ItemsSource="{Binding LocationDtos}" 
-                              DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding SelectedLocation, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
-                    <Button  Command="{Binding AddLocationCommand}"  x:Name="AddBtn" Style="{DynamicResource IconPathButton}" Margin="0">
-                        <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
-                    </Button>
-                </StackPanel>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0" Text="Statut" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <ComboBox Grid.Row="8" Grid.Column="1" Margin="13 0"  IsEditable="False"  ItemsSource="{Binding AssetStatuses.AssetStatusList}" 
-                          DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding SelectedAssetStatus, UpdateSourceTrigger=PropertyChanged}"
-                          Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="320"/>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0" Text="Date de mise en service" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.Column="1">
-                    <Grid Width="320" Margin="13 0" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="36" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Border x:Name="CommissionDate" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="32" Width="320" BorderThickness="0" BorderBrush="{DynamicResource LineColor2}" Background="{DynamicResource LineColor}" CornerRadius="7"/>
-                        <Border Grid.Column="0" HorizontalAlignment="Left" Height="32" Width="480" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="7"/>
-                        <Button  Command="{Binding CommissionDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
-                            <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                <Grid Margin="10" Grid.Column="2" Grid.Row="0" Grid.RowSpan="21" >
+                    <Border Background="{DynamicResource TertiaryBackgroundColor}" CornerRadius="12" Height="220" VerticalAlignment="Top" />
+                    <!--<Rectangle Width="1" HorizontalAlignment="Right" Fill="{DynamicResource LineColor2}" Height="Auto" Margin="0 0 0 0" />-->
+                    <Grid Margin="10" VerticalAlignment="Top">
+
+                        <Border Background="{DynamicResource LineColor}" CornerRadius="12" Height="190" >
+                            <Image  Height="190"  Source="{Binding MyImageSource,UpdateSourceTrigger=PropertyChanged}" Stretch="Uniform" 
+                    Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}">
+                            </Image>
+                        </Border>
+                        <Button Visibility="{Binding IsHaveImage,Converter={local:BooleanToVisiblityConverter}}"  Height="190" Width="190"  x:Name="ImgBtn" Style="{DynamicResource IconPathButton}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Path  Width="30" Height="24" Fill="{DynamicResource FourthTextColor}" Stretch="Fill" Data="{DynamicResource image}"/>
                         </Button>
-                        <TextBlock Text="{Binding ShortAssetCommissionDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="1" Style="{StaticResource TextBlockStyle}"/>
-                        
+                         
                     </Grid>
-                    <!--<TextBox x:Name="CommissionDate"  Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding AssetCommissionDate}" IsReadOnly="True" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
-                    <Button  Command="{Binding CommissionDateCommand}"   Style="{DynamicResource IconPathButton}" Margin="0">
-                        <Path  Width="12" Fill="{DynamicResource SecundaryBlueColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
 
-                    </Button>-->
-                </StackPanel>
-                <Popup Panel.ZIndex="11" StaysOpen="True" IsOpen="{Binding DatePopup}" Placement="Top" PlacementTarget="{Binding ElementName=CommissionDate}"  PopupAnimation="Fade" AllowsTransparency="True" x:Name="CalendarPopup">
-                    <Grid>
-                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                    SelectedDate="{Binding AssetCommissionDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
-                </Popup>
-                <TextBlock HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0" Text="Fabrication" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="12" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Asset.Make, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
+                </Grid>
+                <Border Grid.RowSpan="22" Grid.ColumnSpan="2" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" Text="Équipement" Style="{DynamicResource TextBlockStyle}" Margin="20 20 10 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Description" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock TextWrapping="Wrap"  HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Text="{Binding Description}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Catégorie" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1" Text="{Binding Category}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Fabricant" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="6" Grid.Column="1" Text="{Binding Make}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="8" Grid.Column="0" Text="Modèle" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="8" Grid.Column="1" Text="{Binding Model}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="10" Grid.Column="0" Text="Numéro de série" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="10" Grid.Column="1" Text="{Binding SerialNumber}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="12" Grid.Column="0" Text="Date d'achat" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="12" Grid.Column="1" Text="{Binding PurchaseDate}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="14" Grid.Column="0" Text="Prix d'achat" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="14" Grid.Column="1" Text="{Binding PurchaseCost}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="16" Grid.Column="0" Text="Date de mise en service" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="16" Grid.Column="1" Text="{Binding AssetCommissionDate}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="18" Grid.Column="0" Text="Statut" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="18" Grid.Column="1" Text="{Binding Status}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
+                <TextBlock Grid.Row="20" Grid.Column="0" Text="Localisation" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <TextBlock HorizontalAlignment="Left" Grid.Row="20" Grid.Column="1" Text="{Binding Location}" Style="{DynamicResource TextBlockStyle}" Margin="20 10"/>
+                <Rectangle Grid.Row="21" Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource LineColor2}" Height="0.3" Margin="20 0" />
 
-                <TextBlock HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0" Text="Modèle" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="14" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Asset.Model, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
 
-                <TextBlock HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0" Text="Numéro de série" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="16" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Asset.SerialNumber, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
-
-                <TextBlock HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0" Text="Coût" Style="{DynamicResource TextBlockStyle}" Margin="20 5 0 0"/>
-                <TextBox Grid.Row="18" Grid.Column="1" Height="32" Margin="13 0" BorderThickness="0" Background="{DynamicResource LineColor}" Text="{Binding Asset.PurchaseCost, UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{DynamicResource InputTextBoxStyle}" Width="320"/>
             </Grid>
         </ScrollViewer>
     </Grid>

@@ -21,6 +21,11 @@ namespace Service
         private readonly Lazy<IInstructionService> instructionService;
         private readonly Lazy<IRoleService> roleService;
         private readonly Lazy<IUserRoleService> userRoleService;
+        private readonly Lazy<IPartService> partService;
+        private readonly Lazy<IInventoryService> inventoryService;
+        private readonly Lazy<ILinkPartService> linkPartService;
+
+
 
 
 
@@ -36,6 +41,9 @@ namespace Service
             instructionService = new Lazy<IInstructionService>(() => new InstructionService(repositoryManager, mapper));
             roleService = new Lazy<IRoleService>(() => new RoleService(repositoryManager, mapper));
             userRoleService = new Lazy<IUserRoleService>(() => new UserRoleService(repositoryManager, mapper));
+            partService = new Lazy<IPartService>(() => new PartService(repositoryManager, mapper));
+            inventoryService = new Lazy<IInventoryService>(() => new InventoryService(repositoryManager, mapper));
+            linkPartService = new Lazy<ILinkPartService>(() => new LinkPartService(repositoryManager, mapper));
         }
       
 
@@ -56,5 +64,11 @@ namespace Service
         public IRoleService RoleService => roleService.Value;
 
         public IUserRoleService UserRoleService => userRoleService.Value;
+
+        public IPartService PartService => partService.Value;
+
+        public IInventoryService InventoryService => inventoryService.Value;
+
+        public ILinkPartService LinkPartService => linkPartService.Value;
     }
 }

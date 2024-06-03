@@ -10,10 +10,11 @@ namespace Entities
 
         [ForeignKey("Part")]
         public Guid PartId { get; set; }
+        public Part? Part { get; set; }
+
 
         [ForeignKey("Asset")]
         public Guid AssetId { get; set; }
-        public Part? Part { get; set; }
         public Asset? Asset { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace Repository
             .Include(w => w.UserAssignedTo) 
             .Include(w => w.TeamAssignedTo) 
             .Include(w => w.Asset)
+            .Include(w => w.Asset!.Location)
             .OrderBy(c => c.Name)
             .ToListAsync();
 

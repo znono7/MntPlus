@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -42,20 +43,39 @@ namespace MntPlus.WPF
         }
 
         public ICommand GetSelectedLocationCommand { get; set; }
+        public LocationStore? LocationStore { get; }
 
-        public SelectParentLocationViewModel()
+        public SelectParentLocationViewModel(LocationStore? locationStore)
         {
-            Primaries = new ObservableCollection<PrimarySelectLocationViewModel>();
+            _ = GetLocations();
             GetSelectedLocationCommand = new RelayParameterizedCommand(async(p) => await GetSelectedLocation(p));
+            LocationStore = locationStore;
         }
 
+        private async Task GetLocations()
+        {
+            var response = await AppServices.ServiceManager.LocationService.GetAllLocationsAsync(false);
+            if(response != null && response is ApiOkResponse<IEnumerable<LocationDto>> result)
+            {
+                LocationDtos = new ObservableCollection<LocationDto>(result.Result!.Where(x => x.IsPrimaryLocation));
+                IterateLocations();
+            }
+            else
+            {
+                LocationDtos = new ObservableCollection<LocationDto>();
+            }
+
+        }
         private async Task GetSelectedLocation(object? p)
         {
             var window = p as SelectParentLocationWindow;
             if(SelectedViewModel is  null) 
             {
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un Localisation"));
+                return;
             }
+            LocationStore?.SelectLocation(SelectedViewModel.Location);
+            window?.Close();
          
         }
 
@@ -99,6 +119,7 @@ namespace MntPlus.WPF
                     Primaries.Add(Vmodel);
                 }
             }
+            FilterPrimaryLocationViews = new ObservableCollection<PrimarySelectLocationViewModel>(Primaries!);
         }
 
         private async Task SetSelectedLocation(PrimarySelectLocationViewModel? model)

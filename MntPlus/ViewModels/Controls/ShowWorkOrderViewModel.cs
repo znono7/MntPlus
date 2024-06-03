@@ -45,6 +45,8 @@ namespace MntPlus.WPF
                 OnPropertyChanged(nameof(Priority));
             }
         }
+
+        public string StatusBorderBrush { get; set; } = "429b1f";
         private string? _status { get; set; }
         public string? Status
         {
@@ -58,21 +60,27 @@ namespace MntPlus.WPF
                 {
                     case "Approuvé":
                         ForgroundColorStat = "1C62B9";
+                        StatusBorderBrush = "1C62B9";
                         break;
                     case "En attente":
                         ForgroundColorStat = "7B68EE";
+                        StatusBorderBrush = "7B68EE";
                         break;
                     case "En service":
                         ForgroundColorStat = "ef6a00";
+                        StatusBorderBrush = "ef6a00";
                         break;
                     case "Complet":
                         ForgroundColorStat = "c22528";
+                        StatusBorderBrush = "c22528";
                         break;
                     case "Ouvrir":
                         ForgroundColorStat = "429b1f";
+                        StatusBorderBrush = "429b1f";
                         break;
                     case "Non spécifique":
                         ForgroundColorStat = "B3B3B3";
+                        StatusBorderBrush = "B3B3B3";
                         break;
                 }
                 OnPropertyChanged(nameof(Status));
@@ -175,7 +183,7 @@ namespace MntPlus.WPF
             var Response = await AppServices.ServiceManager.WorkOrderHistoryService.GetAllWorkOrderHistoriesAsync(WorkOrder.Id,false);
             if (Response is not null && Response is ApiOkResponse<IEnumerable<WorkOrderHistoryDto>> response)
             {
-                CommentsHistory = new ObservableCollection<WorkOrderHistoryDto>(response.Result!);
+                CommentsHistory = new ObservableCollection<WorkOrderHistoryDto>(response.Result!.Where(x => x.Notes != null));
             }
             else if(Response is not null && Response is ApiNotFoundResponse apiNotFoundResponse)
             {

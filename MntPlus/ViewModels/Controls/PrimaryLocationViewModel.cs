@@ -7,9 +7,9 @@ namespace MntPlus.WPF
     public class PrimaryLocationViewModel : BaseViewModel
     {
         public LocationDto? Location { get; set; }
-        public string? Name => Location?.Name;
-        public string? Adress => Location?.Address;
-        public string? CreatedAt => Location?.CreatedAt.ToShortDateString();
+        public string? Name { get; set; }
+        public string? Adress { get; set; }
+        public string? CreatedAt { get; set; }  //=> Location?.CreatedAt.ToShortDateString();
 
         public bool IsExpanded { get; set; }
         public ICommand? ExpandCommand { get; set; }
@@ -20,6 +20,9 @@ namespace MntPlus.WPF
         public PrimaryLocationViewModel(LocationDto? location)
         {
             Location = location;
+            Name = location?.Name;
+            Adress = location?.Address;
+            CreatedAt = location?.CreatedAt.ToShortDateString();
             SubLocations = new ObservableCollection<SubLocationViewModel>();
             ExpandCommand = new RelayCommand(() => IsExpanded = !IsExpanded);
         }

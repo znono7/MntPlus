@@ -17,6 +17,9 @@ namespace Contracts
         IInstructionRepository Instruction { get; }
         IRoleRepository Role { get; }
         IUserRoleRepository UserRole { get; }
+        IPartRepository Part { get; }
+        IInventoryRepository Inventory { get; }
+        ILinkPartRepository LinkPart { get; }
 
 
         Task SaveAsync(); 

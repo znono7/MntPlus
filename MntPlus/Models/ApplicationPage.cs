@@ -17,6 +17,8 @@ namespace MntPlus.WPF
         NewPreventiveMaintenance = 10,
         Checklists = 11,
         Meters = 12,
+        Equipment = 13,
+        Inventory = 14,
 
 
     }

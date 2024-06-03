@@ -34,5 +34,9 @@ namespace Entities
         public DateTime? CreatedDate { get; set; }
         public DateTime? PurchaseDate { get; set; }
 
+        public ICollection<Asset>? Assets { get; set; }
+        public ICollection<LinkPart>? LinkParts { get; set; }
+
+
     }
 }

@@ -10,42 +10,49 @@
         <Border BorderThickness="0 0 0 1.2" BorderBrush="{DynamicResource LineColor}"/>
         <Grid TextBlock.TextAlignment="Left">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Height="60" HorizontalAlignment="Left" Style="{StaticResource TextButton}">
-                <TextBlock  Text="{Binding Name}"  Style="{DynamicResource ColumnHeaderStyle}"  />
-            </Button>
-            <TextBlock Grid.Column="1" Text="&#xf03e;" FontSize="32" Foreground="{DynamicResource FourthTextColor}" FontFamily="{StaticResource FontAwesome2}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="2" Text="{Binding Description}"  TextTrimming="CharacterEllipsis" ToolTip="{Binding Description}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <Border Grid.Column="3" Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="#4C44A0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox Cursor="Hand" IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Style="{StaticResource CheckBoxStyle2}" />
+                <Button Grid.Column="1" Command="{Binding ViewEquipmentCommand}" Height="Auto" HorizontalAlignment="Left" Style="{StaticResource TextButton}">
+                    <TextBlock TextWrapping="Wrap" Height="Auto"  Text="{Binding Name}"  Style="{DynamicResource TextBlockStyle}"  />
+                </Button>
+            </Grid>
+            <TextBlock Grid.Column="1" Text="&#xf03e;" FontSize="32" Foreground="{DynamicResource FifthTextColor}" FontFamily="{StaticResource FontAwesome2}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock Grid.Column="2" Text="{Binding Description}"  TextTrimming="CharacterEllipsis" ToolTip="{Binding Description}" Style="{DynamicResource TextBlockStyle}" />
+            <Border Visibility="{Binding IsHasStatut,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True}" Grid.Column="3" Padding="6 2" Height="28" Width="Auto" CornerRadius="14" HorizontalAlignment="Left" Background="#4C44A0">
 
-                <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding Status,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+                <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center" Foreground="#ffffff"    Text="{Binding Status,FallbackValue=EnService,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBlockStyle}" Margin="4 2"/>
             </Border>
-            <TextBlock Grid.Column="4" TextTrimming="CharacterEllipsis" ToolTip="{Binding LocationName}" Text="{Binding LocationName}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="5" Text="{Binding Category}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="6" Text="{Binding Make}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="7" Text="{Binding Model}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="8" TextTrimming="CharacterEllipsis" ToolTip="{Binding SerialNumber}" Text="{Binding SerialNumber}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="9" Text="" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="10" Text="{Binding ParentName}" Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="11" Text="{Binding AssetCommissionDate}"  Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="12" Text="{Binding PurchaseDate}"  Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="13" Text="{Binding PurchaseCost,Converter={local:CurrencyConverter}}"  Style="{DynamicResource ColumnHeaderStyle}" />
-            <TextBlock Grid.Column="14" Text="{Binding CreatedDate}"  Style="{DynamicResource ColumnHeaderStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="4" ToolTip="{Binding LocationName}" Text="{Binding LocationName}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="5" Text="{Binding Category}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="6" Text="{Binding Make}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="7" Text="{Binding Model}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="8" TextTrimming="CharacterEllipsis" ToolTip="{Binding SerialNumber}" Text="{Binding SerialNumber}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="9" Text="" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="10" Text="{Binding ParentName}" Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="11" Text="{Binding AssetCommissionDate}"  Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="12" Text="{Binding PurchaseDate}"  Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="13" Text="{Binding PurchaseCost,Converter={local:CurrencyConverter}}"  Style="{DynamicResource TextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Height="Auto" Grid.Column="14" Text="{Binding CreatedDate}"  Style="{DynamicResource TextBlockStyle}" />
 
         </Grid>
     </Grid>

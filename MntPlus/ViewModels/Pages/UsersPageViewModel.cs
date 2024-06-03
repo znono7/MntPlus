@@ -17,7 +17,7 @@ namespace MntPlus.WPF
                 users = value; 
                 if (users is not null)
                     FilterUsers = new ObservableCollection<UserWithRolesDto>(users);
-            } 
+            }  
         } 
         private ApplicationPage _currentPage;
 

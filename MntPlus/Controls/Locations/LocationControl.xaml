@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MntPlus.WPF"
-             mc:Ignorable="d" Height="50" Width="1020"
+             mc:Ignorable="d"  Width="1020"
              d:DesignHeight="50" d:DesignWidth="1020">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="48"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="2"/>
         </Grid.RowDefinitions>
@@ -20,12 +20,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="{DynamicResource LineColor}"/>
+            <Border Grid.ColumnSpan="4" BorderThickness="1" BorderBrush="{DynamicResource LineColor}"/>
             <TextBlock Text="{Binding Name}" Grid.Column="0" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 0"/>
             <TextBlock Text="{Binding Adress}" Grid.Column="1" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 0"/>
             <TextBlock Text="{Binding CreatedAt}" Grid.Column="2" Style="{DynamicResource ColumnHeaderStyle}" Margin="20 0"/>
-            <Button Click="Button_Click"  Visibility="{Binding IsHaveSubLocations,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Grid.Column="3"  Style="{DynamicResource IconPathButton}"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Path  Width="20" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource expand}">
+            <Button Margin="10 0" Click="Button_Click"  Visibility="{Binding IsHaveSubLocations,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True}" Grid.Column="3"  Style="{DynamicResource IconPathButton}"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Path  Width="14" Height="14" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource expand}">
                     <Path.RenderTransform>
                         <RotateTransform x:Name="rotateTransform" Angle="0" CenterX="3" CenterY="5.5"/>
                     </Path.RenderTransform>

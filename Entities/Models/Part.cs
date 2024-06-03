@@ -11,5 +11,8 @@ namespace Entities
         public string? Description { get; set; }
         public string? Category { get; set; }
         public byte[]? Image { get; set; }
+        public ICollection<Inventory>? Inventories { get; set; }
+        public ICollection<LinkPart>? LinkParts { get; set; }
+
     }
 }

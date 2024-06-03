@@ -8,22 +8,21 @@
              d:DesignHeight="450" d:DesignWidth="800" Width="800">
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
       
 
-        <Grid >
+        <!--<Grid >
             <Border  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="160" Tag="{StaticResource plus}" Command="{Binding AddNewChildCommand}" Margin="20 0" Style="{StaticResource PrimeButton}" Content="  Ajouter un Enfant"/>
-                <!--<Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />-->
+                --><!--<Button Style="{StaticResource PrimeIconButton}" Margin="0 0 20 0" Height="33" Tag="{StaticResource print}" />--><!--
             </StackPanel>
-        </Grid>
-        <Grid Grid.Row="2">
+        </Grid>-->
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="64"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Border Grid.RowSpan="2"  CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
@@ -37,22 +36,22 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Path Margin="10,0,0,0" Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource box}"/>
-                    <TextBlock Text="Actif - enfants" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                    <TextBlock Text="Hiérarchie d'équipement" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
                 </StackPanel>
-                <TextBox Grid.Column="3" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 2 20" Style="{DynamicResource SearchTextBoxStyle}"/>
-                <Button Command="{Binding SearchCommand}" Grid.Column="4" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}" Margin="0 0 5 1"/>
+                <!--<TextBox Grid.Column="3" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 2 20" Style="{DynamicResource SearchTextBoxStyle}"/>
+                <Button Command="{Binding SearchCommand}" Grid.Column="4" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}" Margin="0 0 5 1"/>-->
             </Grid>
-
+           
             <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TreeView Margin="20" HorizontalAlignment="Left"   ItemContainerStyle="{DynamicResource TreeViewItemContainerStyle1}" 
-                        ItemsSource="{Binding FilteredChildren}"   >
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <local:EquipmentItemChildControl   />
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
+                <ItemsControl Margin="20" HorizontalAlignment="Left"    
+                        ItemsSource="{Binding Children}"   >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:EquipmentItemChildControl />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
 
-                </TreeView>
+                </ItemsControl>
             </ScrollViewer>
         </Grid>
     </Grid>

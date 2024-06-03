@@ -20,6 +20,9 @@ namespace Repository
         private readonly Lazy<IInstructionRepository> instructionRepository;
         private readonly Lazy<IRoleRepository> roleRepository;
         private readonly Lazy<IUserRoleRepository> userRoleRepository;
+        private readonly Lazy<IPartRepository> partRepository;
+        private readonly Lazy<IInventoryRepository> inventoryRepository;
+        private readonly Lazy<ILinkPartRepository> linkPartRepository;
 
 
         public RepositoryManager(RepositoryContext repositoryContext)
@@ -34,7 +37,9 @@ namespace Repository
             instructionRepository = new Lazy<IInstructionRepository>(() => new InstructionRepository(repositoryContext));
             roleRepository = new Lazy<IRoleRepository>(() => new RoleRepository(repositoryContext));
             userRoleRepository = new Lazy<IUserRoleRepository>(() => new UserRoleRepository(repositoryContext));
-              
+              partRepository = new Lazy<IPartRepository>(() => new PartRepository(repositoryContext));
+            inventoryRepository = new Lazy<IInventoryRepository>(() => new InventoryRepository(repositoryContext));
+            linkPartRepository = new Lazy<ILinkPartRepository>(() => new LinkPartRepository(repositoryContext));
         }
       
 
@@ -55,6 +60,12 @@ namespace Repository
         public IRoleRepository Role => roleRepository.Value;
 
         public IUserRoleRepository UserRole => userRoleRepository.Value;
+
+        public IPartRepository Part => partRepository.Value;
+
+        public IInventoryRepository Inventory => inventoryRepository.Value;
+
+        public ILinkPartRepository LinkPart => linkPartRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

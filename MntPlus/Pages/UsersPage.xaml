@@ -96,9 +96,7 @@
                         <DataGridTemplateColumn Header="Nom"  Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border Grid.Column="3" Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="#4C44A0">
                                         <TextBlock FontSize="15" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding UserDto.FullName,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
-                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

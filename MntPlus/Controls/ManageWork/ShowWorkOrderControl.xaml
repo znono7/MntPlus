@@ -40,8 +40,9 @@
                     <TextBlock Margin="0" Grid.Row="2" TextWrapping="Wrap" Height="Auto" Text="{Binding Name}"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
                     <TextBlock Grid.Row="3" FontSize="13" Foreground="{DynamicResource FourthTextColor}" TextWrapping="Wrap" Height="Auto" Text="{Binding Description}" Margin="0 5"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
                     <Grid HorizontalAlignment="Left" Grid.Row="4" Margin="0 20">
-                        <Border Background="{Binding BackgroundPriority,Converter={local:StringRGBToBrushConverter}}" CornerRadius="7"/>
-                        <TextBlock  FontSize="15" Foreground="{Binding ForgroundPriority,Converter={local:StringRGBToBrushConverter}}" TextWrapping="Wrap" Height="Auto" Text="{Binding WorkPriority}" Margin="20 10"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                        <Border BorderThickness="1.4" BorderBrush="{Binding ForgroundPriority,Converter={local:StringRGBToBrushConverter}}"
+                            Background="{Binding BackgroundPriority,Converter={local:StringRGBToBrushConverter}}" CornerRadius="5"/>
+                        <TextBlock  FontSize="15" Foreground="{Binding ForgroundPriority,Converter={local:StringRGBToBrushConverter}}" TextWrapping="Wrap" Height="Auto" Text="{Binding WorkPriority}" Margin="10 5"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
                     </Grid>
                     <Rectangle Margin="0 10 0 0" Height="1" Fill="{DynamicResource LineColor}" Grid.Row="0" />
                     <Rectangle Height="1" Fill="{DynamicResource LineColor}" Grid.Row="5"/>
@@ -49,7 +50,7 @@
                     <StackPanel x:Name="StatStack" Orientation="Horizontal" Margin="10 5" Grid.Row="6">
                         <TextBlock  Text="Statut" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0"  Style="{StaticResource TextBlockStyle}" />
                         <Grid Margin="20 0" HorizontalAlignment="Left" x:Name="StatGrid">
-                            <Border Background="#A79AF3" CornerRadius="7"/>
+                            <Border Background="Transparent" BorderThickness="1.4" BorderBrush="{Binding StatusBorderBrush,Converter={local:StringRGBToBrushConverter}}" CornerRadius="5"/>
 
                             <Button Margin="20 0" Command="{Binding OpenMenuStatCommand}" HorizontalAlignment="Stretch"  Foreground="{Binding ForgroundColorStat,FallbackValue=Black,Converter={local:StringRGBToBrushConverter}}" 
                             Content="{Binding Status,UpdateSourceTrigger=PropertyChanged,FallbackValue=Ouvrir}">
@@ -118,7 +119,7 @@
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Localisation : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Location}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
                         <TextBlock Grid.Row="3" Grid.Column="0" Text="Équipement : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
-                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Equipment}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Equipment,UpdateSourceTrigger=PropertyChanged}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
                         <TextBlock Grid.Row="4" Grid.Column="0" Text="Créé : " Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
                         <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Created}" Foreground="{DynamicResource FourthTextColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 20 5 5"  Style="{StaticResource TextBlockStyle}" />
 

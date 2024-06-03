@@ -24,7 +24,7 @@ namespace Shared
         string? Status,
         DateTime? CreatedAt);
 
-    
+      
     public record UserWithRolesDto(
                UserDto? UserDto,
                List<RoleDto?>? UserRoles

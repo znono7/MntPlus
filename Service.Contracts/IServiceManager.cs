@@ -17,6 +17,9 @@ namespace Service.Contracts
         IInstructionService InstructionService { get; }
         IRoleService RoleService { get; }
         IUserRoleService UserRoleService { get; }
+        IPartService PartService { get; }
+        IInventoryService InventoryService { get; }
+        ILinkPartService LinkPartService { get; }
       
 
     }

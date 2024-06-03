@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class mntMigrations : Migration
+    public partial class MntplusMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,16 +60,6 @@ namespace MntPlus.WPF.Migrations
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
                 });
-            migrationBuilder.InsertData(
-                           table: "Roles",
-                           columns: ["Id", "Name", "IsSeeded"],
-                           values: new object[,]
-                           {
-                                { Guid.NewGuid(), "Ingénieur GMAO", true },
-                                { Guid.NewGuid(), "Responsable", true },
-                                { Guid.NewGuid(), "Demandeur", true }
-
-                           });
 
             migrationBuilder.CreateTable(
                 name: "Schedules",
@@ -149,7 +139,8 @@ namespace MntPlus.WPF.Migrations
                         name: "FK_Assets_Assets_AssetParent",
                         column: x => x.AssetParent,
                         principalTable: "Assets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Assets_Locations_LocationId",
                         column: x => x.LocationId,
@@ -162,15 +153,13 @@ namespace MntPlus.WPF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PartID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    Location = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<string>(type: "TEXT", nullable: true),
                     Cost = table.Column<double>(type: "REAL", nullable: true),
                     AvailableQuantity = table.Column<int>(type: "INTEGER", nullable: true),
                     MinimumQuantity = table.Column<int>(type: "INTEGER", nullable: true),
                     MaxQuantity = table.Column<int>(type: "INTEGER", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    DateReceived = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    PartID = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -538,6 +527,47 @@ namespace MntPlus.WPF.Migrations
                 name: "IX_WorkTasks_PreventiveMaintenanceId",
                 table: "WorkTasks",
                 column: "PreventiveMaintenanceId");
+
+            migrationBuilder.InsertData(
+              table: "Users",
+              columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
+              values: new object[,]
+              {
+                     { Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), "Lamine", "Belkheir", "mail@d","01264","lamine","a123456","Actif",DateTime.Now}
+              });
+
+
+            migrationBuilder.InsertData(
+                           table: "Roles",
+                           columns: ["Id", "Name", "IsSeeded"],
+                           values: new object[,]
+                           {
+                     { Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F"), "Ingénieur GMAO", true },
+                     { Guid.NewGuid(), "Responsable", true },
+                     { Guid.NewGuid(), "Demandeur", true }
+
+                           });
+
+            migrationBuilder.InsertData(
+                              table: "UserRoles",
+                              columns: ["Id", "UserId", "RoleId"],
+                         values: new object[,]
+                        {
+                    { Guid.NewGuid(), Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F") },
+
+
+                          });
+
+            //insert into Locations table
+            migrationBuilder.InsertData(
+                               table: "Locations",
+                                              columns: ["Id", "Name", "Address", "IsPrimaryLocation", "IdParent", "CreatedAt"],
+                                                             values: new object[,]
+                                                             {
+                    { Guid.NewGuid(), "Aflou", "Cite Bouaeea kada", true, null, DateTime.Now },
+                    { Guid.NewGuid(), "Location 2", "Address 2", true, null, DateTime.Now }
+                   
+                });
         }
 
         /// <inheritdoc />

@@ -21,6 +21,7 @@ namespace Repository
        
         public async Task<IEnumerable<Asset>?> GetAllAssetsAsync(bool trackChanges) =>
             await FindAll(trackChanges)
+            .Include(l => l.Location)
             .OrderBy(c => c.Name)
             .ToListAsync();
 
@@ -28,6 +29,7 @@ namespace Repository
 
         public async Task<Asset?> GetAssetAsync(Guid assetId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(assetId), trackChanges)
+            .Include(l => l.Location)
             .SingleOrDefaultAsync();
 
       

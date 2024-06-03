@@ -87,8 +87,8 @@
         <Grid Margin="20">
             <Border     Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
             <StackPanel Margin="10">
-                <TextBlock Text="Êtes-vous sûr de vouloir supprimer cet équipement ?" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
-                <TextBlock  Text="Cela supprimera également tous les modèles et calendriers de PM associés à cet actif." Margin="20 10" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource TextBlockStyle}" />
+                <TextBlock Text="{Binding Message}" Margin="20 10" Style="{DynamicResource TextBlockStyle}" />
+                <!--<TextBlock  Text="Cela supprimera également tous les modèles et calendriers de PM associés à cet actif." Margin="20 10" FontFamily="{StaticResource ClarityCity-SemiBold}" Style="{DynamicResource TextBlockStyle}" />-->
             </StackPanel>
         </Grid>
 

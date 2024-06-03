@@ -13,6 +13,8 @@ namespace MntPlus.WPF
         Statut = 2,
         SerialNumber = 3,
         Model = 4,
-        Make = 5
+        Make = 5,
+        DateService = 6,
+        DateCreated = 7,
     }
 }

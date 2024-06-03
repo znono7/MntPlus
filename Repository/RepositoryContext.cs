@@ -11,6 +11,19 @@ namespace Repository
          
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
+            modelBuilder.Entity<Asset>()
+                .HasOne(a => a.Parent)
+                .WithMany(l => l.Assets)
+                .HasForeignKey(a => a.AssetParent)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne(i => i.Part)
+                .WithMany(p => p.Inventories)
+                .HasForeignKey(i => i.PartID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            
         }
         public DbSet<Location>? Locations { get; set; }
         public DbSet<Asset>? Assets { get; set; }

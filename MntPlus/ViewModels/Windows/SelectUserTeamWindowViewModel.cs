@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -94,13 +95,34 @@ namespace MntPlus.WPF
         public ICommand GetUserTeamCommand { get; set; }
         public SelectUserTeamWindowViewModel(UserTeamStore? userTeamStore)
         {
+            _ = GetUsers();
             UserTeamStore = userTeamStore;
             SearchCommand = new RelayCommand(Search);
             TeamSearchCommand = new RelayCommand(TeamSearch);
             SelectUserTeamCommand = new RelayParameterizedCommand((p) => SelectUserTeam(p));
             GetUserTeamCommand = new RelayParameterizedCommand((p) => GetUserTeam(p));
-            GenerateUsers();
-            GenerateTeams();
+           
+        }
+        private async Task GetUsers()
+        {
+            var result = await AppServices.ServiceManager.UserService.GetAllUsersAsync(false);
+            if (result.Success && result is ApiOkResponse<IEnumerable<UserWithRolesDto>> response)
+            {
+                Users = new ObservableCollection<UserWithRolesDto>(response.Result!);
+            }
+            else if (result is ApiBadRequestResponse r)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la récupération des utilisateurs"));
+                Users = new ObservableCollection<UserWithRolesDto>();
+
+            }
+            else if (result is ApiNotFoundResponse n)
+            {
+               
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucun utilisateur trouvé"));
+                Users = new ObservableCollection<UserWithRolesDto>();
+            }
+
         }
 
         private void GetUserTeam(object? p)

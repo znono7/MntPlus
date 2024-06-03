@@ -90,7 +90,7 @@
             <ItemsControl  ItemsSource="{Binding FilterPrimaryLocationViews}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <RadioButton Command="{Binding SelectLocationCommand}"  GroupName="EquipmentGroup" Style="{StaticResource SelectLocationRadioButtonStyle}" Content="{Binding Name}" Tag="{Binding Adress}"  />
+                        <RadioButton Width="480" Command="{Binding SelectLocationCommand}"  GroupName="EquipmentGroup" Style="{StaticResource SelectLocationRadioButtonStyle}" Content="{Binding Name}" Tag="{Binding Adress}"  />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemContainerStyle>

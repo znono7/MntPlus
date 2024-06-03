@@ -25,7 +25,7 @@ namespace MntPlus.WPF
         /// <summary>
         /// True if the side menu should be shown
         /// </summary>
-        private bool _sideMenuVisible = true;
+        private bool _sideMenuVisible { get; set; }
         public bool SideMenuVisible 
         { 
             get => _sideMenuVisible;
@@ -72,18 +72,6 @@ namespace MntPlus.WPF
 
         }
 
-        private void SideMenu()
-        {
-            if (SideBarStatus == "Masquer la Barre")
-            {
-                SideBarStatus = "Afficher la Barre";
-                SideMenuVisible = false;
-            }
-            else
-            {
-                SideBarStatus = "Masquer la Barre";
-                SideMenuVisible = true;
-            }
-        }
+      
     }
 }

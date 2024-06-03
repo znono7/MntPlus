@@ -431,7 +431,7 @@
             <Setter.Value>
                 <ControlTemplate>
                     <TextBlock Foreground="Red" Margin="2,0,0,0" Text="!" VerticalAlignment="Center"/>
-                </ControlTemplate>
+                </ControlTemplate> 
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
@@ -470,7 +470,7 @@
                     <Condition Property="IsSelected" Value="true"/>
                     <Condition Property="Selector.IsSelectionActive" Value="false"/>
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#dfdfdf"/>
+                <Setter Property="Background" Value="#623ED0"/>
             </MultiTrigger>
         </Style.Triggers>
     </Style>

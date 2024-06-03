@@ -85,7 +85,13 @@
     <Compile Update="Controls\Asset\AssetListControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\Inventory\AddInventoryControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\ManageWork\CommentControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Parts\AddPartControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\LocationsPage.xaml.cs">
@@ -116,6 +122,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\SelectPartWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\SelectUserTeamWindow.xaml.cs">

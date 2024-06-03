@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -6,6 +7,9 @@ namespace MntPlus.WPF
 {
     public class LocationsPageViewModel : BaseViewModel
     {
+        public LocationWindowViewModel locationWindow { get; set; }
+        public bool AddLocationPopupIsOpen { get; set; }
+        public bool DimmableOverlayVisible { get; set; }
         public ObservableCollection<LocationDto>? LocationDtos { get; set; }
         public ObservableCollection<PrimaryLocationViewModel>? FilterPrimaryLocationViews { get; set; }
         private ObservableCollection<PrimaryLocationViewModel>? primaries { get; set; }
@@ -50,18 +54,26 @@ namespace MntPlus.WPF
 
         public LocationsPageViewModel()
         {
+            _ = GetLocations();
+            OrginaseData();
             SearchCommand = new RelayCommand(Search);
-            Primaries = new ObservableCollection<PrimaryLocationViewModel>();
             LocationStore = new LocationStore();
             LocationStore.LocationCreated += AddNewLocation;
+            locationWindow = new LocationWindowViewModel(LocationStore);
+            locationWindow.CloseAction += CloseControl;
             OpenWindowCommand = new RelayCommand(() =>
             {
-                var window = new LocationWindow();
-                window.DataContext = new LocationWindowViewModel(LocationStore);
-                window.ShowDialog();
+                AddLocationPopupIsOpen = true;
+                DimmableOverlayVisible = true;
             });
         }
 
+        private async Task CloseControl()
+        {
+            AddLocationPopupIsOpen = false;
+            DimmableOverlayVisible = false;
+            await Task.Delay(1);
+        }
 
         private void Search()
         {
@@ -87,15 +99,28 @@ namespace MntPlus.WPF
 
         }
 
+        private async Task GetLocations()
+        {
+            var response = await AppServices.ServiceManager.LocationService.GetAllLocationsAsync(false);
+            if(response != null && response is ApiOkResponse<IEnumerable<LocationDto>> result)
+            {
+                LocationDtos = new ObservableCollection<LocationDto>(result.Result!);
+            }
+            else
+            {
+                LocationDtos = new ObservableCollection<LocationDto>();
+
+            }
+        }
         private void OrginaseData()
         {
             if (LocationDtos is null)
                 return;
+            Primaries = new ObservableCollection<PrimaryLocationViewModel>();
             foreach (var location in LocationDtos)
             {
-                if (location.IsPrimaryLocation && location.IdParent is null)
+                if (location.IsPrimaryLocation)
                 {
-                    Primaries ??= new ObservableCollection<PrimaryLocationViewModel>();
                     Primaries.Add(new PrimaryLocationViewModel(location));
                 }
             }
@@ -114,6 +139,8 @@ namespace MntPlus.WPF
                     }
                 }
             }
+
+            FilterPrimaryLocationViews = new ObservableCollection<PrimaryLocationViewModel>(Primaries!);
         }
 
         private void AddNewLocation(LocationDto? location)
@@ -125,6 +152,7 @@ namespace MntPlus.WPF
             {
                 Primaries ??= new ObservableCollection<PrimaryLocationViewModel>();
                 Primaries.Add(new PrimaryLocationViewModel(location));
+
             }
             else
             {
@@ -140,8 +168,10 @@ namespace MntPlus.WPF
                             }
                         
                     }
+
                 }
             }
+            FilterPrimaryLocationViews = new ObservableCollection<PrimaryLocationViewModel>(Primaries);
 
 
 

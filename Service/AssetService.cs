@@ -22,8 +22,10 @@ namespace Service
                 var assetEntity = _mapper.Map<Asset>(asset);  
                 _repository.Asset.CreateAsset(assetEntity); 
                 await _repository.SaveAsync();
-                var assetToReturn = _mapper.Map<AssetDto>(assetEntity);
-                return new ApiOkResponse<AssetDto>(assetToReturn);
+                var returnEquipment = _mapper.Map < AssetDto >( await _repository.Asset.GetAssetAsync(assetEntity.Id, false));
+               // var assetToReturn = _mapper.Map<AssetDto>(assetEntity);
+
+                return new ApiOkResponse<AssetDto>(returnEquipment);
             }
             catch (Exception ex)
             {
@@ -61,7 +63,7 @@ namespace Service
                 var assets = await _repository.Asset.GetAllAssetsAsync(trackChanges);
                 if (assets is null)
                 { 
-                    return new ApiNotFoundResponse(""); 
+                    return new ApiNotFoundResponse("");  
                 }
                 var assetsDto = _mapper.Map<IEnumerable<AssetDto>>(assets);
                 return new ApiOkResponse<IEnumerable<AssetDto>>(assetsDto);

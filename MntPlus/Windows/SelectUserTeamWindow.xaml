@@ -113,7 +113,7 @@
                                 <DataTemplate>
                                     <RadioButton Command="{Binding DataContext.GetUserTeamCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
                                                  CommandParameter="{Binding}"
-                                        GroupName="g1" Content="{Binding FullNameAndRoles}" Tag="{StaticResource user}" Style="{StaticResource AssignorRadioButtonStyle}"/>
+                                        GroupName="g1" Content="{Binding UserDto.FullName}" Tag="{StaticResource user}" Style="{StaticResource AssignorRadioButtonStyle}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemContainerStyle>

@@ -20,15 +20,17 @@ namespace MntPlus.WPF
         public bool Confirmed { get; private set; }
         public string? EquipmentName { get; set; }
         public string? TitleWindow { get; set; }
-         
-        public ConfirmationWindow(string? _EquipmentName)
+        public string? Message { get; set; }
+
+        public ConfirmationWindow(string? _EquipmentName , string? message = "Vous êtes maintenant sûr du processus de suppression?") 
         {
             InitializeComponent();
             DataContext = this;
            
             Confirmed = false;
             EquipmentName = _EquipmentName;
-            TitleWindow = $"Supprimer  {EquipmentName}";
+            TitleWindow = EquipmentName;
+            Message = message;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
