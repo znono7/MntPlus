@@ -79,7 +79,7 @@ namespace MntPlus.WPF
         #endregion
 
         #region Constructor
-        public SideMenuViewModel()
+        public SideMenuViewModel() 
         {  
             TravailCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.ManageWork) /*TravailMenuEnabled = true*/);//^
             ToggleCommand = new RelayCommand(async () => await ToggleAction());

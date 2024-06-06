@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="Styles/RadioButton.xaml" />
                 <ResourceDictionary Source="Styles/CheckBox.xaml" />
                 <ResourceDictionary Source="Styles/InventaireDataGrid.xaml" />
+                <ResourceDictionary Source="Styles/NewDataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

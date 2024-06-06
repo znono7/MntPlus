@@ -23,6 +23,12 @@ namespace Repository
                 .HasForeignKey(i => i.PartID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Meter>()
+                .HasMany(m => m.MeterReadings)
+                .WithOne(mr => mr.Meter)
+                .HasForeignKey(mr => mr.MeterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             
         }
         public DbSet<Location>? Locations { get; set; }
@@ -41,7 +47,10 @@ namespace Repository
         public DbSet<Inventory>? Inventories { get; set; }
         public DbSet<Part>? Parts { get; set; }
         public DbSet<LinkPart>? LinkParts { get; set; }
-        public DbSet<Request>? Requests { get; set; }
+        public DbSet<Request>? Requests { get; set; } 
+
+        public DbSet<Meter>? Meters  { get; set; }
+        public DbSet<MeterReading>? MeterReadings { get; set; }
 
 
 

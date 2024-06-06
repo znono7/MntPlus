@@ -197,7 +197,7 @@ namespace MntPlus.WPF
         /// Constructor with specific view model
         /// </summary>
         /// <param name="specificViewModel">The specific view model to use, if any</param>
-        public BasePage(VM specificViewModel = null) : base()
+        public BasePage(VM? specificViewModel = null) : base()
         {
             // Set specific view model
             if (specificViewModel != null)

@@ -1,0 +1,175 @@
+﻿<local:BasePage x:TypeArguments="local:MeterPageViewModel"  
+                x:Class="MntPlus.WPF.MeterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MntPlus.WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MeterPage">
+
+    <Grid Background="{DynamicResource TertiaryBackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.RowSpan="4" Panel.ZIndex="10" Opacity="0.4">
+            <Border Background="{StaticResource PrimaryBlackColor}" local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
+        </Border>
+        <local:AddMeterControl DataContext="{Binding AddMeterViewModel}" Panel.ZIndex="11" 
+         local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.AddMeterPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MeterPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="4" />
+        <local:ReadingMeterControl DataContext="{Binding ReadingMeterViewModel}" Panel.ZIndex="11" 
+  local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.IsReadingMeterPopupOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MeterPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="4" />
+
+        <Grid>
+            <Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource LineColor}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button ToolTipService.InitialShowDelay="1"  Grid.Column="0" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource sidemenu}"
+                        Command="{Binding ApplicationViewModel.SideMenuCommand,Source={x:Static local:ViewModelLocator.Instance}}">
+                    <Button.ToolTip>
+                        <ToolTip Style="{StaticResource ToolTipStyle}">
+                            <TextBlock Text="{Binding ApplicationViewModel.SideBarStatus,Source={x:Static local:ViewModelLocator.Instance}}" />
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <Rectangle Margin="10 0" Width="1" Grid.Column="1" Fill="{DynamicResource LineColor}"/>
+                <TextBlock Grid.Column="2" Text="Compteurs" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
+                <Button Grid.Column="3"  Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding OpenControlCommand}"  Style="{DynamicResource PrimeButton}" Content="Créer Compteur" Tag="{StaticResource plus}"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource LineColor}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Tag="Recherche par Nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle2}"/>
+            </Grid>
+        </Grid>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <Grid Background="{DynamicResource FourthBackgroundColor}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding OpenActionPopupOpenCommand}" x:Name="ActBtn" HorizontalAlignment="Left" Style="{DynamicResource ActionButton}"  Content="Actions"   Margin="15 10 15 1"/>
+                    <Popup StaysOpen="False" Placement="Bottom" PlacementTarget="{Binding ElementName=ActBtn}" AllowsTransparency="True" HorizontalOffset="5" VerticalOffset="5" IsOpen="{Binding IsActionPopupOpen}" x:Name="ActionsPopup">
+                        <Grid >
+                            <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                                                Color="LightSlateGray" Opacity="0.2" />
+                                </Border.Effect>
+                            </Border>
+                            <StackPanel Margin="5 15">
+                                <Button Command="{Binding RemoveCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource delete}" Foreground="#C22528" Content="Supprimer"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
+                </Grid>
+                <Grid Grid.Row="1" Margin="20 0" >
+                    <DataGrid HorizontalAlignment="Stretch"  
+                              ColumnHeaderStyle="{DynamicResource NewDataGridColumnHeaderStyle}"  Margin="0" 
+                              ItemsSource="{Binding FilterMeters}"
+                              Style="{StaticResource NewDataGridStyle }"
+                              RowStyle="{StaticResource NewDataGridRowStyle}"
+                              CellStyle="{StaticResource NewDataGridCellStyle}"
+                              AutoGenerateColumns="False">
+
+                               
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
+                                <DataGridCheckBoxColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding IsChecked,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
+                                    </DataTemplate>
+                                </DataGridCheckBoxColumn.HeaderTemplate>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTemplateColumn Header="Nom de Compteur"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Height="Auto" Command="{Binding DataContext.ViewMeterCommand,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}} }"
+                                                CommandParameter="{Binding}"
+                                             HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextButton}" >
+                                            <TextBlock FontSize="15" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding MeterDto.Name,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Prochaine lecture Prévue"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Border HorizontalAlignment="Stretch"  CornerRadius="4" Background="{DynamicResource LineColor}" Margin="0"/>
+                                            <TextBlock FontSize="15" TextWrapping="Wrap" Height="Auto" TextAlignment="Center" Foreground="{DynamicResource FourthTextColor}"    Text="{Binding NextReading,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="10 4"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Unité de mesure"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"     Text="{Binding MeterDto.Unit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Dernière lecture"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding CurrentReading,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Fréquence"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding MeterDto.Frequency,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Unité de fréquence"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"     Text="{Binding MeterDto.FrequencyUnit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Équipement"  Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"     Text="{Binding AssetName,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</local:BasePage>

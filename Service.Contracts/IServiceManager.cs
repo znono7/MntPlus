@@ -20,6 +20,8 @@ namespace Service.Contracts
         IPartService PartService { get; }
         IInventoryService InventoryService { get; }
         ILinkPartService LinkPartService { get; }
+        IMeterService MeterService { get; }
+        IMeterReadingService MeterReadingService { get; }
       
 
     }

@@ -19,7 +19,8 @@ namespace Repository
 
 
         public void Delete(T entity) => RepositoryContext.Set<T>().Remove(entity);
-       
+
+
 
         public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? RepositoryContext.Set<T>().AsNoTracking() : RepositoryContext.Set<T>();
        

@@ -42,6 +42,16 @@ namespace MntPlus.WPF
             CreateMap<Inventory, InventoryDto>().ReverseMap();
             CreateMap<InventoryForCreationDto, Inventory>().ReverseMap();
 
+            CreateMap<Meter,MeterDto>()
+                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => src.Asset!.Name))
+                .ReverseMap();
+            CreateMap<MeterDtoForCreation, Meter>().ReverseMap();
+
+            CreateMap<MeterReading, MeterReadingDto>()
+                .ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User != null ? $"{src.User!.FirstName} {src.User.LastName}" : string.Empty))
+                .ReverseMap();
+            CreateMap<MeterReadingDtoForCreation, MeterReading>().ReverseMap();
+
            
 
 

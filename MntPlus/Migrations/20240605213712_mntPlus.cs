@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class MntplusMigration : Migration
+    public partial class mntPlus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -272,6 +272,29 @@ namespace MntPlus.WPF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Meters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    CurrentReading = table.Column<double>(type: "REAL", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Unit = table.Column<string>(type: "TEXT", nullable: true),
+                    Frequency = table.Column<int>(type: "INTEGER", nullable: false),
+                    FrequencyUnit = table.Column<string>(type: "TEXT", nullable: true),
+                    AssetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Meters_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PreventiveMaintenances",
                 columns: table => new
                 {
@@ -343,6 +366,32 @@ namespace MntPlus.WPF.Migrations
                     table.ForeignKey(
                         name: "FK_WorkOrders_Users_UserCreatedId",
                         column: x => x.UserCreatedId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MeterReadings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    MeterId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Reading = table.Column<double>(type: "REAL", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeterReadings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeterReadings_Meters_MeterId",
+                        column: x => x.MeterId,
+                        principalTable: "Meters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MeterReadings_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
@@ -449,6 +498,21 @@ namespace MntPlus.WPF.Migrations
                 column: "IdParent");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MeterReadings_MeterId",
+                table: "MeterReadings",
+                column: "MeterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeterReadings_UserId",
+                table: "MeterReadings",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Meters_AssetId",
+                table: "Meters",
+                column: "AssetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PreventiveMaintenanceHistories_ChangedById",
                 table: "PreventiveMaintenanceHistories",
                 column: "ChangedById");
@@ -529,12 +593,12 @@ namespace MntPlus.WPF.Migrations
                 column: "PreventiveMaintenanceId");
 
             migrationBuilder.InsertData(
-              table: "Users",
-              columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
-              values: new object[,]
-              {
-                     { Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), "Lamine", "Belkheir", "mail@d","01264","lamine","a123456","Actif",DateTime.Now}
-              });
+  table: "Users",
+  columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
+  values: new object[,]
+  {
+           { Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), "Lamine", "Belkheir", "mail@d","01264","lamine","a123456","Actif",DateTime.Now}
+  });
 
 
             migrationBuilder.InsertData(
@@ -542,9 +606,9 @@ namespace MntPlus.WPF.Migrations
                            columns: ["Id", "Name", "IsSeeded"],
                            values: new object[,]
                            {
-                     { Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F"), "Ingénieur GMAO", true },
-                     { Guid.NewGuid(), "Responsable", true },
-                     { Guid.NewGuid(), "Demandeur", true }
+           { Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F"), "Ingénieur GMAO", true },
+           { Guid.NewGuid(), "Responsable", true },
+           { Guid.NewGuid(), "Demandeur", true }
 
                            });
 
@@ -553,7 +617,7 @@ namespace MntPlus.WPF.Migrations
                               columns: ["Id", "UserId", "RoleId"],
                          values: new object[,]
                         {
-                    { Guid.NewGuid(), Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F") },
+          { Guid.NewGuid(), Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F") },
 
 
                           });
@@ -564,9 +628,18 @@ namespace MntPlus.WPF.Migrations
                                               columns: ["Id", "Name", "Address", "IsPrimaryLocation", "IdParent", "CreatedAt"],
                                                              values: new object[,]
                                                              {
-                    { Guid.NewGuid(), "Aflou", "Cite Bouaeea kada", true, null, DateTime.Now },
-                    { Guid.NewGuid(), "Location 2", "Address 2", true, null, DateTime.Now }
-                   
+          { Guid.NewGuid(), "Aflou", "Cite Bouaeea kada", true, null, DateTime.Now },
+          { Guid.NewGuid(), "Location 2", "Address 2", true, null, DateTime.Now }
+
+                });
+            migrationBuilder.InsertData(
+                                        table: "Assets",
+                                        columns: ["Id", "AssetParent", "Name", "Description", "Status", "Category", "LocationId", "SerialNumber", "Model", "Make", "PurchaseCost", "ImagePath", "AssetImage", "AssetCommissionDate", "CreatedDate", "PurchaseDate"],
+                                        values: new object[,]
+                                        {
+          { Guid.NewGuid(), null, "Asset 1", "Description 1", "Active", "Category 1",null, "Serial 1", "Model 1", "Make 1", 1000, "Path 1", null, DateTime.Now, DateTime.Now, DateTime.Now },
+          { Guid.NewGuid(), null, "Asset 2", "Description 2", "Active", "Category 2", null, "Serial 2", "Model 2", "Make 2", 2000, "Path 2", null, DateTime.Now, DateTime.Now, DateTime.Now }
+
                 });
         }
 
@@ -578,6 +651,9 @@ namespace MntPlus.WPF.Migrations
 
             migrationBuilder.DropTable(
                 name: "LinkParts");
+
+            migrationBuilder.DropTable(
+                name: "MeterReadings");
 
             migrationBuilder.DropTable(
                 name: "PreventiveMaintenanceHistories");
@@ -599,6 +675,9 @@ namespace MntPlus.WPF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Parts");
+
+            migrationBuilder.DropTable(
+                name: "Meters");
 
             migrationBuilder.DropTable(
                 name: "Roles");

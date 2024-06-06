@@ -16,7 +16,6 @@
     <None Remove="Fonts\ClarityCity-Thin.ttf" />
     <None Remove="Fonts\fontawesome-webfont.ttf" />
     <None Remove="images.jpg" />
-    <None Remove="MntPlusDatabase.db" />
     <None Remove="Styles\Icons\maintenance.png" />
     <None Remove="Styles\Icons\setting-240.png" />
   </ItemGroup>
@@ -38,9 +37,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="images.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MntPlusDatabase.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Styles\Icons\maintenance.png">
@@ -89,6 +85,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\ManageWork\CommentControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Meters\AddMeterControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\Parts\AddPartControl.xaml.cs">
@@ -142,6 +141,12 @@
     <Compile Update="Windows\UserTeam\AddUserWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MntPlusDatabase.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

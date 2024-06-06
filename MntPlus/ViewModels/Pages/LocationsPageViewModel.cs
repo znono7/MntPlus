@@ -14,7 +14,7 @@ namespace MntPlus.WPF
         public ObservableCollection<PrimaryLocationViewModel>? FilterPrimaryLocationViews { get; set; }
         private ObservableCollection<PrimaryLocationViewModel>? primaries { get; set; }
         public ObservableCollection<PrimaryLocationViewModel>? Primaries
-        {
+        { 
             get => primaries;
             set
             {

@@ -11,8 +11,8 @@ using Repository;
 namespace MntPlus.WPF.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240602161908_MntplusMigration")]
-    partial class MntplusMigration
+    [Migration("20240605213712_mntPlus")]
+    partial class mntPlus
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,6 +161,67 @@ namespace MntPlus.WPF.Migrations
                     b.HasIndex("IdParent");
 
                     b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("Entities.Meter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("CurrentReading")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Frequency")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FrequencyUnit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("Meters");
+                });
+
+            modelBuilder.Entity("Entities.MeterReading", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MeterId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Reading")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeterId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MeterReadings");
                 });
 
             modelBuilder.Entity("Entities.Part", b =>
@@ -613,6 +674,32 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("Entities.Meter", b =>
+                {
+                    b.HasOne("Entities.Asset", "Asset")
+                        .WithMany("Meters")
+                        .HasForeignKey("AssetId");
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("Entities.MeterReading", b =>
+                {
+                    b.HasOne("Entities.Meter", "Meter")
+                        .WithMany("MeterReadings")
+                        .HasForeignKey("MeterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Meter");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entities.PreventiveMaintenance", b =>
                 {
                     b.HasOne("Entities.Asset", "Asset")
@@ -746,6 +833,13 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("Assets");
 
                     b.Navigation("LinkParts");
+
+                    b.Navigation("Meters");
+                });
+
+            modelBuilder.Entity("Entities.Meter", b =>
+                {
+                    b.Navigation("MeterReadings");
                 });
 
             modelBuilder.Entity("Entities.Part", b =>

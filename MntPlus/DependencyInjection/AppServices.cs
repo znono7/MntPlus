@@ -46,6 +46,7 @@ namespace MntPlus.WPF
         {
             ServiceCollection.ConfigureRepositoryManager();
             ServiceCollection.ConfigureServiceManager();
+            ServiceCollection.ConfigureUniteWorkManager();
             ServiceCollection.ConfigureSqlContext(DefaultConnectionString);
             ServiceCollection.AddAutoMapper(typeof(App));
         }

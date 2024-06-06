@@ -45,6 +45,7 @@
 
 
     <!--#region data Grid Asset Items-->
+   
     <Style x:Key="DataGridStyle2" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource SecundaryTextColor}"/>
@@ -231,9 +232,9 @@
         <Setter Property="Margin" Value="0" />
         <Setter Property="FontFamily" Value="{StaticResource ClarityCity-Regular}" />
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Height" Value="42" />
+        <Setter Property="Padding" Value="5 0" />
         
 
         <Setter Property="Template">
@@ -241,7 +242,11 @@
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
                     <Grid>
                         <theme:DataGridHeaderBorder Background="{TemplateBinding Background}" BorderThickness="0 0 1 1" 
-                                                    BorderBrush="{DynamicResource LineColor}" IsClickable="{TemplateBinding CanUserSort}" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" Padding="{TemplateBinding Padding}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SortDirection="{TemplateBinding SortDirection}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}">
+                                                    BorderBrush="{DynamicResource LineColor}" IsClickable="{TemplateBinding CanUserSort}" 
+                                                    IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" 
+                                                    Padding="{TemplateBinding Padding}" SeparatorBrush="{TemplateBinding SeparatorBrush}" 
+                                                    SortDirection="{TemplateBinding SortDirection}" 
+                                                    SeparatorVisibility="{TemplateBinding SeparatorVisibility}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </theme:DataGridHeaderBorder>
                         <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>

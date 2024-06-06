@@ -36,6 +36,7 @@ namespace Entities
 
         public ICollection<Asset>? Assets { get; set; }
         public ICollection<LinkPart>? LinkParts { get; set; }
+        public ICollection<Meter>? Meters { get; set; }
 
 
     }

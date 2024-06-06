@@ -3,13 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Repository;
 using Service.Contracts;
 using Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace MntPlus.WPF
 {
@@ -28,6 +22,9 @@ namespace MntPlus.WPF
         /// <param name="services"></param>
         public static void ConfigureServiceManager(this IServiceCollection services) =>
                                 services.AddScoped<IServiceManager, ServiceManager>();
+
+        public static void ConfigureUniteWorkManager(this IServiceCollection services) =>
+                                services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         /// <summary>
         /// register the SqlContext class in the service container

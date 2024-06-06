@@ -55,7 +55,9 @@ namespace MntPlus.WPF
                         return new EquipmentPage(viewModel as ViewEquipmentPageViewModel);
                     case ApplicationPage.Inventory:
                         return new InventoryPage(viewModel as InventoryPageViewModel);
-                default:
+                    case ApplicationPage.Meters:
+                        return new MeterPage(viewModel as MeterPageViewModel);
+                    default:
                     Debugger.Break();
                     return null;
             }
@@ -93,6 +95,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.Equipment;
             if (page is InventoryPage)
                 return ApplicationPage.Inventory;
+            if (page is MeterPage)
+                return ApplicationPage.Meters;
 
             // Alert developer of issue
             Debugger.Break();

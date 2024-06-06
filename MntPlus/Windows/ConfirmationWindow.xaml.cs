@@ -20,7 +20,7 @@ namespace MntPlus.WPF
         public bool Confirmed { get; private set; }
         public string? EquipmentName { get; set; }
         public string? TitleWindow { get; set; }
-        public string? Message { get; set; }
+        public string? Message { get; set; } 
 
         public ConfirmationWindow(string? _EquipmentName , string? message = "Vous êtes maintenant sûr du processus de suppression?") 
         {
@@ -28,8 +28,8 @@ namespace MntPlus.WPF
             DataContext = this;
            
             Confirmed = false;
-            EquipmentName = _EquipmentName;
-            TitleWindow = EquipmentName;
+            //EquipmentName = _EquipmentName;
+            TitleWindow = _EquipmentName;
             Message = message;
         }
 

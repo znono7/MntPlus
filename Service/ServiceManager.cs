@@ -24,12 +24,10 @@ namespace Service
         private readonly Lazy<IPartService> partService;
         private readonly Lazy<IInventoryService> inventoryService;
         private readonly Lazy<ILinkPartService> linkPartService;
+        private readonly Lazy<IMeterService> meterService;
+        private readonly Lazy<IMeterReadingService> meterReadingService;
 
-
-
-
-
-        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper) 
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper,IUnitOfWork unitOfWork) 
           
         {
             _locationService = new Lazy<ILocationService>(() => new LocationService(repositoryManager, mapper));
@@ -44,6 +42,8 @@ namespace Service
             partService = new Lazy<IPartService>(() => new PartService(repositoryManager, mapper));
             inventoryService = new Lazy<IInventoryService>(() => new InventoryService(repositoryManager, mapper));
             linkPartService = new Lazy<ILinkPartService>(() => new LinkPartService(repositoryManager, mapper));
+            meterService = new Lazy<IMeterService>(() => new MeterService(repositoryManager, mapper));
+            meterReadingService = new Lazy<IMeterReadingService>(() => new MeterReadingService(repositoryManager, mapper,unitOfWork));
         }
       
 
@@ -70,5 +70,9 @@ namespace Service
         public IInventoryService InventoryService => inventoryService.Value;
 
         public ILinkPartService LinkPartService => linkPartService.Value;
+
+        public IMeterService MeterService => meterService.Value;
+
+        public IMeterReadingService MeterReadingService => meterReadingService.Value;
     }
 }

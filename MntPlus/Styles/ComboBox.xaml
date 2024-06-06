@@ -171,13 +171,13 @@
         </Setter>
     </Style>
     <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
-        <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Height="32">
+        <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Height="36">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
             </Grid.ColumnDefinitions>
             <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="RelativePoint" VerticalOffset="45" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
-                <Border x:Name="dropDownBorder" Margin="10" Background="White" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                <Border x:Name="dropDownBorder" Margin="10" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="5" BlurRadius="10" Opacity="0.3"/>
                     </Border.Effect>

@@ -408,7 +408,7 @@
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
 
                                 </Grid.ColumnDefinitions>
 
@@ -1348,16 +1348,16 @@
     </Style>
 
     <Style x:Key="ActionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource DefaultButton}">
-        <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource SecundaryTextColor}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBlueColor}"/>
         <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="{DynamicResource FifthTextColor}"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Height" Value="36"/>
-        <Setter Property="Padding" Value="20 0"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Padding" Value="10 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -1372,14 +1372,16 @@
 
                         <Grid Margin="{TemplateBinding Padding}">
                             <!-- Drop shadow -->
-
-                           
-
-                          
-                            <TextBlock x:Name="txtName" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="txtName"  HorizontalAlignment="Left" VerticalAlignment="Center" 
                                        Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
                                       FontWeight="{TemplateBinding FontWeight}"
-                                      FontSize="{TemplateBinding FontSize}"  />
+                                      FontSize="{TemplateBinding FontSize}" Margin="5 0"  />
+                            <Path Grid.Column="1" Data="{StaticResource expand}" 
+                                  Height="6" Width="8" Stretch="Fill" Fill="{TemplateBinding Foreground}"/>
 
 
                         </Grid>
@@ -1389,9 +1391,8 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="{DynamicResource TertiaryBackgroundColor}"/>
-                            <Setter Property="BorderThickness" TargetName="border" Value="0"/>
-                            <Setter Property="Foreground"  Value="#0760FF"/>
+
+                            <Setter Property="Foreground"  Value="#022055"/>
                             <Setter TargetName="border" Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect  ShadowDepth="0" Color="#0760FF" BlurRadius="10" Opacity="0.3"/>
@@ -1400,7 +1401,7 @@
 
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="{DynamicResource LineColor}"/>
+                            <Setter Property="Foreground"  Value="#022055"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

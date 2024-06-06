@@ -23,6 +23,8 @@ namespace Repository
         private readonly Lazy<IPartRepository> partRepository;
         private readonly Lazy<IInventoryRepository> inventoryRepository;
         private readonly Lazy<ILinkPartRepository> linkPartRepository;
+        private readonly Lazy<IMeterRepository> meterRepository;
+        private readonly Lazy<IMeterReadingRepository> meterReadingRepository;
 
 
         public RepositoryManager(RepositoryContext repositoryContext)
@@ -40,6 +42,8 @@ namespace Repository
               partRepository = new Lazy<IPartRepository>(() => new PartRepository(repositoryContext));
             inventoryRepository = new Lazy<IInventoryRepository>(() => new InventoryRepository(repositoryContext));
             linkPartRepository = new Lazy<ILinkPartRepository>(() => new LinkPartRepository(repositoryContext));
+            meterRepository = new Lazy<IMeterRepository>(() => new MeterRepository(repositoryContext));
+            meterReadingRepository = new Lazy<IMeterReadingRepository>(() => new MeterReadingRepository(repositoryContext));
         }
       
 
@@ -66,6 +70,10 @@ namespace Repository
         public IInventoryRepository Inventory => inventoryRepository.Value;
 
         public ILinkPartRepository LinkPart => linkPartRepository.Value;
+
+        public IMeterRepository Meter => meterRepository.Value;
+
+        public IMeterReadingRepository MeterReading => meterReadingRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

@@ -136,7 +136,7 @@
     </Style>
 
 
-    
+
     <Style x:Key="TabControlStyle" TargetType="TabControl">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -186,7 +186,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Grid>
-                        <Border Name="Border" Margin="{TemplateBinding Margin}"  BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" >
+                        <Border Name="Border" Margin="{TemplateBinding Margin}"  BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" >
                             <ContentPresenter SnapsToDevicePixels="True" VerticalAlignment="Center" 
                                               HorizontalAlignment="Center" ContentSource="Header" Margin="{TemplateBinding Padding}"
                                                Focusable="False" RecognizesAccessKey="True" />
@@ -262,7 +263,87 @@
     </Style>
 
 
-   
+
+    <Style x:Key="TabControl" TargetType="TabControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="BorderThickness" Value="0 1 0 0"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel x:Name="HeaderPanel" Grid.Row="0" Background="Transparent" IsItemsHost="True"/>
+                        <Border x:Name="Border" Grid.Row="1" BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"  
+                                Background="{TemplateBinding Background}" KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" Margin="5" ContentSource="SelectedContent"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style x:Key="TabItemStyleNav" TargetType="TabItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesome2}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Margin" Value="0,0,5,0"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Grid>
+                        <Border Name="Border" Margin="{TemplateBinding Margin}"  BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" >
+                            <ContentPresenter SnapsToDevicePixels="True" VerticalAlignment="Center" 
+                                              HorizontalAlignment="Center" ContentSource="Header" Margin="{TemplateBinding Padding}"
+                                               Focusable="False" RecognizesAccessKey="True" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PrimaryBlueColor}"/>
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 2"/>
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+                            <Setter Property="FontFamily" Value="{StaticResource ClarityCity-SemiBold}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+
+
+
+    </Style>
 
 
 </ResourceDictionary>

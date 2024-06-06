@@ -20,6 +20,8 @@ namespace Contracts
         IPartRepository Part { get; }
         IInventoryRepository Inventory { get; }
         ILinkPartRepository LinkPart { get; }
+        IMeterRepository Meter { get; }
+        IMeterReadingRepository MeterReading { get; }
 
 
         Task SaveAsync(); 
