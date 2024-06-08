@@ -24,7 +24,8 @@ namespace Repository
 
         public async Task<MeterReading?> GetMeterReadingAsync(Guid meterReadingId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(meterReadingId), trackChanges)
-            .SingleOrDefaultAsync(); 
+            .Include(c => c.User)
+            .SingleOrDefaultAsync();  
     }
     
     

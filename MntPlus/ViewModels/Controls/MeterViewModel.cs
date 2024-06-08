@@ -13,7 +13,7 @@ namespace MntPlus.WPF
         public DateTime? NextReading { get; set; } 
       
         public MeterDto MeterDto { get; }
-
+         
         public string? CurrentReading { get; set; }
 
         public string? AssetName { get; set;}

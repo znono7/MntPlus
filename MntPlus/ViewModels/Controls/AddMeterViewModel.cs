@@ -125,7 +125,8 @@ namespace MntPlus.WPF
                 {
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Compteur modifier avec succès"));
 
-                    MeterStore?.CreateMeter(result.Result);
+                    MeterStore?.UpdateMeter(new MeterDto(result.Result!.Id, Name, 0, DateTime.Now, SelectedUnitOfMeasurement?.Value.ToUnitMeasurementString(),
+                        Frequency, SelectedFrequencyUnit.Value.ToString(), SelectedAssetId, SelectedAsset, null));
                     await CloseAsync();
 
                 }
@@ -148,7 +149,8 @@ namespace MntPlus.WPF
                 {
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Compteur ajouté avec succès"));
 
-                    MeterStore?.CreateMeter(result.Result);
+                    MeterStore?.CreateMeter(new MeterDto(result.Result!.Id, Name, 0, DateTime.Now, SelectedUnitOfMeasurement?.Value.ToUnitMeasurementString(),
+                        Frequency, SelectedFrequencyUnit.Value.ToString(), SelectedAssetId,SelectedAsset, null));
                     await CloseAsync();
 
                 }

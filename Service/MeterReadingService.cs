@@ -29,19 +29,14 @@ namespace Service
                 _repository.MeterReading.CreateMeterReading(meterReadingEntity);
                 await _unitOfWork.SaveChangesAsync(); 
                 var meter = await _repository.Meter.GetMeterAsync(meterReading.MeterId, true);
-                var meterUpdated = new MeterDtoForCreation
-                (
-                    Name: meter.Name,
-                    CurrentReading: meterReading.Reading,
-                    LastUpdated: meterReading.Timestamp,
-                    Unit: meter.Unit,
-                    Frequency: meter.Frequency,
-                    AssetId: meter.AssetId,
-                    FrequencyUnit: meter.FrequencyUnit
-                );
-                var meterEntity = _mapper.Map<Meter>(meterUpdated);
+                if (meter == null)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return new ApiNotFoundResponse("Meter not found.");
+                }
+                meter.CurrentReading = meterReading.Reading;
+                meter.LastUpdated = meterReading.Timestamp;
                 await _unitOfWork.SaveChangesAsync();
-                // var meterReadingToReturn = _mapper.Map<MeterReadingDto>(meterReadingEntity);
                 var meterReadingToReturn = new MeterReadingDto
                 (
                    Id: meterReadingEntity.Id,
@@ -71,11 +66,12 @@ namespace Service
             {
                 var meterReading = await _repository.MeterReading.GetMeterReadingAsync(meterReadingId, trackChanges);
                 if (meterReading is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
                 _repository.MeterReading.DeleteMeterReading(meterReading);
                 await _repository.SaveAsync(); 
+                
                 var meterReadingToReturn = new MeterReadingDto
                 (
                   Id: meterReading.Id,
@@ -100,7 +96,7 @@ namespace Service
         public async Task<ApiBaseResponse> DeleteUpdateMeterReading(Guid meterReadingId, bool trackChanges)
         {
             await _unitOfWork.BeginTransactionAsync();
-            try
+            try  
             {
                 var meterReading = await _repository.MeterReading.GetMeterReadingAsync(meterReadingId, trackChanges);
                 if (meterReading == null) 
@@ -146,11 +142,11 @@ namespace Service
             try
             {
                 var meterReadings = await _repository.MeterReading.GetAllMeterReadingsAsync(meterId, trackChanges);
-                if (meterReadings is null)
+                if (meterReadings == null)
                 {
                     return new ApiNotFoundResponse("");
                 }
-                List<MeterReadingDto> meterReadingDtos = new();
+                List<MeterReadingDto> meterReadingDtos = new(); 
                 foreach (var meterReading in meterReadings)
                 {
                     var meterReadingDto = new MeterReadingDto
@@ -196,12 +192,20 @@ namespace Service
             {
                 var meterReadingEntity = await _repository.MeterReading.GetMeterReadingAsync(meterReadingId, trackChanges);
                 if (meterReadingEntity is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
-                _mapper.Map(meterReading, meterReadingEntity);
+                meterReadingEntity.Reading = meterReading.Reading;
                 await _repository.SaveAsync();
-                var meterReadingToReturn = _mapper.Map<MeterReadingDto>(meterReadingEntity);
+                var meterReadingToReturn = new MeterReadingDto
+                    (
+                      Id: meterReadingEntity.Id,
+                      MeterId: meterReadingEntity.MeterId,
+                      Reading: meterReadingEntity.Reading,
+                      Timestamp: meterReadingEntity.Timestamp,
+                      UserId: meterReadingEntity.UserId,
+                      UserFullName: meterReadingEntity.User != null ? $"{meterReadingEntity.User.FirstName} {meterReadingEntity.User.LastName}" : string.Empty
+                    );
                 return new ApiOkResponse<MeterReadingDto>(meterReadingToReturn);
             }
             catch (Exception ex)

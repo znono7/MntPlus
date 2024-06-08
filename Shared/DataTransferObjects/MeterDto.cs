@@ -14,7 +14,7 @@ namespace Shared
         DateTime LastUpdated,
         string? Unit, 
         int Frequency,
-        string? FrequencyUnit,
+        string? FrequencyUnit, 
         Guid? AssetId,
         string? AssetName,
         List<MeterReadingDto>? MeterReadings

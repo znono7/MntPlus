@@ -43,7 +43,7 @@ namespace Service
             try
             {
                 var meter = await _repository.Meter.GetMeterAsync(meterId, trackChanges);
-                if (meter is null)
+                if (meter is null) 
                 {
                     return new ApiNotFoundResponse("");
                 }
@@ -73,14 +73,40 @@ namespace Service
                 List<MeterDto> metersToReturn = new List<MeterDto>();
                 foreach (var meter in meters)
                 {
+                    
+                    metersToReturn.Add(new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit,meter.AssetId, meter.Asset!.Name, null));
+
+                }
+                return new ApiOkResponse<IEnumerable<MeterDto>>(metersToReturn);
+
+            }
+            catch (Exception ex)
+            {
+                return new ApiBadRequestResponse(ex.Message);
+
+            }
+        }
+
+        public async Task<ApiBaseResponse> GetAllMetersWthReadingsAsync(bool trackChanges)
+        {
+            try
+            {
+                var meters = await _repository.Meter.GetAllMetersWithReadingsAsync(trackChanges);
+                if (meters is null)
+                {
+                    return new ApiNotFoundResponse("");
+                }
+                List<MeterDto> metersToReturn = new List<MeterDto>();
+                foreach (var meter in meters)
+                {
                     List<MeterReadingDto>? MeterReadings = null;
-                    if(meter.MeterReadings is not null)
+                    if (meter.MeterReadings is not null)
                     {
-                        MeterReadings = meter.MeterReadings.Select(m => 
-                        new MeterReadingDto(m.Id, m.MeterId, m.Reading, m.Timestamp, m.UserId,m.User!= null ? $"{m.User!.FirstName} {m.User!.LastName}" : string.Empty)).ToList();
+                        MeterReadings = meter.MeterReadings.Select(m =>
+                        new MeterReadingDto(m.Id, m.MeterId, m.Reading, m.Timestamp, m.UserId, m.User != null ? $"{m.User!.FirstName} {m.User!.LastName}" : string.Empty)).ToList();
 
                     }
-                    metersToReturn.Add(new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit,meter.AssetId, meter.Asset!.Name, MeterReadings));
+                    metersToReturn.Add(new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit, meter.AssetId, meter.Asset!.Name, MeterReadings));
 
                 }
                 return new ApiOkResponse<IEnumerable<MeterDto>>(metersToReturn);
@@ -101,26 +127,11 @@ namespace Service
                 if (meter is null)
                 {
                     return new ApiNotFoundResponse("");
-                }
-                List<MeterReadingDto>? MeterReadings = null;
+                } 
 
-                
-                    if (meter.MeterReadings is not null)
-                    {
-                        MeterReadings = meter.MeterReadings.Select(m =>
-                        new MeterReadingDto(m.Id, m.MeterId, m.Reading, m.Timestamp, m.UserId, $"{m.User!.FirstName} {m.User!.LastName}")).ToList();
-
-                    }
-                   
-                
-                
-                    
-                var meterToReturn = new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit, meter.AssetId, meter.Asset!.Name, MeterReadings);
+                var meterToReturn = new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit, meter.AssetId, meter.Asset!.Name, null);
                     
                 return new ApiOkResponse<MeterDto>(meterToReturn);
-                
-
-                
 
             }
             catch (Exception ex)
@@ -130,24 +141,25 @@ namespace Service
             }
         }
 
-        public async Task<ApiBadRequestResponse> RemoveBulkMetersAsync(List<Guid> guids)
+        public async Task<ApiBaseResponse> GetMeterWithReadingAsync(Guid meterId, bool trackChanges)
         {
             try
             {
-                foreach (var meterId in guids)
+                var meter = await _repository.Meter.GetMeterWithReadingAsync(meterId, trackChanges);
+                if (meter is null)
                 {
-                    var meter = await _repository.Meter.GetMeterAsync(meterId, false);
-                    if (meter is null)
-                    {
-                        continue;
-                    }else
-                    {
-                        _repository.Meter.DeleteMeter(meter);
-                    }
+                    return new ApiNotFoundResponse("");
                 }
+                List<MeterReadingDto>? MeterReadings = null;
+                if (meter.MeterReadings is not null)
+                {
+                    MeterReadings = meter.MeterReadings.Select(m =>
+                    new MeterReadingDto(m.Id, m.MeterId, m.Reading, m.Timestamp, m.UserId, m.User != null ? $"{m.User!.FirstName} {m.User!.LastName}" : string.Empty)).ToList();
 
-                await _repository.SaveAsync();
-                return new ApiBadRequestResponse("");
+                }
+                var meterToReturn = new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit, meter.AssetId, meter.Asset!.Name, MeterReadings);
+
+                return new ApiOkResponse<MeterDto>(meterToReturn);
 
             }
             catch (Exception ex)
@@ -156,6 +168,7 @@ namespace Service
 
             }
         }
+
 
         public async Task<ApiBaseResponse> UpdateMeter(Guid meterId, MeterDtoForCreation meter, bool trackChanges)
         {
@@ -167,8 +180,8 @@ namespace Service
                     return new ApiNotFoundResponse("");
                 }
                 _mapper.Map(meter, meterEntity); 
-                await _repository.SaveAsync();
-                var meterToReturn = _mapper.Map<MeterDto>(meterEntity);
+                await _repository.SaveAsync(); 
+                var meterToReturn = new MeterDto(meterEntity.Id, meterEntity.Name, meterEntity.CurrentReading, meterEntity.LastUpdated, meterEntity.Unit, meterEntity.Frequency, meterEntity.FrequencyUnit, meterEntity.AssetId, meterEntity.Asset!.Name, null);
                 return new ApiOkResponse<MeterDto>(meterToReturn);
 
             }

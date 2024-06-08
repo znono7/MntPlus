@@ -15,7 +15,7 @@ namespace MntPlus.WPF
         {
             get => mSearchText;
             set
-            {
+            { 
                 // Check value is different
                 if (mSearchText == value) 
                     return;
@@ -68,41 +68,52 @@ namespace MntPlus.WPF
             MeterStore = new MeterStore();
             MeterStore.MeterCreated += MeterStore_MeterCreated; 
             MeterStore.MeterUpdated += MeterStore_MeterUpdated;
+            MeterStore.MeterDeleted += MeterStore_MeterDeleted;
 
             _ = LoadData();
 
         }
 
-      private async Task RemoveBulkMeters()
+        private void MeterStore_MeterDeleted(MeterDto? dto)
         {
-            if(FilterMeters == null || FilterMeters.Count == 0)
+            var meter = Meters?.FirstOrDefault(m => m.MeterDto.Id == dto?.Id);
+            if (meter != null)
             {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Pas de compteurs à supprimer"));
-                return;
+                Meters?.Remove(meter);
+                FilterMeters?.Remove(meter);
             }
-            var selectedMeters = FilterMeters.Where(m => m.IsChecked).ToList();
-            if (selectedMeters.Count == 0)
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un compteur pour supprimer"));
-                return;
-            }
-            var response = await AppServices.ServiceManager.MeterService.RemoveBulkMetersAsync(selectedMeters.Select(m => m.MeterDto.Id).ToList());
-            if (response.Success)
-            {
-                foreach (var meter in selectedMeters)
-                {
-                    Meters.Remove(meter);
-                    FilterMeters.Remove(meter);
-                }
-            }
-            else if (response is ApiBadRequestResponse badRequestResponse)
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
-            }
-
         }
 
-       private async Task LoadData()
+        //private async Task RemoveBulkMeters()
+        //  {
+        //      if(FilterMeters == null || FilterMeters.Count == 0)
+        //      {
+        //          await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Pas de compteurs à supprimer"));
+        //          return;
+        //      }
+        //      var selectedMeters = FilterMeters.Where(m => m.IsChecked).ToList();
+        //      if (selectedMeters.Count == 0)
+        //      {
+        //          await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un compteur pour supprimer"));
+        //          return;
+        //      }
+        //      var response = await AppServices.ServiceManager.MeterService.RemoveBulkMetersAsync(selectedMeters.Select(m => m.MeterDto.Id).ToList());
+        //      if (response.Success)
+        //      {
+        //          foreach (var meter in selectedMeters)
+        //          {
+        //              Meters.Remove(meter);
+        //              FilterMeters.Remove(meter);
+        //          }
+        //      }
+        //      else if (response is ApiBadRequestResponse badRequestResponse)
+        //      {
+        //          await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
+        //      }
+
+        //  }
+
+        private async Task LoadData()
         {
             var response = await AppServices.ServiceManager.MeterService.GetAllMetersAsync(false);
             if (response.Success && response is ApiOkResponse<IEnumerable<MeterDto>> result)

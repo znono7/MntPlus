@@ -52,15 +52,15 @@
                                 BorderBrush="Transparent"
                                 HorizontalAlignment="Right"/>
                         <Grid Margin="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="6"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="6"/>
+                            </Grid.RowDefinitions>
                             <Border x:Name="iBorder"
-                                    Grid.Column="0"
-                                    CornerRadius="3" Width="4" Height="24"
+                                    Grid.Row="1"
+                                    CornerRadius="3" Width="110" Height="4"
                                     Background="Transparent"
-                                    HorizontalAlignment="Left"
+                                    HorizontalAlignment="Center"
                                     BorderBrush="Transparent"
                                     BorderThickness="0"/>
 
@@ -102,7 +102,7 @@
                                 </ContentPresenter.LayoutTransform>
                             </ContentPresenter>-->
                             <!-- Custom header content -->
-                            <StackPanel HorizontalAlignment="Center" Cursor="Hand" Margin="0 10 0 10" Grid.Column="1" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Center" Cursor="Hand" Margin="0 10 0 10" Grid.Row="0" Orientation="Horizontal">
                                 <!-- Add your custom header elements here -->
                                 <Path Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Stretch="Fill" Fill="{DynamicResource FourthTextColor}" Width="16" Height="16"/>
                                 <TextBlock Margin="5 0 0 0" Text="{TemplateBinding Header}" FontSize="16"/>

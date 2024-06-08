@@ -40,7 +40,10 @@
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Vertical" Grid.Row="0" Margin="10 20 0 0">
                                 <TextBlock Text="Nouveau relevé de compteur"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
-                                <TextBox Background="{DynamicResource BackSubButtons}" Text="{Binding ReadingValue,Converter={local:DoubleConventer}}" Style="{StaticResource InputTextBoxStyle}" Margin="0" Width="450"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Background="{DynamicResource BackSubButtons}" Text="{Binding ReadingValue,Converter={local:DoubleConventer}}" Style="{StaticResource InputTextBoxStyle}" Margin="0" Width="350"/>
+                                    <TextBox IsReadOnly="True" Background="{DynamicResource BackSubButtons}" Text="{Binding ReadingUnite}" Style="{StaticResource InputTextBoxStyle}" Margin="10 0 0 0" Width="100"/>
+                                </StackPanel>
                                 <TextBlock Text="{Binding LastReading}"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
 
                                 <Button local:IsBusyProperty.Value="{Binding SaveIsRunning}"

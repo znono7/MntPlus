@@ -44,7 +44,7 @@
         </Grid>
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto">
             <Grid Background="{DynamicResource FourthBackgroundColor}">
-                <TabControl Margin="25" Style="{StaticResource TabControlStyle}">
+                <TabControl HorizontalAlignment="Stretch" Margin="25" Style="{StaticResource TabControlStyle}">
                     <TabItem Header="Info" Tag="{StaticResource priority}"  Style="{StaticResource TabItemStl}">
                         <local:AssetInfoControl DataContext="{Binding equipmentInfo}" />
                     </TabItem>

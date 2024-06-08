@@ -145,7 +145,7 @@
 
   <ItemGroup>
     <None Update="MntPlusDatabase.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
