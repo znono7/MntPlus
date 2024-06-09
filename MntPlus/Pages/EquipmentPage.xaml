@@ -54,8 +54,8 @@
                     <TabItem Header="Pièces" Tag="{StaticResource parts}"  Style="{StaticResource TabItemStl}">
                         <local:EquipmentPartControl DataContext="{Binding equipmentPartViewModel}" />
                     </TabItem>
-                    <TabItem Header="Compteurs" Tag="{StaticResource metre}"  Style="{StaticResource TabItemStl}">
-
+                    <TabItem HorizontalAlignment="Stretch" Header="Compteurs" Tag="{StaticResource metre}"  Style="{StaticResource TabItemStl}">
+                        <local:EquipmentMeterControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DataContext="{Binding equipmentMeterViewModel}" />
 
                     </TabItem>
                 </TabControl>

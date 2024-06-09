@@ -87,6 +87,38 @@ namespace Service
             }
         }
 
+        public async Task<ApiBaseResponse> GetAllMetersByEquipmentAsync(Guid equipmentId, bool trackChanges)
+        {
+            try
+            {
+                var meters = await _repository.Meter.GetAllMerersByEquipment(equipmentId, trackChanges);
+                if (meters is null)
+                {
+                    return new ApiNotFoundResponse("");
+                } 
+                List<MeterDto> metersToReturn = new List<MeterDto>();
+                foreach (var meter in meters)
+                {
+                    List<MeterReadingDto>? MeterReadings = null;
+                    if (meter.MeterReadings is not null)
+                    {
+                        MeterReadings = meter.MeterReadings.Select(m =>
+                        new MeterReadingDto(m.Id, m.MeterId, m.Reading, m.Timestamp, m.UserId, m.User != null ? $"{m.User!.FirstName} {m.User!.LastName}" : string.Empty)).ToList();
+
+                    }
+                    metersToReturn.Add(new MeterDto(meter.Id, meter.Name, meter.CurrentReading, meter.LastUpdated, meter.Unit, meter.Frequency, meter.FrequencyUnit, meter.AssetId, meter.Asset!.Name, MeterReadings));
+
+                }
+                return new ApiOkResponse<IEnumerable<MeterDto>>(metersToReturn);
+
+            }
+            catch (Exception ex)
+            {
+                return new ApiBadRequestResponse(ex.Message);
+
+            }
+        }
+
         public async Task<ApiBaseResponse> GetAllMetersWthReadingsAsync(bool trackChanges)
         {
             try

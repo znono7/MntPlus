@@ -13,6 +13,15 @@ namespace Repository
 
         public void DeleteMeter(Meter meter) => Delete(meter);
 
+        public async Task<IEnumerable<Meter>?> GetAllMerersByEquipment(Guid equipmentId, bool trackChanges) =>
+            await FindByCondition(c => c.AssetId.Equals(equipmentId), trackChanges)
+            .Include( c =>  c.MeterReadings!)
+            .ThenInclude(c => c.User)
+            .Include(c => c.Asset)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
+       
+
         public async Task<IEnumerable<Meter>?> GetAllMetersAsync(bool trackChanges) =>
              await FindAll(trackChanges)
             .Include(c => c.Asset)

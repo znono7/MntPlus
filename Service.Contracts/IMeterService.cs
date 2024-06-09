@@ -6,6 +6,8 @@ namespace Service.Contracts
     public interface IMeterService
     {
         Task<ApiBaseResponse> GetAllMetersAsync(bool trackChanges);
+        Task<ApiBaseResponse> GetAllMetersByEquipmentAsync(Guid equipmentId , bool trackChanges);
+
         Task<ApiBaseResponse> GetAllMetersWthReadingsAsync(bool trackChanges);
         Task<ApiBaseResponse> GetMeterAsync(Guid meterId, bool trackChanges);
         Task<ApiBaseResponse> GetMeterWithReadingAsync(Guid meterId, bool trackChanges);

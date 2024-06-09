@@ -91,11 +91,13 @@ namespace MntPlus.WPF
             {
                 Children = EquipmentHierarchy
             };
+            EquipmentMeterViewModel equipmentMeterViewModel = new(Asset!.Id);
             ViewEquipmentPageViewModel viewEquipment = new()
             {
                 equipmentInfo = equipment,
-                childrenViewModel = assetChildren
-            };
+                childrenViewModel = assetChildren,
+                equipmentMeterViewModel = equipmentMeterViewModel
+            }; 
             IoContainer.Application.GoToPage(ApplicationPage.Equipment, viewEquipment);
         }
         public ObservableCollection<AssetItemViewModel> EquipmentHierarchy = new();

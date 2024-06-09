@@ -11,7 +11,7 @@ namespace MntPlus.WPF
     {
         #region Public Properties
 
-        private ApplicationPage _currentPage;
+        private ApplicationPage _currentPage = IoContainer.Application.CurrentPage;
 
         public ApplicationPage CurrentPage
         {

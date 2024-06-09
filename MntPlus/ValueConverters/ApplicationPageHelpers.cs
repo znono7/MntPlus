@@ -57,6 +57,9 @@ namespace MntPlus.WPF
                         return new InventoryPage(viewModel as InventoryPageViewModel);
                     case ApplicationPage.Meters:
                         return new MeterPage(viewModel as MeterPageViewModel);
+                    case ApplicationPage.Checklists:
+                        return new ChecklistsPage(viewModel as ChecklistsViewModel);
+
                     default:
                     Debugger.Break();
                     return null;
@@ -97,6 +100,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.Inventory;
             if (page is MeterPage)
                 return ApplicationPage.Meters;
+            if (page is ChecklistsPage)
+                return ApplicationPage.Checklists;
 
             // Alert developer of issue
             Debugger.Break();

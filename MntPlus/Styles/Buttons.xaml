@@ -1014,11 +1014,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBlueColor}"/>
         <Setter Property="FontFamily" Value="{DynamicResource ClarityCity-Regular}"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="BorderThickness" Value="0"/> 
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="12 5"/>
 
         <Setter Property="Height" Value="33"/>
-        <Setter Property="Width" Value="160"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -1030,7 +1030,7 @@
                             </Border.Effect>
                         </Border>
 
-                        <Grid>
+                        <Grid Margin="{TemplateBinding Padding}">
 
                             <!-- Text -->
                             <TextBlock   x:Name="txtName" HorizontalAlignment="Center" VerticalAlignment="Center" 
