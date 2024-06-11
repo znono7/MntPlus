@@ -10,5 +10,9 @@ namespace Contracts
         void Update(T entity);
         void Delete(T entity);
 
+        // Bulk operations
+        void CreateBulk(IEnumerable<T> entities);
+        void UpdateBulk(IEnumerable<T> entities);
+        void DeleteBulk(IEnumerable<T> entities);
     }
 }

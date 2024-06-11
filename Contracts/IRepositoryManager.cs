@@ -22,6 +22,8 @@ namespace Contracts
         ILinkPartRepository LinkPart { get; }
         IMeterRepository Meter { get; }
         IMeterReadingRepository MeterReading { get; }
+        ICheckListRepository CheckList { get; }
+
 
 
         Task SaveAsync(); 

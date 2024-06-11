@@ -25,6 +25,7 @@ namespace Repository
         private readonly Lazy<ILinkPartRepository> linkPartRepository;
         private readonly Lazy<IMeterRepository> meterRepository;
         private readonly Lazy<IMeterReadingRepository> meterReadingRepository;
+        private readonly Lazy<ICheckListRepository> checkListRepository;
 
 
         public RepositoryManager(RepositoryContext repositoryContext)
@@ -44,6 +45,7 @@ namespace Repository
             linkPartRepository = new Lazy<ILinkPartRepository>(() => new LinkPartRepository(repositoryContext));
             meterRepository = new Lazy<IMeterRepository>(() => new MeterRepository(repositoryContext));
             meterReadingRepository = new Lazy<IMeterReadingRepository>(() => new MeterReadingRepository(repositoryContext));
+            checkListRepository = new Lazy<ICheckListRepository>(() => new CheckListRepository(repositoryContext));
         }
       
 
@@ -74,6 +76,8 @@ namespace Repository
         public IMeterRepository Meter => meterRepository.Value;
 
         public IMeterReadingRepository MeterReading => meterReadingRepository.Value;
+
+        public ICheckListRepository CheckList => checkListRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         
