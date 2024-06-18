@@ -11,9 +11,8 @@ namespace MntPlus.WPF
     public class WorkOrderItemsViewModel : BaseViewModel
     {
         public WorkOrderDto? WorkOrderDto { get; set; }
-
-        public string WorkOrderNumber =>  $"00000{WorkOrderDto?.Number}"; 
-        public string WorkOrderName { get; set; }
+        public string WorkOrderNumber => AddDynamicLeadingZeros(WorkOrderDto?.Number ?? 0); 
+        public string WorkOrderName { get; set; } 
         public string PriorityBackground { get; set; }  
 
         private string _orderWorkPriority = "3";
@@ -78,7 +77,7 @@ namespace MntPlus.WPF
                         ForgroundColorStat = "429b1f";
                         break;
                     case "Non spécifique":
-                        ForgroundColorStat = "B3B3B3";
+                        ForgroundColorStat = "595959";
                         break;
                 }
             }
@@ -88,7 +87,7 @@ namespace MntPlus.WPF
         public string WorkAssignedName { get; set; }
 
         public DateTime? AssetCommissionDate { get ; set; }
-        public string? ShortAssetCommissionDate => AssetCommissionDate?.ToString("d");
+        public string? ShortAssetCommissionDate => AssetCommissionDate?.ToString("dd/MM/yyyy");
 
         public string? AssetName => WorkOrderDto?.Asset?.Name ?? string.Empty;
 
@@ -125,9 +124,28 @@ namespace MntPlus.WPF
                 WorkAssignedName = WorkOrderDto?.TeamAssignedTo?.Name ?? string.Empty;
             }
 
-            ViewOrderWorkCommand = new RelayCommand(async () => await ViewOrderWork(WorkOrderDto));
+            ViewOrderWorkCommand = new RelayCommand(async () =>  await ViewOrderWorkDetail(WorkOrderDto) );
                 
            
+        }
+
+        private async Task ViewOrderWorkDetail(WorkOrderDto? workOrderDto)
+        {
+            if (ViewOrderWork is not null)
+            {
+                await ViewOrderWork(workOrderDto);
+            }
+        }
+        public string AddDynamicLeadingZeros(int number)
+        {
+            // Get the number of digits in the number
+            int numberOfDigits = number.ToString().Length;
+
+            // Calculate the total length after adding zeros
+            int totalLength = numberOfDigits * 2 + 1;
+
+            // Pad the number with leading zeros
+            return number.ToString().PadLeft(totalLength, '0');
         }
     }
 }

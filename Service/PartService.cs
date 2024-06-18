@@ -39,7 +39,7 @@ namespace Service
             {
                 var part = await _repository.Part.GetPartAsync(partId, trackChanges);
                 if (part is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
                 _repository.Part.DeletePart(part);
@@ -181,7 +181,7 @@ namespace Service
         }
 
         public async Task<ApiBaseResponse> UpdatePart(Guid partId, PartForCreationDto part, bool trackChanges)
-        {
+        { 
             try
             {
                 var partEntity = await _repository.Part.GetPartAsync(partId, trackChanges);

@@ -31,7 +31,6 @@ namespace Entities
         public Guid? ScheduleId { get; set; }
         public Schedule? Schedule { get; set; }
 
-        public ICollection<WorkTask>? Tasks { get; set; }
         public ICollection<PreventiveMaintenanceHistory>? PreventiveMaintenanceHistories { get; set; }
 
     }

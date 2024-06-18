@@ -17,7 +17,7 @@ namespace MntPlus.WPF
             set
             { 
                 // Check value is different
-                if (mSearchText == value) 
+                if (mSearchText == value)  
                     return;
 
                 // Update value

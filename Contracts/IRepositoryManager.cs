@@ -14,7 +14,6 @@ namespace Contracts
         ITeamRepository Team { get; }
         IWorkOrderRepository WorkOrder { get; }
         IWorkOrderHistoryRepository WorkOrderHistory { get; }
-        IInstructionRepository Instruction { get; }
         IRoleRepository Role { get; }
         IUserRoleRepository UserRole { get; }
         IPartRepository Part { get; }
@@ -23,6 +22,8 @@ namespace Contracts
         IMeterRepository Meter { get; }
         IMeterReadingRepository MeterReading { get; }
         ICheckListRepository CheckList { get; }
+        IIndividualTaskRepository IndividualTask { get; }
+        ICheckListItemRepository CheckListItem { get; }
 
 
 

@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Shared;
+using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -43,7 +44,7 @@ namespace MntPlus.WPF
         }
         public ICommand BrowseCommand { get; set; }
         public ICommand DeleteImgCommand { get; set; }
-        public ICommand OpenMenuDueDateCommand { get; set; }
+        public ICommand OpenMenuDueDateCommand { get; set; } 
         public ICommand OpenMenuStartDateCommand { get; set; }
         public ICommand HighPriorityCommand { get; set; }
         public ICommand MediumPriorityCommand { get; set; }
@@ -81,7 +82,7 @@ namespace MntPlus.WPF
         public ICommand BrowseToAssignedCommand { get; set; }
         public ICommand ClearAssignedCommand { get; set; }
         public UserTeamStore? UserTeamStore { get; set; }
-        public Guid? UserGuid { get; set; }
+        public Guid? UserGuid { get; set; } 
         public Guid? TeamGuid { get; set; }
 
         public bool SaveIsRunning { get; set; }
@@ -90,9 +91,14 @@ namespace MntPlus.WPF
         public Func<Task>? CloseAction { get; set; } 
 
         public string? Number { get; set; }
+        public int num { get; set; }
+        public string? Requester { get;  set; }
         public WorkOrderStore WorkOrderStore { get; }
+        public WorkOrderDto? WorkOrderDto { get; }
 
-        public AddWorkOrderViewModel(WorkOrderStore workOrderStore)
+        public bool IsForUpdate { get; set; } = false;  
+        public string Title => IsForUpdate ? "Modifier l'ordre de travail" : "Ajouter un ordre de travail";
+        public AddWorkOrderViewModel(WorkOrderStore workOrderStore , WorkOrderDto? workOrderDto = null )
         {
             _ = GetLastNumber();
             BrowseCommand = new RelayCommand(async () => await Browse());
@@ -113,6 +119,27 @@ namespace MntPlus.WPF
             SaveCommand = new RelayCommand(async () => await SaveAsync());
             CloseCommand = new RelayCommand(async () => await CloseAsync());
             WorkOrderStore = workOrderStore;
+            WorkOrderDto = workOrderDto;
+            if(workOrderDto != null)
+            {
+                IsForUpdate = true;
+                Name = workOrderDto.Name;
+                Description = workOrderDto.Description;
+                DueDate = workOrderDto.DueDate;
+                StartDate = workOrderDto.StartDate;
+                OrderWorkPriority = workOrderDto.Priority!;
+                Type = workOrderDto.Type!;
+                SelectedAsset = workOrderDto.Asset != null ? new AssetDto(workOrderDto.Asset.Id,null,null, workOrderDto.Asset.Name,null,null, null, null, null, null, null, null, null, null, null, null, null, null) : null;
+                SelectedAssignedTo = workOrderDto.UserAssignedTo?.FullName ?? workOrderDto.TeamAssignedTo?.Name;
+                UserGuid = workOrderDto.UserAssignedTo != null ? workOrderDto.UserAssignedTo?.Id : null;
+                TeamGuid = workOrderDto.TeamAssignedTo != null ? workOrderDto.TeamAssignedTo?.Id : null;
+                Number = AddDynamicLeadingZeros( workOrderDto.Number ?? 0);
+                num = workOrderDto.Number ?? 0;
+                Requester = workOrderDto.Requester;
+                
+
+
+            }
         }
 
         private async Task SaveAsync()
@@ -123,21 +150,26 @@ namespace MntPlus.WPF
                 return;
 
             }
+            if(IsForUpdate)
+            {
+                await UpdateAsync();
+                return;
+            }
             await RunCommandAsync(() => SaveIsRunning, async () =>
             {
                 WorkOrderForCreationDto workOrderForCreationDto = new
                 (
                     Name : Name,
-                    Number: null,
+                    Number: num,
                     Description : Description,
                     Priority : OrderWorkPriority, 
                     StartDate : StartDate,
                     DueDate : DueDate,
                     Type : Type,
                     Status : "Non spécifique",
-                    Requester : "Moi",
+                    Requester : Requester,
                     CreatedOn : DateTime.Now,
-                    UserCreatedId : null,
+                    UserCreatedId : Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"),
                     UserAssignedToId : UserGuid == null ? null : UserGuid,
                     TeamAssignedToId : TeamGuid == null ? null : TeamGuid,
                     AssetId : SelectedAsset?.Id == null ? null : SelectedAsset?.Id
@@ -145,30 +177,11 @@ namespace MntPlus.WPF
                 var Response = await AppServices.ServiceManager.WorkOrderService.CreateWorkOrder(workOrderForCreationDto);
                 if (Response.Success && Response is ApiOkResponse<WorkOrderDto> result)
                 {
-
-                    WorkOrderHistoryCreateDto historyCreateDto = new
-                    (
-                        Notes: "Création de l'ordre de travail",
-                        Status: "Non spécifique",
-                        DateChanged: DateTime.Now,
-                        ChangedById: null,//IoContainer.CurrentUser.Id,
-                        WorkOrderId: result.Result?.Id
-                    ) ;
-                    await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto);
-
-                    WorkOrderHistoryCreateDto historyCreateDto2 = new
-                   (
-                       Notes: Description,
-                       Status: "Non spécifique",
-                       DateChanged: DateTime.Now,
-                       ChangedById: null,//IoContainer.CurrentUser.Id,
-                       WorkOrderId: result.Result?.Id
-                   );
-                    await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto2);
-
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Ordre de travail créé avec succès"));
                     WorkOrderStore.CreateWorkOrder(result.Result);
-                }else if (Response is ApiBadRequestResponse badRequestResponse)
+                    CloseCommand.Execute(null);
+                }
+                else if (Response is ApiBadRequestResponse badRequestResponse)
                 {
                     await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
                 }
@@ -180,14 +193,26 @@ namespace MntPlus.WPF
             var res = await AppServices.ServiceManager.WorkOrderService.CreateLastNumberWorkOrder();
             if (res.Success && res is ApiOkResponse<int?> result)
             {
-                Number = $"00000{result.Result}";
-            }else if (res is ApiBadRequestResponse badRequestResponse)
+                num = result.Result ?? 0;
+                Number = AddDynamicLeadingZeros(num);
+            }
+            else if (res is ApiBadRequestResponse badRequestResponse)
             {
-                Number = $"00000";
+                Number = $"000000";
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
             }
         }
+        public string AddDynamicLeadingZeros(int number)
+        {
+            // Get the number of digits in the number
+            int numberOfDigits = number.ToString().Length;
 
+            // Calculate the total length after adding zeros
+            int totalLength = numberOfDigits * 2 + 1;
+
+            // Pad the number with leading zeros
+            return number.ToString().PadLeft(totalLength, '0');
+        }
         private async Task CloseAsync()
         {
             if(CloseAction != null)
@@ -256,6 +281,32 @@ namespace MntPlus.WPF
                 IsHaveImage = true;
             }
             await Task.Delay(1);
+        }
+
+        private async Task UpdateAsync()
+        {
+           
+            await RunCommandAsync(() => SaveIsRunning, async () =>
+            {
+                WorkOrderForCreationDto workOrderForUpdateDto = new
+                (Name: Name, Number: num, Description: Description, Priority: OrderWorkPriority, StartDate: StartDate,
+                 DueDate: DueDate, Type: Type, Status: WorkOrderDto?.Status, Requester: Requester, CreatedOn: WorkOrderDto.CreatedOn,
+                 UserCreatedId: Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"),
+                 UserAssignedToId: UserGuid == null ? null : UserGuid,
+                 TeamAssignedToId: TeamGuid == null ? null : TeamGuid,
+                 AssetId: SelectedAsset?.Id == null ? null : SelectedAsset?.Id);
+                var Response = await AppServices.ServiceManager.WorkOrderService.UpdateWorkOrder(WorkOrderDto!.Id, workOrderForUpdateDto,true);
+                if (Response.Success && Response is ApiOkResponse<WorkOrderDto> result)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Ordre de travail modifié avec succès"));
+                    WorkOrderStore.UpdateWorkOrder(result.Result);
+                    CloseCommand.Execute(null);
+                }else if (Response is ApiBadRequestResponse badRequestResponse)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
+                }
+            });
+
         }
     }
 }

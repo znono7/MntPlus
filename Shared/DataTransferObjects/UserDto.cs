@@ -12,8 +12,12 @@ namespace Shared
         string? UserName, 
         string? Status,
         DateTime? CreatedAt,
-        bool IsChecked); 
-    
+        bool IsChecked);
+    public record UserByDto
+       (Guid Id,
+       string? FullName
+      );
+
     public record UserCreateDto(
          string? FirstName,
         string? LastName,

@@ -16,23 +16,23 @@ namespace Shared
         DateTime? DueDate,
         string? Type, 
         string? Status,
-        string? Requester, 
+        string? Requester,  
         DateTime? CreatedOn,
         Guid? UserCreatedId,
-        UserDto? UserCreatedBy,
+        UserByDto? UserCreatedBy,
         Guid? UserAssignedToId,
-        UserDto? UserAssignedTo, 
+        UserByDto? UserAssignedTo, 
         Guid? TeamAssignedToId, 
         TeamDto? TeamAssignedTo, 
         Guid? AssetId,
-        AssetDto? Asset); 
+        AssetWorkOrderDto? Asset); 
 
     public record WorkOrderForCreationDto
         (
           string? Name, 
         int? Number,
         string? Description,
-        string? Priority,
+        string? Priority, 
         DateTime? StartDate,
         DateTime? DueDate,
         string? Type,

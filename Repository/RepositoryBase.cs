@@ -18,9 +18,9 @@ namespace Repository
 
         public void Delete(T entity) => RepositoryContext.Set<T>().Remove(entity);
 
-        public void DeleteBulk(IEnumerable<T> entities) => RepositoryContext.BulkDelete(entities, options => options.IncludeGraph = true);
+        public void DeleteBulk(IEnumerable<T> entities) =>  RepositoryContext.BulkDelete(entities, options => options.IncludeGraph = true);
        
-
+         
         public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? RepositoryContext.Set<T>().AsNoTracking() : RepositoryContext.Set<T>();
        
 

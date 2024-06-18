@@ -27,7 +27,12 @@ namespace Shared
         DateTime? CreatedDate,
         DateTime? PurchaseDate
     );
-     
+    public record AssetWorkOrderDto
+   (
+       Guid Id, string? Name, LocatioWODto? Location
+       );
+
+
     public record AssetForCreationDto
         (
          Guid? AssetParent,

@@ -11,6 +11,7 @@ namespace Contracts
     {
         Task<IEnumerable<WorkOrder>?> GetAllWorkOrdersAsync(bool trackChanges);
         Task<WorkOrder?> GetWorkOrderAsync(Guid workOrderId, bool trackChanges);
+        Task<WorkOrder?> GetWorkOrderForDeleteAsync(Guid workOrderId, bool trackChanges);
         void CreateWorkOrder(WorkOrder workOrder);
         void DeleteWorkOrder(WorkOrder workOrder);
         Task<int> GetNextWorkOrderNumberAsync();

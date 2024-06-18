@@ -143,10 +143,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="MntPlusDatabase.db">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

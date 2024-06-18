@@ -12,9 +12,9 @@ namespace Shared
             string? Notes,
             string? Status,
             DateTime? DateChanged,
-            UserDto? ChangedBy,
+            UserByDto? ChangedBy,
             Guid? WorkOrderId
-        );
+        ); 
         
 
     public record WorkOrderHistoryCreateDto

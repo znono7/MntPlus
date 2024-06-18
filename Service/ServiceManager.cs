@@ -18,7 +18,6 @@ namespace Service
         private readonly Lazy<ITeamService> teamService;
         private readonly Lazy<IWorkOrderService> workOrderService;
         private readonly Lazy<IWorkOrderHistoryService> workOrderHistoryService;
-        private readonly Lazy<IInstructionService> instructionService;
         private readonly Lazy<IRoleService> roleService;
         private readonly Lazy<IUserRoleService> userRoleService;
         private readonly Lazy<IPartService> partService;
@@ -26,6 +25,7 @@ namespace Service
         private readonly Lazy<ILinkPartService> linkPartService;
         private readonly Lazy<IMeterService> meterService;
         private readonly Lazy<IMeterReadingService> meterReadingService;
+        private readonly Lazy<ITaskListService> taskListService;
 
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper,IUnitOfWork unitOfWork) 
           
@@ -34,9 +34,8 @@ namespace Service
             assetService = new Lazy<IAssetService>(() => new AssetService(repositoryManager, mapper));
             userService = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper));
             teamService = new Lazy<ITeamService>(() => new TeamService(repositoryManager, mapper));
-            workOrderService = new Lazy<IWorkOrderService>(() => new WorkOrderService(repositoryManager, mapper));
+            workOrderService = new Lazy<IWorkOrderService>(() => new WorkOrderService(repositoryManager, mapper , unitOfWork));
             workOrderHistoryService = new Lazy<IWorkOrderHistoryService>(() => new WorkOrderHistoryService(repositoryManager, mapper));
-            instructionService = new Lazy<IInstructionService>(() => new InstructionService(repositoryManager, mapper));
             roleService = new Lazy<IRoleService>(() => new RoleService(repositoryManager, mapper));
             userRoleService = new Lazy<IUserRoleService>(() => new UserRoleService(repositoryManager, mapper));
             partService = new Lazy<IPartService>(() => new PartService(repositoryManager, mapper));
@@ -44,6 +43,7 @@ namespace Service
             linkPartService = new Lazy<ILinkPartService>(() => new LinkPartService(repositoryManager, mapper));
             meterService = new Lazy<IMeterService>(() => new MeterService(repositoryManager, mapper));
             meterReadingService = new Lazy<IMeterReadingService>(() => new MeterReadingService(repositoryManager, mapper,unitOfWork));
+            taskListService = new Lazy<ITaskListService>(() => new TaskListService(repositoryManager, mapper , unitOfWork));
         }
       
 
@@ -59,7 +59,6 @@ namespace Service
 
         public IWorkOrderHistoryService WorkOrderHistoryService => workOrderHistoryService.Value;
 
-        public IInstructionService InstructionService => instructionService.Value;
 
         public IRoleService RoleService => roleService.Value;
 
@@ -74,5 +73,7 @@ namespace Service
         public IMeterService MeterService => meterService.Value;
 
         public IMeterReadingService MeterReadingService => meterReadingService.Value;
+
+        public ITaskListService TaskListService => taskListService.Value;
     }
 }

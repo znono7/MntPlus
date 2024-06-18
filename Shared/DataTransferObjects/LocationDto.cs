@@ -15,7 +15,12 @@ namespace Shared
                LocationDto? Parent,
                DateTime CreatedAt 
                );
-     
+    public record LocatioWODto(
+              Guid Id,
+              string Name
+              
+              );
+
     public record LocationForCreationDto
         ( 
                string Name,

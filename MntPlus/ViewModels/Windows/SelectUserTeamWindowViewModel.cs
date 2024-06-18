@@ -169,17 +169,7 @@ namespace MntPlus.WPF
             //};
 
         }
-        private void GenerateTeams()
-        {
-            Teams = new ObservableCollection<TeamDto>
-            {
-                new TeamDto(Guid.Parse("77390131-C867-45A8-85CB-BE4FD0CA3B9C"), "Team 1", true),
-                new TeamDto(Guid.Parse("01F4FFF9-1FDC-4E38-AF2F-720EE5EE1DB9"), "Team 2", true),
-                new TeamDto(Guid.Parse("9552C1F2-151B-400B-93F8-F2DCD6E37120"), "Team 3", true),
-
-            };
-
-        }
+      
 
         private void Search()
         {

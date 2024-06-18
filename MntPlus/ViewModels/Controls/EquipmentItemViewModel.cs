@@ -11,7 +11,7 @@ namespace MntPlus.WPF
         public string? Name { get; set; }
         public string? ParentName { get; set; }
         public string? Description { get; set; }
-        public string? Status { get; set; }
+        public string? Status { get; set; } 
         public string? Category { get; set; }
         public LocationDto? Location { get; set; } 
         public string? LocationName { get; set; }

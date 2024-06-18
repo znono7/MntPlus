@@ -190,20 +190,6 @@ namespace MntPlus.WPF
                 return;
             }
             
-            await RunCommandAsync(() => DeleteIsRunning, async () =>
-            {
-                var Result = await AppServices.ServiceManager.InstructionService.DeleteInstruction(instruction.Id,false);
-                if(Result is not null && Result is ApiOkResponse<InstructionDto> response)
-                {
-                   
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Instruction supprimée avec succès"));
-                }
-                else
-                {
-                    
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression de l'instruction"));
-                }
-            });
             InstructionDtos.Remove(instruction);
             await Task.Delay(1);
             

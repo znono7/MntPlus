@@ -22,9 +22,10 @@ namespace Repository
         public async Task<IEnumerable<WorkOrder>?> GetAllWorkOrdersAsync(bool trackChanges) =>
             await FindAll(trackChanges)
             .Include(w => w.UserAssignedTo) 
-            .Include(w => w.TeamAssignedTo) 
+            .Include(w => w.TeamAssignedTo)  
             .Include(w => w.Asset)
-            .Include(w => w.Asset!.Location)
+            .ThenInclude(a => a!.Location)
+            .Include(w => w.UserCreatedBy)
             .OrderBy(c => c.Name)
             .ToListAsync();
 
@@ -37,10 +38,18 @@ namespace Repository
 
         public async Task<WorkOrder?> GetWorkOrderAsync(Guid workOrderId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(workOrderId), trackChanges)
-             .Include(w => w.UserAssignedTo)
-            .Include(w => w.TeamAssignedTo)
+              .Include(w => w.UserAssignedTo)
+            .Include(w => w.TeamAssignedTo) 
+            .Include(w => w.Asset)
+            .ThenInclude(a => a!.Location)
+            .Include(w => w.UserCreatedBy)
             .Include(w => w.Asset)
             .SingleOrDefaultAsync();
-        
+
+        public async Task<WorkOrder?> GetWorkOrderForDeleteAsync(Guid workOrderId, bool trackChanges) =>
+            await FindByCondition(c => c.Id.Equals(workOrderId), trackChanges)
+            .Include(w => w.WorkOrderHistories)
+            .SingleOrDefaultAsync();
+       
     }
 }

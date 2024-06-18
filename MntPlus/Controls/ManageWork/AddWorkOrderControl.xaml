@@ -14,7 +14,7 @@
 
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Ajouter un ordre de travail"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center"/>
+        <TextBlock Text="{Binding Title,UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
         <Button Command="{Binding CloseCommand}" Margin="25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton" HorizontalAlignment="Right"/>
         <Rectangle Height="1" Fill="{DynamicResource LineColor}" Grid.Row="1"/>
         <StackPanel Orientation="Vertical" Grid.Row="2" Margin="10 20 0 0">
@@ -23,7 +23,7 @@
             </TextBlock>
             <TextBox Background="{DynamicResource BackSubButtons}" Tag="#" Text="{Binding Number}" Style="{StaticResource InputTextBoxStyle}" IsReadOnly="True" Margin="0" Width="450"/>
         </StackPanel>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="3">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -51,7 +51,7 @@
                     <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Height="94" Padding="5 10" VerticalAlignment="Top" Background="{DynamicResource BackSubButtons}" Tag="Commentaire" Text="{Binding Description}" Style="{StaticResource InputTextBoxStyle}" Margin="0" Width="450"/>
                    
                 </StackPanel>
-                <StackPanel  Orientation="Vertical" Grid.Row="2" Margin="10 0 0 0">
+                <!--<StackPanel  Orientation="Vertical" Grid.Row="2" Margin="10 0 0 0">
                     <Button Command="{Binding BrowseCommand}" Style="{StaticResource PrimeButton3}" HorizontalAlignment="Left" Tag="{StaticResource image}" Content="Image"/>
                     <Grid Visibility="{Binding IsHaveImage,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToCollapsedConverter},ConverterParameter=true}" Width="80" Height="60" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Border Background="{DynamicResource LineColor}" CornerRadius="4"  >
@@ -92,7 +92,7 @@
                         </Grid.Triggers>
                     </Grid>
 
-                </StackPanel>
+                </StackPanel>-->
 
                 <Rectangle Height="1" Fill="{DynamicResource LineColor}" Margin="0 20" Grid.Row="3"/>
                 <StackPanel  Orientation="Vertical" Grid.Row="4" Margin="10 0 0 0">

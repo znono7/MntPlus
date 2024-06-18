@@ -14,7 +14,6 @@ namespace Service.Contracts
         ITeamService TeamService { get; }
         IWorkOrderService WorkOrderService { get;}
         IWorkOrderHistoryService WorkOrderHistoryService { get; }
-        IInstructionService InstructionService { get; }
         IRoleService RoleService { get; }
         IUserRoleService UserRoleService { get; }
         IPartService PartService { get; }
@@ -22,6 +21,7 @@ namespace Service.Contracts
         ILinkPartService LinkPartService { get; }
         IMeterService MeterService { get; }
         IMeterReadingService MeterReadingService { get; }
+        ITaskListService TaskListService { get; }
       
 
     }

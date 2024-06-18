@@ -228,11 +228,11 @@
     <Style x:Key="DataGridColumnHeaderStyle2" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource FourthTextColor}" />
         <Setter Property="Margin" Value="0" />
-        <Setter Property="FontFamily" Value="{StaticResource ClarityCity-Regular}" />
-        <Setter Property="FontSize" Value="15" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="{StaticResource ClarityCity-SemiBold}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Height" Value="42" />
         <Setter Property="Padding" Value="5 0" />
         
@@ -241,7 +241,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
                     <Grid>
-                        <theme:DataGridHeaderBorder Background="{TemplateBinding Background}" BorderThickness="0 0 1 1" 
+                        <theme:DataGridHeaderBorder Background="{TemplateBinding Background}" BorderThickness="0 0 0 1" 
                                                     BorderBrush="{DynamicResource LineColor}" IsClickable="{TemplateBinding CanUserSort}" 
                                                     IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" 
                                                     Padding="{TemplateBinding Padding}" SeparatorBrush="{TemplateBinding SeparatorBrush}" 
@@ -363,7 +363,7 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalOnly"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="HeadersVisibility" Value="Column" />
@@ -381,7 +381,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">
-                    <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                    <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                             <ScrollViewer.Template>
                                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -427,10 +428,15 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Define the DropShadowEffect -->
+    <DropShadowEffect x:Key="RowDropShadowEffect" Color="#F0F0F0" BlurRadius="10" ShadowDepth="2" Opacity="0.5" />
+
     <Style x:Key="DataGridRowStyle1" TargetType="{x:Type DataGridRow}">
-        <Setter Property="Margin" Value="0 4 0 0" />
+        <Setter Property="Margin" Value="4 15 0 0" />
         <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Height" Value="48"/>
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
         <Setter Property="ValidationErrorTemplate">
             <Setter.Value>
@@ -442,7 +448,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
-                    <Border x:Name="DGR_Border" Padding="0 8" CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="0" SnapsToDevicePixels="True">
+                    <Border x:Name="DGR_Border"   Padding="0 8" CornerRadius="5" Background="{TemplateBinding Background}"
+                            BorderThickness="0 0 0 1" BorderBrush="{DynamicResource LineColor}" SnapsToDevicePixels="True">
+                        
                         <SelectiveScrollingGrid>
                             <SelectiveScrollingGrid.ColumnDefinitions> 
                                 <ColumnDefinition Width="Auto"/>
@@ -463,20 +471,16 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#623ED0"/>
+                <Setter  Property="Effect" Value="{StaticResource RowDropShadowEffect}" />
+                <Setter Property="Background" Value="{DynamicResource SideMenuBackground}"/>
                 <Setter Property="Foreground" Value="#ffffff"/>
+                <Setter Property="BorderThickness" Value="0"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#623ED0"/>
+                <Setter Property="Background" Value="#F0F0F0"/>
                 <Setter Property="Foreground" Value="#ffffff"/>
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsSelected" Value="true"/>
-                    <Condition Property="Selector.IsSelectionActive" Value="false"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#623ED0"/>
-            </MultiTrigger>
+           
         </Style.Triggers>
     </Style>
 

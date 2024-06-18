@@ -17,7 +17,6 @@ namespace Repository
         private readonly Lazy<ITeamRepository> teamRepository;
         private readonly Lazy<IWorkOrderRepository> workOrderRepository;
         private readonly Lazy<IWorkOrderHistoryRepository> workOrderHistoryRepository;
-        private readonly Lazy<IInstructionRepository> instructionRepository;
         private readonly Lazy<IRoleRepository> roleRepository;
         private readonly Lazy<IUserRoleRepository> userRoleRepository;
         private readonly Lazy<IPartRepository> partRepository;
@@ -26,6 +25,10 @@ namespace Repository
         private readonly Lazy<IMeterRepository> meterRepository;
         private readonly Lazy<IMeterReadingRepository> meterReadingRepository;
         private readonly Lazy<ICheckListRepository> checkListRepository;
+        private readonly Lazy<IIndividualTaskRepository> individualTaskRepository;
+        private readonly Lazy<ICheckListItemRepository> checkListItemRepository;
+
+
 
 
         public RepositoryManager(RepositoryContext repositoryContext)
@@ -37,7 +40,6 @@ namespace Repository
             teamRepository = new Lazy<ITeamRepository>(() => new TeamRepository(repositoryContext));
             workOrderRepository = new Lazy<IWorkOrderRepository>(() => new WorkOrderRepository(repositoryContext));
             workOrderHistoryRepository = new Lazy<IWorkOrderHistoryRepository>(() => new WorkOrderHistoryRepository(repositoryContext));
-            instructionRepository = new Lazy<IInstructionRepository>(() => new InstructionRepository(repositoryContext));
             roleRepository = new Lazy<IRoleRepository>(() => new RoleRepository(repositoryContext));
             userRoleRepository = new Lazy<IUserRoleRepository>(() => new UserRoleRepository(repositoryContext));
               partRepository = new Lazy<IPartRepository>(() => new PartRepository(repositoryContext));
@@ -46,6 +48,8 @@ namespace Repository
             meterRepository = new Lazy<IMeterRepository>(() => new MeterRepository(repositoryContext));
             meterReadingRepository = new Lazy<IMeterReadingRepository>(() => new MeterReadingRepository(repositoryContext));
             checkListRepository = new Lazy<ICheckListRepository>(() => new CheckListRepository(repositoryContext));
+            individualTaskRepository = new Lazy<IIndividualTaskRepository>(() => new IndividualTaskRepository(repositoryContext));
+            checkListItemRepository = new Lazy<ICheckListItemRepository>(() => new CheckListItemRepository(repositoryContext));
         }
       
 
@@ -61,7 +65,6 @@ namespace Repository
 
         public IWorkOrderHistoryRepository WorkOrderHistory => workOrderHistoryRepository.Value;
 
-        public IInstructionRepository Instruction => instructionRepository.Value;
 
         public IRoleRepository Role => roleRepository.Value;
 
@@ -78,6 +81,10 @@ namespace Repository
         public IMeterReadingRepository MeterReading => meterReadingRepository.Value;
 
         public ICheckListRepository CheckList => checkListRepository.Value;
+
+        public IIndividualTaskRepository IndividualTask => individualTaskRepository.Value;
+
+        public ICheckListItemRepository CheckListItem => checkListItemRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

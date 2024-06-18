@@ -26,8 +26,14 @@ namespace Service
             {
                 var workOrderHistoryEntity = _mapper.Map<WorkOrderHistory>(workOrderHistory);
                 _repository.WorkOrderHistory.CreateWorkOrderHistory(workOrderHistoryEntity);
-                await _repository.SaveAsync();
-                var workOrderHistoryToReturn = _mapper.Map<WorkOrderHistoryDto>(workOrderHistoryEntity);
+                await _repository.SaveAsync(); 
+                var workOrderHistoryToReturn = new WorkOrderHistoryDto(Id: workOrderHistoryEntity.Id,
+                    Notes: workOrderHistoryEntity.Notes,
+                    Status: workOrderHistoryEntity.Status,
+                    DateChanged: workOrderHistoryEntity.DateChanged,
+                    ChangedBy: workOrderHistoryEntity.ChangedBy != null ? 
+                                new UserByDto(workOrderHistoryEntity.ChangedBy.Id, $"{workOrderHistoryEntity.ChangedBy.FirstName} {workOrderHistoryEntity.ChangedBy.LastName}") : null,
+                    WorkOrderId: workOrderHistoryEntity.WorkOrderId);
                 return new ApiOkResponse<WorkOrderHistoryDto>(workOrderHistoryToReturn);
             }
             catch (Exception ex)
@@ -47,7 +53,11 @@ namespace Service
                 }
                 _repository.WorkOrderHistory.DeleteWorkOrderHistory(workOrderHistory);
                 await _repository.SaveAsync();
-                var workOrderHistoryToReturn = _mapper.Map<WorkOrderHistoryDto>(workOrderHistory);
+                var workOrderHistoryToReturn = new WorkOrderHistoryDto
+                (Id: workOrderHistory.Id, Notes: workOrderHistory.Notes, Status: workOrderHistory.Status,
+                 DateChanged: workOrderHistory.DateChanged,
+                 ChangedBy: workOrderHistory.ChangedBy != null ? new UserByDto(workOrderHistory.ChangedBy.Id, $"{workOrderHistory.ChangedBy.FirstName} {workOrderHistory.ChangedBy.LastName}") : null,
+                 WorkOrderId: workOrderHistory.WorkOrderId);
 
                 return new ApiOkResponse<WorkOrderHistoryDto>(workOrderHistoryToReturn);
             }
@@ -60,18 +70,23 @@ namespace Service
         public async Task<ApiBaseResponse> GetAllWorkOrderHistoriesAsync(Guid workOrderId, bool trackChanges)
         {
             try
-            {
+            { 
                 var workOrderHistories = await _repository.WorkOrderHistory.GetWorkOrderHistoriesAsync(workOrderId, trackChanges);
                 if (workOrderHistories is null)
                 {
                     return new ApiNotFoundResponse(""); 
                 }
                 List<WorkOrderHistoryDto> workOrderHistoriesDto = new();
-                foreach (var item in workOrderHistories)
-                {
-                    workOrderHistoriesDto.Add(_mapper.Map<WorkOrderHistoryDto>(item));
-                }
-                //var workOrderHistoriesDto = _mapper.Map<IEnumerable<WorkOrderHistoryDto>>(workOrderHistories);
+                workOrderHistoriesDto = workOrderHistories.Select(x => new WorkOrderHistoryDto
+                (
+                    Id : x.Id,
+                    Notes : x.Notes,
+                    Status : x.Status,
+                    DateChanged : x.DateChanged,
+                    ChangedBy : x.ChangedBy != null ? new UserByDto(x.ChangedBy.Id,$"{x.ChangedBy.FirstName} {x.ChangedBy.LastName}") : null,
+                    WorkOrderId: x.WorkOrderId
+                )).ToList();
+
                 return new ApiOkResponse<IEnumerable<WorkOrderHistoryDto>>(workOrderHistoriesDto);
             }
             catch (Exception ex)

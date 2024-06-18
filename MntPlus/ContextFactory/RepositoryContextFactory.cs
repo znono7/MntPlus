@@ -11,8 +11,7 @@ namespace MntPlus.WPF
 
         public RepositoryContext CreateDbContext(string[] args)
         {
-           
-            var builder = new DbContextOptionsBuilder<RepositoryContext>()
+             var builder = new DbContextOptionsBuilder<RepositoryContext>()
                                 .UseSqlite(DefaultConnectionString,
                                               b => b.MigrationsAssembly("MntPlus.WPF"));
             return new RepositoryContext(builder.Options);

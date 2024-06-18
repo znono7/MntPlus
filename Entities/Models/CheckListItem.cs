@@ -7,16 +7,17 @@ namespace Entities
     {
         [Key]
         public Guid Id { get; set; }
+        public int Order { get; set; }
         public string? Description { get; set; }
         public bool IsCompleted { get; set; }
 
         [ForeignKey("CheckList")]
-        public Guid? CheckListId { get; set; }
+        public Guid? CheckListId { get; set; } 
         public CheckList? CheckList { get; set; }
 
         [ForeignKey("WorkTask")]
         public Guid? IndividualTaskId { get; set; }
-        public IndividualTask? IndividualTaskTask { get; set; }
+        public IndividualTask? IndividualTask { get; set; }
 
 
     }

@@ -41,6 +41,11 @@ namespace MntPlus.WPF
                         BackgroundPriority = "D0E9C6";
                         WorkPriority = "Priorité Basse";
                         break;
+                        case "Aucune" :
+                        ForgroundPriority = "29224F";
+                        BackgroundPriority = "F0F0F0";
+                        WorkPriority = "Aucune Priorité";
+                        break;
                 }
                 OnPropertyChanged(nameof(Priority));
             }
@@ -86,6 +91,11 @@ namespace MntPlus.WPF
                 OnPropertyChanged(nameof(Status));
             }
         }
+
+        public ICommand EditWorkOrderCommand { get; set; }
+        public Func<WorkOrderDto, Task>? EditAction { get; set; }
+
+        public ICommand DeleteWorkOrderCommand { get; set; }
         public Func<Task>? CloseAction { get; set; }
         public RelayCommand CloseCommand { get;  set; }
         public string? AssignedTo { get; set; }
@@ -107,6 +117,7 @@ namespace MntPlus.WPF
         public string? Location { get; set; }
         public string? Equipment { get; set; }
         public string? Created { get; set; }
+        public string? Requester { get; set; }
         public bool SaveIsRunning { get; set; }
         public ICommand SaveCommand { get; set; }
 
@@ -119,16 +130,18 @@ namespace MntPlus.WPF
             CloseCommand = new RelayCommand(async () => await CloseAsync());
             OpenMenuStatCommand = new RelayCommand(() => IsMenuStatOpen = !IsMenuStatOpen);
             SaveCommand = new RelayCommand(async () => await AddHistoryAsync());
+            DeleteWorkOrderCommand = new RelayCommand(async () => await DeleteWorkOrder());
             WorkOrder = workOrder;
-            Number = FormatNumberWithLeadingZeros(workOrder?.Number) ;
+            Number = AddDynamicLeadingZeros(workOrder?.Number ?? 0);
             Name = workOrder?.Name;
             Description = workOrder?.Description;
             Priority = workOrder?.Priority;
             Status  = workOrder?.Status;
             AssignedTo = workOrder?.UserAssignedTo == null ? workOrder?.TeamAssignedTo?.Name : workOrder?.UserAssignedTo?.FullName;
-            Location = $"{workOrder?.Asset?.Location?.Name} , {workOrder?.Asset?.Location?.Address}";
-            Equipment = $"{workOrder?.Asset?.Name} , {workOrder?.Asset?.SerialNumber}";
+            Location = workOrder?.Asset?.Location != null ? $"{workOrder?.Asset?.Location?.Name}" : null;
+            Equipment = workOrder?.Asset != null ? $"{workOrder?.Asset?.Name}" : "";
             Created = $"{workOrder?.CreatedOn?.ToString("dd/MM/yyyy")} ,Par: {workOrder?.UserCreatedBy?.FullName}";
+            Requester = workOrder?.Requester;
             ApprovedCommand = new RelayCommand(async () => await UpdateStat("Approuvé"));
             PendingCommand = new RelayCommand(async () => await UpdateStat("En attente"));
             InServiceCommand = new RelayCommand(async () => await UpdateStat("En service"));
@@ -139,7 +152,40 @@ namespace MntPlus.WPF
             _ = GetCommentsHistory();
             Comments = GenerateComments(CommentsHistory);
             WorkOrderStore = workOrderStore;
-           
+            EditWorkOrderCommand = new RelayCommand(async () => await EditWorkOrder());
+
+
+        }
+
+        private async Task EditWorkOrder()
+        {
+            if (EditAction != null)
+                await EditAction(WorkOrder!);
+        }
+
+        private async Task DeleteWorkOrder()
+        {
+            var Dialog = new ConfirmationWindow("Supprimer ordre de travail", "Voulez-vous vraiment supprimer cet ordre de travail ?");
+            Dialog.ShowDialog();
+            if (!Dialog.Confirmed)
+            {
+                return;
+            } 
+            var Response = await AppServices.ServiceManager.WorkOrderService.DeleteWorkOrder(WorkOrder!.Id, true);
+            if (Response is not null && Response is ApiOkResponse<WorkOrderDto> response)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Ordre de travail supprimé avec succès"));
+                WorkOrderStore?.DeleteWorkOrder(response.Result);
+                await CloseAsync();
+            }
+            else if(Response is not null && Response is ApiBadRequestResponse apiBadRequestResponse)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, apiBadRequestResponse.Message ));
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression de l'ordre de travail"));
+            }
         }
 
         private async Task AddHistoryAsync()
@@ -156,17 +202,15 @@ namespace MntPlus.WPF
                                            Notes: CommentAdded,
                                            Status: Status,
                                            DateChanged: DateTime.Now,
-                                           ChangedById: null,/*IoContainer.CurrentUser.Id*/
+                                           ChangedById: Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"),
                                            WorkOrderId: WorkOrder?.Id);
 
                 var Response = await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto);
                 if (Response is not null && Response is ApiOkResponse<WorkOrderHistoryDto> response)
                 {
-                    CommentsHistory ??= new ObservableCollection<WorkOrderHistoryDto>();
-                    CommentsHistory.Add(response.Result!);
-                    Comments ??= new ObservableCollection<CommentControlViewModel>();
-                    Comments.Add(new CommentControlViewModel(response.Result!) { RemoveItemFunc = RemoveComment });
-                    CommentAdded = string.Empty;
+                   _ = GetCommentsHistory();
+                    Comments = GenerateComments(CommentsHistory);
+                    CommentAdded = "";
                 }
                 else
                 {
@@ -178,12 +222,12 @@ namespace MntPlus.WPF
 
         private async Task GetCommentsHistory()
         {
-            if (WorkOrder == null)
+            if (WorkOrder == null) 
                 return;
             var Response = await AppServices.ServiceManager.WorkOrderHistoryService.GetAllWorkOrderHistoriesAsync(WorkOrder.Id,false);
             if (Response is not null && Response is ApiOkResponse<IEnumerable<WorkOrderHistoryDto>> response)
             {
-                CommentsHistory = new ObservableCollection<WorkOrderHistoryDto>(response.Result!.Where(x => x.Notes != null));
+                CommentsHistory = new ObservableCollection<WorkOrderHistoryDto>(response.Result!);
             }
             else if(Response is not null && Response is ApiNotFoundResponse apiNotFoundResponse)
             {
@@ -215,20 +259,19 @@ namespace MntPlus.WPF
 
         private async Task RemoveComment(CommentControlViewModel model)
         {
-            var Dialog = new ConfirmationWindow(model?.WorkOrderHistoryDto?.Notes);
+            var Dialog = new ConfirmationWindow("Supprimer commentaire", "Voulez-vous vraiment supprimer ce commentaire ?");
             Dialog.ShowDialog();
             if (!Dialog.Confirmed)
             {
                 return;
             }
-            var Response = await AppServices.ServiceManager.WorkOrderHistoryService.DeleteWorkOrderHistory(model!.WorkOrderHistoryDto!.Id, false);
+            var Response = await AppServices.ServiceManager.WorkOrderHistoryService.DeleteWorkOrderHistory(model!.WorkOrderHistoryDto!.Id, true);
             if (Response is not null && Response is ApiOkResponse<WorkOrderHistoryDto> response)
             {
                 CommentsHistory ??= new ObservableCollection<WorkOrderHistoryDto>();
                 CommentsHistory.Remove(response.Result!);
                 Comments ??= new ObservableCollection<CommentControlViewModel>();
                 Comments.Remove(model);
-                //Comments = GenerateComments(CommentsHistory);
             }
             else
             {
@@ -248,24 +291,18 @@ namespace MntPlus.WPF
             if (WorkOrder == null)
                 return;
             
-           var Response = await AppServices.ServiceManager.WorkOrderService.UpdateWorkOrder(WorkOrder.Id,new WorkOrderForCreationDto
-               ( Name, WorkOrder.Number, Description, Priority, WorkOrder.StartDate, WorkOrder.DueDate, WorkOrder.Type, status, WorkOrder.Requester, WorkOrder.CreatedOn, WorkOrder.UserCreatedId, WorkOrder.UserAssignedToId, WorkOrder.TeamAssignedToId, WorkOrder.AssetId)
-               , true);
+            var Response = await AppServices.ServiceManager.WorkOrderService.UpdateStatWorkOrder(WorkOrder.Id, status, true);
+          
             if (Response is not null && Response is ApiOkResponse<WorkOrderDto> response)
             {
                 WorkOrder = response.Result;
                 Status = status;
-                WorkOrderHistoryCreateDto historyCreateDto = new
-                   (
-                       Notes: $"l'ordre de travail mis à jour, statut : {status}",
-                       Status: status,
-                       DateChanged: DateTime.Now,
-                       ChangedById: null,//IoContainer.CurrentUser.Id,
-                       WorkOrderId: response.Result?.Id
-                   );
-                await AppServices.ServiceManager.WorkOrderHistoryService.CreateWorkOrderHistory(historyCreateDto);
                 WorkOrderStore?.UpdateWorkOrder(response.Result);
 
+            }
+            else if(Response is not null && Response is ApiBadRequestResponse apiBadRequestResponse)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, apiBadRequestResponse.Message ));
             }
             else
             {
@@ -274,13 +311,17 @@ namespace MntPlus.WPF
             
         }
 
-        public  string FormatNumberWithLeadingZeros(int? number)
+
+        public string AddDynamicLeadingZeros(int number)
         {
-            if (number.HasValue)
-            {
-                return $"#{number.Value.ToString("D6")}";
-            }
-            return "000000"; // Default value for null
+            // Get the number of digits in the number
+            int numberOfDigits = number.ToString().Length;
+
+            // Calculate the total length after adding zeros
+            int totalLength = numberOfDigits * 2 + 1;
+
+            // Pad the number with leading zeros
+            return number.ToString().PadLeft(totalLength, '0');
         }
     }
 }

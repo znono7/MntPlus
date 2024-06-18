@@ -16,5 +16,6 @@ namespace Service.Contracts
         Task<ApiBaseResponse> CreateLastNumberWorkOrder();
         Task<ApiBaseResponse> DeleteWorkOrder(Guid workOrderId, bool trackChanges);
         Task<ApiBaseResponse> UpdateWorkOrder(Guid workOrderId, WorkOrderForCreationDto workOrder, bool trackChanges);
+        Task<ApiBaseResponse> UpdateStatWorkOrder(Guid workOrderId, string workOrderStat, bool trackChanges);
     }
 }

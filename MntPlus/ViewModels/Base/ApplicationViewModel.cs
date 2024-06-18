@@ -12,7 +12,7 @@ namespace MntPlus.WPF
         /// <summary>
         /// The current page of the application 
         /// </summary>
-        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Meters;
+        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.ManageWork;
 
         /// <summary>
         /// The view model to use for the current page when the CurrentPage changes
@@ -25,7 +25,7 @@ namespace MntPlus.WPF
         /// <summary>
         /// True if the side menu should be shown
         /// </summary>
-        private bool _sideMenuVisible { get; set; }
+        private bool _sideMenuVisible { get; set; } = false;
         public bool SideMenuVisible 
         { 
             get => _sideMenuVisible;

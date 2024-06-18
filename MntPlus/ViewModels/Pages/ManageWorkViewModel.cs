@@ -1,21 +1,37 @@
 ﻿using Entities;
 using Shared;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.Metrics;
 using System.Windows.Input;
 
 namespace MntPlus.WPF
 {
-   public class ManageWorkViewModel : BaseViewModel
+    public class ManageWorkViewModel : BaseViewModel
     {
+        protected string? mLastSearchText;
+        protected string? mSearchText;
+        public string? SearchText
+        {
+            get => mSearchText;
+            set
+            {
+                // Check value is different
+                if (mSearchText == value)
+                    return;
+
+                // Update value
+                mSearchText = value;
+
+                // If the search text is empty...
+                if (string.IsNullOrEmpty(SearchText))
+                // Search to restore messages
+                Search();
+            }
+        }
         public bool IsActionPopupOpen { get; set; }
         public ICommand OpenActionPopupOpenCommand { get; set; }
         public DueDateFilterViewModel dueDateFilterViewModel { get; set; }
-        public bool IsDateFilterOpen { get; set; }
+        public bool IsDateFilterOpen { get; set; }  
         public ObservableCollection<WorkOrderDto> WorkOrderDtos { get; set;}  
           
         private ObservableCollection<WorkOrderItemsViewModel> _workOrders { get; set; }
@@ -41,10 +57,12 @@ namespace MntPlus.WPF
         public ICommand TaskPopupCommand { get; set; }
         public ICommand ViewOrderWorkCommand { get; set; }
         public ICommand OpenDueDateMenuCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
+
 
         public ViewTaskViewModel TaskViewModel { get; set; } 
         public ShowWorkOrderViewModel ShowWorkOrderViewModel { get; set; }
-        public AddWorkOrderViewModel AddWorkOrderViewModel { get; set; }
+        public BaseViewModel AddWorkOrderViewModel { get; set; }
 
         public WorkOrderStore WorkOrderStore { get; set; }
 
@@ -173,6 +191,7 @@ namespace MntPlus.WPF
 
         public ICommand RemoveCommand { get; set; }
 
+        public ObservableCollection<StatFilterCriteria> StatFilterCriteria { get; set; }
         public ManageWorkViewModel()
         {
             _ = LoadWorkOrders();
@@ -185,6 +204,7 @@ namespace MntPlus.WPF
             WorkOrderStore = new WorkOrderStore();
             WorkOrderStore.WorkOrderCreated += WorkOrderStore_WorkOrderCreated;
             WorkOrderStore.WorkOrderUpdated += WorkOrderStore_WorkOrderUpdated;
+            WorkOrderStore.WorkOrderDeleted += WorkOrderStore_WorkOrderDeleted;
 
             OpenStatFilterCommand = new RelayCommand(() => IsMenuStatOpen = !IsMenuStatOpen);
             ApprovedChecked = true;
@@ -194,8 +214,43 @@ namespace MntPlus.WPF
             OpenDueDateMenuCommand = new RelayCommand(() => IsDateFilterOpen = !IsDateFilterOpen);
             OpenActionPopupOpenCommand = new RelayCommand(() => IsActionPopupOpen = !IsActionPopupOpen);
             RemoveCommand = new RelayCommand(async () => await Remove() );
+            SearchCommand = new RelayCommand(Search);
+            StatFilterCriteria = new ObservableCollection<StatFilterCriteria>();
 
 
+        }
+        private void Search()
+        {
+            // Make sure we don't re-search the same text
+            if ((string.IsNullOrEmpty(mLastSearchText) && string.IsNullOrEmpty(SearchText)) ||
+                string.Equals(mLastSearchText, SearchText))
+                return;
+
+            if (string.IsNullOrEmpty(SearchText) || WorkOrders is null || WorkOrders.Count <= 0)
+            {
+                // Make filtered list the same
+                FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders ?? Enumerable.Empty<WorkOrderItemsViewModel>());
+
+                // Set last search text
+                mLastSearchText = SearchText;
+
+                return;
+            }
+            FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(
+                WorkOrders.Where(item => item.WorkOrderName is not null && item.WorkOrderName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+            // Set last search text
+            mLastSearchText = SearchText;
+
+        }
+
+        private void WorkOrderStore_WorkOrderDeleted(WorkOrderDto? dto)
+        {
+            var workOrder = WorkOrders.FirstOrDefault(x => x.WorkOrderDto?.Id == dto?.Id);
+            //get the index of the work order
+            var index = WorkOrders.IndexOf(workOrder!);
+            //update the work order
+            WorkOrders.RemoveAt(index);
+            FilterWorkOrders?.RemoveAt(index);
         }
 
         private async Task Remove()
@@ -256,20 +311,121 @@ namespace MntPlus.WPF
                 if (!statuses.Contains(status))
                 {
                     statuses.Add(status);
+                    switch (status)
+                    {
+                        case "Approuvé":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Approved, "Approuvé"));
+                            break;
+                        case "En attente":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Waiting, "En attente"));
+                            break;
+                        case "Ouvrir":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Open, "Ouvrir"));
+                            break;
+                        case "En service":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.InProgress, "En service"));
+                            break;
+                        case "Complet":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Completed, "Complet"));
+                            break;
+                        case "Non spécifié":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.NonSpecific, "Non spécifié"));
+                            break;
+                    }
+                    ApplyFilters();
                 }
             }
             else
             {
                 statuses.Remove(status);
+                switch (status)
+                {
+                    case "Approuvé":
+                        var filter = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Approved);
+                        if (filter != null)
+                            RemveFilterCriteria(filter);
+                        break;
+                    case "En attente":
+                        var filter1 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Waiting);
+                        if (filter1 != null)
+                            RemveFilterCriteria(filter1);
+                        break;
+                    case "Ouvrir":
+                        var filter2 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Open);
+                        if (filter2 != null)
+                            RemveFilterCriteria(filter2);
+                        break;
+                    case "En service":
+                        var filter3 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.InProgress);
+                        if (filter3 != null)
+                            RemveFilterCriteria(filter3);
+                        break;
+                    case "Complet":
+                        var filter4 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Completed);
+                        if (filter4 != null)
+                            RemveFilterCriteria(filter4);
+                        break;
+                    case "Non spécifié":
+                        var filter5 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.NonSpecific);
+                        if (filter5 != null)
+                            RemveFilterCriteria(filter5);
+                        break;
+                }
             }
 
             StatFilterContent = string.Join(",", statuses);
         }
+
+        private void RemveFilterCriteria(StatFilterCriteria filterToRemove)
+        {
+            StatFilterCriteria.Remove(filterToRemove);
+            if(StatFilterCriteria.Count == 0)
+            {
+                FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders ?? Enumerable.Empty<WorkOrderItemsViewModel>());
+            }
+            else
+            {
+                ApplyFilters();
+            }
+        }
+
+        private void ApplyFilters()
+        {
+            if(WorkOrders is null || WorkOrders.Count == 0) return;
+
+            var items = WorkOrders.ToList();
+
+            foreach (var filter in StatFilterCriteria)
+            {
+                items = ApplyFilter(items, filter);
+            }
+
+            FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(items);
+        }
+
+        private List<WorkOrderItemsViewModel> ApplyFilter(List<WorkOrderItemsViewModel> items, StatFilterCriteria filter)
+        {
+            return filter.StatFilterType switch
+            {
+                StatFilterType.Approved => items.Where(x => x.WorkOrderDto?.Status == "Approuvé").ToList(),
+                StatFilterType.Waiting => items.Where(x => x.WorkOrderDto?.Status == "En attente").ToList(),
+                StatFilterType.Open => items.Where(x => x.WorkOrderDto?.Status == "Ouvrir").ToList(),
+                StatFilterType.InProgress => items.Where(x => x.WorkOrderDto?.Status == "En service").ToList(),
+                StatFilterType.Completed => items.Where(x => x.WorkOrderDto?.Status == "Complet").ToList(),
+                StatFilterType.NonSpecific => items.Where(x => x.WorkOrderDto?.Status == "Non spécifique").ToList(),
+                _ => items
+            };
+        }
+
         private void WorkOrderStore_WorkOrderUpdated(WorkOrderDto? dto)
         {
-            //var workOrder = WorkOrders.FirstOrDefault(x => x.WorkOrderDto?.Id == dto?.Id);
-            //workOrder = new WorkOrderItemsViewModel(dto);
-            _ = LoadWorkOrders();
+            var workOrder = WorkOrders.FirstOrDefault(x => x.WorkOrderDto?.Id == dto?.Id);
+            //get the index of the work order
+            var index = WorkOrders.IndexOf(workOrder!);
+            //update the work order 
+            WorkOrders[index] = new WorkOrderItemsViewModel(dto);
+            FilterWorkOrders![index] = new WorkOrderItemsViewModel(dto);
+            
         }
 
         private async Task LoadWorkOrders()
@@ -309,9 +465,11 @@ namespace MntPlus.WPF
         }
 
         private void AddWorkOrder() 
-        { 
-            AddWorkOrderViewModel = new AddWorkOrderViewModel(WorkOrderStore);
-            AddWorkOrderViewModel.CloseAction = async () =>  { AddWorkOrderPopupIsOpen = false; DimmableOverlayVisible = false; await Task.Delay(1);  };
+        {
+            AddWorkOrderViewModel = new AddWorkOrderViewModel(WorkOrderStore)
+            {
+                CloseAction = async () => { AddWorkOrderPopupIsOpen = false; DimmableOverlayVisible = false; await Task.Delay(1); }
+            };
             AddWorkOrderPopupIsOpen = true;
             DimmableOverlayVisible = true;
            
@@ -332,12 +490,25 @@ namespace MntPlus.WPF
         }
 
         private async Task SetWorkTask(object? dto)
-        {
+        { 
             if(dto is null) return;
             var MyDto = (WorkOrderItemsViewModel)dto;
             ShowWorkOrderViewModel = new ShowWorkOrderViewModel(MyDto.WorkOrderDto,WorkOrderStore); 
             ShowWorkOrderViewModel.CloseAction = CloseTaskPopup;
+            ShowWorkOrderViewModel.EditAction = EditWorkOrder;
             TaskPopupIsOpen = true;
+            DimmableOverlayVisible = true;
+            await Task.Delay(1);
+        }
+
+        private async Task EditWorkOrder(WorkOrderDto dto)
+        {
+            AddWorkOrderViewModel = new AddWorkOrderViewModel(WorkOrderStore , dto)
+            {
+                CloseAction = async () => { AddWorkOrderPopupIsOpen = false; DimmableOverlayVisible = false; await Task.Delay(1); }
+            };
+            TaskPopupIsOpen = false;
+            AddWorkOrderPopupIsOpen = true;
             DimmableOverlayVisible = true;
             await Task.Delay(1);
         }

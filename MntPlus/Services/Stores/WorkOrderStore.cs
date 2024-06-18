@@ -11,6 +11,7 @@ namespace MntPlus.WPF
     {
         public event Action<WorkOrderDto?>? WorkOrderCreated;
         public event Action<WorkOrderDto?>? WorkOrderUpdated;
+        public event Action<WorkOrderDto?>? WorkOrderDeleted;
 
         public void CreateWorkOrder(WorkOrderDto? location)
         {
@@ -20,6 +21,11 @@ namespace MntPlus.WPF
         public void UpdateWorkOrder(WorkOrderDto? location)
         {
             WorkOrderUpdated?.Invoke(location);
+        }
+
+        public void DeleteWorkOrder(WorkOrderDto? location)
+        {
+            WorkOrderDeleted?.Invoke(location);
         }
     }
 }

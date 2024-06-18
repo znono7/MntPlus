@@ -6,11 +6,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class mntPlus : Migration
+    public partial class MntMigra : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "CheckLists",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckLists", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IndividualTasks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IndividualTasks", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
@@ -109,6 +133,34 @@ namespace MntPlus.WPF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheckListItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Order = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    IsCompleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CheckListId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    IndividualTaskId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckListItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CheckListItems_CheckLists_CheckListId",
+                        column: x => x.CheckListId,
+                        principalTable: "CheckLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CheckListItems_IndividualTasks_IndividualTaskId",
+                        column: x => x.IndividualTaskId,
+                        principalTable: "IndividualTasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -423,25 +475,6 @@ namespace MntPlus.WPF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkTasks",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    PreventiveID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    PreventiveMaintenanceId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkTasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WorkTasks_PreventiveMaintenances_PreventiveMaintenanceId",
-                        column: x => x.PreventiveMaintenanceId,
-                        principalTable: "PreventiveMaintenances",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "WorkOrderHistories",
                 columns: table => new
                 {
@@ -476,6 +509,16 @@ namespace MntPlus.WPF.Migrations
                 name: "IX_Assets_LocationId",
                 table: "Assets",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CheckListItems_CheckListId",
+                table: "CheckListItems",
+                column: "CheckListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CheckListItems_IndividualTaskId",
+                table: "CheckListItems",
+                column: "IndividualTaskId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inventories_PartID",
@@ -587,18 +630,13 @@ namespace MntPlus.WPF.Migrations
                 table: "WorkOrders",
                 column: "UserCreatedId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkTasks_PreventiveMaintenanceId",
-                table: "WorkTasks",
-                column: "PreventiveMaintenanceId");
-
             migrationBuilder.InsertData(
-  table: "Users",
-  columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
-  values: new object[,]
-  {
+ table: "Users",
+ columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
+ values: new object[,]
+ {
            { Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), "Lamine", "Belkheir", "mail@d","01264","lamine","a123456","Actif",DateTime.Now}
-  });
+ });
 
 
             migrationBuilder.InsertData(
@@ -647,6 +685,9 @@ namespace MntPlus.WPF.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CheckListItems");
+
+            migrationBuilder.DropTable(
                 name: "Inventories");
 
             migrationBuilder.DropTable(
@@ -671,7 +712,10 @@ namespace MntPlus.WPF.Migrations
                 name: "WorkOrderHistories");
 
             migrationBuilder.DropTable(
-                name: "WorkTasks");
+                name: "CheckLists");
+
+            migrationBuilder.DropTable(
+                name: "IndividualTasks");
 
             migrationBuilder.DropTable(
                 name: "Parts");
@@ -680,25 +724,25 @@ namespace MntPlus.WPF.Migrations
                 name: "Meters");
 
             migrationBuilder.DropTable(
+                name: "PreventiveMaintenances");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "WorkOrders");
 
             migrationBuilder.DropTable(
-                name: "PreventiveMaintenances");
+                name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "Assets");
 
             migrationBuilder.DropTable(
                 name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Assets");
-
-            migrationBuilder.DropTable(
-                name: "Schedules");
 
             migrationBuilder.DropTable(
                 name: "Locations");

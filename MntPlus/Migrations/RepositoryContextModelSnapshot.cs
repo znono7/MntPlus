@@ -15,7 +15,7 @@ namespace MntPlus.WPF.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
 
             modelBuilder.Entity("Entities.Asset", b =>
                 {
@@ -75,6 +75,64 @@ namespace MntPlus.WPF.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("Entities.CheckList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CheckLists");
+                });
+
+            modelBuilder.Entity("Entities.CheckListItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CheckListId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("IndividualTaskId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckListId");
+
+                    b.HasIndex("IndividualTaskId");
+
+                    b.ToTable("CheckListItems");
+                });
+
+            modelBuilder.Entity("Entities.IndividualTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IndividualTasks");
                 });
 
             modelBuilder.Entity("Entities.Inventory", b =>
@@ -594,28 +652,6 @@ namespace MntPlus.WPF.Migrations
                     b.ToTable("WorkOrderHistories");
                 });
 
-            modelBuilder.Entity("Entities.WorkTask", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("PreventiveID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("PreventiveMaintenanceId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PreventiveMaintenanceId");
-
-                    b.ToTable("WorkTasks");
-                });
-
             modelBuilder.Entity("Entities.Asset", b =>
                 {
                     b.HasOne("Entities.Asset", "Parent")
@@ -630,6 +666,23 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("Location");
 
                     b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Entities.CheckListItem", b =>
+                {
+                    b.HasOne("Entities.CheckList", "CheckList")
+                        .WithMany("CheckListItems")
+                        .HasForeignKey("CheckListId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entities.IndividualTask", "IndividualTask")
+                        .WithMany("CheckListItems")
+                        .HasForeignKey("IndividualTaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("CheckList");
+
+                    b.Navigation("IndividualTask");
                 });
 
             modelBuilder.Entity("Entities.Inventory", b =>
@@ -816,15 +869,6 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("WorkOrder");
                 });
 
-            modelBuilder.Entity("Entities.WorkTask", b =>
-                {
-                    b.HasOne("Entities.PreventiveMaintenance", "PreventiveMaintenance")
-                        .WithMany("Tasks")
-                        .HasForeignKey("PreventiveMaintenanceId");
-
-                    b.Navigation("PreventiveMaintenance");
-                });
-
             modelBuilder.Entity("Entities.Asset", b =>
                 {
                     b.Navigation("Assets");
@@ -832,6 +876,16 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("LinkParts");
 
                     b.Navigation("Meters");
+                });
+
+            modelBuilder.Entity("Entities.CheckList", b =>
+                {
+                    b.Navigation("CheckListItems");
+                });
+
+            modelBuilder.Entity("Entities.IndividualTask", b =>
+                {
+                    b.Navigation("CheckListItems");
                 });
 
             modelBuilder.Entity("Entities.Meter", b =>
@@ -849,8 +903,6 @@ namespace MntPlus.WPF.Migrations
             modelBuilder.Entity("Entities.PreventiveMaintenance", b =>
                 {
                     b.Navigation("PreventiveMaintenanceHistories");
-
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("Entities.Role", b =>

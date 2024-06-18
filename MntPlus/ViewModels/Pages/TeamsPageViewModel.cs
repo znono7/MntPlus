@@ -92,13 +92,13 @@ namespace MntPlus.WPF
 
         private void RemoveSelectedItems()
         {
-            if (FilterTeams is null || FilterTeams.Count == 0)
-                return;
-            var selectedItems = FilterTeams.Where(item => item.IsChecked).ToList();
-            foreach (var item in selectedItems)
-            {
-                FilterTeams.Remove(item);
-            }
+            //if (FilterTeams is null || FilterTeams.Count == 0)
+            //    return;
+            //var selectedItems = FilterTeams.Where(item => item.IsChecked).ToList();
+            //foreach (var item in selectedItems)
+            //{
+            //    FilterTeams.Remove(item);
+            //}
         }
         private void Search()
         {

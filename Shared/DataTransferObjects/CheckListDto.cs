@@ -12,7 +12,7 @@ namespace Shared
         string? Description,
         string? Name
         );
-    public record CreateCheckListDto
+    public record CreateCheckListDto 
    (
        string? Description,
        string? Name
@@ -31,11 +31,16 @@ namespace Shared
     public record CheckListItemDto
         (
         Guid Id,
-            string? Description
+        int Order,
+            string? Description 
         );
-    public record CreateCheckListItemDto
+    public record CreateCheckListItemDto 
         (
-                   string? Description , Guid? CheckListId , Guid? IndividualTaskId
+                   int Order, string? Description , Guid? CheckListId , Guid? IndividualTaskId
                );
+    public record TaskItem(
+        string? Description,
+        string? Number
+        );
         
 }

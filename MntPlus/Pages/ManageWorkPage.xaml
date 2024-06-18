@@ -6,7 +6,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MntPlus.WPF"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="1100"
+      d:DesignHeight="450" d:DesignWidth="1200"
       Title="ManageWorkPage">
 
     <Grid Background="{DynamicResource TertiaryBackgroundColor}">
@@ -16,6 +16,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Border Grid.RowSpan="4" Panel.ZIndex="10" Opacity="0.4">
             <Border Background="{StaticResource PrimaryBlackColor}" local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
         </Border>
@@ -25,18 +28,7 @@
 
         <local:ShowWorkOrderControl DataContext="{Binding ShowWorkOrderViewModel}" Panel.ZIndex="11" 
                                local:AnimateSlideInFromRightProperty.Value="{Binding DataContext.TaskPopupIsOpen,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ManageWorkPage}}}" HorizontalAlignment="Right"   Grid.RowSpan="4" />
-        <!--<Grid Margin="20 20 20 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            
-            <TextBlock Text="Gérer le Travail" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
-            <Button Width="220" Command="{Binding AddWorkOrderCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>
-            --><!--<Button Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter}}" Width="220" Command="{Binding TaskPopupCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Commencer l'Ordre de Travail" Tag="{StaticResource plus}"/>--><!--
-        </Grid>-->
+      
         <Grid>
             <Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource LineColor}"/>
             <Grid>
@@ -65,7 +57,7 @@
 
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Ordres de Travail" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
-                    <Button Width="145"  Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding AddWorkOrderCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ordre de Travail" Tag="{StaticResource plus}"/>
+                    <Button   Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding AddWorkOrderCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ordre de Travail" Tag="{StaticResource plus}"/>
                 </Grid>
             </Grid>
         </Grid>
@@ -123,7 +115,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Tag="Recherche par Nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle}"/>
+                <TextBox Tag="Recherche par Nom" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="20 20 10 20" Style="{DynamicResource SearchTextBoxStyle}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
                 <Button Command="{Binding SearchCommand}" Grid.Column="1" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource search}"/>
             </Grid>
             <!--#endregion-->
@@ -147,233 +143,170 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        <Grid Margin="20 10 20 20" Grid.Row="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Border Grid.RowSpan="3"  Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
-            <!--<Grid Visibility="{Binding IsEmpty,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true,FallbackValue=Hidden}" Grid.RowSpan="3" Panel.ZIndex="5" >
-                <Border   Height="auto" CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
-
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Image 
-                           Opacity="0.5" ClipToBounds="True"
-                           Source="/Styles/Icons/setting-240.png" 
-                           Height="100"  Width="430" />
-                    <TextBlock HorizontalAlignment="Center" Text="C'est tellement vide ici." Style="{DynamicResource TitleTextBlockStyle}" Margin="0 10 0 0"/>
-                    <TextBlock HorizontalAlignment="Center" Text="Cliquez sur le bouton ci-dessous pour commencer." Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 0 10"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Command="{Binding AddWorkOrderCommand}" Grid.Column="1" Style="{DynamicResource PrimeButton}" Content="Ajouter un équipement" Tag="{StaticResource plus}"/>
-
-                    </StackPanel>
-
-                </StackPanel>
-            </Grid>
-            <Image Grid.RowSpan="3" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True,FallbackValue=Hidden}" Width="100" Height="100" Panel.ZIndex="10" Source="/Styles/Icons/setting-240.png" >
-                <Image.Style>
-                    <Style TargetType="Image">
-                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <RotateTransform></RotateTransform>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Resources>
-                            <Storyboard x:Key="Spin">
-                                <DoubleAnimation
-                               Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
-                               From="0"
-                               To="360"
-                               Duration="0:0:2"
-                               RepeatBehavior="Forever" />
-                            </Storyboard>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IsVisible}" Value="True">
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard Name="SpinStoryboard" Storyboard="{StaticResource Spin}" />
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <RemoveStoryboard BeginStoryboardName="SpinStoryboard" />
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-
-                </Image.Style>
-            </Image>-->
-            <Button Grid.Row="1" Command="{Binding OpenActionPopupOpenCommand}" x:Name="ActBtn" HorizontalAlignment="Left" Style="{DynamicResource ActionButton}"  Content="Actions"   Margin="15 10 15 10"/>
-            <Popup StaysOpen="False" Placement="Bottom" PlacementTarget="{Binding ElementName=ActBtn}" AllowsTransparency="True" HorizontalOffset="5" VerticalOffset="5" IsOpen="{Binding IsActionPopupOpen}" x:Name="ActionsPopup">
-                <Grid >
-                    <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid Margin="0" Grid.Row="3" Background="{DynamicResource FourthBackgroundColor}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="1" Command="{Binding OpenActionPopupOpenCommand}" x:Name="ActBtn" HorizontalAlignment="Left" Style="{DynamicResource ActionButton}"  Content="Actions"   Margin="15 10 0 0"/>
+                <Popup StaysOpen="False" Placement="Bottom" PlacementTarget="{Binding ElementName=ActBtn}" AllowsTransparency="True" HorizontalOffset="5" VerticalOffset="5" IsOpen="{Binding IsActionPopupOpen}" x:Name="ActionsPopup">
+                    <Grid >
+                        <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="16" ShadowDepth="2"
                Color="LightSlateGray" Opacity="0.2" />
-                        </Border.Effect>
-                    </Border>
-                    <StackPanel Margin="5 15">
-                        <Button Command="{Binding RemoveCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource delete}" Foreground="#C22528" Content="Supprimer"/>
-                    </StackPanel>
-                </Grid>
-            </Popup>
-            <ScrollViewer Grid.Row="2"  VerticalScrollBarVisibility="Auto">
-                <DataGrid  Margin="10" 
+                            </Border.Effect>
+                        </Border>
+                        <StackPanel Margin="5 15">
+                            <Button Command="{Binding RemoveCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource delete}" Foreground="#C22528" Content="Supprimer"/>
+                        </StackPanel>
+                    </Grid>
+                </Popup>
+                    
+                <Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="20 0 0 0">
+                        <DataGrid  HorizontalAlignment="Stretch" 
                       ItemsSource="{Binding FilterWorkOrders,UpdateSourceTrigger=PropertyChanged}"
                       Style="{StaticResource DataGridStyle}"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
                       RowStyle="{StaticResource DataGridRowStyle1}"
                       CellStyle="{StaticResource DataGridCellStyle}"
                       AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
-                            <DataGridCheckBoxColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsSelected,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
-                                </DataTemplate>
-                            </DataGridCheckBoxColumn.HeaderTemplate>
-                        </DataGridCheckBoxColumn>
-                        <DataGridTemplateColumn Header="OT#" Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Height="Auto" Command="{Binding DataContext.ViewOrderWorkCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                        CommandParameter="{Binding}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextButton}" >
-                                        <TextBlock Height="Auto" TextWrapping="Wrap" Text="{Binding WorkOrderNumber,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
-                                    </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Description" Width="2*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Height="Auto" Command="{Binding DataContext.ViewOrderWorkCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                        CommandParameter="{Binding}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextButton}" >
-                                        <TextBlock Height="Auto" TextWrapping="Wrap" Text="{Binding WorkOrderName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
-                                    </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Équipement" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                        <Path Margin="10,0,0,0" Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource box}"/>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="#" CanUserResize="False" Width="auto" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsSelected,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="OT#" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                        <Grid HorizontalAlignment="Left" Height="Auto">
+                                            <Button Height="Auto" Command="{Binding DataContext.ViewOrderWorkCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding}"  VerticalAlignment="Center" Style="{StaticResource TextButton}" >
+                                                <TextBlock Height="Auto" TextWrapping="Wrap" Text="{Binding WorkOrderNumber,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Description" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                        <Grid HorizontalAlignment="Left" Height="Auto">
+                                            <Button Height="Auto" Command="{Binding DataContext.ViewOrderWorkCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding}"  VerticalAlignment="Center" Style="{StaticResource TextButton}" >
+                                                <TextBlock Height="Auto" TextWrapping="Wrap" ToolTip="{Binding WorkOrderName}"  Text="{Binding WorkOrderName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Équipement" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <Path Margin="10,0,0,0" Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource box}"/>
 
-                                        <TextBlock Text="{Binding AssetName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Priorité" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Ellipse Stretch="Fill" Width="10" Height="10" Fill="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        <TextBlock Height="Auto" TextWrapping="Wrap" Foreground="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter}}" Text="{Binding Priority,UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Statut" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                        <Path x:Name="PathStat" Margin="10,0,0,0" Width="16" Fill="{Binding ForgroundColorStat,Converter={local:StringRGBToBrushConverter}}" Stretch="Uniform" >
-                                            <Path.Style>
-                                                <Style TargetType="Path">
-                                                    <Setter Property="Data" Value="{StaticResource statpending}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="Ouvrir">
-                                                            <Setter Property="Data" Value="{StaticResource statopen}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="En Cours">
-                                                            <Setter Property="Data" Value="{StaticResource statinprogress}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="Complété">
-                                                            <Setter Property="Data" Value="{StaticResource statcomplete}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="Fermé">
-                                                            <Setter Property="Data" Value="{StaticResource statclosed}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="Annulé">
-                                                            <Setter Property="Data" Value="{StaticResource statcancel}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="En Attente">
+                                                <TextBlock Text="{Binding AssetName,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Priorité" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Stretch="Fill" Width="10" Height="10" Fill="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                <TextBlock Height="Auto" TextWrapping="Wrap" Foreground="{Binding PriorityBackground,Converter={local:StringRGBToBrushConverter}}" Text="{Binding Priority,UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Statut" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <Path x:Name="PathStat" Margin="10,0,0,0" Width="16" Fill="{Binding ForgroundColorStat,Converter={local:StringRGBToBrushConverter}}" Stretch="Uniform" >
+                                                    <Path.Style>
+                                                        <Style TargetType="Path">
                                                             <Setter Property="Data" Value="{StaticResource statpending}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="Ouvrir">
+                                                                    <Setter Property="Data" Value="{StaticResource statopen}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="En Cours">
+                                                                    <Setter Property="Data" Value="{StaticResource statinprogress}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="Complété">
+                                                                    <Setter Property="Data" Value="{StaticResource statcomplete}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="Fermé">
+                                                                    <Setter Property="Data" Value="{StaticResource statclosed}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="Annulé">
+                                                                    <Setter Property="Data" Value="{StaticResource statcancel}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="En Attente">
+                                                                    <Setter Property="Data" Value="{StaticResource statpending}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
 
-                                            </Path.Style>
-                                        </Path>
-                                        <TextBlock x:Name="StatTxt" Height="Auto" TextWrapping="Wrap" Foreground="{Binding ForgroundColorStat,Converter={local:StringRGBToBrushConverter}}" Text="{Binding WorkStat,UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                                    </Path.Style>
+                                                </Path>
+                                                <TextBlock x:Name="StatTxt" Height="Auto" TextWrapping="Wrap" Foreground="{Binding ForgroundColorStat,Converter={local:StringRGBToBrushConverter}}" Text="{Binding WorkStat,UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
 
-                                    </StackPanel>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Foreground" TargetName="StatTxt" Value="#ffffff" />
-                                            <Setter Property="Fill" TargetName="PathStat" Value="#ffffff" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Fill" TargetName="PathStat" Value="#ffffff" />
-                                            <Setter Property="Foreground" TargetName="StatTxt" Value="#ffffff" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
+                                            </StackPanel>
+                                            
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Date d'échéance" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Height="Auto" TextWrapping="Wrap" Foreground="{DynamicResource FourthTextColor}" Text="{Binding ShortAssetCommissionDate,UpdateSourceTrigger=PropertyChanged}" Margin="10,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
 
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Date d'échéance" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Height="Auto" TextWrapping="Wrap" Foreground="{DynamicResource FourthTextColor}" Text="{Binding ShortAssetCommissionDate,UpdateSourceTrigger=PropertyChanged}" Margin="10,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
-
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Assigné à" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                        <Path x:Name="UserPath" Margin="10,0,0,0" Width="16" Fill="{Binding ForgroundColorStat,Converter={local:StringRGBToBrushConverter}}" Stretch="Uniform" >
-                                            <Path.Style>
-                                                <Style TargetType="Path">
-                                                    <Setter Property="Data" Value="{StaticResource user}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding WorkAssigned}" Value="user">
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Assigné à" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <Path x:Name="UserPath" Margin="10,0,0,0" Width="16" Fill="{Binding ForgroundColorStat,Converter={local:StringRGBToBrushConverter}}" Stretch="Uniform" >
+                                                    <Path.Style>
+                                                        <Style TargetType="Path">
                                                             <Setter Property="Data" Value="{StaticResource user}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding WorkStat}" Value="team">
-                                                            <Setter Property="Data" Value="{StaticResource users}" />
-                                                        </DataTrigger>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding WorkAssigned}" Value="user">
+                                                                    <Setter Property="Data" Value="{StaticResource user}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding WorkStat}" Value="team">
+                                                                    <Setter Property="Data" Value="{StaticResource users}" />
+                                                                </DataTrigger>
 
-                                                    </Style.Triggers>
-                                                </Style>
+                                                            </Style.Triggers>
+                                                        </Style>
 
-                                            </Path.Style>
-                                        </Path>
-                                        <TextBlock x:Name="UserTxt" Height="Auto" TextWrapping="Wrap" Foreground="{DynamicResource SecundaryTextColor}" Text="{Binding WorkAssignedName,UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
+                                                    </Path.Style>
+                                                </Path>
+                                                <TextBlock x:Name="UserTxt" Height="Auto" TextWrapping="Wrap" Foreground="{DynamicResource SecundaryTextColor}" Text="{Binding WorkAssignedName,UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,0" Style="{DynamicResource TextBlockStyle}"/>
 
-                                    </StackPanel>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Foreground" TargetName="UserTxt" Value="#ffffff" />
-                                            <Setter Property="Fill" TargetName="UserPath" Value="#ffffff" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Fill" TargetName="UserPath" Value="#ffffff" />
-                                            <Setter Property="Foreground" TargetName="UserTxt" Value="#ffffff" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                            </StackPanel>
+                                          
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                    </DataGrid.Columns>
-                </DataGrid>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+            </Grid>
 
-            </ScrollViewer>
-        </Grid>
+        </ScrollViewer>
     </Grid>
 </local:BasePage>
