@@ -15,6 +15,7 @@ namespace Contracts
         void CreateWorkOrder(WorkOrder workOrder);
         void DeleteWorkOrder(WorkOrder workOrder);
         Task<int> GetNextWorkOrderNumberAsync();
-
+        void BulkDeleteWorkOrder(IEnumerable<WorkOrder> workOrders);
+        Task<IEnumerable<WorkOrder>> GetWorkOrdersByIdsAsync(List<Guid> workOrderIds, bool trackChanges);
     }
 }

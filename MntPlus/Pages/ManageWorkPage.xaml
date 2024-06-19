@@ -77,7 +77,7 @@
             </Grid.RowDefinitions>
             <Rectangle Grid.ColumnSpan="4" Grid.Row="1" Height="1" Fill="{DynamicResource LineColor}" Margin="20 0"/>
             <Button Command="{Binding OpenFilterCommand}" x:Name="AllFilterBtn" Grid.Column="1"  Style="{DynamicResource FiltersPrimeButton}"  Tag="{DynamicResource filter}"  />
-            <Button x:Name="StatFilter" FontSize="9"  Content="{Binding StatFilterContent,FallbackValue=OpenEnAttente}" ToolTipService.InitialShowDelay="1" Margin="10 0" Command="{Binding OpenStatFilterCommand}"  Grid.Column="2"  Style="{DynamicResource FiltersPrimeButton}"  Tag="{DynamicResource dots}" Foreground="{DynamicResource TertiaryTextColor}"  >
+            <Button x:Name="StatFilter" FontSize="14"  Content="Statue" ToolTipService.InitialShowDelay="1" Margin="10 0" Command="{Binding OpenStatFilterCommand}"  Grid.Column="2"  Style="{DynamicResource FiltersPrimeButton}"  Tag="{DynamicResource dots}" Foreground="{DynamicResource TertiaryTextColor}"  >
                 <Button.ToolTip>
                     <ToolTip Style="{StaticResource ToolTipStyle}">
                         <TextBlock Text="Filtrer par Statut" />
@@ -98,14 +98,34 @@
                     </StackPanel>
                 </Grid>
             </Popup>
+            <Popup StaysOpen="False" PopupAnimation="Scroll"  HorizontalAlignment="Center" VerticalOffset="5"   IsOpen="{Binding IsPriorityFilterOpen}" PlacementTarget="{Binding ElementName=PriorityFilter}" Placement="Bottom" AllowsTransparency="True" >
+                <Grid>
+                    <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
+
+                    <StackPanel Margin="10 20 10 20">
+                        <CheckBox IsChecked="{Binding HighPriorityChecked}" Style="{DynamicResource PopupCheckButton2}" Tag="{StaticResource high_priority}" Foreground="#F44336" Content="Haute Priorité"/>
+                        <CheckBox IsChecked="{Binding MediumPriorityChecked}" Style="{DynamicResource PopupCheckButton2}" Tag="{StaticResource medium_priority}" Foreground="#FFC107" Content="Priorité Moyenne"/>
+                        <CheckBox IsChecked="{Binding LowPriorityChecked}" Style="{DynamicResource PopupCheckButton2}" Tag="{StaticResource low_priority}" Foreground="#4CAF50" Content="Priorité Basse"/>
+                        <CheckBox IsChecked="{Binding NoPriorityChecked}" Style="{DynamicResource PopupCheckButton2}" Foreground="#595959" Content="Aucune"/>
+                    </StackPanel>
+                </Grid>
+            </Popup>
 
             <Popup VerticalOffset="4"  StaysOpen="False" PopupAnimation="Slide" HorizontalAlignment="Center"   IsOpen="{Binding IsDateFilterOpen}" PlacementTarget="{Binding ElementName=DueDateFilter}" Placement="Bottom" AllowsTransparency="True">
                 <local:DueDateFilterControl DataContext="{Binding dueDateFilterViewModel}" />
             </Popup>
-            <Button x:Name="DueDateFilter" FontSize="9"  Content="{Binding DueDatetFilterContent}" ToolTipService.InitialShowDelay="1" Margin="10 0" Command="{Binding OpenDueDateMenuCommand}"  Grid.Column="3"  Style="{DynamicResource FiltersPrimeButton}"  Tag="{DynamicResource date}" Foreground="{DynamicResource TertiaryTextColor}"  >
+            <!--<Button x:Name="DueDateFilter" FontSize="9"  Content="{Binding DueDatetFilterContent}" ToolTipService.InitialShowDelay="1" Margin="10 0" Command="{Binding OpenDueDateMenuCommand}"  Grid.Column="3"  Style="{DynamicResource FiltersPrimeButton}"  Tag="{DynamicResource date}" Foreground="{DynamicResource TertiaryTextColor}"  >
                 <Button.ToolTip>
                     <ToolTip Style="{StaticResource ToolTipStyle}">
                         <TextBlock Text="Filtrer par Date d'échéance" />
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>-->
+
+            <Button x:Name="PriorityFilter" FontSize="14"  Content="Priorité" ToolTipService.InitialShowDelay="1" Margin="10 0" Command="{Binding OpenPriorityFilterCommand}"  Grid.Column="3"  Style="{DynamicResource FiltersPrimeButton}"  Tag="{DynamicResource filterPrio}" Foreground="{DynamicResource TertiaryTextColor}"  >
+                <Button.ToolTip>
+                    <ToolTip Style="{StaticResource ToolTipStyle}">
+                        <TextBlock Text="Filtrer par Priorité" />
                     </ToolTip>
                 </Button.ToolTip>
             </Button>
@@ -174,10 +194,10 @@
                       CellStyle="{StaticResource DataGridCellStyle}"
                       AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="#" CanUserResize="False" Width="auto" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox IsChecked="{Binding IsSelected,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
+                            <DataGridTemplateColumn  Header="#" CanUserResize="False" Width="auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

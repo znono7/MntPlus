@@ -15,6 +15,7 @@ namespace Service.Contracts
         Task<ApiBaseResponse> CreateWorkOrder(WorkOrderForCreationDto workOrder); 
         Task<ApiBaseResponse> CreateLastNumberWorkOrder();
         Task<ApiBaseResponse> DeleteWorkOrder(Guid workOrderId, bool trackChanges);
+        Task<ApiBaseResponse> BulkDeleteWorkOrder(List<Guid> workOrderIds, bool trackChanges);
         Task<ApiBaseResponse> UpdateWorkOrder(Guid workOrderId, WorkOrderForCreationDto workOrder, bool trackChanges);
         Task<ApiBaseResponse> UpdateStatWorkOrder(Guid workOrderId, string workOrderStat, bool trackChanges);
     }

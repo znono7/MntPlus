@@ -10,7 +10,7 @@ namespace MntPlus.WPF
 {
     public class WorkOrderItemsViewModel : BaseViewModel
     {
-        public WorkOrderDto? WorkOrderDto { get; set; }
+        public WorkOrderDto? WorkOrderDto { get; set; } 
         public string WorkOrderNumber => AddDynamicLeadingZeros(WorkOrderDto?.Number ?? 0); 
         public string WorkOrderName { get; set; } 
         public string PriorityBackground { get; set; }  

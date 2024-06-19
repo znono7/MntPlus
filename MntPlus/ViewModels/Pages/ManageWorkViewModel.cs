@@ -8,6 +8,72 @@ namespace MntPlus.WPF
 {
     public class ManageWorkViewModel : BaseViewModel
     {
+        private string _priorityFilterContent ;
+        public string PriorityFilterContent
+        {
+            get => _priorityFilterContent;
+            set
+            {
+                if (value == _priorityFilterContent) return;
+                _priorityFilterContent = value;
+                OnPropertyChanged(nameof(PriorityFilterContent));
+            }
+        }
+        public bool IsPriorityFilterOpen { get; set; }
+        public ICommand OpenPriorityFilterCommand { get; set; }
+         private bool _lowPriorityChecked { get; set; }
+        public bool LowPriorityChecked
+        {
+            get => _lowPriorityChecked; 
+            set
+            {
+                if(value == _lowPriorityChecked) return;
+                _lowPriorityChecked = value;
+                UpdatePriorityFilterContent("Basse priorité", _lowPriorityChecked);
+                OnPropertyChanged(nameof(LowPriorityChecked));
+            } 
+        }
+
+        
+
+        private bool _mediumPriorityChecked { get; set; }
+        public bool MediumPriorityChecked
+        {
+            get => _mediumPriorityChecked; 
+            set
+            {
+                if(value == _mediumPriorityChecked) return;
+                _mediumPriorityChecked = value;
+                UpdatePriorityFilterContent("Moyenne priorité", _mediumPriorityChecked);
+                OnPropertyChanged(nameof(MediumPriorityChecked));
+            } 
+        }
+        private bool _highPriorityChecked { get; set; }
+        public bool HighPriorityChecked
+        {
+            get => _highPriorityChecked; 
+            set
+            {
+                if(value == _highPriorityChecked) return;
+                _highPriorityChecked = value;
+                UpdatePriorityFilterContent("Haute priorité", _highPriorityChecked);
+                OnPropertyChanged(nameof(HighPriorityChecked));
+            } 
+        }
+        private bool _noPriorityChecked { get; set; }
+        public bool NoPriorityChecked
+        {
+            get => _noPriorityChecked; 
+            set
+            {
+                if(value == _noPriorityChecked) return;
+                _noPriorityChecked = value;
+                UpdatePriorityFilterContent("Aucune priorité", _noPriorityChecked);
+                OnPropertyChanged(nameof(NoPriorityChecked));
+            } 
+        }
+
+
         protected string? mLastSearchText;
         protected string? mSearchText;
         public string? SearchText
@@ -68,7 +134,7 @@ namespace MntPlus.WPF
 
         public bool DimmableOverlayVisible { get; set; }
 
-        private string _statFilterContent;
+        private string _statFilterContent ;
         public string StatFilterContent
         {
             get => _statFilterContent;
@@ -105,7 +171,6 @@ namespace MntPlus.WPF
                 _approvedChecked = value;
                 UpdateStatFilterContent("Approuvé", _approvedChecked);
                 OnPropertyChanged(nameof(ApprovedChecked));
-                //FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders.Where(x => x.WorkOrderDto?.Status == WorkOrderStatus.Approved));
             } 
         }
 
@@ -185,37 +250,56 @@ namespace MntPlus.WPF
 
                
                 OnPropertyChanged(nameof(NonSpecificChecked));
-                //FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders.Where(x => x.WorkOrderDto?.Status == WorkOrderStatus.NonSpecific));
             } 
         }
 
         public ICommand RemoveCommand { get; set; }
 
         public ObservableCollection<StatFilterCriteria> StatFilterCriteria { get; set; }
+        public ObservableCollection<PriorityFilterCriteria> PriorityFilterCriterias { get; set; }
+
+        private readonly List<string> allPossibleStatuses = new List<string>
+        {
+   "Approuvé", "En attente", "Ouvrir", "En service", "Complet", "Non spécifique"
+        };
+
+        public bool FilterByStatus { get; set; }
+        public bool FilterByPriority { get; set; }
         public ManageWorkViewModel()
         {
+            StatFilterCriteria = new ObservableCollection<StatFilterCriteria>();
+            PriorityFilterCriterias = new ObservableCollection<PriorityFilterCriteria>();
+
             _ = LoadWorkOrders();
            
             AddWorkOrderCommand = new RelayCommand(AddWorkOrder);
              
             TaskPopupCommand = new RelayCommand(TaskPopup);
             ViewOrderWorkCommand = new RelayParameterizedCommand(async (dto) => await SetWorkTask(dto));
-            //TaskViewModel = new ViewTaskViewModel();
             WorkOrderStore = new WorkOrderStore();
             WorkOrderStore.WorkOrderCreated += WorkOrderStore_WorkOrderCreated;
             WorkOrderStore.WorkOrderUpdated += WorkOrderStore_WorkOrderUpdated;
             WorkOrderStore.WorkOrderDeleted += WorkOrderStore_WorkOrderDeleted;
 
             OpenStatFilterCommand = new RelayCommand(() => IsMenuStatOpen = !IsMenuStatOpen);
-            ApprovedChecked = true;
-            PendingChecked = true;
-            OpenChecked = true;
+            //ApprovedChecked = true;
+            //PendingChecked = true;
+            //OpenChecked = true;
+            //InServiceChecked = true;
+            //CompleteChecked = true;
+            //NonSpecificChecked = true;
+
+            //LowPriorityChecked = true;
+            //MediumPriorityChecked = true;
+            //HighPriorityChecked = true;
+            //NoPriorityChecked = true;
+
             dueDateFilterViewModel = new DueDateFilterViewModel();
             OpenDueDateMenuCommand = new RelayCommand(() => IsDateFilterOpen = !IsDateFilterOpen);
             OpenActionPopupOpenCommand = new RelayCommand(() => IsActionPopupOpen = !IsActionPopupOpen);
+            OpenPriorityFilterCommand = new RelayCommand(() => IsPriorityFilterOpen = !IsPriorityFilterOpen);
             RemoveCommand = new RelayCommand(async () => await Remove() );
             SearchCommand = new RelayCommand(Search);
-            StatFilterCriteria = new ObservableCollection<StatFilterCriteria>();
 
 
         }
@@ -277,132 +361,269 @@ namespace MntPlus.WPF
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucun Ot sélectionné"));
                 return;
             }
-            var Dialog = new ConfirmationWindow("Supprimé OT");
+            var Dialog = new ConfirmationWindow("Supprimer les OT sélectionnés", "Êtes-vous sûr de vouloir supprimer les OT sélectionnés?");
             Dialog.ShowDialog();
+           
             if (Dialog.Confirmed)
             {
-                foreach (var item in itemsToRemove)
+                //select Guid from the list of items to remove
+                var ids = itemsToRemove.Select(x => x.WorkOrderDto!.Id).ToList();
+                var response = await AppServices.ServiceManager.WorkOrderService.BulkDeleteWorkOrder(ids, true);
+                if (response is ApiOkResponse<IEnumerable<WorkOrderDto>> && response.Success)
                 {
-                    await RemoveWorkOrder(item);
+                    foreach (var item in itemsToRemove)
+                    {
+                        WorkOrders.Remove(item);
+                        FilterWorkOrders?.Remove(item);
+                        WorkOrderDtos.Remove(item.WorkOrderDto!);
+                    }
+                }else if(response is ApiBadRequestResponse badRequest)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression des OT"));
                 }
+
+               
             }
 
         }
-        private async Task RemoveWorkOrder(WorkOrderItemsViewModel workOrder)
+      
+        private void UpdatePriorityFilterContent(string v, bool lowPriorityChecked)
         {
-            var response = await AppServices.ServiceManager.WorkOrderService.DeleteWorkOrder(workOrder.WorkOrderDto!.Id, false);
-            if (response is ApiOkResponse<AssetDto> && response.Success)
+           
+            var priorities = _priorityFilterContent?.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).ToList() ?? new List<string>();
+
+            if (lowPriorityChecked)
             {
-               
-                WorkOrders?.Remove(workOrder);
-                FilterWorkOrders?.Remove(workOrder);
+                FilterByPriority = true;
+                if (!priorities.Contains(v))
+                {
+                    priorities.Add(v);
+                    PriorityFilterContent = string.Join(",", priorities);
 
-
+                    switch (v)
+                    {
+                        case "Basse priorité":
+                            PriorityFilterCriterias.Add(new PriorityFilterCriteria(PriorityFilterType.LowPriority, "Basse priorité"));
+                            break;
+                        case "Moyenne priorité":
+                            PriorityFilterCriterias.Add(new PriorityFilterCriteria(PriorityFilterType.MediumPriority, "Moyenne priorité"));
+                            break;
+                        case "Haute priorité":
+                            PriorityFilterCriterias.Add(new PriorityFilterCriteria(PriorityFilterType.HighPriority, "Haute priorité"));
+                            break;
+                            case "Aucune priorité":
+                            PriorityFilterCriterias.Add(new PriorityFilterCriteria(PriorityFilterType.NoPriority, "Aucune priorité"));
+                            break;
+                    }
+                    ApplyFilters(FilterByStatus, FilterByPriority);
+                }
+            }
+            else
+            {
+                priorities.Remove(v);
+               if (priorities.Count == 0)
+                {
+                    FilterByPriority = false;
+                }
+                PriorityFilterContent = string.Join(",", priorities);
+                
+                switch (v)
+                {
+                    case "Basse priorité":
+                        var filter = PriorityFilterCriterias.FirstOrDefault(x => x.PriorityFilterType == PriorityFilterType.LowPriority);
+                        if (filter != null)
+                            RemveFilterCriteria(filter);
+                        break;
+                    case "Moyenne priorité":
+                        var filter1 = PriorityFilterCriterias.FirstOrDefault(x => x.PriorityFilterType == PriorityFilterType.MediumPriority);
+                        if (filter1 != null)
+                            RemveFilterCriteria(filter1);
+                        break;
+                    case "Haute priorité":
+                        var filter2 = PriorityFilterCriterias.FirstOrDefault(x => x.PriorityFilterType == PriorityFilterType.HighPriority);
+                        if (filter2 != null)
+                            RemveFilterCriteria(filter2);
+                        break;
+                        case "Aucune priorité":
+                        var filter3 = PriorityFilterCriterias.FirstOrDefault(x => x.PriorityFilterType == PriorityFilterType.NoPriority);
+                        if (filter3 != null)
+                            RemveFilterCriteria(filter3);
+                        break;
+                }
             }
 
         }
 
         private void UpdateStatFilterContent(string status, bool add)
         {
-            var statuses = _statFilterContent?.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).ToList() ?? new List<string>();
-
+           
+            List<string> statuses;
+             statuses = _statFilterContent?.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).ToList() ?? new List<string>();   
             if (add)
-            {
-                if (!statuses.Contains(status))
                 {
-                    statuses.Add(status);
+                FilterByStatus = true;
+                    if (!statuses.Contains(status))
+                    {
+                        statuses.Add(status);
+                    _statFilterContent = string.Join(",", statuses);
+
                     switch (status)
+                        {
+                            case "Approuvé":
+                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Approved, "Approuvé"));
+                                break;
+                            case "En attente":
+                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Waiting, "En attente"));
+                                break;
+                            case "Ouvrir":
+                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Open, "Ouvrir"));
+                                break;
+                            case "En service":
+                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.InProgress, "En service"));
+                                break;
+                            case "Complet":
+                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Completed, "Complet"));
+                                break;
+                            case "Non spécifié":
+                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.NonSpecific, "Non spécifié"));
+                                break;
+                        }
+                        ApplyFilters(FilterByStatus, FilterByPriority);
+                    }
+                }   
+            else
+                {
+                    statuses.Remove(status);
+                if (statuses.Count == 0)
+                {
+                    FilterByStatus = false;
+                }
+                _statFilterContent = string.Join(",", statuses);
+
+                switch (status)
                     {
                         case "Approuvé":
-                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Approved, "Approuvé"));
+                            var filter = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Approved);
+                            if (filter != null)
+                                RemveFilterCriteria(filter);
                             break;
                         case "En attente":
-                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Waiting, "En attente"));
+                            var filter1 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Waiting);
+                            if (filter1 != null)
+                                RemveFilterCriteria(filter1);
                             break;
                         case "Ouvrir":
-                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Open, "Ouvrir"));
+                            var filter2 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Open);
+                            if (filter2 != null)
+                                RemveFilterCriteria(filter2);
                             break;
                         case "En service":
-                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.InProgress, "En service"));
+                            var filter3 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.InProgress);
+                            if (filter3 != null)
+                                RemveFilterCriteria(filter3);
                             break;
                         case "Complet":
-                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Completed, "Complet"));
+                            var filter4 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Completed);
+                            if (filter4 != null)
+                                RemveFilterCriteria(filter4);
                             break;
                         case "Non spécifié":
-                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.NonSpecific, "Non spécifié"));
+                            var filter5 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.NonSpecific);
+                            if (filter5 != null)
+                                RemveFilterCriteria(filter5);
                             break;
                     }
-                    ApplyFilters();
-                }
-            }
-            else
-            {
-                statuses.Remove(status);
-                switch (status)
-                {
-                    case "Approuvé":
-                        var filter = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Approved);
-                        if (filter != null)
-                            RemveFilterCriteria(filter);
-                        break;
-                    case "En attente":
-                        var filter1 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Waiting);
-                        if (filter1 != null)
-                            RemveFilterCriteria(filter1);
-                        break;
-                    case "Ouvrir":
-                        var filter2 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Open);
-                        if (filter2 != null)
-                            RemveFilterCriteria(filter2);
-                        break;
-                    case "En service":
-                        var filter3 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.InProgress);
-                        if (filter3 != null)
-                            RemveFilterCriteria(filter3);
-                        break;
-                    case "Complet":
-                        var filter4 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Completed);
-                        if (filter4 != null)
-                            RemveFilterCriteria(filter4);
-                        break;
-                    case "Non spécifié":
-                        var filter5 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.NonSpecific);
-                        if (filter5 != null)
-                            RemveFilterCriteria(filter5);
-                        break;
-                }
-            }
 
-            StatFilterContent = string.Join(",", statuses);
+                }
+           
+
+
         }
-
-        private void RemveFilterCriteria(StatFilterCriteria filterToRemove)
+        private void RemveFilterCriteria(PriorityFilterCriteria filterToRemove)
         {
-            StatFilterCriteria.Remove(filterToRemove);
-            if(StatFilterCriteria.Count == 0)
+            PriorityFilterCriterias.Remove(filterToRemove);
+            if (PriorityFilterCriterias.Count == 0 && StatFilterCriteria.Count == 0)
             {
                 FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders ?? Enumerable.Empty<WorkOrderItemsViewModel>());
             }
             else
             {
-                ApplyFilters();
+                ApplyFilters(FilterByStatus, FilterByPriority);
+            }
+        }
+        private void RemveFilterCriteria(StatFilterCriteria filterToRemove)
+        {
+            StatFilterCriteria.Remove(filterToRemove);
+            if (PriorityFilterCriterias.Count == 0 && StatFilterCriteria.Count == 0)
+            {
+                FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders ?? Enumerable.Empty<WorkOrderItemsViewModel>());
+            }
+            else
+            {
+                ApplyFilters(FilterByStatus,FilterByPriority);
             }
         }
 
-        private void ApplyFilters()
+        private void ApplyFilters(bool filterByStatus, bool filterByPriority)
         {
-            if(WorkOrders is null || WorkOrders.Count == 0) return;
-
+            if (WorkOrders is null || WorkOrders.Count == 0) return;
+            if(!filterByStatus && !filterByPriority)
+            {
+                FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders);
+                return;
+            }
             var items = WorkOrders.ToList();
 
-            foreach (var filter in StatFilterCriteria)
+            if (filterByPriority)
             {
-                items = ApplyFilter(items, filter);
+                // Apply Priority filters first with OR logic
+                items = ApplyPriorityFiltersOr(items, PriorityFilterCriterias);
+            }
+
+            if (filterByStatus)
+            {
+                // Apply Status filters next with OR logic
+                items = ApplyFiltersOr(items, StatFilterCriteria);
             }
 
             FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(items);
         }
+        private List<WorkOrderItemsViewModel> ApplyPriorityFiltersOr(List<WorkOrderItemsViewModel> items, IEnumerable<PriorityFilterCriteria> priorityFilters)
+        {
+            var filteredItems = new List<WorkOrderItemsViewModel>();
 
+            foreach (var filter in priorityFilters)
+            {
+                filteredItems.AddRange(ApplyPriorityFilter(items, filter));
+            }
+
+            return filteredItems.Distinct().ToList();
+        }
+        private List<WorkOrderItemsViewModel> ApplyPriorityFilter(List<WorkOrderItemsViewModel> items, PriorityFilterCriteria filter)
+        {
+            return filter.PriorityFilterType switch
+            {
+                PriorityFilterType.HighPriority => items.Where(x => x.WorkOrderDto?.Priority == "1").ToList(),
+                PriorityFilterType.MediumPriority => items.Where(x => x.WorkOrderDto?.Priority == "2").ToList(),
+                PriorityFilterType.LowPriority => items.Where(x => x.WorkOrderDto?.Priority == "3").ToList(),
+                PriorityFilterType.NoPriority => items.Where(x => x.WorkOrderDto?.Priority == "Aucune").ToList(),
+                _ => items
+            };
+        }
+        private List<WorkOrderItemsViewModel> ApplyFiltersOr(List<WorkOrderItemsViewModel> items, IEnumerable<StatFilterCriteria> filters)
+        {
+            var filteredItems = new List<WorkOrderItemsViewModel>();
+
+            foreach (var filter in filters)
+            {
+                filteredItems.AddRange(ApplyFilter(items, filter));
+            }
+
+            // Remove duplicates
+            filteredItems = filteredItems.Distinct().ToList();
+
+            return filteredItems;
+        }
         private List<WorkOrderItemsViewModel> ApplyFilter(List<WorkOrderItemsViewModel> items, StatFilterCriteria filter)
         {
             return filter.StatFilterType switch

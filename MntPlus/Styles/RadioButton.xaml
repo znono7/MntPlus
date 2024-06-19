@@ -92,7 +92,7 @@
                             <Border Grid.Column="1" Background="{DynamicResource LineColor2}" CornerRadius="8" Margin="5" Width="32" Height="32"/>
                             <Path x:Name="IconUser" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}}" 
                                   Height="24" Width="24" Stretch="Uniform" Fill="{DynamicResource FourthTextColor}" 
-                                  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10" Grid.Column="1"/>
+                                  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10" Grid.Column="1"/> 
                             <!-- Text -->
                             <TextBlock x:Name="txtName" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                        Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"

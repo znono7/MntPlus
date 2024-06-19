@@ -23,6 +23,51 @@ namespace Service
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<ApiBaseResponse> BulkDeleteWorkOrder(List<Guid> workOrderIds, bool trackChanges)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var workOrders = await _repository.WorkOrder.GetWorkOrdersByIdsAsync(workOrderIds, trackChanges);
+                if (workOrders is null)
+                {
+                    return new ApiNotFoundResponse("");
+                }
+                List<WorkOrderDto> workOrdersDto = new();
+                workOrdersDto = workOrders.Select (x => new WorkOrderDto(
+                        Id: x.Id,
+                        Name: x.Name,
+                        Number: x.Number,
+                        Description: x.Description,
+                        Priority: x.Priority,
+                        StartDate: x.StartDate,
+                        DueDate: x.DueDate,
+                        Type: x.Type,
+                        Status: x.Status,
+                        Requester: x.Requester,
+                        CreatedOn: x.CreatedOn,
+                        UserCreatedId: x.UserCreatedId,
+                        UserCreatedBy: x.UserCreatedBy != null ? new UserByDto(x.UserCreatedBy.Id, $"{x.UserCreatedBy.FirstName} {x.UserCreatedBy.LastName}") : null,
+                        UserAssignedToId: x.UserAssignedToId,
+                        UserAssignedTo: x.UserAssignedTo != null ? new UserByDto(x.UserAssignedTo.Id, $"{x.UserAssignedTo.FirstName} {x.UserAssignedTo.LastName}") : null,
+                        TeamAssignedToId: x.TeamAssignedToId,
+                        TeamAssignedTo: x.TeamAssignedTo != null ? new TeamDto(x.TeamAssignedTo.Id, x.TeamAssignedTo.Name!) : null,
+                        AssetId: x.AssetId,
+                        Asset: x.Asset != null ? new AssetWorkOrderDto(x.Asset.Id, x.Asset.Name,
+                        x.Asset.Location != null ? new LocatioWODto(x.Asset.Location.Id, x.Asset.Location.Name!) : null) : null)
+                                                                            ).ToList();
+                _repository.WorkOrder.BulkDeleteWorkOrder(workOrders);
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return new ApiOkResponse<IEnumerable<WorkOrderDto>>(workOrdersDto);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return new ApiBadRequestResponse(ex.Message);
+            }
+        }
+
         public async Task<ApiBaseResponse> CreateLastNumberWorkOrder()
         {
             try

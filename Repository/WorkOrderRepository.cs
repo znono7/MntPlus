@@ -13,6 +13,10 @@ namespace Repository
     {
         public WorkOrderRepository(RepositoryContext repositoryContext)
             : base(repositoryContext) { }
+
+        public void BulkDeleteWorkOrder(IEnumerable<WorkOrder> workOrders) => DeleteBulk(workOrders);
+       
+
         public void CreateWorkOrder(WorkOrder workOrder) => Create(workOrder);
        
 
@@ -50,6 +54,11 @@ namespace Repository
             await FindByCondition(c => c.Id.Equals(workOrderId), trackChanges)
             .Include(w => w.WorkOrderHistories)
             .SingleOrDefaultAsync();
+
+        public async Task<IEnumerable<WorkOrder>> GetWorkOrdersByIdsAsync(List<Guid> workOrderIds, bool trackChanges) =>
+            await FindByCondition(w => workOrderIds.Contains(w.Id), trackChanges)
+            .Include(w => w.WorkOrderHistories)
+            .ToListAsync();
        
     }
 }
