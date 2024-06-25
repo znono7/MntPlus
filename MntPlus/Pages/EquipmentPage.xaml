@@ -39,6 +39,11 @@
 
                 <Grid VerticalAlignment="Center" Grid.Column="4" Margin="10 0" >
                     <TextBlock Text="Détails d'équipement" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0">
+                        <Button Command="{Binding EditEquipmentCommand}" Style="{StaticResource PrimeIconButton}" Margin="25 0 0 0" Tag="{StaticResource edit}" Foreground="{DynamicResource FourthTextColor}"/>
+                        <Button Command="{Binding DeleteEquipmentCommand}" local:IsBusyProperty.Value="{Binding SaveIsRunning}" Style="{StaticResource PrimeIconButton}" Margin="5 0 0 0" Tag="{StaticResource delete}" Foreground="{DynamicResource SecundaryRedColor}"/>
+                        <Button Command="{Binding BackPageCommand}" Margin="25 0 25 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton" HorizontalAlignment="Right"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Grid>

@@ -1,22 +1,23 @@
-﻿using Entities;
-using Shared;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using Shared;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Media;
 
 namespace MntPlus.WPF
 {
     public class EquipmentInfoViewModel : BaseViewModel
     {
-
+        private AssetDto? _asset;
+        public AssetDto? Asset
+        {
+            get => _asset;
+            set
+            {
+                if (value == null)
+                    return;
+                _asset = value;
+                MapData(value);
+            }
+        }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Status { get; set; }
@@ -34,7 +35,7 @@ namespace MntPlus.WPF
             set
             {
                 _assetImage = value;
-                ReadImage(value);
+                
 
             }
         }
@@ -44,6 +45,10 @@ namespace MntPlus.WPF
         public BitmapImage? MyImageSource { get; private set; }
         public bool IsHaveImage { get;  set; }
 
+        public EquipmentInfoViewModel(AssetDto assetDto)
+        {
+            Asset = assetDto;
+        }
         public void ReadImage(byte[]? Image)
         {
             if (Image != null && Image.Length > 0)
@@ -60,6 +65,23 @@ namespace MntPlus.WPF
                 }
                 MyImageSource = image;
             }
+        }
+
+        private void MapData(AssetDto asset)
+        {
+            Name = asset.Name;
+            Description = asset.Description;
+            Status = asset.Status;
+            Category = asset.Category;
+            Location = asset.Location?.Name;
+            SerialNumber = asset.SerialNumber;
+            Model = asset.Model;
+            Make = asset.Make;
+            PurchaseCost = asset.PurchaseCost;
+            AssetCommissionDate = asset.AssetCommissionDate.HasValue ? asset.AssetCommissionDate.Value.ToShortDateString() : "";
+            CreatedDate = asset.CreatedDate.HasValue ? asset.CreatedDate.Value.ToShortDateString() : "";
+            PurchaseDate = asset.PurchaseDate.HasValue ? asset.PurchaseDate.Value.ToShortDateString() : "";
+            ReadImage(asset.AssetImage);
         }
     }
 }

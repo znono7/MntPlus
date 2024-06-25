@@ -37,7 +37,7 @@ namespace MntPlus.WPF
         }
 
         private const string DefaultConnectionString = "Data Source=D:\\WPF\\My Projects\\repos\\MntPlus\\MntPlusDatabase.db";
-           // "Data Source=MntPlusDatabase.db";
+           //"Data Source=MntPlusDatabase.db";
 
         /// <summary>
         /// Binds all singleton services
@@ -49,6 +49,7 @@ namespace MntPlus.WPF
             ServiceCollection.ConfigureUniteWorkManager();
             ServiceCollection.ConfigureSqlContext(DefaultConnectionString);
             ServiceCollection.AddAutoMapper(typeof(App));
+            
         }
 
         public static void Setup()

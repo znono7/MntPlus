@@ -12,7 +12,7 @@ namespace Entities
     {
         [Key]
         public Guid Id { get; set; }
-
+         
         [ForeignKey(nameof(Parent))]
         public Guid? AssetParent { get; set; }
         public Asset? Parent { get; set; }
@@ -33,8 +33,6 @@ namespace Entities
         public DateTime? AssetCommissionDate { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? PurchaseDate { get; set; }
-
-        public ICollection<Asset>? Assets { get; set; }
         public ICollection<LinkPart>? LinkParts { get; set; }
         public ICollection<Meter>? Meters { get; set; }
 

@@ -17,7 +17,7 @@ namespace MntPlus.WPF
         private ObservableCollection<PartInventoryItem>? _partItemViewModels { get; set; }
         public ObservableCollection<PartInventoryItem>? PartItemViewModels 
         { 
-            get => _partItemViewModels;   
+            get => _partItemViewModels;    
             set
             {
                 _partItemViewModels = value;

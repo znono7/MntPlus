@@ -11,5 +11,9 @@ namespace Service.Contracts
         Task<ApiBaseResponse> DeleteAsset(Guid assetId, bool trackChanges);
         Task<ApiBaseResponse> UpdateAsset(Guid assetId, AssetForCreationDto asset, bool trackChanges);
         Task<ApiBaseResponse> UpdateAssetImage(Guid assetId, AssetForUpdateImage asset, bool trackChanges);
+        Task<ApiBaseResponse> DeleteAssets(IEnumerable<Guid> assetIds, bool trackChanges);
+        Task<ApiBaseResponse> GetAllPartsAsync(Guid assetId, bool trackChanges);
+
     }
+
 }

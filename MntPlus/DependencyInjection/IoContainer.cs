@@ -24,6 +24,8 @@ namespace MntPlus.WPF
         /// A shortcut to access the <see cref="IUIManager"/>
         /// </summary>
         public static INotificationsManager NotificationsManager => Get<INotificationsManager>();
+
+       
         #endregion
 
         #region Construction
@@ -61,6 +63,7 @@ namespace MntPlus.WPF
             Kernel.Bind<ManageWorkViewModel>().ToConstant(new ManageWorkViewModel());
             Kernel.Bind<EquipmentPageViewModel>().ToConstant(new EquipmentPageViewModel());
 
+           
 
             Kernel.Bind<INotificationsManager>().ToConstant(new NotificationsManager()); 
         }

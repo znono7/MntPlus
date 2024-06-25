@@ -18,7 +18,7 @@ namespace MntPlus.WPF
                 _priorityFilterContent = value;
                 OnPropertyChanged(nameof(PriorityFilterContent));
             }
-        }
+        } 
         public bool IsPriorityFilterOpen { get; set; }
         public ICommand OpenPriorityFilterCommand { get; set; }
          private bool _lowPriorityChecked { get; set; }
@@ -33,8 +33,6 @@ namespace MntPlus.WPF
                 OnPropertyChanged(nameof(LowPriorityChecked));
             } 
         }
-
-        
 
         private bool _mediumPriorityChecked { get; set; }
         public bool MediumPriorityChecked
@@ -99,7 +97,6 @@ namespace MntPlus.WPF
         public DueDateFilterViewModel dueDateFilterViewModel { get; set; }
         public bool IsDateFilterOpen { get; set; }  
         public ObservableCollection<WorkOrderDto> WorkOrderDtos { get; set;}  
-          
         private ObservableCollection<WorkOrderItemsViewModel> _workOrders { get; set; }
         public ObservableCollection<WorkOrderItemsViewModel>? FilterWorkOrders { get; set; } 
         public ObservableCollection<WorkOrderItemsViewModel> WorkOrders 
@@ -186,7 +183,6 @@ namespace MntPlus.WPF
 
               
                 OnPropertyChanged(nameof(PendingChecked));
-                //FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders.Where(x => x.WorkOrderDto?.Status == WorkOrderStatus.Pending));
             } 
         }
 
@@ -202,7 +198,6 @@ namespace MntPlus.WPF
 
                
                 OnPropertyChanged(nameof(OpenChecked));
-                //FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders.Where(x => x.WorkOrderDto?.Status == WorkOrderStatus.Open));
             } 
         }
 
@@ -258,11 +253,7 @@ namespace MntPlus.WPF
         public ObservableCollection<StatFilterCriteria> StatFilterCriteria { get; set; }
         public ObservableCollection<PriorityFilterCriteria> PriorityFilterCriterias { get; set; }
 
-        private readonly List<string> allPossibleStatuses = new List<string>
-        {
-   "Approuvé", "En attente", "Ouvrir", "En service", "Complet", "Non spécifique"
-        };
-
+       
         public bool FilterByStatus { get; set; }
         public bool FilterByPriority { get; set; }
         public ManageWorkViewModel()
@@ -282,17 +273,6 @@ namespace MntPlus.WPF
             WorkOrderStore.WorkOrderDeleted += WorkOrderStore_WorkOrderDeleted;
 
             OpenStatFilterCommand = new RelayCommand(() => IsMenuStatOpen = !IsMenuStatOpen);
-            //ApprovedChecked = true;
-            //PendingChecked = true;
-            //OpenChecked = true;
-            //InServiceChecked = true;
-            //CompleteChecked = true;
-            //NonSpecificChecked = true;
-
-            //LowPriorityChecked = true;
-            //MediumPriorityChecked = true;
-            //HighPriorityChecked = true;
-            //NoPriorityChecked = true;
 
             dueDateFilterViewModel = new DueDateFilterViewModel();
             OpenDueDateMenuCommand = new RelayCommand(() => IsDateFilterOpen = !IsDateFilterOpen);
@@ -386,10 +366,11 @@ namespace MntPlus.WPF
             }
 
         }
-      
+
+        #region Filters
         private void UpdatePriorityFilterContent(string v, bool lowPriorityChecked)
         {
-           
+
             var priorities = _priorityFilterContent?.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).ToList() ?? new List<string>();
 
             if (lowPriorityChecked)
@@ -411,7 +392,7 @@ namespace MntPlus.WPF
                         case "Haute priorité":
                             PriorityFilterCriterias.Add(new PriorityFilterCriteria(PriorityFilterType.HighPriority, "Haute priorité"));
                             break;
-                            case "Aucune priorité":
+                        case "Aucune priorité":
                             PriorityFilterCriterias.Add(new PriorityFilterCriteria(PriorityFilterType.NoPriority, "Aucune priorité"));
                             break;
                     }
@@ -421,12 +402,12 @@ namespace MntPlus.WPF
             else
             {
                 priorities.Remove(v);
-               if (priorities.Count == 0)
+                if (priorities.Count == 0)
                 {
                     FilterByPriority = false;
                 }
                 PriorityFilterContent = string.Join(",", priorities);
-                
+
                 switch (v)
                 {
                     case "Basse priorité":
@@ -444,7 +425,7 @@ namespace MntPlus.WPF
                         if (filter2 != null)
                             RemveFilterCriteria(filter2);
                         break;
-                        case "Aucune priorité":
+                    case "Aucune priorité":
                         var filter3 = PriorityFilterCriterias.FirstOrDefault(x => x.PriorityFilterType == PriorityFilterType.NoPriority);
                         if (filter3 != null)
                             RemveFilterCriteria(filter3);
@@ -456,44 +437,44 @@ namespace MntPlus.WPF
 
         private void UpdateStatFilterContent(string status, bool add)
         {
-           
+
             List<string> statuses;
-             statuses = _statFilterContent?.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).ToList() ?? new List<string>();   
+            statuses = _statFilterContent?.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).ToList() ?? new List<string>();
             if (add)
-                {
+            {
                 FilterByStatus = true;
-                    if (!statuses.Contains(status))
-                    {
-                        statuses.Add(status);
+                if (!statuses.Contains(status))
+                {
+                    statuses.Add(status);
                     _statFilterContent = string.Join(",", statuses);
 
                     switch (status)
-                        {
-                            case "Approuvé":
-                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Approved, "Approuvé"));
-                                break;
-                            case "En attente":
-                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Waiting, "En attente"));
-                                break;
-                            case "Ouvrir":
-                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Open, "Ouvrir"));
-                                break;
-                            case "En service":
-                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.InProgress, "En service"));
-                                break;
-                            case "Complet":
-                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Completed, "Complet"));
-                                break;
-                            case "Non spécifié":
-                                StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.NonSpecific, "Non spécifié"));
-                                break;
-                        }
-                        ApplyFilters(FilterByStatus, FilterByPriority);
+                    {
+                        case "Approuvé":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Approved, "Approuvé"));
+                            break;
+                        case "En attente":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Waiting, "En attente"));
+                            break;
+                        case "Ouvrir":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Open, "Ouvrir"));
+                            break;
+                        case "En service":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.InProgress, "En service"));
+                            break;
+                        case "Complet":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.Completed, "Complet"));
+                            break;
+                        case "Non spécifié":
+                            StatFilterCriteria.Add(new StatFilterCriteria(StatFilterType.NonSpecific, "Non spécifié"));
+                            break;
                     }
-                }   
+                    ApplyFilters(FilterByStatus, FilterByPriority);
+                }
+            }
             else
-                {
-                    statuses.Remove(status);
+            {
+                statuses.Remove(status);
                 if (statuses.Count == 0)
                 {
                     FilterByStatus = false;
@@ -501,41 +482,41 @@ namespace MntPlus.WPF
                 _statFilterContent = string.Join(",", statuses);
 
                 switch (status)
-                    {
-                        case "Approuvé":
-                            var filter = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Approved);
-                            if (filter != null)
-                                RemveFilterCriteria(filter);
-                            break;
-                        case "En attente":
-                            var filter1 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Waiting);
-                            if (filter1 != null)
-                                RemveFilterCriteria(filter1);
-                            break;
-                        case "Ouvrir":
-                            var filter2 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Open);
-                            if (filter2 != null)
-                                RemveFilterCriteria(filter2);
-                            break;
-                        case "En service":
-                            var filter3 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.InProgress);
-                            if (filter3 != null)
-                                RemveFilterCriteria(filter3);
-                            break;
-                        case "Complet":
-                            var filter4 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Completed);
-                            if (filter4 != null)
-                                RemveFilterCriteria(filter4);
-                            break;
-                        case "Non spécifié":
-                            var filter5 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.NonSpecific);
-                            if (filter5 != null)
-                                RemveFilterCriteria(filter5);
-                            break;
-                    }
-
+                {
+                    case "Approuvé":
+                        var filter = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Approved);
+                        if (filter != null)
+                            RemveFilterCriteria(filter);
+                        break;
+                    case "En attente":
+                        var filter1 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Waiting);
+                        if (filter1 != null)
+                            RemveFilterCriteria(filter1);
+                        break;
+                    case "Ouvrir":
+                        var filter2 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Open);
+                        if (filter2 != null)
+                            RemveFilterCriteria(filter2);
+                        break;
+                    case "En service":
+                        var filter3 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.InProgress);
+                        if (filter3 != null)
+                            RemveFilterCriteria(filter3);
+                        break;
+                    case "Complet":
+                        var filter4 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.Completed);
+                        if (filter4 != null)
+                            RemveFilterCriteria(filter4);
+                        break;
+                    case "Non spécifié":
+                        var filter5 = StatFilterCriteria.FirstOrDefault(x => x.StatFilterType == StatFilterType.NonSpecific);
+                        if (filter5 != null)
+                            RemveFilterCriteria(filter5);
+                        break;
                 }
-           
+
+            }
+
 
 
         }
@@ -560,14 +541,14 @@ namespace MntPlus.WPF
             }
             else
             {
-                ApplyFilters(FilterByStatus,FilterByPriority);
+                ApplyFilters(FilterByStatus, FilterByPriority);
             }
         }
 
         private void ApplyFilters(bool filterByStatus, bool filterByPriority)
         {
             if (WorkOrders is null || WorkOrders.Count == 0) return;
-            if(!filterByStatus && !filterByPriority)
+            if (!filterByStatus && !filterByPriority)
             {
                 FilterWorkOrders = new ObservableCollection<WorkOrderItemsViewModel>(WorkOrders);
                 return;
@@ -638,6 +619,7 @@ namespace MntPlus.WPF
             };
         }
 
+        #endregion
         private void WorkOrderStore_WorkOrderUpdated(WorkOrderDto? dto)
         {
             var workOrder = WorkOrders.FirstOrDefault(x => x.WorkOrderDto?.Id == dto?.Id);

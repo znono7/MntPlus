@@ -29,7 +29,7 @@ namespace MntPlus.WPF.ViewModels.Windows
             PartStore = partStore;
             SelectPartCommand = new RelayParameterizedCommand((p) => SelectPartFunc(p));
             GetSelectedPartCommand = new RelayParameterizedCommand((p) => GetSelectPartFunc(p));
-        }
+        } 
         private async Task GetAllParts()
         {
             var response = await AppServices.ServiceManager.PartService.GetAllPartsAsync(false);

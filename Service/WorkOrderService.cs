@@ -118,7 +118,26 @@ namespace Service
 
                 }
 
-                var workOrderToReturn = _mapper.Map<WorkOrderDto>(workOrderEntity);
+                var workOrderToReturn = new WorkOrderDto(Id: workOrderEntity.Id,
+                Name: workOrderEntity.Name,
+                Number: workOrderEntity.Number,
+                Description: workOrderEntity.Description,
+                Priority: workOrderEntity.Priority,
+                StartDate: workOrderEntity.StartDate,
+                DueDate: workOrderEntity.DueDate,
+                Type: workOrderEntity.Type,
+                Status: workOrderEntity.Status,
+                Requester: workOrderEntity.Requester,
+                CreatedOn: workOrderEntity.CreatedOn,
+                UserCreatedId: workOrderEntity.UserCreatedId,
+                UserCreatedBy: workOrderEntity.UserCreatedBy != null ? new UserByDto(workOrderEntity.UserCreatedBy.Id, $"{workOrderEntity.UserCreatedBy.FirstName} {workOrderEntity.UserCreatedBy.LastName}") : null,
+                UserAssignedToId: workOrderEntity.UserAssignedToId,
+                UserAssignedTo: workOrderEntity.UserAssignedTo != null ? new UserByDto(workOrderEntity.UserAssignedTo.Id, $"{workOrderEntity.UserAssignedTo.FirstName} {workOrderEntity.UserAssignedTo.LastName}") : null,
+                TeamAssignedToId: workOrderEntity.TeamAssignedToId,
+                TeamAssignedTo: workOrderEntity.TeamAssignedTo != null ? new TeamDto(workOrderEntity.TeamAssignedTo.Id, workOrderEntity.TeamAssignedTo.Name!) : null,
+                AssetId: workOrderEntity.AssetId,
+                Asset: workOrderEntity.Asset != null ? new AssetWorkOrderDto(workOrderEntity.Asset.Id, workOrderEntity.Asset.Name,
+                workOrderEntity.Asset.Location != null ? new LocatioWODto(workOrderEntity.Asset.Location.Id, workOrderEntity.Asset.Location.Name) : null) : null);
 
                 await _unitOfWork.CommitTransactionAsync();
                 return new ApiOkResponse<WorkOrderDto>(workOrderToReturn);
@@ -207,7 +226,7 @@ namespace Service
                                 TeamAssignedTo: x.TeamAssignedTo != null ? new TeamDto(x.TeamAssignedTo.Id, x.TeamAssignedTo.Name!) : null,
                                 AssetId: x.AssetId,
                                 Asset: x.Asset != null ? new AssetWorkOrderDto(x.Asset.Id, x.Asset.Name, x.Asset.Location!= null ? 
-                                new LocatioWODto(x.Asset.Location.Id,x.Asset.Location.Name) : null) : null)
+                                new LocatioWODto(x.Asset.Location.Id,x.Asset.Location.Name!) : null) : null)
                                ).ToList();
                 return new ApiOkResponse<IEnumerable<WorkOrderDto>>(workOrdersDto); 
             }

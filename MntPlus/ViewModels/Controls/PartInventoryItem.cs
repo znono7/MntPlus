@@ -11,7 +11,7 @@ namespace MntPlus.WPF
 {
     public class PartInventoryItem : BaseViewModel
     {
-        public PartDto? Part { get; set; }
+        public PartDto? Part { get; set; } 
         public Guid Id { get; set; } 
         public string? PartNumber { get; set; }
         public string? Name { get; set; }
@@ -50,7 +50,7 @@ namespace MntPlus.WPF
         }
 
         public ICommand? ViewInventoryCommand { get; set; }
-
+      
         public PartInventoryItem(PartDto? partDto)
         {
             Part = partDto;

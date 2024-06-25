@@ -10,7 +10,7 @@ namespace Shared
     (
         Guid Id,
         Guid? AssetParent,
-        AssetDto? Parent,  
+        AssetDto? Parent,
         string? Name,
         string? Description,
         string? Status,
@@ -20,7 +20,7 @@ namespace Shared
         string? SerialNumber,
         string? Model,
         string? Make,
-        double? PurchaseCost, 
+        double? PurchaseCost,
         string? ImagePath,
         byte[]? AssetImage,
         DateTime? AssetCommissionDate,
@@ -56,5 +56,8 @@ namespace Shared
                string? ImagePath,
                       byte[]? AssetImage
            );
+     
+    public record AssetPartsDto(List<PartAssetDto> Parts);
+
 
 }

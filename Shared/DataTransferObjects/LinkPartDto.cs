@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public record LinkPartDto(Guid Id, Guid PartId, PartDto Part, Guid AssetId, AssetDto Asset);
+    public record LinkPartDto(Guid Id, Guid PartId, PartDto? Part, Guid AssetId, AssetDto? Asset);
     public record LinkPartForCreationDto(Guid PartId, Guid AssetId);
    
 }

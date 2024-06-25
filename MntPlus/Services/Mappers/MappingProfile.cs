@@ -52,7 +52,11 @@ namespace MntPlus.WPF
                 .ReverseMap();
             CreateMap<MeterReadingDtoForCreation, MeterReading>().ReverseMap();
 
-           
+
+
+
+            CreateMap<RequestForCreationDto, Request>().ReverseMap();
+            CreateMap<Request, RequestDto>().ReverseMap();
 
 
         }

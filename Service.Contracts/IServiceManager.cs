@@ -22,6 +22,7 @@ namespace Service.Contracts
         IMeterService MeterService { get; }
         IMeterReadingService MeterReadingService { get; }
         ITaskListService TaskListService { get; }
+        IRequestService RequestService { get; }
       
 
     }

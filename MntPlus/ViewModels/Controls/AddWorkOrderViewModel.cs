@@ -8,9 +8,30 @@ namespace MntPlus.WPF
 {
     public class AddWorkOrderViewModel : BaseViewModel
     {
+        public AddWorkOrderViewModel()
+        {
+            BrowseCommand = new RelayCommand(async () => await Browse());
+            DeleteImgCommand = new RelayCommand(RemoveImage);
+            OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);
+            OpenMenuStartDateCommand = new RelayCommand(() => IsMenuStartDateOpen = !IsMenuStartDateOpen);
+            OpenMenuPriorityCommand = new RelayCommand(() => IsMenuPrioprityOpen = !IsMenuPrioprityOpen);
+            HighPriorityCommand = new RelayCommand(() => OrderWorkPriority = "1");
+            MediumPriorityCommand = new RelayCommand(() => OrderWorkPriority = "2");
+            LowPriorityCommand = new RelayCommand(() => OrderWorkPriority = "3");
+            NonPriorityCommand = new RelayCommand(() => OrderWorkPriority = "Aucune");
+            ClearStartDateCommand = new RelayCommand(() => _startDate = null);
+            ClearDueDateCommand = new RelayCommand(() => _dueDate = null);
+            BrowseToEquipmentCommand = new RelayCommand(BrowseToEquipment);
+            ClearEquipmentCommand = new RelayCommand(() => { SelectedAsset = null; browseToEquipmentVisible = true; });
+            BrowseToAssignedCommand = new RelayCommand(BrowseToAssigned);
+            ClearAssignedCommand = new RelayCommand(() => { SelectedAssignedTo = null; browseToAssignedVisible = true; });
+            SaveCommand = new RelayCommand(async () => await SaveAsync());
+            CloseCommand = new RelayCommand(async () => await CloseAsync());
+           
+        }
         public string ForgroundColor { get; set; } = "53667B";
 
-        public bool IsMenuPrioprityOpen { get; set; }
+        public bool IsMenuPrioprityOpen { get; set; } 
 
         private string _orderWorkPriority = "Aucune";
         public string OrderWorkPriority
@@ -97,10 +118,9 @@ namespace MntPlus.WPF
         public WorkOrderDto? WorkOrderDto { get; }
 
         public bool IsForUpdate { get; set; } = false;  
-        public string Title => IsForUpdate ? "Modifier l'ordre de travail" : "Ajouter un ordre de travail";
+        public string Title { get; set; } 
         public AddWorkOrderViewModel(WorkOrderStore workOrderStore , WorkOrderDto? workOrderDto = null )
         {
-            _ = GetLastNumber();
             BrowseCommand = new RelayCommand(async () => await Browse());
             DeleteImgCommand = new RelayCommand(RemoveImage);
             OpenMenuDueDateCommand = new RelayCommand(() => IsMenuDueDateOpen = !IsMenuDueDateOpen);
@@ -120,7 +140,7 @@ namespace MntPlus.WPF
             CloseCommand = new RelayCommand(async () => await CloseAsync());
             WorkOrderStore = workOrderStore;
             WorkOrderDto = workOrderDto;
-            if(workOrderDto != null)
+            if (workOrderDto != null) 
             {
                 IsForUpdate = true;
                 Name = workOrderDto.Name;
@@ -136,13 +156,20 @@ namespace MntPlus.WPF
                 Number = AddDynamicLeadingZeros( workOrderDto.Number ?? 0);
                 num = workOrderDto.Number ?? 0;
                 Requester = workOrderDto.Requester;
-                
+
 
 
             }
+            else
+            {
+                _ = GetLastNumber();
+
+            }
+            Title = IsForUpdate ? "Modifier l'ordre de travail" : "Ajouter un ordre de travail";
+
         }
 
-        private async Task SaveAsync()
+        public async Task SaveAsync()
         {
             if (string.IsNullOrEmpty(Name))
             {

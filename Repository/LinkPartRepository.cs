@@ -12,7 +12,7 @@ namespace Repository
         public void CreateLinkPart( LinkPart linkPart)
         {
             Create(linkPart);
-        }
+        } 
 
         public void DeleteLinkPart(LinkPart linkPart) => Delete(linkPart);
 

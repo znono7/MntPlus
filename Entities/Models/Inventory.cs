@@ -10,7 +10,7 @@ namespace Entities
      
         public string? Status { get; set; }
         public double? Cost { get; set; }
-        public int? AvailableQuantity { get; set; }
+        public int? AvailableQuantity { get; set; } 
         public int? MinimumQuantity { get; set; }
         public int? MaxQuantity { get; set; }
         public DateTime? DateReceived { get; set; }

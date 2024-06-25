@@ -10,10 +10,13 @@ namespace Service
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
-        public AssetService(IRepositoryManager repository, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AssetService(IRepositoryManager repository, IMapper mapper , IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
         public async Task<ApiBaseResponse> CreateAsset(AssetForCreationDto asset)
         {
@@ -32,13 +35,14 @@ namespace Service
                 return new ApiBadRequestResponse(ex.Message);
             }
             
-        }
+        } 
 
         public async Task<ApiBaseResponse> DeleteAsset(Guid assetId, bool trackChanges)
         {
+           
             try
             {
-                var asset = await _repository.Asset.GetAssetAsync(assetId, trackChanges);
+                var asset = await _repository.Asset.GetAssetForDeleteAsync(assetId, trackChanges); 
                 if (asset is null)
                 {
                     return new ApiNotFoundResponse("");
@@ -51,9 +55,32 @@ namespace Service
             }
             catch (Exception ex)
             {
-                return new ApiBadRequestResponse(ex.Message);
+                return new ApiBadRequestResponse(ex.InnerException.Message);
             }
             
+        }
+
+        public async Task<ApiBaseResponse> DeleteAssets(IEnumerable<Guid> assetIds, bool trackChanges)
+        {
+            await _unitOfWork
+                .BeginTransactionAsync();
+            try
+            {
+                var assets = await _repository.Asset.GetByIdsAsync(assetIds, trackChanges);
+                if (assets is null)
+                {
+                    return new ApiNotFoundResponse("");
+                }
+                _repository.Asset.DeleteAssets(assets);
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return new ApiOkResponse<IEnumerable<Guid>>(assetIds);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return new ApiBadRequestResponse(ex.Message);
+            }
         }
 
         public async Task<ApiBaseResponse> GetAllAssetsAsync(bool trackChanges)
@@ -73,6 +100,50 @@ namespace Service
                 return new ApiBadRequestResponse(ex.Message);
             }
             
+        }
+
+        public async Task<ApiBaseResponse> GetAllPartsAsync(Guid assetId, bool trackChanges)
+        {
+            try
+            {
+                var asset = await _repository.Asset.GetAllPartsAsync(assetId, trackChanges);
+                if (asset is null)
+                {
+                    return new ApiNotFoundResponse("");
+                }
+                List<PartDto>? assetDto = new List<PartDto>(); 
+                if (asset.LinkParts!= null)
+                {
+                    foreach (var item in asset.LinkParts)
+                    {
+                        List<InventoryDto>? inventories = null;
+                        if (item.Part?.Inventories != null)
+                        {
+                            
+                            inventories = item.Part.Inventories.Select(inventory =>
+                            new InventoryDto(
+                                inventory.Id,
+                                inventory.Status,
+                                inventory.Cost,
+                                inventory.AvailableQuantity ?? 0,
+                                inventory.MinimumQuantity,
+                                inventory.MaxQuantity,
+                                inventory.DateReceived ?? DateTime.Now,
+                                inventory.PartID,
+                                null
+                            )
+                        ).ToList();
+                        }
+                        PartDto partAssetDto = new PartDto(item.Part!.Id, item.Part.PartNumber, item.Part.Name, item.Part.Description, item.Part.Category,null, inventories,null);
+                        assetDto.Add(partAssetDto);
+                    }
+                }
+                return new ApiOkResponse<IEnumerable<PartDto>>(assetDto);
+            }
+            catch (Exception ex)
+            {
+                return new ApiBadRequestResponse(ex.Message);
+            }
         }
 
         public async Task<ApiBaseResponse> GetAssetAsync(Guid assetId, bool trackChanges)

@@ -7,11 +7,13 @@ namespace MntPlus.WPF
 {
     public class EquipmentItemViewModel : BaseViewModel
     {
+        public ICommand OpenEquipmentCommand { get; set; }
+        public Func<EquipmentItemViewModel?, Task>? OpenEquipment { get; set; }
         public AssetDto? Parent { get; set; }
         public string? Name { get; set; }
         public string? ParentName { get; set; }
         public string? Description { get; set; }
-        public string? Status { get; set; } 
+        public string? Status { get; set; }  
         public string? Category { get; set; }
         public LocationDto? Location { get; set; } 
         public string? LocationName { get; set; }
@@ -59,120 +61,31 @@ namespace MntPlus.WPF
             Asset = asset;
             MapProperties();
             Children = new ObservableCollection<EquipmentItemViewModel>();
-            ViewEquipmentCommand = new RelayCommand(ViewEquipment);
+            //ViewEquipmentCommand = new RelayCommand(ViewEquipment);
+            OpenEquipmentCommand = new RelayCommand(async () => await OnEquipmentOpened());
+        }
+
+        private async Task OnEquipmentOpened()
+        {
+            if (OpenEquipment != null)
+            {
+                await OpenEquipment(this);
+            }
         }
 
         private void ViewEquipment()
-        {
-            EquipmentInfoViewModel equipment = new()
-            {
-                Name = Name,
-                Description = Description,
-                Status = Status,
-                Category = Category,
-                Location = Location?.Name,
-                SerialNumber = SerialNumber,
-                Model = Model,
-                Make = Make,
-                PurchaseCost = PurchaseCost,
-                ImagePath = ImagePath,
-                AssetImage = AssetImage,
-                AssetCommissionDate = AssetCommissionDate,
-                CreatedDate = CreatedDate,
-                PurchaseDate = PurchaseDate
-
-            };
-            // Get and display the full hierarchy
-            EquipmentHierarchyManager manager = new EquipmentHierarchyManager();
-            manager.GetFullHierarchy(this);
-            if(manager.EquipmentHierarchy != null)
-                EquipmentHierarchy = new ObservableCollection<AssetItemViewModel>(FromEquipToAsset( manager.EquipmentHierarchy));
-            AssetChildrenViewModel assetChildren = new()
-            {
-                Children = EquipmentHierarchy
-            };
-            EquipmentMeterViewModel equipmentMeterViewModel = new(Asset!.Id);
+        { 
             ViewEquipmentPageViewModel viewEquipment = new()
             {
-                equipmentInfo = equipment,
-                childrenViewModel = assetChildren,
-                equipmentMeterViewModel = equipmentMeterViewModel
+                
+                asset = Asset,
+                equipmentItem = this,
             }; 
             IoContainer.Application.GoToPage(ApplicationPage.Equipment, viewEquipment);
         }
-        public ObservableCollection<AssetItemViewModel> EquipmentHierarchy = new();
 
-        public List< AssetItemViewModel> FromEquipToAsset(List< EquipmentItemViewModel> assetItem)
-        {
-            List<AssetItemViewModel> assetItems = new();
-            foreach (var item in assetItem)
-            {
-                if(item.Asset?.Id == Asset?.Id)
-                {
-                    AssetItemViewModel asset = new()
-                    {
-                        AssetName = $"Cette équipement : {item.Name}"
-                    };
-                    assetItems.Add(asset);
 
-                }
-                else
-                {
-                    AssetItemViewModel asset = new()
-                    {
-                        AssetName = item.Name
-                    };
-                    assetItems.Add(asset);
-
-                }
-
-            }
-            return assetItems;
-            
-        }
-        public void GetFullHierarchy()
-        {
-            GetParentHierarchy(this);
-            if (HierarchyParents.Count > 0)
-            {
-                HierarchyParents.Reverse();
-                HierarchyParents.Add(this);
-                if(Children != null)
-                {
-                    foreach (var item in Children)
-                    {
-                        HierarchyParents.Add(item);
-                    }
-                }
-               
-            }
-            else
-            {
-                HierarchyParents.Add(this);
-                if (Children != null)
-                {
-                    foreach (var item in Children)
-                    {
-                        HierarchyParents.Add(item);
-                    }
-                }
-
-            }
-            EquipmentHierarchy = new ObservableCollection<AssetItemViewModel>(FromEquipToAsset(HierarchyParents));
-        }
       
-        List<EquipmentItemViewModel> HierarchyParents = new List<EquipmentItemViewModel>();
-
-        private void GetParentHierarchy(EquipmentItemViewModel model)
-        {
-            if (model.Parent != null)
-            {
-                HierarchyParents.Add(new EquipmentItemViewModel(model.Parent));
-                GetParentHierarchy(new EquipmentItemViewModel(model.Parent));
-            }
-            
-        }
-
         private void IterateEquipmentChildren(ObservableCollection<EquipmentItemViewModel>? equipments,bool val)
         {
             if(equipments != null && equipments.Count > 0)
@@ -187,24 +100,27 @@ namespace MntPlus.WPF
                 }
             }
         }
-        //map the properties
         private void MapProperties()
         {
-            Parent = Asset.Parent;
-            ParentName = Asset.Parent?.Name;
-            Name = Asset.Name;
-            Description = Asset.Description;
-            Status = Asset.Status;
-            Category = Asset.Category;
-            Location = Asset.Location;
-            LocationName = Asset.Location?.Name;
-            SerialNumber = Asset.SerialNumber;
-            Model = Asset.Model;
-            Make = Asset.Make;
-            PurchaseCost = Asset.PurchaseCost;
-            ImagePath = Asset.ImagePath;
-            AssetImage = Asset.AssetImage;
-            AssetCommissionDate = Asset.AssetCommissionDate.HasValue ? Asset.AssetCommissionDate.Value.ToString("dd/MM/yyyy") : "";
+            if(Asset == null)
+            {
+                return;
+            }
+            Parent = Asset?.Parent;
+            ParentName = Asset?.Parent?.Name;
+            Name = Asset?.Name;
+            Description = Asset?.Description;
+            Status = Asset?.Status;
+            Category = Asset?.Category;
+            Location = Asset?.Location;
+            LocationName = Asset?.Location?.Name;
+            SerialNumber = Asset?.SerialNumber;
+            Model = Asset?.Model;
+            Make = Asset?.Make;
+            PurchaseCost = Asset?.PurchaseCost;
+            ImagePath = Asset?.ImagePath;
+            AssetImage = Asset?.AssetImage;
+            AssetCommissionDate = Asset!.AssetCommissionDate.HasValue ? Asset.AssetCommissionDate.Value.ToString("dd/MM/yyyy") : "";
             CreatedDate = Asset.CreatedDate.HasValue ? Asset.CreatedDate.Value.ToString("dd/MM/yyyy") : "";
             PurchaseDate = Asset.PurchaseDate.HasValue ? Asset.PurchaseDate.Value.ToString("dd/MM/yyyy") : "";
         }

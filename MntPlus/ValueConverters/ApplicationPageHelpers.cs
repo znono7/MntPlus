@@ -59,6 +59,9 @@ namespace MntPlus.WPF
                         return new MeterPage(viewModel as MeterPageViewModel);
                     case ApplicationPage.Checklists:
                         return new ChecklistsPage(viewModel as ChecklistsViewModel);
+                    case ApplicationPage.NewAsset:
+                        return new NewAssetPage(viewModel as NewAssetViewModel);
+
 
                     default:
                     Debugger.Break();
@@ -102,6 +105,8 @@ namespace MntPlus.WPF
                 return ApplicationPage.Meters;
             if (page is ChecklistsPage)
                 return ApplicationPage.Checklists;
+            if (page is NewAssetPage)
+                return ApplicationPage.NewAsset;
 
             // Alert developer of issue
             Debugger.Break();

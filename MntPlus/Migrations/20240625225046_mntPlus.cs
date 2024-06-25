@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class MntMigra : Migration
+    public partial class mntPlus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -86,22 +86,28 @@ namespace MntPlus.WPF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Schedules",
+                name: "Schedule",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Interval = table.Column<int>(type: "INTEGER", nullable: true),
-                    IsDaily = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DaysOfWeek = table.Column<string>(type: "TEXT", nullable: true),
-                    Week = table.Column<string>(type: "TEXT", nullable: true),
-                    DayOfWeek = table.Column<string>(type: "TEXT", nullable: true),
+                    FrequencyType = table.Column<string>(type: "TEXT", nullable: false),
+                    Interval = table.Column<int>(type: "INTEGER", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ScheduleType = table.Column<string>(type: "TEXT", maxLength: 21, nullable: false),
                     DayOfMonth = table.Column<int>(type: "INTEGER", nullable: true),
-                    Month = table.Column<string>(type: "TEXT", nullable: true),
-                    YearDayOfMonth = table.Column<int>(type: "INTEGER", nullable: true)
+                    WeekOfMonth = table.Column<int>(type: "INTEGER", nullable: true),
+                    DayOfWeek = table.Column<int>(type: "INTEGER", nullable: true),
+                    DaysOfWeek = table.Column<string>(type: "TEXT", nullable: true),
+                    YearlyNumericSchedule_DayOfMonth = table.Column<int>(type: "INTEGER", nullable: true),
+                    Month = table.Column<int>(type: "INTEGER", nullable: true),
+                    YearlyOrdinalSchedule_WeekOfMonth = table.Column<int>(type: "INTEGER", nullable: true),
+                    YearlyOrdinalSchedule_DayOfWeek = table.Column<int>(type: "INTEGER", nullable: true),
+                    YearlyOrdinalSchedule_Month = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Schedules", x => x.Id);
+                    table.PrimaryKey("PK_Schedule", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,8 +197,7 @@ namespace MntPlus.WPF.Migrations
                         name: "FK_Assets_Assets_AssetParent",
                         column: x => x.AssetParent,
                         principalTable: "Assets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Assets_Locations_LocationId",
                         column: x => x.LocationId,
@@ -222,30 +227,6 @@ namespace MntPlus.WPF.Migrations
                         principalTable: "Parts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Requests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Number = table.Column<int>(type: "INTEGER", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Priority = table.Column<string>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: true),
-                    Requester = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    SubmittedById = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Requests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Requests_Users_SubmittedById",
-                        column: x => x.SubmittedById,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -343,7 +324,8 @@ namespace MntPlus.WPF.Migrations
                         name: "FK_Meters_Assets_AssetId",
                         column: x => x.AssetId,
                         principalTable: "Assets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -371,9 +353,55 @@ namespace MntPlus.WPF.Migrations
                         principalTable: "Assets",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_PreventiveMaintenances_Schedules_ScheduleId",
+                        name: "FK_PreventiveMaintenances_Schedule_ScheduleId",
                         column: x => x.ScheduleId,
-                        principalTable: "Schedules",
+                        principalTable: "Schedule",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Number = table.Column<int>(type: "INTEGER", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Priority = table.Column<string>(type: "TEXT", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    Requester = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UserCreatedId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserAssignedToId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    TeamAssignedToId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    AssetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Requests_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Requests_Teams_TeamAssignedToId",
+                        column: x => x.TeamAssignedToId,
+                        principalTable: "Teams",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Requests_Users_UserAssignedToId",
+                        column: x => x.UserAssignedToId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Requests_Users_UserCreatedId",
+                        column: x => x.UserCreatedId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -497,7 +525,8 @@ namespace MntPlus.WPF.Migrations
                         name: "FK_WorkOrderHistories_WorkOrders_WorkOrderId",
                         column: x => x.WorkOrderId,
                         principalTable: "WorkOrders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -576,9 +605,24 @@ namespace MntPlus.WPF.Migrations
                 column: "ScheduleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_SubmittedById",
+                name: "IX_Requests_AssetId",
                 table: "Requests",
-                column: "SubmittedById");
+                column: "AssetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_TeamAssignedToId",
+                table: "Requests",
+                column: "TeamAssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_UserAssignedToId",
+                table: "Requests",
+                column: "UserAssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_UserCreatedId",
+                table: "Requests",
+                column: "UserCreatedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -630,13 +674,14 @@ namespace MntPlus.WPF.Migrations
                 table: "WorkOrders",
                 column: "UserCreatedId");
 
+
             migrationBuilder.InsertData(
- table: "Users",
- columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
- values: new object[,]
- {
+table: "Users",
+columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
+values: new object[,]
+{
            { Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), "Lamine", "Belkheir", "mail@d","01264","lamine","a123456","Actif",DateTime.Now}
- });
+});
 
 
             migrationBuilder.InsertData(
@@ -733,7 +778,7 @@ namespace MntPlus.WPF.Migrations
                 name: "WorkOrders");
 
             migrationBuilder.DropTable(
-                name: "Schedules");
+                name: "Schedule");
 
             migrationBuilder.DropTable(
                 name: "Assets");

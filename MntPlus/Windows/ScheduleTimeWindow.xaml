@@ -140,7 +140,7 @@
                             <TextBlock Margin="10 0" Text="jours" Style="{DynamicResource LabelTextBlockStyle}"/>
 
                         </StackPanel>
-                        <!--<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 10" >
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 10" >
                             <TextBlock Text="Commence le" Style="{DynamicResource LabelTextBlockStyle}"/>
                             <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
                                 <Grid.ColumnDefinitions>
@@ -153,12 +153,12 @@
                                     <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
                                 </Button>
 
-                                <TextBlock Text="{Binding ShortStartDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding ShortStartWeeklyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
                                 <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateDaysOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup">
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                                SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                SelectedDate="{Binding StartWeeklyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>
                             </Grid>
@@ -174,16 +174,16 @@
                                     <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
                                 </Button>
 
-                                <TextBlock Text="{Binding ShortEndDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding ShortEndWeeklyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
                                 <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateDaysOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup2">
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                     SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                     SelectedDate="{Binding EndWeeklyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>
                             </Grid>
-                        </StackPanel>-->
+                        </StackPanel>
 
                     </Grid>
                 </StackPanel>
@@ -191,6 +191,7 @@
                     <RadioButton HorizontalAlignment="Left" GroupName="ScheduleGrp" IsChecked="{Binding IsWeekly}" Content="Hebdomadaire" Style="{StaticResource ScheduleBtn}"/>
                     <Grid local:AnimateSlideInFromTopProperty.Value="{Binding IsWeekly,FallbackValue=True}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -219,7 +220,7 @@
                             <TextBlock Margin="10 0" Text="Semaine" Style="{DynamicResource LabelTextBlockStyle}"/>
 
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <StackPanel Margin="10 0" Grid.Row="1" Orientation="Horizontal">
                             <TextBlock Margin="10 0" Text="Sur" Style="{DynamicResource LabelTextBlockStyle}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Dimanche" IsChecked="{Binding IsDimancheChecked}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Lundi" IsChecked="{Binding IsLundiChecked}"/>
@@ -228,7 +229,50 @@
                             <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Jeudi" IsChecked="{Binding IsJeudiChecked}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Vendredi" IsChecked="{Binding IsVendrediChecked}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Samedi" IsChecked="{Binding IsSamediChecked}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10" >
+                            <TextBlock Text="Commence le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="DateBorderWeekly" Background="{DynamicResource BackSubButtons}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="32" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                                <Border Grid.Column="1"  Height="32" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="0 4 4 0"/>
+                                <Button Grid.Column="1"  Command="{Binding OpenMenuStartDateWeekly}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                    <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                                </Button>
 
+                                <TextBlock Text="{Binding ShortStartDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateWeeklyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                    <Grid >
+
+                                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                            <TextBlock Text="et se termine le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="DateBorderWeekly2" Background="{DynamicResource TertiaryBackgroundColor}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="32" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                                <Border Grid.Column="1"  Height="32" BorderThickness="1" Background="{DynamicResource BackSubButtons}" CornerRadius="0 4 4 0"/>
+                                <Button Grid.Column="1"  Command="{Binding OpenMenuEndDateWeekly}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                    <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                                </Button>
+
+                                <TextBlock Text="{Binding ShortEndDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateWeeklyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                    <Grid >
+
+                                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                            SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
                         </StackPanel>
 
                     </Grid>
@@ -236,8 +280,9 @@
                 </StackPanel>
                 <StackPanel Margin="0 10" Grid.Row="2">
                     <RadioButton HorizontalAlignment="Left" GroupName="ScheduleGrp" IsChecked="{Binding IsMonthly}" Content="Mensuel" Style="{StaticResource ScheduleBtn}"/>
-                    <Grid local:AnimateSlideInFromTopProperty.Value="{Binding IsMonthly,FallbackValue=True}">
+                    <Grid local:AnimateSlideInFromTopProperty.Value="{Binding IsMonthly,FallbackValue=true}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -245,7 +290,7 @@
                             <RadioButton HorizontalAlignment="Left" GroupName="ScheduleMonthGrp" IsChecked="{Binding IsMonthlyWeekday}" Content="Jour de la Semaine" Margin="10 0" Style="{StaticResource ScheduleBtn}"/>
                             <RadioButton HorizontalAlignment="Left" GroupName="ScheduleMonthGrp" IsChecked="{Binding IsMonthlyNumeric}" Content="Numérique" Margin="10 0" Style="{StaticResource ScheduleBtn}"/>
                         </StackPanel>
-                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsMonthlyWeekday,FallbackValue=False}">
+                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsMonthlyWeekday,FallbackValue=True}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -281,7 +326,7 @@
 
                             </StackPanel>
                         </Grid>
-                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsMonthlyNumeric,FallbackValue=True}">
+                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsMonthlyNumeric,FallbackValue=False}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -316,6 +361,50 @@
 
                             </StackPanel>
                         </Grid>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10" >
+                            <TextBlock Text="Commence le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="DateBorderMonthly" Background="{DynamicResource BackSubButtons}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="32" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                                <Border Grid.Column="1"  Height="32" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="0 4 4 0"/>
+                                <Button Grid.Column="1"  Command="{Binding OpenMenuStartDateMonthly}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                    <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                                </Button>
+
+                                <TextBlock Text="{Binding ShortStartMonthlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateMonthlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                    <Grid >
+
+                                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                SelectedDate="{Binding StartMonthlyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                            <TextBlock Text="et se termine le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="DateBorderMonthly2" Background="{DynamicResource TertiaryBackgroundColor}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="32" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                                <Border Grid.Column="1"  Height="32" BorderThickness="1" Background="{DynamicResource BackSubButtons}" CornerRadius="0 4 4 0"/>
+                                <Button Grid.Column="1"  Command="{Binding OpenMenuEndDateMonthly}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                    <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                                </Button>
+
+                                <TextBlock Text="{Binding ShortEndMonthlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateMonthlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                    <Grid >
+
+                                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                            SelectedDate="{Binding EndMonthlyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </StackPanel>
 
                     </Grid>
                 </StackPanel>
@@ -325,12 +414,13 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel Margin="30 10" Orientation="Horizontal">
                             <RadioButton HorizontalAlignment="Left" GroupName="ScheduleYearlyGrp" IsChecked="{Binding IsYearlyOrdinal}" Content="Ordinal" Margin="10 0" Style="{StaticResource ScheduleBtn}"/>
                             <RadioButton HorizontalAlignment="Left" GroupName="ScheduleYearlyGrp" IsChecked="{Binding IsYearlyNumeric}" Content="Numérique" Margin="10 0" Style="{StaticResource ScheduleBtn}"/>
                         </StackPanel>
-                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsYearlyOrdinal,FallbackValue=True}">
+                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsYearlyOrdinal,FallbackValue=False}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -368,7 +458,7 @@
 
                             </StackPanel>
                         </Grid>
-                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsYearlyNumeric,FallbackValue=False}">
+                        <Grid  Grid.Row="1" local:AnimateSlideInFromTopProperty.Value="{Binding IsYearlyNumeric,FallbackValue=True}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -406,6 +496,50 @@
 
                             </StackPanel>
                         </Grid>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10" >
+                            <TextBlock Text="Commence le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="DateBorderYearly" Background="{DynamicResource BackSubButtons}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="32" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                                <Border Grid.Column="1"  Height="32" BorderThickness="1" Background="{DynamicResource LineColor2}" CornerRadius="0 4 4 0"/>
+                                <Button Grid.Column="1"  Command="{Binding OpenMenuStartDateYearly}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                    <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                                </Button>
+
+                                <TextBlock Text="{Binding ShortStartYearlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateYearlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                    <Grid >
+
+                                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                                SelectedDate="{Binding StartYearlyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                            <TextBlock Text="et se termine le" Style="{DynamicResource LabelTextBlockStyle}"/>
+                            <Grid Width="240" HorizontalAlignment="Left" Margin="10 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="DateBorderYearly2" Background="{DynamicResource TertiaryBackgroundColor}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Height="32" BorderThickness="1" BorderBrush="{DynamicResource LineColor2}" CornerRadius="4"/>
+                                <Border Grid.Column="1"  Height="32" BorderThickness="1" Background="{DynamicResource BackSubButtons}" CornerRadius="0 4 4 0"/>
+                                <Button Grid.Column="1"  Command="{Binding OpenMenuEndDateYearly}"   Style="{DynamicResource IconPathButton}" Margin="0">
+                                    <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
+                                </Button>
+
+                                <TextBlock Text="{Binding ShortEndYearlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateYearlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                    <Grid >
+
+                                        <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
+                                            SelectedDate="{Binding EndYearlyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </StackPanel>
 
                     </Grid>
                 </StackPanel>

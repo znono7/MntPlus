@@ -61,12 +61,11 @@ namespace Service
             {
                 var parts = await _repository.Part.GetAllPartsAsync(trackChanges);
                 if (parts is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
 
                 List<PartDto> partsDto = new List<PartDto>();
-
                 foreach (var part in parts)
                 {
                     List<InventoryDto>? inventories = null;

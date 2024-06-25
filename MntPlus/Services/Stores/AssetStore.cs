@@ -6,6 +6,8 @@ namespace MntPlus.WPF
     {
         public event Action<AssetDto?>? AssetCreated;
         public event Action<AssetDto?>? AssetUpdated;
+        public event Action<AssetDto?>? AssetDeleted;
+
         public void CreateAsset(AssetDto? equipment)
         {
             AssetCreated?.Invoke(equipment);
@@ -14,6 +16,11 @@ namespace MntPlus.WPF
         public void UpdateAsset(AssetDto? equipment)
         {
             AssetUpdated?.Invoke(equipment);
+        }
+
+        public void DeleteAsset(AssetDto? equipment)
+        {
+            AssetDeleted?.Invoke(equipment);
         }
     }
 }

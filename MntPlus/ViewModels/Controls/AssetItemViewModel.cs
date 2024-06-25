@@ -15,9 +15,9 @@ using System.Drawing;
 namespace MntPlus.WPF
 {
     public class AssetItemViewModel : BaseViewModel
-    {
+    { 
         #region Public Properties   
-
+         
         /// <summary>  
         /// The display Description of Asset
         /// </summary>
@@ -30,17 +30,15 @@ namespace MntPlus.WPF
         /// </summary>
         public bool IsSelected { get; set; }
 
+       
         #endregion
 
-      
-         
+
+
         #region Constructor
 
         public AssetItemViewModel()
         {
-
-           
-
         }
 
        

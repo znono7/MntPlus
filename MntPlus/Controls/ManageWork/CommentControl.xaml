@@ -27,9 +27,9 @@
                                     <RowDefinition Height="24"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="1" Text="{Binding WorkOrderHistoryDto.Notes}" Foreground="{DynamicResource PrimaryTextColor}" FontSize="13" />
-                                <TextBlock Grid.Row="0" Text="{Binding WorkOrderHistoryDto.ChangedBy.FullName}" Foreground="{DynamicResource FourthTextColor}" FontSize="14" HorizontalAlignment="Left" />
-                                <TextBlock Grid.Row="0" Text="{Binding WorkOrderHistoryDto.DateChanged}" Foreground="{DynamicResource FourthTextColor}" FontSize="11" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Row="1" Text="{Binding Comment}" Foreground="{DynamicResource PrimaryTextColor}" FontSize="13" />
+                                <TextBlock Grid.Row="0" Text="{Binding ChangedBy}" Foreground="{DynamicResource FourthTextColor}" FontSize="14" HorizontalAlignment="Left" />
+                                <TextBlock Grid.Row="0" Text="{Binding DateChanged}" Foreground="{DynamicResource FourthTextColor}" FontSize="11" HorizontalAlignment="Right" />
                             </Grid>
                         </Grid>
                         <ControlTemplate.Triggers>

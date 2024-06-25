@@ -474,10 +474,10 @@
                 <Setter  Property="Effect" Value="{StaticResource RowDropShadowEffect}" />
                 <Setter Property="Background" Value="{DynamicResource SideMenuBackground}"/>
                 <Setter Property="Foreground" Value="#ffffff"/>
-                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="BorderThickness" Value="0"/> 
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#F0F0F0"/>
+                <Setter Property="Background" Value="{DynamicResource SideMenuBackground}"/>
                 <Setter Property="Foreground" Value="#ffffff"/>
             </Trigger>
            

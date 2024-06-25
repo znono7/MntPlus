@@ -16,6 +16,7 @@
     <None Remove="Fonts\ClarityCity-Thin.ttf" />
     <None Remove="Fonts\fontawesome-webfont.ttf" />
     <None Remove="images.jpg" />
+    <None Remove="MntPlusDatabase.db" />
     <None Remove="Styles\Icons\maintenance.png" />
     <None Remove="Styles\Icons\setting-240.png" />
   </ItemGroup>
@@ -39,6 +40,9 @@
     <Content Include="images.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="MntPlusDatabase.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Styles\Icons\maintenance.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -54,6 +58,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
     <PackageReference Include="Ninject" Version="3.3.6" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
   </ItemGroup>
@@ -91,6 +96,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\Parts\AddPartControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Request\AddRequestControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Request\ShowRequestControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\LocationsPage.xaml.cs">

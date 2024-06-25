@@ -386,10 +386,19 @@ namespace MntPlus.WPF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -404,15 +413,33 @@ namespace MntPlus.WPF.Migrations
                     b.Property<string>("Requester")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Status")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("SubmittedById")
+                    b.Property<Guid?>("TeamAssignedToId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserAssignedToId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserCreatedId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubmittedById");
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("TeamAssignedToId");
+
+                    b.HasIndex("UserAssignedToId");
+
+                    b.HasIndex("UserCreatedId");
 
                     b.ToTable("Requests");
                 });
@@ -441,33 +468,32 @@ namespace MntPlus.WPF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DayOfMonth")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("DayOfWeek")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DaysOfWeek")
+                    b.Property<string>("FrequencyType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Interval")
+                    b.Property<int>("Interval")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDaily")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Month")
+                    b.Property<string>("ScheduleType")
+                        .IsRequired()
+                        .HasMaxLength(21)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Week")
+                    b.Property<DateTime?>("StartDate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("YearDayOfMonth")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedule");
+
+                    b.HasDiscriminator<string>("ScheduleType").HasValue("Schedule");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Entities.Team", b =>
@@ -652,12 +678,99 @@ namespace MntPlus.WPF.Migrations
                     b.ToTable("WorkOrderHistories");
                 });
 
+            modelBuilder.Entity("Entities.DailySchedule", b =>
+                {
+                    b.HasBaseType("Entities.Schedule");
+
+                    b.HasDiscriminator().HasValue("Daily");
+                });
+
+            modelBuilder.Entity("Entities.MonthlyNumericSchedule", b =>
+                {
+                    b.HasBaseType("Entities.Schedule");
+
+                    b.Property<int>("DayOfMonth")
+                        .HasColumnType("INTEGER");
+
+                    b.HasDiscriminator().HasValue("MonthlyNumeric");
+                });
+
+            modelBuilder.Entity("Entities.MonthlyWeekdaySchedule", b =>
+                {
+                    b.HasBaseType("Entities.Schedule");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WeekOfMonth")
+                        .HasColumnType("INTEGER");
+
+                    b.HasDiscriminator().HasValue("MonthlyWeekday");
+                });
+
+            modelBuilder.Entity("Entities.WeeklySchedule", b =>
+                {
+                    b.HasBaseType("Entities.Schedule");
+
+                    b.Property<string>("DaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Weekly");
+                });
+
+            modelBuilder.Entity("Entities.YearlyNumericSchedule", b =>
+                {
+                    b.HasBaseType("Entities.Schedule");
+
+                    b.Property<int>("DayOfMonth")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("Schedule", t =>
+                        {
+                            t.Property("DayOfMonth")
+                                .HasColumnName("YearlyNumericSchedule_DayOfMonth");
+                        });
+
+                    b.HasDiscriminator().HasValue("YearlyNumeric");
+                });
+
+            modelBuilder.Entity("Entities.YearlyOrdinalSchedule", b =>
+                {
+                    b.HasBaseType("Entities.Schedule");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WeekOfMonth")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("Schedule", t =>
+                        {
+                            t.Property("DayOfWeek")
+                                .HasColumnName("YearlyOrdinalSchedule_DayOfWeek");
+
+                            t.Property("Month")
+                                .HasColumnName("YearlyOrdinalSchedule_Month");
+
+                            t.Property("WeekOfMonth")
+                                .HasColumnName("YearlyOrdinalSchedule_WeekOfMonth");
+                        });
+
+                    b.HasDiscriminator().HasValue("YearlyOrdinal");
+                });
+
             modelBuilder.Entity("Entities.Asset", b =>
                 {
                     b.HasOne("Entities.Asset", "Parent")
-                        .WithMany("Assets")
-                        .HasForeignKey("AssetParent")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("AssetParent");
 
                     b.HasOne("Entities.Location", "Location")
                         .WithMany()
@@ -728,7 +841,8 @@ namespace MntPlus.WPF.Migrations
                 {
                     b.HasOne("Entities.Asset", "Asset")
                         .WithMany("Meters")
-                        .HasForeignKey("AssetId");
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Asset");
                 });
@@ -782,11 +896,29 @@ namespace MntPlus.WPF.Migrations
 
             modelBuilder.Entity("Entities.Request", b =>
                 {
-                    b.HasOne("Entities.User", "SubmittedBy")
+                    b.HasOne("Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("SubmittedById");
+                        .HasForeignKey("AssetId");
 
-                    b.Navigation("SubmittedBy");
+                    b.HasOne("Entities.Team", "TeamAssignedTo")
+                        .WithMany()
+                        .HasForeignKey("TeamAssignedToId");
+
+                    b.HasOne("Entities.User", "UserAssignedTo")
+                        .WithMany()
+                        .HasForeignKey("UserAssignedToId");
+
+                    b.HasOne("Entities.User", "UserCreatedBy")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("TeamAssignedTo");
+
+                    b.Navigation("UserAssignedTo");
+
+                    b.Navigation("UserCreatedBy");
                 });
 
             modelBuilder.Entity("Entities.UserRole", b =>
@@ -862,7 +994,8 @@ namespace MntPlus.WPF.Migrations
 
                     b.HasOne("Entities.WorkOrder", "WorkOrder")
                         .WithMany("WorkOrderHistories")
-                        .HasForeignKey("WorkOrderId");
+                        .HasForeignKey("WorkOrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ChangedBy");
 
@@ -871,8 +1004,6 @@ namespace MntPlus.WPF.Migrations
 
             modelBuilder.Entity("Entities.Asset", b =>
                 {
-                    b.Navigation("Assets");
-
                     b.Navigation("LinkParts");
 
                     b.Navigation("Meters");

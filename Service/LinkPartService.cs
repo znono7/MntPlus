@@ -23,7 +23,7 @@ namespace Service
                 var linkPartEntity = _mapper.Map<LinkPart>(linkPart);
                 _repository.LinkPart.CreateLinkPart(linkPartEntity);
                 await _repository.SaveAsync();
-                var linkPartToReturn = _mapper.Map<LinkPartDto>(linkPartEntity);
+                var linkPartToReturn = new LinkPartDto(linkPartEntity.Id, linkPartEntity.PartId,null, linkPartEntity.AssetId , null);
                 return new ApiOkResponse<LinkPartDto>(linkPartToReturn);
             }
             catch (Exception ex)

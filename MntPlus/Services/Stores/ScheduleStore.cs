@@ -9,12 +9,13 @@ namespace MntPlus.WPF
 {
     public class ScheduleStore
     {
-        public event Action<CreateScheduleDto?,string>? ScheduleCreated;
+        public event Action<object?,string>? ScheduleCreated;
 
-        public void CreateSchedule(CreateScheduleDto? schedule,string message)
+        public void CreateSchedule(object? schedule,string message)
         {
             ScheduleCreated?.Invoke(schedule,message);
         }
 
+       
     }
 }

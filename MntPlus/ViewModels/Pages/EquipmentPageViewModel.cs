@@ -11,7 +11,7 @@ namespace MntPlus.WPF
         #region protected
         protected string? mLastSearchText;
         protected string? mSearchText;
-
+         
         #endregion
         #region Public Properties
 
@@ -91,16 +91,16 @@ namespace MntPlus.WPF
             _equipmentStore = new AssetStore();
             _equipmentStore.AssetCreated += OnEquipmentCreated;
             _equipmentStore.AssetUpdated += OnEquipmentUpdated;
-          
-           
+            _equipmentStore.AssetDeleted += OnEquipmentDeleted;
+
             _ = LoadDataAsync();
-           // GenerateData();
            
             if (AssetDtos is not null && AssetDtos.Count > 0)
             {
                 CreateEquipmentTree equipmentTree = new();
                 EquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>();
                 EquipmentItemViewModels = equipmentTree.CreateTreeViewItems(AssetDtos.ToList());
+                IterateEquipmentItemsAndChildren(EquipmentItemViewModels);
             }
             FilterAssetControl = new FilterAssetControlViewModel();
             FilterAssetControl.FilterByCategoryFonction = FilterByCategory;
@@ -123,6 +123,41 @@ namespace MntPlus.WPF
 
         }
 
+        private void OnEquipmentDeleted(AssetDto? dto)
+        {
+            if (dto != null)
+            {
+                var equip = EquipmentItemViewModels?.FirstOrDefault(x => x.Asset?.Id == dto.Id);
+                if(equip != null)
+                {
+                    OnRemoveAsset(equip);
+                    EquipmentItemViewModels?.Remove(equip);
+                    FilterEquipmentItemViewModels?.Remove(equip);
+                }
+
+            }
+        }
+
+        public List<EquipmentItemViewModel> GetSelectedChildren(EquipmentItemViewModel parent)
+        {
+            List<EquipmentItemViewModel> selectedItems = new List<EquipmentItemViewModel>();
+
+            if (parent.IsChecked)
+            {
+                selectedItems.Add(parent);
+            }
+
+            if (parent.Children != null)
+            {
+                foreach (var child in parent.Children)
+                {
+                    selectedItems.AddRange(GetSelectedChildren(child));
+                }
+            }
+
+            return selectedItems;
+        }
+
         private async Task RemoveItem()
         {
            
@@ -131,12 +166,7 @@ namespace MntPlus.WPF
             {
                 foreach (var item in FilterEquipmentItemViewModels)
                 {
-                    if(item.IsChecked)
-                    {
-                        itemsToRemove.Add(item);
-                      
-                       
-                    }
+                    itemsToRemove.AddRange(GetSelectedChildren(item));
                 }
             }
             else
@@ -153,29 +183,80 @@ namespace MntPlus.WPF
             Dialog.ShowDialog();
             if (Dialog.Confirmed)
             {
-                foreach (var item in itemsToRemove)
+               if(itemsToRemove.Count > 1)
                 {
-                    await RemoveEquipment(item);
+                    await RemoveEquipItems(itemsToRemove);
+                }
+                else
+                {
+                    await RemoveEquipment(itemsToRemove[0]);
                 }
             }           
 
         }
-        private async Task RemoveEquipment(EquipmentItemViewModel equipment)
+
+        private async Task RemoveEquipItems(List<EquipmentItemViewModel> itemsToRemove)
         {
-            var response = await AppServices.ServiceManager.AssetService.DeleteAsset(equipment.Asset!.Id, false);
+            List<Guid> assetIds = new();
+            foreach (var item in itemsToRemove)
+            {
+                assetIds.Add(item.Asset!.Id);
+            }
+            var response = await AppServices.ServiceManager.AssetService.DeleteAssets(assetIds, true);
             if (response is ApiOkResponse<AssetDto> && response.Success)
             {
-                RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentItemViewModels);
-                // Remove the item from the tree view
-                removeEquipmentItem.RemoveItemFromTreeView(equipment);
+                foreach (var item in itemsToRemove)
+                {
+                    RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentItemViewModels);
+                    // Remove the item from the tree view
+                    removeEquipmentItem.RemoveItemFromTreeView(item);
+
+                    // Remove the item from the list view
+                    EquipmentItemViewModels?.Remove(item);
+                    FilterEquipmentItemViewModels?.Remove(item);
+                    AssetDtos?.Remove(item.Asset!);
+                }
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Equipements Supprimés avec Succès"));
+            }
+            else if (response is ApiBadRequestResponse errorResponse)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message));
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression de l'équipement"));
+            }
+        }
+
+        private async Task RemoveEquipment(EquipmentItemViewModel equipment)
+        {
+            var response = await AppServices.ServiceManager.AssetService.DeleteAsset(equipment.Asset!.Id, true);
+            if (response is ApiOkResponse<AssetDto> && response.Success)
+            {
+                OnRemoveAsset(equipment);
 
                 // Remove the item from the list view
                 EquipmentItemViewModels?.Remove(equipment);
                 FilterEquipmentItemViewModels?.Remove(equipment);
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Equipement Supprimé avec Succès"));
 
-               
+            }
+            else if(response is ApiBadRequestResponse errorResponse)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message));
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression de l'équipement"));
             }
            
+        }
+
+        private void OnRemoveAsset(EquipmentItemViewModel equipment)
+        {
+            RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentItemViewModels);
+            // Remove the item from the tree view
+            removeEquipmentItem.RemoveItemFromTreeView(equipment);
         }
 
         private async Task ApplyResetFunction()
@@ -359,44 +440,23 @@ namespace MntPlus.WPF
                 {
                     FilterTags.Remove(tag);
                     RemoveFilter(filt);
-                    //if(FilterTags.Count == 0)
-                    //{
-                    //    FilterEquipmentItemViewModels = new ObservableCollection<EquipmentItemViewModel>(EquipmentItemViewModels ?? Enumerable.Empty<EquipmentItemViewModel>());
-                    //}
+
                 }
             }
             await Task.Delay(1);
         }
 
-        private void GenerateData()
-        {
-            AssetDtos = new ObservableCollection<AssetDto>
-            {
-                new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
-                new AssetDto(Guid.Parse("5DD77287-1606-4336-8D2C-BAAE9F49534F"),null,null,"Asset 2","Description 2","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
-                new AssetDto(Guid.Parse("C3D3D3D3-3D3D-3D3D-3D3D-3D3D3D3D3D3D"),null,null,"Asset 3","Description 3","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
-               
-                
-                new AssetDto(Guid.Parse("BB96AA0A-D6C4-468B-BC0F-FBB404B79469"),Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),
-                             new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
-                "Asset 4","Description 4","en service",null,null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
-                new AssetDto(Guid.Parse("59C1F0CC-46C6-4104-B0A9-31E2A6DA3A1C"),Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),
-                             new AssetDto(Guid.Parse("CF0517C7-D792-4CAF-969F-D62226BCE1DC"),null,null,"Asset 1","Description 1","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null)
-                ,"Asset 5","Description 5","en service","Informatiques et de Bureau",null,null,"12500365","modelsdd",null,12500,null,null,null,null,null),
-            };
-        }
+      
         private void OnEquipmentUpdated(AssetDto? dto)
         {
-            //EquipmentItemViewModels
             EquipmentItemViewModel? EquipmentItem = EquipmentItemViewModels?.FirstOrDefault(e => e.Asset?.Id == dto?.Id);
-            if (EquipmentItem is not null && dto is not null)
+           var index = EquipmentItemViewModels?.IndexOf(EquipmentItem!);
+            if (EquipmentItem is not null && index != null)
             {
-                EquipmentItem.Asset = dto;
-              
+                
+                EquipmentItemViewModels![index.Value] = new EquipmentItemViewModel(dto);
+                FilterEquipmentItemViewModels![index.Value] = new EquipmentItemViewModel(dto);
             }
-           
-            IsHeaderVisible = true;
-            IsEmpty = false;
 
         }
 
@@ -488,73 +548,36 @@ namespace MntPlus.WPF
       
         private void AddEquipment()
         {
-                
-            NewEquipmentWindow window = new(_equipmentStore);          
-            window.ShowDialog();
+            IoContainer.Application.GoToPage(ApplicationPage.NewAsset,new NewAssetViewModel { AssetStore = _equipmentStore});
         }
-
-
-        private async Task RemoveEquipItem(EquipmentItemViewModel cmodel)
-        {
-            if(cmodel.ChildrenCount > 0 && cmodel.Children?.Count > 0)
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Vous ne pouvez pas supprimer cet équipement car il contient des enfants"));
-                return;
-            }
-            var Dialog = new ConfirmationWindow(cmodel.Asset?.Name);
-            Dialog.ShowDialog();
-            if (Dialog.Confirmed)
-            {
-                var response = await AppServices.ServiceManager.AssetService.DeleteAsset(cmodel.Asset.Id,false);
-                if (response is ApiOkResponse<AssetDto> && response.Success)
-                {
-                    RemoveEquipmentItemFromTreeView removeEquipmentItem = new(EquipmentItemViewModels);
-                    // Remove the item from the tree view
-                    removeEquipmentItem.RemoveItemFromTreeView(cmodel);
-
-                    // Remove the item from the list view
-                    EquipmentItemViewModels?.Remove(cmodel);
-                    
-                    if (EquipmentItemViewModels?.Count == 0)
-                    {
-                        IsHeaderVisible = false;
-                        IsEmpty = true;
-                    }
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Equipement Supprimé avec Succès"));
-                }else if(response is ApiBadRequestResponse errorResponse)
-                {
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message));
-                }
-                else
-                {
-                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la suppression de l'équipement"));
-                }
-            }
-            else
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Suppression Annulée"));
-            }
-               
-        }
-       
+        
 
         void IterateEquipmentItemsAndChildren(ObservableCollection<EquipmentItemViewModel> equipmentItems)
         {
             foreach (var equipmentItem in equipmentItems)
             {
-                
+                equipmentItem.OpenEquipment = OpenAsset;
                 // Check if the current equipmentItem has children
                 if (equipmentItem.Children != null && equipmentItem.Children.Any())
                 {
                     // Recursively call the method to iterate over the children
-                    IterateEquipmentItemsAndChildren(equipmentItem.Children);
+                    IterateEquipmentItemsAndChildren(equipmentItem.Children); 
                 }
             }
         }
 
-       
+        private async Task OpenAsset(EquipmentItemViewModel? model)
+        {
+            ViewEquipmentPageViewModel viewEquipment = new()
+            {
+                AssetStore = _equipmentStore,
+                asset = model?.Asset,
+                equipmentItem = model,
+            };
+            IoContainer.Application.GoToPage(ApplicationPage.Equipment, viewEquipment);
+            await Task.Delay(1);
+        }
 
-       
         public override void Dispose()
         {
             _equipmentStore.AssetCreated -= OnEquipmentCreated;

@@ -32,7 +32,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox Cursor="Hand" IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Style="{StaticResource CheckBoxStyle2}" />
-                <Button Grid.Column="1" Command="{Binding ViewEquipmentCommand}" Height="Auto" HorizontalAlignment="Left" Style="{StaticResource TextButton}">
+                <Button Grid.Column="1" Command="{Binding OpenEquipmentCommand}" Height="Auto" HorizontalAlignment="Left" Style="{StaticResource TextButton}">
                     <TextBlock TextWrapping="Wrap" Height="Auto"  Text="{Binding Name}"  Style="{DynamicResource TextBlockStyle}"  />
                 </Button>
             </Grid>

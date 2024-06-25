@@ -27,10 +27,7 @@ namespace Repository
         private readonly Lazy<ICheckListRepository> checkListRepository;
         private readonly Lazy<IIndividualTaskRepository> individualTaskRepository;
         private readonly Lazy<ICheckListItemRepository> checkListItemRepository;
-
-
-
-
+        private readonly Lazy<IRequestRepository> requestRepository;
         public RepositoryManager(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
@@ -50,6 +47,7 @@ namespace Repository
             checkListRepository = new Lazy<ICheckListRepository>(() => new CheckListRepository(repositoryContext));
             individualTaskRepository = new Lazy<IIndividualTaskRepository>(() => new IndividualTaskRepository(repositoryContext));
             checkListItemRepository = new Lazy<ICheckListItemRepository>(() => new CheckListItemRepository(repositoryContext));
+            requestRepository = new Lazy<IRequestRepository>(() => new RequestRepository(repositoryContext));
         }
       
 
@@ -85,6 +83,8 @@ namespace Repository
         public IIndividualTaskRepository IndividualTask => individualTaskRepository.Value;
 
         public ICheckListItemRepository CheckListItem => checkListItemRepository.Value;
+
+        public IRequestRepository Request => requestRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

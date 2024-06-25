@@ -11,16 +11,28 @@ namespace Repository
          
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         { 
-            modelBuilder.Entity<Asset>() 
-                .HasOne(a => a.Parent) 
-                .WithMany(l => l.Assets)
-                .HasForeignKey(a => a.AssetParent)
+
+            modelBuilder.Entity<LinkPart>()
+                .HasOne(lp => lp.Asset)
+                .WithMany(a => a.LinkParts)
+                .HasForeignKey(lp => lp.AssetId)
                 .OnDelete(DeleteBehavior.Cascade);
-             
+            modelBuilder.Entity<LinkPart>()
+                .HasOne(lp => lp.Part)
+                .WithMany(p => p.LinkParts)
+                .HasForeignKey(lp => lp.PartId)
+                .OnDelete(DeleteBehavior.Cascade);
+          
             modelBuilder.Entity<Inventory>() 
                 .HasOne(i => i.Part)
                 .WithMany(p => p.Inventories)
                 .HasForeignKey(i => i.PartID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Meter>()
+                .HasOne(m => m.Asset)
+                .WithMany(a => a.Meters)
+                .HasForeignKey(m => m.AssetId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Meter>()
@@ -47,7 +59,22 @@ namespace Repository
                 .HasForeignKey(woh => woh.WorkOrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            
+            modelBuilder.Entity<Schedule>()
+               .HasDiscriminator<string>("ScheduleType")
+               .HasValue<DailySchedule>("Daily")
+               .HasValue<WeeklySchedule>("Weekly")
+               .HasValue<MonthlyNumericSchedule>("MonthlyNumeric")
+               .HasValue<MonthlyWeekdaySchedule>("MonthlyWeekday")
+               .HasValue<YearlyNumericSchedule>("YearlyNumeric")
+               .HasValue<YearlyOrdinalSchedule>("YearlyOrdinal");
+
+            modelBuilder.Entity<WeeklySchedule>()
+              .Property(e => e.DaysOfWeek)
+              .HasConversion(
+                      v => string.Join(',', v),
+                      v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(d => Enum.Parse<DayOfWeek>(d)).ToList());
+
         }
         public DbSet<Location>? Locations { get; set; }
         public DbSet<Asset>? Assets { get; set; }
@@ -60,18 +87,24 @@ namespace Repository
         public DbSet<WorkOrderHistory>? WorkOrderHistories { get; set; }
         public DbSet<PreventiveMaintenance>? PreventiveMaintenances { get; set; }
         public DbSet<PreventiveMaintenanceHistory>? PreventiveMaintenanceHistories { get; set; }
-        public DbSet<Schedule>? Schedules { get; set; }
+        //public DbSet<Schedule>? Schedules { get; set; }
         public DbSet<Inventory>? Inventories { get; set; }
         public DbSet<Part>? Parts { get; set; }
         public DbSet<LinkPart>? LinkParts { get; set; }
         public DbSet<Request>? Requests { get; set; } 
-
         public DbSet<Meter>? Meters  { get; set; }
         public DbSet<MeterReading>? MeterReadings { get; set; }
         public DbSet<CheckList>? CheckLists { get; set; }
         public DbSet<CheckListItem>? CheckListItems { get; set; }
         public DbSet<IndividualTask>? IndividualTasks { get; set; }
 
+
+        public DbSet<DailySchedule> DailySchedules { get; set; }
+        public DbSet<WeeklySchedule> WeeklySchedules { get; set; }
+        public DbSet<MonthlyNumericSchedule> MonthlyNumericSchedules { get; set; }
+        public DbSet<MonthlyWeekdaySchedule> MonthlyWeekdaySchedules { get; set; }
+        public DbSet<YearlyNumericSchedule> YearlyNumericSchedules { get; set; }
+        public DbSet<YearlyOrdinalSchedule> YearlyOrdinalSchedules { get; set; }
 
 
 

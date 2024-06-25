@@ -19,7 +19,7 @@ namespace MntPlus.WPF
 
             foreach (var rootItem in rootItems!) 
             {
-                var rootViewModel = new EquipmentItemViewModel(rootItem);
+                var rootViewModel = new EquipmentItemViewModel(rootItem); 
                 CreateTreeViewChildren(rootViewModel, equipmentData);
 
                 CalculateNumberOfChildren(rootViewModel, equipmentData);

@@ -6,8 +6,8 @@ namespace MntPlus.WPF
 {
     public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryContext>
     {
-        private const string DefaultConnectionString = //"Data Source=D:\\WPF\\My Projects\\repos\\MntPlus\\MntPlusDatabase.db";
-            "Data Source=MntPlusDatabase.db";
+        private const string DefaultConnectionString = "Data Source=D:\\WPF\\My Projects\\repos\\MntPlus\\MntPlusDatabase.db";
+            //"Data Source=MntPlusDatabase.db";
 
         public RepositoryContext CreateDbContext(string[] args)
         {

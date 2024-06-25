@@ -22,7 +22,7 @@ namespace Repository
              await FindAll(trackChanges)
             .Include(c => c.Inventories)
             .OrderBy(c => c.Name)
-            .ToListAsync();
+            .ToListAsync(); 
 
         public async Task<Part?> GetPartAsync(Guid partId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(partId), trackChanges)

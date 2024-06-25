@@ -1088,21 +1088,21 @@
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
 
                             </Grid.ColumnDefinitions>
 
                             <!-- Icon -->
                             <Path  x:Name="Icon" Data="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
                                    Height="11" Width="11" Stretch="Uniform" Fill="#F8F8F8" 
-                                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 0 5 0"
+                                   VerticalAlignment="Center" HorizontalAlignment="Left"
                                    Visibility="{TemplateBinding local:IsBusyProperty.Value, Converter={local:BooleanToVisiblityConverter}}"/>
 
                             <!-- Text -->
-                            <TextBlock  Grid.Column="1" x:Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            <TextBlock  Grid.Column="1" x:Name="txtName" HorizontalAlignment="Center" VerticalAlignment="Center" 
                                    Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
                                   FontWeight="{TemplateBinding FontWeight}" FontFamily="{TemplateBinding FontFamily}"
-                                  FontSize="{TemplateBinding FontSize}"  
+                                  FontSize="{TemplateBinding FontSize}"  Margin="5 0 0 0"
                                         Visibility="{TemplateBinding local:IsBusyProperty.Value, Converter={local:BooleanToVisiblityConverter}}"/>
 
                             <Path  x:Name="IconSpinner" Data="{StaticResource spinner}" 

@@ -16,7 +16,7 @@ namespace MntPlus.WPF
         public PmTypes? SelectedType { get; set; }
 
          
-        public NewPreventiveMaintenanceViewModel()
+        public NewPreventiveMaintenanceViewModel() 
         {
             TypesColllection = new PmTypesColllection();
             BackPageCommand = new RelayCommand(() => BackPage());

@@ -24,6 +24,7 @@ namespace Contracts
         ICheckListRepository CheckList { get; }
         IIndividualTaskRepository IndividualTask { get; }
         ICheckListItemRepository CheckListItem { get; }
+        IRequestRepository Request { get; }
 
 
 

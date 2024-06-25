@@ -19,6 +19,7 @@ namespace MntPlus.WPF
         Meters = 12,
         Equipment = 13,
         Inventory = 14,
+        NewAsset = 15,
 
 
     }

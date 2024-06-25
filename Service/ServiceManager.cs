@@ -26,12 +26,14 @@ namespace Service
         private readonly Lazy<IMeterService> meterService;
         private readonly Lazy<IMeterReadingService> meterReadingService;
         private readonly Lazy<ITaskListService> taskListService;
+        private readonly Lazy<IRequestService> requestService;
+
 
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper,IUnitOfWork unitOfWork) 
           
         {
             _locationService = new Lazy<ILocationService>(() => new LocationService(repositoryManager, mapper));
-            assetService = new Lazy<IAssetService>(() => new AssetService(repositoryManager, mapper));
+            assetService = new Lazy<IAssetService>(() => new AssetService(repositoryManager, mapper, unitOfWork));
             userService = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper));
             teamService = new Lazy<ITeamService>(() => new TeamService(repositoryManager, mapper));
             workOrderService = new Lazy<IWorkOrderService>(() => new WorkOrderService(repositoryManager, mapper , unitOfWork));
@@ -44,6 +46,7 @@ namespace Service
             meterService = new Lazy<IMeterService>(() => new MeterService(repositoryManager, mapper));
             meterReadingService = new Lazy<IMeterReadingService>(() => new MeterReadingService(repositoryManager, mapper,unitOfWork));
             taskListService = new Lazy<ITaskListService>(() => new TaskListService(repositoryManager, mapper , unitOfWork));
+            requestService = new Lazy<IRequestService>(() => new RequestService(repositoryManager, mapper, unitOfWork));
         }
       
 
@@ -75,5 +78,7 @@ namespace Service
         public IMeterReadingService MeterReadingService => meterReadingService.Value;
 
         public ITaskListService TaskListService => taskListService.Value;
+
+        public IRequestService RequestService => requestService.Value;
     }
 }
