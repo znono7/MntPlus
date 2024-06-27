@@ -81,10 +81,14 @@ namespace MntPlus.WPF
         public ICommand ClearMeterCommand { get; set; }
         public bool browseToMeterVisible { get; set; } = false;
         public bool browseToMeterScheduleVisible { get; set; } = false;
-        public MeterScheduleDtoForCreation MeterSchedule { get; set; }
+        public MeterScheduleDtoForCreation? MeterSchedule { get; set; }
         public MeterScheduleStore MeterScheduleStore { get; set; }
         public string? MeterScheduleText { get; set; }
         public bool IsOrVisible => browseToMeterScheduleVisible && browseToMeterVisible;
+        public ICommand ClearScheduleCommand { get; set; }
+        public string SaveButtonContent { get; set; } = "Enregistrer";
+        public bool SaveIsRunning { get; set; }
+        public ICommand SaveCommand { get; set; }
         public NewPreventiveMaintenanceViewModel() 
         {
             TypesColllection = new PmTypesColllection();
@@ -100,13 +104,24 @@ namespace MntPlus.WPF
             ScheduleStore = new ScheduleStore();
             ScheduleStore.ScheduleCreated += ScheduleStore_ScheduleCreated;
             BrowseToMeterCommand = new RelayCommand(BrowseToMeter);
+            ClearMeterCommand = new RelayCommand(() => { MeterSchedule = null; MeterScheduleText = null; browseToMeterVisible = false; });
+            ClearScheduleCommand = new RelayCommand(() => { browseToMeterScheduleVisible = false; ScheduleText = ""; ScheduleModel = null; });
         }
 
         private void BrowseToMeter()
         {
             MeterScheduleStore = new MeterScheduleStore();
+            MeterScheduleStore.MeterScheduleSelected += SelectMeterSchedule;
             
             SelectMeterWindow selectMeterWindow = new() { DataContext = new SelectMeterViewModel(MeterScheduleStore) };
+            selectMeterWindow.ShowDialog();
+        }
+
+        private void SelectMeterSchedule(MeterScheduleDtoForCreation? creation, string? arg2)
+        {
+            MeterScheduleText = arg2;
+            MeterSchedule = creation!;
+            browseToMeterVisible = true;
         }
 
         private void AddTask()

@@ -40,7 +40,7 @@ namespace MntPlus.WPF
             if (obj is SelectMeterWindow meter)
             {
                 MeterScheduleStore.SelectMeterSchedule(new MeterScheduleDtoForCreation(SelectedMeterScheduleType.Name!, Interval, SelectedMeter.MeterDto.Id),
-                    $"Utilisation : Créé quand {SelectedMeter.MeterDto.Name}");
+                    $"Utilisation : Créé quand {SelectedMeter.MeterDto.Name} {Interval} {SelectedMeter.MeterDto.Unit}");
             }
             
         }

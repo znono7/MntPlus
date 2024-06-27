@@ -455,9 +455,9 @@ namespace MntPlus.WPF
                                                                                          EndMonthlyDate,
                                                                                          MonthlyNumericDay.IndexOf(dayOfMonth) + 1);
                 ScheduleStore.CreateSchedule(monthlyNumericSchedule, "MonthlyNumeric");
-                //if (p == null) return;
-                //var window = (ScheduleTimeWindow)p;
-                //window.Close();
+                if (p == null) return;
+                var window = (ScheduleTimeWindow)p;
+                window.Close();
             }
             catch (Exception)
             {
@@ -549,9 +549,9 @@ namespace MntPlus.WPF
                                                                         EndWeeklyDate,
                                                                         daysOfWeek);
                 ScheduleStore.CreateSchedule(weeklySchedule, "Weekly");
-                //if (p == null) return;
-                //var window = (ScheduleTimeWindow)p;
-                //window.Close();
+                if (p == null) return;
+                var window = (ScheduleTimeWindow)p;
+                window.Close();
             }
             catch (Exception)
             {
@@ -583,9 +583,9 @@ namespace MntPlus.WPF
                                                                        StartDate.HasValue ? StartDate.Value : DateTime.Now,
                                                                        EndDate);
                 ScheduleStore.CreateSchedule(dailySchedule, "Daily");
-                //if (p == null) return;
-                //var window = (ScheduleTimeWindow)p;
-                //window.Close();
+                if (p == null) return;
+                var window = (ScheduleTimeWindow)p;
+                window.Close();
             }
             catch (Exception)
             {

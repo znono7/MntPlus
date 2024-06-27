@@ -24,6 +24,7 @@
                     <ColumnDefinition Width="75"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button ToolTipService.InitialShowDelay="1"  Grid.Column="0" Style="{StaticResource PrimeIconButton}" Height="28"  Tag="{StaticResource sidemenu}"
                   Command="{Binding ApplicationViewModel.SideMenuCommand,Source={x:Static local:ViewModelLocator.Instance}}">
@@ -41,6 +42,11 @@
                 <Grid VerticalAlignment="Center" Grid.Column="4" Margin="10 0" >
                     <TextBlock Text="Nouveau Modèle de Maintenance Préventive" Margin="0 0 10 0" Style="{DynamicResource TitleTextBlockStyle}"/>
                 </Grid>
+                <Button   Command="{Binding SaveCommand}" Grid.Column="5"
+                         local:IsBusyProperty.Value="{Binding SaveIsRunning}" 
+                         Tag="{StaticResource done}" Margin="10 15"
+                         Style="{DynamicResource RegullarPrimeButton}" 
+                           Content="{Binding SaveButtonContent}"/>
             </Grid>
         </Grid>
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto">
@@ -244,7 +250,14 @@
                                 <Button Command="{Binding ScheduleWindCommand}" Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource time}" Content="Modifier le Déclencheur Temporel"/>
                         </Grid>
                         <Grid Visibility="{Binding browseToMeterScheduleVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Margin="0 20 0 0">
-                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="{Binding ScheduleText,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" Style="{StaticResource TextBlockStyle}" Text="{Binding ScheduleText,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Grid.Column="1" Command="{Binding ClearScheduleCommand}"   Style="{DynamicResource IconPathButton}" Margin="10 0">
+                                <Path  Width="12" Fill="{DynamicResource PrimaryRedColor}" Stretch="Uniform" Data="{DynamicResource close}"/>
+                            </Button>
                         </Grid>
                         <Grid Visibility="{Binding IsOrVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Margin="0 20 0 0">
                             <TextBlock Style="{StaticResource TextBlockStyle}" Text="OU"/>
@@ -253,7 +266,14 @@
                             <Button  Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding BrowseToMeterCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource usage}" Content="Modifier le Déclencheur Basé sur l'utilisation"/>
                         </Grid>
                         <Grid Visibility="{Binding browseToMeterVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Margin="0 20 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
                             <TextBlock Style="{StaticResource TextBlockStyle}" Text="{Binding MeterScheduleText,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Grid.Column="1" Command="{Binding ClearMeterCommand}"   Style="{DynamicResource IconPathButton}" Margin="10 0">
+                                <Path  Width="12" Fill="{DynamicResource PrimaryRedColor}" Stretch="Uniform" Data="{DynamicResource close}"/>
+                            </Button>
                         </Grid>
                     </StackPanel>
                     <!--<Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="1" Margin="0 20"/>
