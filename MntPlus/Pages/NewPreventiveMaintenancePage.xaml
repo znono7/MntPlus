@@ -57,13 +57,19 @@
                         <RowDefinition Height="Auto"/>
                       
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Height="145">
+                    <Grid Grid.Row="0" Height="174">
                         <Border CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor3}"/>
                         <StackPanel VerticalAlignment="Center" Margin="25 0 10 10">
                             <TextBlock Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 10 10">
-                           <Run Text="Nom du Modèle"/>  <Run Text="*" Foreground="Red"/>
+                           <Run Text="Modèle#"/>  <Run Text="*" Foreground="Red"/>
                             </TextBlock>
-                            <TextBox Text="{Binding ModelName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource InputTextBoxStyle}" HorizontalAlignment="Stretch"  Margin="0 0 20 0"/>
+                            <TextBox IsReadOnly="True" Text="{Binding Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource InputTextBoxStyle}" HorizontalAlignment="Stretch"  Margin="0 0 20 0"/>
+                            <Grid Height="15"/>
+                            <TextBlock Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 10 10">
+                            <Run Text="Nom du Modèle"/>  <Run Text="*" Foreground="Red"/>
+                            </TextBlock>
+                            <TextBox Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource InputTextBoxStyle}" HorizontalAlignment="Stretch"  Margin="0 0 20 0"/>
+
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="1" Margin="0 10 0 0">
@@ -113,7 +119,14 @@
                         <StackPanel Grid.Row="4" Orientation="Vertical" Margin="25 20 10 10">
                             <TextBlock Text="Équipement"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
                             <Grid Margin="0 20 0 20">
-                                <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource box}" Content="Attribuer l'équipement"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding BrowseToEquipmentCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource box}" Content="{Binding SelectAssetContent,UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Grid.Column="1" Visibility="{Binding browseToEquipmentVisible,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding ClearEquipmentCommand}"   Style="{DynamicResource IconPathButton}" Margin="0 0 0 0">
+                                    <Path  Width="12" Fill="{DynamicResource PrimaryRedColor}" Stretch="Uniform" Data="{DynamicResource close}"/>
+                                </Button>
                             </Grid>
                         </StackPanel>
                         <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="5"/>
@@ -143,7 +156,7 @@
                             </Grid>
                            
                         </StackPanel>
-                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="9"/>
+                        <!--<Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="9"/>
 
                         <StackPanel  Orientation="Vertical" Grid.Row="10" Margin="25 20 10 10">
                             <TextBlock Text="Image"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
@@ -188,19 +201,29 @@
                                 </Grid.Triggers>
                             </Grid>
 
-                        </StackPanel>
+                        </StackPanel>-->
                         <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="11"/>
-                        <StackPanel Grid.Row="12" Orientation="Vertical" Margin="25 20 10 10">
+                        <StackPanel Visibility="{Binding IsTaskSelected,Converter={local:BooleanToVisiblityConverter}}" Grid.Row="12" Orientation="Vertical" Margin="25 20 10 10">
                             <TextBlock Text="Tâches &amp; Listes de Contrôle"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
                             <Grid Margin="0 20 0 20">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Button Foreground="{DynamicResource FourthTextColor}" Margin="10 0" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Listes de Contrôle"/>
+                                <Button Foreground="{DynamicResource FourthTextColor}" Margin="0 0" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding AddTaskCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Listes de Contrôle"/>
                                 <Button Grid.Row="1" Foreground="{DynamicResource FourthTextColor}" Margin="0 20" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Tâches Individuelles"/>
                             </Grid>
                         </StackPanel>
+                        <Grid Visibility="{Binding IsTaskSelected,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True}" Margin="10 20" Grid.Row="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}"  Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="{Binding CheckListDto.Name,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Grid.Column="1"  Command="{Binding ClearTaskCommand}"   Style="{DynamicResource IconPathButton}" Margin="10 0">
+                                <Path  Width="12" Fill="{DynamicResource PrimaryRedColor}" Stretch="Uniform" Data="{DynamicResource close}"/>
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
 
@@ -217,14 +240,23 @@
                             <TextBlock  Style="{DynamicResource LabelTextBlockStyle}" Margin="0 0 10 10">
                                 <Run Text="Déclencheurs de Création d’Ordre de Travail"/><Run Text="*" Foreground="Red"/>
                             </TextBlock>
-                            <Grid Margin="0 20 0 0">
+                        <Grid Visibility="{Binding browseToMeterScheduleVisible,Converter={local:BooleanToVisiblityConverter}}" Margin="0 20 0 0">
                                 <Button Command="{Binding ScheduleWindCommand}" Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource time}" Content="Modifier le Déclencheur Temporel"/>
-                            </Grid>
-                            <Grid Margin="0 20 0 20">
-                                <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource usage}" Content="Modifier le Déclencheur Basé sur l'utilisation"/>
-                            </Grid>
-                        </StackPanel>
-                    <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="1" Margin="0 20"/>
+                        </Grid>
+                        <Grid Visibility="{Binding browseToMeterScheduleVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Margin="0 20 0 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="{Binding ScheduleText,UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                        <Grid Visibility="{Binding IsOrVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Margin="0 20 0 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="OU"/>
+                        </Grid>
+                        <Grid Visibility="{Binding browseToMeterVisible,Converter={local:BooleanToVisiblityConverter}}" Margin="0 20 0 20">
+                            <Button  Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding BrowseToMeterCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource usage}" Content="Modifier le Déclencheur Basé sur l'utilisation"/>
+                        </Grid>
+                        <Grid Visibility="{Binding browseToMeterVisible,Converter={local:BooleanToVisiblityConverter},ConverterParameter=true}" Margin="0 20 0 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="{Binding MeterScheduleText,UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </StackPanel>
+                    <!--<Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="1" Margin="0 20"/>
                     <StackPanel  Orientation="Vertical" Grid.Row="2" Margin="10 0 0 0">
                         <Grid Margin="0 0 40 0">
                             <TextBlock  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" >
@@ -282,7 +314,7 @@
                             </Popup>
                         </Grid>
 
-                    </StackPanel>
+                    </StackPanel>-->
 
                 </Grid>
             </Grid>

@@ -134,6 +134,12 @@
     <Compile Update="Windows\InitialEquipmentWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\SelectMeterWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\SelectTaskWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\SelectPartWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

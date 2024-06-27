@@ -33,7 +33,7 @@ namespace MntPlus.WPF
             }
         }
         public BaseViewModel checkListControlViewModel { get; set; }
-
+         
         private ObservableCollection<CheckListDto> CheckListDtos { get; set; }
         private ObservableCollection<CheckListRecord> _checkLists { get; set; }
         public ObservableCollection<CheckListRecord> CheckLists

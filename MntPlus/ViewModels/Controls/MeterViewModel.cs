@@ -10,14 +10,14 @@ namespace MntPlus.WPF
     public class MeterViewModel : BaseViewModel
     {
         public bool IsChecked { get; set; }
-        public DateTime? NextReading { get; set; } 
+        public DateTime? NextReading { get; set; }  
       
         public MeterDto MeterDto { get; }
          
         public string? CurrentReading { get; set; }
 
         public string? AssetName { get; set;}
-
+        public string? Name { get; set; }
         
         public MeterViewModel(MeterDto meterDto)
         {
@@ -25,6 +25,7 @@ namespace MntPlus.WPF
             NextReading = CalculateNextReadingTime(meterDto);
             CurrentReading= meterDto.CurrentReading == 0 ? "Pas de lecture encore" : meterDto.CurrentReading.ToString();
             AssetName = meterDto.AssetName is null ? "pas d'équipement" : meterDto.AssetName;
+            Name = meterDto.Name;
         }
 
         public DateTime CalculateNextReadingTime(MeterDto meter)

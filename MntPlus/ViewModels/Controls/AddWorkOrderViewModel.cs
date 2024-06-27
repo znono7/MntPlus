@@ -30,9 +30,7 @@ namespace MntPlus.WPF
            
         }
         public string ForgroundColor { get; set; } = "53667B";
-
         public bool IsMenuPrioprityOpen { get; set; } 
-
         private string _orderWorkPriority = "Aucune";
         public string OrderWorkPriority
         {

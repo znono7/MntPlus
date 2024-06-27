@@ -128,7 +128,7 @@ namespace MntPlus.WPF
                     IsWeekly = false;
                     IsDaily = false;
                     IsYearly = false;
-                    Interval = 0;
+                    IsMonthlyWeekday = true;
 
                 }
                 OnPropertyChanged("IsMonthly"); } }
@@ -140,7 +140,7 @@ namespace MntPlus.WPF
                     IsWeekly = false;
                     IsMonthly = false;
                     IsDaily = false;
-                    Interval = 0;
+                    IsYearlyOrdinal = true;
 
                 }
                 OnPropertyChanged("IsYearly"); } }
@@ -314,36 +314,37 @@ namespace MntPlus.WPF
 
         private void CreateSchedule(object? p)
         {
-            if(Interval <= 0)
-            {
-                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
-                return;
-            }
+           
             switch (FrequencyType)
             {
                 case "Daily":
-                    CreateDailySchedule(Interval,p);
+                    CreateDailySchedule(Days,p);
                     break;
                 case "Weekly":
-                    CreateWeeklySchedule(Interval, DaysOfWeek, p);
+                    CreateWeeklySchedule( Weeks, p);
                     break;
                 case "MonthlyWeekday":
-                    CreateMonthlyWeekdaySchedule(Interval, SelectedMonthlyWeekDay, SelectedWeekDay, p);
+                    CreateMonthlyWeekdaySchedule(Months, SelectedMonthlyWeekDay, SelectedWeekDay, p);
                     break;
                 case "MonthlyNumeric":
-                    CreateMonthlyNumericSchedule(Interval, SelectedMonthlyNumericDay, p);
+                    CreateMonthlyNumericSchedule(Months, SelectedMonthlyNumericDay, p);
                     break;
                 case "YearlyOrdinal":
-                    CreateYearlyOrdinalSchedule(Interval, SelectedYearMonth, SelectedMonthlyWeekDay, SelectedWeekDay, p);
+                    CreateYearlyOrdinalSchedule(Years, SelectedYearMonth, SelectedMonthlyWeekDay, SelectedWeekDay, p);
                     break;
                 case "YearlyNumeric":
-                    CreateYearlyNumericSchedule(Interval, SelectedYearMonth, SelectedMonthlyNumericDay, p);
+                    CreateYearlyNumericSchedule(Years, SelectedYearMonth, SelectedMonthlyNumericDay, p);
                     break;
             }
         }
 
         private void CreateYearlyNumericSchedule(int interval, string? selectedYearMonth, string? dayOfMonth, object? p)
         {
+            if (interval <= 0)
+            {
+                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
+                return;
+            }
             if (selectedYearMonth == null || dayOfMonth == null)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un mois et un jour du mois"));
@@ -354,7 +355,7 @@ namespace MntPlus.WPF
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner une date de début"));
                 return;
             }
-            if (StartYearlyDate != null && EndYearlyDate != null && StartYearlyDate > EndYearlyDate)
+            if (StartYearlyDate != null && EndYearlyDate != null && StartYearlyDate >= EndYearlyDate)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de début doit être inférieure à la date de fin"));
                 return;
@@ -383,7 +384,12 @@ namespace MntPlus.WPF
 
         private void CreateYearlyOrdinalSchedule(int interval, string? selectedYearMonth, string? selectedMonthlyWeekDay,string? selectedWeekDay, object? p)
         {
-            if(selectedYearMonth == null || selectedMonthlyWeekDay == null || selectedWeekDay == null)
+            if (interval <= 0)
+            {
+                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
+                return;
+            }
+            if (selectedYearMonth == null || selectedMonthlyWeekDay == null || selectedWeekDay == null)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un mois et un jour de la semaine"));
                 return;
@@ -393,7 +399,7 @@ namespace MntPlus.WPF
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner une date de début"));
                 return;
             }
-            if (StartYearlyDate != null && EndYearlyDate != null && StartYearlyDate > EndYearlyDate)
+            if (StartYearlyDate != null && EndYearlyDate != null && StartYearlyDate >= EndYearlyDate)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de début doit être inférieure à la date de fin"));
                 return;
@@ -405,7 +411,7 @@ namespace MntPlus.WPF
                                                                                        StartYearlyDate.HasValue ? StartYearlyDate.Value : DateTime.Now,
                                                                                        EndYearlyDate,
                                                                                        WeekOfMonth: MonthlyWeekDay.IndexOf(selectedMonthlyWeekDay) + 1,
-                                                                                       (DayOfWeek)Enum.Parse(typeof(DayOfWeek), selectedWeekDay!),
+                                                                                       ConvertFrenchDayToDayOfWeek(selectedWeekDay),
                                                                                        YearMonths.IndexOf(selectedYearMonth) + 1);
                 ScheduleStore.CreateSchedule(yearlyOrdinalSchedule, "YearlyOrdinal");
                 if (p == null) return;
@@ -421,7 +427,12 @@ namespace MntPlus.WPF
 
         private void CreateMonthlyNumericSchedule(int interval, string? dayOfMonth, object? p)
         {
-            if(dayOfMonth == null)
+            if (interval <= 0)
+            {
+                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
+                return;
+            }
+            if (dayOfMonth == null)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un jour du mois"));
                 return;
@@ -431,7 +442,7 @@ namespace MntPlus.WPF
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner une date de début"));
                 return;
             }
-            if(StartMonthlyDate != null && EndMonthlyDate != null && StartMonthlyDate > EndMonthlyDate)
+            if(StartMonthlyDate != null && EndMonthlyDate != null && StartMonthlyDate >= EndMonthlyDate)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de début doit être inférieure à la date de fin"));
                 return;
@@ -444,9 +455,9 @@ namespace MntPlus.WPF
                                                                                          EndMonthlyDate,
                                                                                          MonthlyNumericDay.IndexOf(dayOfMonth) + 1);
                 ScheduleStore.CreateSchedule(monthlyNumericSchedule, "MonthlyNumeric");
-                if (p == null) return;
-                var window = (ScheduleTimeWindow)p;
-                window.Close();
+                //if (p == null) return;
+                //var window = (ScheduleTimeWindow)p;
+                //window.Close();
             }
             catch (Exception)
             {
@@ -456,7 +467,12 @@ namespace MntPlus.WPF
 
         private void CreateMonthlyWeekdaySchedule(int interval, string? selectedMonthlyWeekDay,string? selectedWeekDay, object? p)
         {
-            if(selectedMonthlyWeekDay == null || selectedWeekDay == null)
+            if (interval <= 0)
+            {
+                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
+                return;
+            }
+            if (selectedMonthlyWeekDay == null || selectedWeekDay == null)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner un jour de la semaine et un jour du mois"));
                 return;
@@ -466,19 +482,21 @@ namespace MntPlus.WPF
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner une date de début"));
                 return;
             }
-            if(StartMonthlyDate != null && EndMonthlyDate != null && StartMonthlyDate > EndMonthlyDate)
+            if(StartMonthlyDate != null && EndMonthlyDate != null && StartMonthlyDate >= EndMonthlyDate)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de début doit être inférieure à la date de fin"));
                 return;
             }
             try
             {
-                var monthlyWeekdaySchedule = new MonthlyWeekdayScheduleDtoForCreation(FrequencyType ?? "",
+                int _index = MonthlyWeekDay.IndexOf(selectedMonthlyWeekDay) + 1;
+                var _weekDay = ConvertFrenchDayToDayOfWeek(selectedWeekDay);
+                MonthlyWeekdayScheduleDtoForCreation monthlyWeekdaySchedule = new MonthlyWeekdayScheduleDtoForCreation(FrequencyType ?? "",
                                                                                          interval,
                                                                                          StartMonthlyDate.HasValue ? StartMonthlyDate.Value : DateTime.Now,
                                                                                          EndMonthlyDate,
-                                                                                         MonthlyWeekDay.IndexOf(selectedMonthlyWeekDay!) + 1,
-                                                                                         (DayOfWeek)Enum.Parse(typeof(DayOfWeek), selectedWeekDay));
+                                                                                         _index,
+                                                                                         _weekDay);
                 ScheduleStore.CreateSchedule(monthlyWeekdaySchedule, "MonthlyWeekday");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;
@@ -490,18 +508,25 @@ namespace MntPlus.WPF
             }
         }
 
-        private void CreateWeeklySchedule(int interval, List<DayOfWeek>? daysOfWeek, object? p)
+        private void CreateWeeklySchedule(int interval, object? p)
         {
-            daysOfWeek = new List<DayOfWeek> {
-                            IsLundiChecked ? DayOfWeek.Monday : 0,
-                            IsMardiChecked ? DayOfWeek.Tuesday : 0,
-                            IsMercrediChecked ? DayOfWeek.Wednesday : 0,
-                            IsJeudiChecked ? DayOfWeek.Thursday : 0,
-                            IsVendrediChecked ? DayOfWeek.Friday : 0,
-                            IsSamediChecked ? DayOfWeek.Saturday : 0,
-                            IsDimancheChecked ? DayOfWeek.Sunday : 0
-                        }.Where(d => d != 0).ToList();
-            if(daysOfWeek.Count == 0)
+            if (interval <= 0)
+            {
+                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
+                return;
+            }
+
+            List<DayOfWeek> daysOfWeek = new();
+            if (IsDimancheChecked) daysOfWeek.Add(DayOfWeek.Sunday);
+            if (IsLundiChecked) daysOfWeek.Add(DayOfWeek.Monday);
+            if (IsMardiChecked) daysOfWeek.Add(DayOfWeek.Tuesday);
+            if (IsMercrediChecked) daysOfWeek.Add(DayOfWeek.Wednesday);
+            if (IsJeudiChecked) daysOfWeek.Add(DayOfWeek.Thursday);
+            if (IsVendrediChecked) daysOfWeek.Add(DayOfWeek.Friday);
+            if (IsSamediChecked) daysOfWeek.Add(DayOfWeek.Saturday);
+
+
+            if (daysOfWeek.Count == 0)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner au moins un jour de la semaine"));
                 return;
@@ -511,7 +536,7 @@ namespace MntPlus.WPF
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner une date de début"));
                 return;
             }
-            if(StartWeeklyDate != null && EndWeeklyDate != null && StartWeeklyDate > EndWeeklyDate)
+            if(StartWeeklyDate != null && EndWeeklyDate != null && StartWeeklyDate >= EndWeeklyDate)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de début doit être inférieure à la date de fin"));
                 return;
@@ -524,9 +549,9 @@ namespace MntPlus.WPF
                                                                         EndWeeklyDate,
                                                                         daysOfWeek);
                 ScheduleStore.CreateSchedule(weeklySchedule, "Weekly");
-                if (p == null) return;
-                var window = (ScheduleTimeWindow)p;
-                window.Close();
+                //if (p == null) return;
+                //var window = (ScheduleTimeWindow)p;
+                //window.Close();
             }
             catch (Exception)
             {
@@ -536,12 +561,17 @@ namespace MntPlus.WPF
 
         private void CreateDailySchedule(int interval, object? p)
         {
-            if(StartDate == null)
+            if (interval <= 0)
+            {
+                IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "L'intervalle ne peut pas être égal à 0"));
+                return;
+            }
+            if (StartDate == null)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Veuillez sélectionner une date de début"));
                 return;
             }
-            if(StartDate != null && EndDate != null && StartDate > EndDate)
+            if(StartDate != null && EndDate != null && StartDate >= EndDate)
             {
                 IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de début doit être inférieure à la date de fin"));
                 return;
@@ -553,9 +583,9 @@ namespace MntPlus.WPF
                                                                        StartDate.HasValue ? StartDate.Value : DateTime.Now,
                                                                        EndDate);
                 ScheduleStore.CreateSchedule(dailySchedule, "Daily");
-                if (p == null) return;
-                var window = (ScheduleTimeWindow)p;
-                window.Close();
+                //if (p == null) return;
+                //var window = (ScheduleTimeWindow)p;
+                //window.Close();
             }
             catch (Exception)
             {
@@ -563,6 +593,29 @@ namespace MntPlus.WPF
 
             }
         }
-       
+
+        public static DayOfWeek ConvertFrenchDayToDayOfWeek(string frenchDay)
+        {
+            var frenchToDayOfWeekMap = new Dictionary<string, DayOfWeek>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { "Dimanche", DayOfWeek.Sunday },
+            { "Lundi", DayOfWeek.Monday },
+            { "Mardi", DayOfWeek.Tuesday },
+            { "Mercredi", DayOfWeek.Wednesday },
+            { "Jeudi", DayOfWeek.Thursday },
+            { "Vendredi", DayOfWeek.Friday },
+            { "Samedi", DayOfWeek.Saturday }
+        };
+
+            if (frenchToDayOfWeekMap.TryGetValue(frenchDay, out DayOfWeek dayOfWeek))
+            {
+                return dayOfWeek;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid French day name", nameof(frenchDay));
+            }
+        }
+
     }
 }

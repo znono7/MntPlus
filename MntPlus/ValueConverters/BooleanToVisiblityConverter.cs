@@ -12,7 +12,7 @@ namespace MntPlus.WPF
     /// A converter that takes in a boolean and returns a <see cref="Visibility"/>
     /// </summary>
     public class BooleanToVisiblityConverter : BaseValueConverter<BooleanToVisiblityConverter>
-    { 
+    {  
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (parameter == null)

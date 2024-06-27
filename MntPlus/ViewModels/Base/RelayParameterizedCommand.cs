@@ -15,6 +15,8 @@ namespace MntPlus.WPF
         /// </summary>
         private Action<object?> mAction;
 
+        public Action Select { get; }
+
         #endregion
 
         #region Public Events
@@ -35,6 +37,8 @@ namespace MntPlus.WPF
         {
             mAction = action;
         }
+
+      
 
         #endregion
 

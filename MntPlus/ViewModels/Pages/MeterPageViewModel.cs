@@ -10,7 +10,7 @@ namespace MntPlus.WPF
     public class MeterPageViewModel : BaseViewModel
     {
         protected string? mLastSearchText;
-        protected string? mSearchText;
+        protected string? mSearchText; 
         public string? SearchText
         {
             get => mSearchText;
@@ -32,7 +32,7 @@ namespace MntPlus.WPF
         public List<MeterDto> MeterDtos { get; set; } 
         private ObservableCollection<MeterViewModel>? _meters;
         public ObservableCollection<MeterViewModel>? FilterMeters { get; set; }
-        public ObservableCollection<MeterViewModel>? Meters
+        public ObservableCollection<MeterViewModel>? Meters 
         {
             get => _meters;
             set
@@ -73,7 +73,7 @@ namespace MntPlus.WPF
             _ = LoadData();
 
         }
-
+         
         private void MeterStore_MeterDeleted(MeterDto? dto)
         {
             var meter = Meters?.FirstOrDefault(m => m.MeterDto.Id == dto?.Id);

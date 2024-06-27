@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF"
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" 
-        WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
-        Title="scheduleTimeWindow" Height="Auto" Width="1000" 
+        WindowStyle="None" WindowStartupLocation="CenterScreen" 
+        ResizeMode="CanResize" Background="Transparent"
+        Title="scheduleTimeWindow"  Height="Auto" SizeToContent="Height" Width="1000" 
         Loaded="Window_Loaded" x:Name="WindSchedule">
     <Window.Resources>
         <Style TargetType="{x:Type local:ScheduleTimeWindow}">
@@ -39,7 +40,7 @@
                                         <RowDefinition Height="60" />
 
                                         <!-- Window Content -->
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
 
                                     </Grid.RowDefinitions>
 
@@ -75,15 +76,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <ControlTemplate x:Key="ErrorTemplate">
-            <StackPanel Orientation="Horizontal">
-                <!-- Icon -->
-                <Path x:Name="errorIcon" Data="{StaticResource error}" Height="11" Width="11" Stretch="Fill" Fill="{DynamicResource SecundaryRedColor}"/>
-
-                <!-- Error TextBlock -->
-                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="{DynamicResource SecundaryRedColor}"/>
-            </StackPanel>
-        </ControlTemplate>
+       
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -100,7 +93,6 @@
 
         <Grid Grid.Row="0" Margin="20">
             <Border  Grid.RowSpan="5"   CornerRadius="7" Background="{DynamicResource TertiaryBackgroundColor}" BorderThickness="2" BorderBrush="{DynamicResource LineColor}"/>
-
             <Grid Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -153,12 +145,12 @@
                                     <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
                                 </Button>
 
-                                <TextBlock Text="{Binding ShortStartWeeklyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding ShortStartDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
                                 <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateDaysOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup">
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                                SelectedDate="{Binding StartWeeklyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>
                             </Grid>
@@ -174,12 +166,12 @@
                                     <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
                                 </Button>
 
-                                <TextBlock Text="{Binding ShortEndWeeklyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding ShortEndDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
                                 <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateDaysOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" x:Name="CalendarPopup2">
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                     SelectedDate="{Binding EndWeeklyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                     SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>
                             </Grid>
@@ -222,13 +214,13 @@
                         </StackPanel>
                         <StackPanel Margin="10 0" Grid.Row="1" Orientation="Horizontal">
                             <TextBlock Margin="10 0" Text="Sur" Style="{DynamicResource LabelTextBlockStyle}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Dimanche" IsChecked="{Binding IsDimancheChecked}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Lundi" IsChecked="{Binding IsLundiChecked}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mardi" IsChecked="{Binding IsMardiChecked}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mercredi" IsChecked="{Binding IsMercrediChecked}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Jeudi" IsChecked="{Binding IsJeudiChecked}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Vendredi" IsChecked="{Binding IsVendrediChecked}"/>
-                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Samedi" IsChecked="{Binding IsSamediChecked}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Dimanche" IsChecked="{Binding IsDimancheChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Lundi" IsChecked="{Binding IsLundiChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mardi" IsChecked="{Binding IsMardiChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Mercredi" IsChecked="{Binding IsMercrediChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Jeudi" IsChecked="{Binding IsJeudiChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Vendredi" IsChecked="{Binding IsVendrediChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle2}" Content="Samedi" IsChecked="{Binding IsSamediChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10" >
                             <TextBlock Text="Commence le" Style="{DynamicResource LabelTextBlockStyle}"/>
@@ -243,12 +235,12 @@
                                     <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
                                 </Button>
 
-                                <TextBlock Text="{Binding ShortStartDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
-                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateWeeklyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                <TextBlock Text="{Binding ShortStartWeeklyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateWeeklyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderWeekly}"  PopupAnimation="Slide" AllowsTransparency="True" >
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                                SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                SelectedDate="{Binding StartWeeklyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>
                             </Grid>
@@ -264,12 +256,12 @@
                                     <Path  Width="16" Fill="{DynamicResource FourthTextColor}" Stretch="Uniform" Data="{DynamicResource date}"/>
                                 </Button>
 
-                                <TextBlock Text="{Binding ShortEndDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
-                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateWeeklyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                <TextBlock Text="{Binding ShortEndWeeklyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateWeeklyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderWeekly2}"  PopupAnimation="Slide" AllowsTransparency="True" >
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                            SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            SelectedDate="{Binding EndWeeklyDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </Popup>
                             </Grid>
@@ -375,7 +367,7 @@
                                 </Button>
 
                                 <TextBlock Text="{Binding ShortStartMonthlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
-                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateMonthlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateMonthlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderMonthly}"  PopupAnimation="Slide" AllowsTransparency="True" >
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
@@ -396,7 +388,7 @@
                                 </Button>
 
                                 <TextBlock Text="{Binding ShortEndMonthlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
-                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateMonthlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateMonthlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderMonthly2}"  PopupAnimation="Slide" AllowsTransparency="True" >
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
@@ -510,7 +502,7 @@
                                 </Button>
 
                                 <TextBlock Text="{Binding ShortStartYearlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
-                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateYearlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuStartDateYearlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderYearly}"  PopupAnimation="Slide" AllowsTransparency="True" >
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
@@ -531,7 +523,7 @@
                                 </Button>
 
                                 <TextBlock Text="{Binding ShortEndYearlyDate,UpdateSourceTrigger=PropertyChanged}" Margin="20 0" Grid.Column="0" Style="{StaticResource TextBlockStyle}"/>
-                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateYearlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorder2}"  PopupAnimation="Slide" AllowsTransparency="True" >
+                                <Popup Panel.ZIndex="11" StaysOpen="False" IsOpen="{Binding IsMenuEndDateYearlyOpen}" Placement="Top" PlacementTarget="{Binding ElementName=DateBorderYearly2}"  PopupAnimation="Slide" AllowsTransparency="True" >
                                     <Grid >
 
                                         <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
@@ -545,13 +537,16 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Button   Command="{Binding SaveCommand}" 
+        <StackPanel HorizontalAlignment="Right" Grid.Row="1" Orientation="Horizontal">
+            <Button   Command="{Binding SetScheduleCommand}" 
             CommandParameter="{Binding ElementName=WindSchedule}"
             local:IsBusyProperty.Value="{Binding SaveIsRunning}" 
             Tag="{StaticResource plus}"  Height="34"
             Style="{DynamicResource RegullarPrimeButton}" 
-                  Content="Ajouter" Grid.Row="1"
-                  HorizontalAlignment="Right" Margin="0 0 20 10"/>
+                  Content="Ajouter" 
+                   Margin="0 0 0 10"/>
+            <Button  Click="Button_Click" Style="{DynamicResource CPrime2}" Content="Annuler" Margin="20 0 20 10"/>
+        </StackPanel>
 
-         </Grid>
+    </Grid>
 </Window>
