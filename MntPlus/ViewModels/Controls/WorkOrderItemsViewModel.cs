@@ -13,8 +13,8 @@ namespace MntPlus.WPF
         public WorkOrderDto? WorkOrderDto { get; set; } 
         public string WorkOrderNumber => AddDynamicLeadingZeros(WorkOrderDto?.Number ?? 0); 
         public string WorkOrderName { get; set; } 
-        public string PriorityBackground { get; set; }  
-
+        public string PriorityBackground { get; set; }  = "000000";
+          
         private string _orderWorkPriority = "3";
         public string Priority { get; set; }
         public string OrderWorkPriority
@@ -23,7 +23,8 @@ namespace MntPlus.WPF
             set
             {
                 _orderWorkPriority = value;
-                switch (value)
+                OnPropertyChanged(nameof(OrderWorkPriority));
+                switch (_orderWorkPriority)
                 {
                     case "1":
                         PriorityBackground = "c22528";
@@ -38,6 +39,10 @@ namespace MntPlus.WPF
                         Priority = "Basse";
                         break;
                     case "Aucune":
+                        PriorityBackground = "53667B";
+                        Priority = "Aucune";
+                        break;
+                        default:
                         PriorityBackground = "53667B";
                         Priority = "Aucune";
                         break;
@@ -110,7 +115,9 @@ namespace MntPlus.WPF
         {
             WorkOrderDto = workOrderDto;
             WorkOrderName = WorkOrderDto?.Name ?? string.Empty;
-            OrderWorkPriority = WorkOrderDto?.Priority ?? string.Empty;
+            //OrderWorkPriority = WorkOrderDto?.Priority ?? string.Empty;
+            Priority = SetOrderWorkPriority(WorkOrderDto?.Priority);
+            PriorityBackground = SetBackgroundOrderWorkPriority(WorkOrderDto?.Priority);
             Type = WorkOrderDto?.Type ?? string.Empty;
             WorkStat = WorkOrderDto?.Status ?? string.Empty;
             AssetCommissionDate = WorkOrderDto?.DueDate;
@@ -127,6 +134,38 @@ namespace MntPlus.WPF
             ViewOrderWorkCommand = new RelayCommand(async () =>  await ViewOrderWorkDetail(WorkOrderDto) );
                 
            
+        }
+        private string SetOrderWorkPriority(string? priority)
+        {
+            switch (priority)
+            {
+                case "1":
+                    return "Haute";
+                case "2":
+                    return "Moyenne";
+                case "3":
+                    return "Basse";
+                case "Aucune":
+                    return "Aucune";
+                default:
+                    return "Aucune";
+            }
+        }
+        private string SetBackgroundOrderWorkPriority(string? priority)
+        {
+            switch (priority)
+            {
+                case "1":
+                    return "c22528";
+                case "2":
+                    return "ef6a00";
+                case "3":
+                    return "429b1f";
+                case "Aucune":
+                    return "53667B";
+                default:
+                    return "53667B";
+            }
         }
 
         private async Task ViewOrderWorkDetail(WorkOrderDto? workOrderDto)

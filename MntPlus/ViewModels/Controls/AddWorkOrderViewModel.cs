@@ -175,6 +175,11 @@ namespace MntPlus.WPF
                 return;
 
             }
+            if(DueDate <= StartDate)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "La date de fin doit être supérieure à la date de début"));
+                return;
+            }
             if(IsForUpdate)
             {
                 await UpdateAsync();

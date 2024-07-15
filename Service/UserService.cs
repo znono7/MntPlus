@@ -58,7 +58,7 @@ namespace Service
             {
                 return new ApiBadRequestResponse(ex.Message);
             }
-            
+             
         }
 
         public async Task<ApiBaseResponse> GetAllUsersAsync(bool trackChanges)
@@ -136,6 +136,24 @@ namespace Service
                 return new ApiBadRequestResponse(ex.Message);
             }
             
+        }
+
+        public async Task<ApiBaseResponse> GetAllUsersWithRolesAsync(bool trackChanges)
+        {
+            try
+            {
+                var users = await _repository.User.GetAllUsersWithRolesAsync(trackChanges);
+                if (users is null)
+                { 
+                    return new ApiNotFoundResponse("");
+                }
+                var usersToReturn = users.Select( x => UserMapper.MapToRolesDto(x));
+                return new ApiOkResponse<IEnumerable<RolesDto>>(usersToReturn!);
+            }
+            catch (Exception ex)
+            {
+                return new ApiBadRequestResponse(ex.Message);
+            }
         }
 
         public async Task<ApiBaseResponse> UpdateUser(Guid userId, UserCreateDto user, bool trackChanges)

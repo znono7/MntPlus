@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ namespace MntPlus.WPF
         public ObservableCollection<TeamDto>? Teams
         {
             get => teams;
-            set
+            set 
             {
                 teams = value;
                 if (teams is not null)
@@ -73,7 +74,21 @@ namespace MntPlus.WPF
             OpenWindowCommand = new RelayCommand(OpenTeamWindow);
             DeleteTeamsCommand = new RelayCommand(RemoveSelectedItems);
             SearchCommand = new RelayCommand(Search);
+            Teams = new ObservableCollection<TeamDto>();
+            _ = GetTeams();
 
+        }
+        private async Task GetTeams()
+        {
+            var result = await AppServices.ServiceManager.TeamService.GetAllTeamsAsync(false);
+            if (result is ApiOkResponse<IEnumerable<TeamDto>> okResponse && okResponse.Result != null)
+            {
+                Teams = new ObservableCollection<TeamDto>(okResponse.Result);
+            }
+            else
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Une erreur s'est produite lors de la récupération des équipes"));
+            }
         }
         private void OpenTeamWindow()
         {

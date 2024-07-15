@@ -11,6 +11,7 @@ namespace Contracts
     {
         Task<IEnumerable<User>?> GetAllUsersAsync(bool trackChanges);
         Task<IEnumerable<User>?> GetUsersByTeamAsync(Guid teamId, bool trackChanges);
+        Task<IEnumerable<User>?> GetAllUsersWithRolesAsync(bool trackChanges);
 
         Task<User?> GetUserAsync(Guid userId, bool trackChanges);
         void CreateUser(User user);

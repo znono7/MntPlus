@@ -48,8 +48,9 @@ namespace MntPlus.WPF.ViewModels.Windows
             {
                 if(SelectedPart != null)
                 {
-                    partWind.Close();
                     PartStore.CreatePart(SelectedPart.Part);
+                    partWind.Close();
+                    
                 }
                 else
                 {

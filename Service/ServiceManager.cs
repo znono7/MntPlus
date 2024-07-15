@@ -27,6 +27,8 @@ namespace Service
         private readonly Lazy<IMeterReadingService> meterReadingService;
         private readonly Lazy<ITaskListService> taskListService;
         private readonly Lazy<IRequestService> requestService;
+        private readonly Lazy<IPreventiveMaintenanceService> preventiveMaintenanceService;
+
 
 
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper,IUnitOfWork unitOfWork) 
@@ -47,6 +49,7 @@ namespace Service
             meterReadingService = new Lazy<IMeterReadingService>(() => new MeterReadingService(repositoryManager, mapper,unitOfWork));
             taskListService = new Lazy<ITaskListService>(() => new TaskListService(repositoryManager, mapper , unitOfWork));
             requestService = new Lazy<IRequestService>(() => new RequestService(repositoryManager, mapper, unitOfWork));
+            preventiveMaintenanceService = new Lazy<IPreventiveMaintenanceService>(() => new PreventiveMaintenanceService(repositoryManager, unitOfWork));
         }
       
 
@@ -80,5 +83,7 @@ namespace Service
         public ITaskListService TaskListService => taskListService.Value;
 
         public IRequestService RequestService => requestService.Value;
+
+        public IPreventiveMaintenanceService PreventiveMaintenanceService => preventiveMaintenanceService.Value;
     }
 }

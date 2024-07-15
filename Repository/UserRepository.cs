@@ -25,6 +25,14 @@ namespace Repository
             .OrderBy(c => c.FirstName) 
             .ToListAsync();
 
+        public async Task<IEnumerable<User>?> GetAllUsersWithRolesAsync(bool trackChanges) =>
+            await FindAll(trackChanges)
+            .Include(c => c.UserRoles!) 
+            .ThenInclude(c => c.Role) 
+            .OrderBy(c => c.FirstName) 
+            .ToListAsync();
+      
+
         public async Task<User?> GetUserAsync(Guid userId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(userId), trackChanges)
             .SingleOrDefaultAsync();

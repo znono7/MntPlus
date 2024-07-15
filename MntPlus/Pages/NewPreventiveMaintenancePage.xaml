@@ -135,13 +135,13 @@
                                 </Button>
                             </Grid>
                         </StackPanel>
-                        <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="5"/>
+                        <!--<Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="5"/>
                         <StackPanel Grid.Row="6" Orientation="Vertical" Margin="25 20 10 10">
                             <TextBlock Text="Pièces"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
                             <Grid Margin="0 20 0 20">
                                 <Button Foreground="{DynamicResource FourthTextColor}" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource parts}" Content="Ajouter des Pièces"/>
                             </Grid>
-                        </StackPanel>
+                        </StackPanel>-->
                         <Rectangle Height="1" Fill="{DynamicResource LineColor3}" Grid.Row="7"/>
                         <StackPanel HorizontalAlignment="Stretch" Grid.Row="8" Orientation="Vertical" Margin="25 20 10 10">
                             <TextBlock Text="Assigné à"  Style="{StaticResource LabelTextBlockStyle}" Margin="0 0 0 5" />
@@ -217,7 +217,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Button Foreground="{DynamicResource FourthTextColor}" Margin="0 0" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding AddTaskCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Listes de Contrôle"/>
-                                <Button Grid.Row="1" Foreground="{DynamicResource FourthTextColor}" Margin="0 20" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Tâches Individuelles"/>
+                                <!--<Button Grid.Row="1" Foreground="{DynamicResource FourthTextColor}" Margin="0 20" Height="56" Background="{DynamicResource BackSubButtons}" Command="{Binding NonPriorityCommand}" Style="{DynamicResource PopupButton2}" Tag="{StaticResource checklist}" Content="Ajouter des Tâches Individuelles"/>-->
                             </Grid>
                         </StackPanel>
                         <Grid Visibility="{Binding IsTaskSelected,Converter={local:BooleanToVisiblityConverter},ConverterParameter=True}" Margin="10 20" Grid.Row="12">

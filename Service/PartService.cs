@@ -44,9 +44,10 @@ namespace Service
                 }
                 _repository.Part.DeletePart(part);
                 await _repository.SaveAsync();
-                var partToReturn = _mapper.Map<PartDto>(part);
+                //var partToReturn = _mapper.Map<PartDto>(part);
 
-                return new ApiOkResponse<PartDto>(partToReturn);
+                //return new ApiOkResponse<PartDto>(partToReturn);
+                return new ApiOkResponse<bool>(true);
             }
             catch (Exception ex)
             {

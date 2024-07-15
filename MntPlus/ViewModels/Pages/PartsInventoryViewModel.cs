@@ -16,7 +16,7 @@ namespace MntPlus.WPF
 
         private ObservableCollection<PartInventoryItem>? _partItemViewModels { get; set; }
         public ObservableCollection<PartInventoryItem>? PartItemViewModels 
-        { 
+        {  
             get => _partItemViewModels;    
             set
             {
@@ -41,15 +41,24 @@ namespace MntPlus.WPF
         public PartsInventoryViewModel()
         {
             _ = GetAllParts();
-            PartStore =   new PartStore();
+            PartStore = new PartStore();
             PartStore.PartCreated += PartStore_PartAdded;
-            addPartControl = new AddPartControlViewModel(PartStore);
-            addPartControl.CloseAction += CloseControl;
-            OpenControlCommand = new RelayCommand(() => { AddPartPopupIsOpen = true; DimmableOverlayVisible = true; });
+
+
+            OpenControlCommand = new RelayCommand(OpenControl);
             OpenActionPopupOpenCommand = new RelayCommand(() => IsActionPopupOpen = !IsActionPopupOpen);
             RemoveCommand = new RelayCommand(async () => await RemoveItem());
 
         }
+
+        private void OpenControl()
+        {
+            addPartControl = new AddPartControlViewModel(PartStore);
+            addPartControl.CloseAction += CloseControl;
+            AddPartPopupIsOpen = true;
+            DimmableOverlayVisible = true;
+        }
+
         public ObservableCollection<PartDto>? PartDtoItems { get; set; }
         private async Task GetAllParts()
         {
@@ -108,7 +117,7 @@ namespace MntPlus.WPF
         private async Task RemoveEquipment(PartInventoryItem part)
         {
             var response = await AppServices.ServiceManager.PartService.DeletePart(part.Id, false);
-            if (response is ApiOkResponse<PartDto> && response.Success)
+            if (response is ApiOkResponse<bool> /*ApiOkResponse<PartDto>*/ && response.Success)
             {
                
                 // Remove the item from the list view

@@ -13,6 +13,7 @@ namespace MntPlus.WPF
     {
         public PartDto? Part { get; set; } 
         public Guid Id { get; set; } 
+        public Guid LinkId { get; set; }
         public string? PartNumber { get; set; }
         public string? Name { get; set; }
         public string? FullName { get; set; }

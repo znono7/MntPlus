@@ -33,7 +33,7 @@ namespace MntPlus.WPF
                 OnPropertyChanged(nameof(LowPriorityChecked));
             } 
         }
-
+         
         private bool _mediumPriorityChecked { get; set; }
         public bool MediumPriorityChecked
         {
@@ -650,13 +650,13 @@ namespace MntPlus.WPF
         }
         private void WorkOrderStore_WorkOrderCreated(WorkOrderDto? dto)
         {
-            if(dto is null) return;
+            if(dto is null) return; 
             WorkOrderDtos ??= new ObservableCollection<WorkOrderDto>();
             WorkOrders ??= new ObservableCollection<WorkOrderItemsViewModel>();
             WorkOrderDtos.Add(dto); 
-            WorkOrders.Add(new WorkOrderItemsViewModel(dto));
+            WorkOrders.Add(new WorkOrderItemsViewModel(dto) { ViewOrderWork = SetWorkTask} );
             FilterWorkOrders ??= new ObservableCollection<WorkOrderItemsViewModel>();
-            FilterWorkOrders.Add(new WorkOrderItemsViewModel(dto));
+            FilterWorkOrders.Add(new WorkOrderItemsViewModel(dto) { ViewOrderWork = SetWorkTask });
 
 
         }

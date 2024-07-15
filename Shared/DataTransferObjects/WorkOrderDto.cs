@@ -15,7 +15,7 @@ namespace Shared
         DateTime? StartDate,  
         DateTime? DueDate,
         string? Type, 
-        string? Status,
+        string? Status, 
         string? Requester,  
         DateTime? CreatedOn,
         Guid? UserCreatedId,

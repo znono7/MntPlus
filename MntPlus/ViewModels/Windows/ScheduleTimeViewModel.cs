@@ -277,7 +277,7 @@ namespace MntPlus.WPF
         public ICommand OpenMenuStartDateYearly { get; set; }
         public bool IsMenuStartDateYearlyOpen { get; set; }
         public ICommand OpenMenuEndDateYearly { get; set; }
-        public bool IsMenuEndDateYearlyOpen { get; set; }
+        public bool IsMenuEndDateYearlyOpen { get; set; } 
         public ScheduleTimeViewModel(ScheduleStore scheduleStore)
         {
             ScheduleStore = scheduleStore;
@@ -364,12 +364,16 @@ namespace MntPlus.WPF
             {
                
 
-                var yearlyNumericSchedule = new YearlyNumericScheduleDtoForCreation(FrequencyType ?? "",
-                                                                                    interval,
-                                                                                    StartYearlyDate.HasValue ? StartYearlyDate.Value : DateTime.Now,
-                                                                                    EndYearlyDate,
-                                                                                    MonthlyNumericDay.IndexOf(dayOfMonth) + 1,
-                                                                                    YearMonths.IndexOf(selectedYearMonth) + 1);
+                var yearlyNumericSchedule = new YearlyNumericScheduleDtoForCreation()
+                {
+                    FrequencyType = FrequencyType ?? "",
+                    Interval = interval,
+                    StartDate = StartYearlyDate.HasValue ? StartYearlyDate.Value : DateTime.Now,
+                    EndDate = EndYearlyDate,
+                    Month = YearMonths.IndexOf(selectedYearMonth) + 1,
+                    DayOfMonth = MonthlyNumericDay.IndexOf(dayOfMonth) + 1
+
+                };
                 ScheduleStore.CreateSchedule(yearlyNumericSchedule, "YearlyNumeric");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;
@@ -406,13 +410,17 @@ namespace MntPlus.WPF
             }
             try
             {
-                var yearlyOrdinalSchedule = new YearlyOrdinalScheduleDtoForCreation(FrequencyType ?? "",
-                                                                                       interval,
-                                                                                       StartYearlyDate.HasValue ? StartYearlyDate.Value : DateTime.Now,
-                                                                                       EndYearlyDate,
-                                                                                       WeekOfMonth: MonthlyWeekDay.IndexOf(selectedMonthlyWeekDay) + 1,
-                                                                                       ConvertFrenchDayToDayOfWeek(selectedWeekDay),
-                                                                                       YearMonths.IndexOf(selectedYearMonth) + 1);
+                var yearlyOrdinalSchedule = new YearlyOrdinalScheduleDtoForCreation()
+                {
+                    FrequencyType = FrequencyType ?? "",
+                    Interval = interval,
+                    StartDate = StartYearlyDate.HasValue ? StartYearlyDate.Value : DateTime.Now,
+                    EndDate = EndYearlyDate,
+                    Month = YearMonths.IndexOf(selectedYearMonth) + 1,
+                    DayOfWeek = ConvertFrenchDayToDayOfWeek(selectedWeekDay),
+                    WeekOfMonth = MonthlyWeekDay.IndexOf(selectedMonthlyWeekDay) + 1
+
+                };
                 ScheduleStore.CreateSchedule(yearlyOrdinalSchedule, "YearlyOrdinal");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;
@@ -449,11 +457,15 @@ namespace MntPlus.WPF
             }
             try
             {
-                var monthlyNumericSchedule = new MonthlyNumericScheduleDtoForCreation(FrequencyType ?? "",
-                                                                                         interval,
-                                                                                         StartMonthlyDate.HasValue ? StartMonthlyDate.Value : DateTime.Now,
-                                                                                         EndMonthlyDate,
-                                                                                         MonthlyNumericDay.IndexOf(dayOfMonth) + 1);
+                var monthlyNumericSchedule = new MonthlyNumericScheduleDtoForCreation()
+                {
+                    FrequencyType = FrequencyType ?? "",
+                    Interval = interval,
+                    StartDate = StartMonthlyDate.HasValue ? StartMonthlyDate.Value : DateTime.Now,
+                    EndDate = EndMonthlyDate,
+                    DayOfMonth = MonthlyNumericDay.IndexOf(dayOfMonth) + 1
+
+                };
                 ScheduleStore.CreateSchedule(monthlyNumericSchedule, "MonthlyNumeric");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;
@@ -491,12 +503,16 @@ namespace MntPlus.WPF
             {
                 int _index = MonthlyWeekDay.IndexOf(selectedMonthlyWeekDay) + 1;
                 var _weekDay = ConvertFrenchDayToDayOfWeek(selectedWeekDay);
-                MonthlyWeekdayScheduleDtoForCreation monthlyWeekdaySchedule = new MonthlyWeekdayScheduleDtoForCreation(FrequencyType ?? "",
-                                                                                         interval,
-                                                                                         StartMonthlyDate.HasValue ? StartMonthlyDate.Value : DateTime.Now,
-                                                                                         EndMonthlyDate,
-                                                                                         _index,
-                                                                                         _weekDay);
+                MonthlyWeekdayScheduleDtoForCreation monthlyWeekdaySchedule = new MonthlyWeekdayScheduleDtoForCreation()
+                {
+                    FrequencyType = FrequencyType ?? "",
+                    Interval = interval,
+                    StartDate = StartMonthlyDate.HasValue ? StartMonthlyDate.Value : DateTime.Now,
+                    EndDate = EndMonthlyDate,
+                    WeekOfMonth = _index,
+                    DayOfWeek = _weekDay
+
+                };
                 ScheduleStore.CreateSchedule(monthlyWeekdaySchedule, "MonthlyWeekday");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;
@@ -543,11 +559,15 @@ namespace MntPlus.WPF
             }
             try
             {
-                var weeklySchedule = new WeeklyScheduleDtoForCreation(FrequencyType ?? "",
-                                                                        interval,
-                                                                        StartWeeklyDate.HasValue ? StartWeeklyDate.Value : DateTime.Now,
-                                                                        EndWeeklyDate,
-                                                                        daysOfWeek);
+                var weeklySchedule = new WeeklyScheduleDtoForCreation()
+                {
+                    FrequencyType = FrequencyType ?? "",
+                    Interval = interval,
+                    StartDate = StartWeeklyDate.HasValue ? StartWeeklyDate.Value : DateTime.Now,
+                    EndDate = EndWeeklyDate,
+                    DaysOfWeek = daysOfWeek
+
+                };
                 ScheduleStore.CreateSchedule(weeklySchedule, "Weekly");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;
@@ -578,10 +598,14 @@ namespace MntPlus.WPF
             }
             try
             {
-                var dailySchedule = new DailyScheduleDtoForCreation(FrequencyType ?? "",
-                                                                       interval,
-                                                                       StartDate.HasValue ? StartDate.Value : DateTime.Now,
-                                                                       EndDate);
+                var dailySchedule = new DailyScheduleDtoForCreation()
+                {
+                    FrequencyType = FrequencyType ?? "",
+                    Interval = interval,
+                    StartDate = StartDate.HasValue ? StartDate.Value : DateTime.Now,
+                    EndDate = EndDate
+
+                };
                 ScheduleStore.CreateSchedule(dailySchedule, "Daily");
                 if (p == null) return;
                 var window = (ScheduleTimeWindow)p;

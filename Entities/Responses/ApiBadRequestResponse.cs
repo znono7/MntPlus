@@ -12,6 +12,17 @@ namespace Entities
         public ApiBadRequestResponse(string message) : base(false)
         {
             Message = message;
+        } 
+
+    }
+
+    public sealed class ApiPropertyNullRequestResponse : ApiBaseResponse
+    {
+        public string Message { get; set; }
+            
+        public ApiPropertyNullRequestResponse(string message) : base(false)
+        {
+            Message = message;
         }
 
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MntPlus.WPF" 
         mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="Transparent"
-        Title="AddTeamWindow" Height="720" Width="510" Loaded="Window_Loaded" x:Name="WindLoc">
+        Title="AddTeamWindow" Height="720" Width="510"  x:Name="WindTeam">
     <Window.Resources>
         <Style TargetType="{x:Type local:AddTeamWindow}">
             <Setter Property="Template">
@@ -110,7 +110,7 @@
 
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="Nom" Style="{DynamicResource LabelTextBlockStyle}" />
-                    <TextBox x:Name="txtEquipmentName" Margin="24 0 0 20" Style="{DynamicResource InputTextBoxStyle}" 
+                    <TextBox HorizontalAlignment="Stretch" x:Name="txtEquipmentName" Margin="24 20" Style="{DynamicResource InputTextBoxStyle}" 
                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
 
                 </StackPanel>
@@ -119,8 +119,8 @@
 
             </Grid>
         </ScrollViewer>
-        <Button Grid.Row="1"  Command="{Binding AddCommand}" 
-           CommandParameter="{Binding ElementName=WindLoc}"
+        <Button Grid.Row="1"  Command="{Binding SaveCommand}" 
+           CommandParameter="{Binding ElementName=WindTeam}"
            local:IsBusyProperty.Value="{Binding SaveIsRunning}" 
            Tag="{StaticResource done}" HorizontalAlignment="Right"
            Style="{DynamicResource RegullarPrimeButton}" 

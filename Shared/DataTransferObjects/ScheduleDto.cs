@@ -1,81 +1,85 @@
 ﻿namespace Shared
 {
-    public record DailyScheduleDto(Guid Id,
-                                  string FrequencyType,
-                                  int Interval,
-                                  DateTime StartDate,
-                                  DateTime? EndDate);
-    public record DailyScheduleDtoForCreation(string FrequencyType,
-                                 int Interval,
-                                 DateTime StartDate,
-                                 DateTime? EndDate);
+
+    public abstract record ScheduleDto
+    {
+        public Guid Id { get; set; }
+        public string? FrequencyType { get; set; }
+        public int Interval { get; set; }
+        public DateTime? StartDate { get; set; } 
+        public DateTime? EndDate { get; set; }
+    }
+    public abstract record ScheduleDtoForCreation
+    {
+        public string? FrequencyType { get; set; }
+        public int Interval { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+    public record DailyScheduleDto : ScheduleDto
+    {
+    }
+
+    public record DailyScheduleDtoForCreation : ScheduleDtoForCreation
+    {
+    }
 
 
-    public record WeeklyScheduleDto(Guid Id,
-                                    string FrequencyType,
-                                    int Interval,
-                                    DateTime StartDate,
-                                    DateTime? EndDate,
-                                    List<DayOfWeek> DaysOfWeek);
-    public record WeeklyScheduleDtoForCreation(string FrequencyType,
-                                               int Interval,
-                                               DateTime StartDate,
-                                               DateTime? EndDate,
-                                               List<DayOfWeek> DaysOfWeek);
+    public record WeeklyScheduleDto : ScheduleDto
+    {
+        public List<DayOfWeek>? DaysOfWeek { get; set; }
+    }
 
-    public record MonthlyNumericScheduleDto(Guid Id,
-                                            string FrequencyType,
-                                            int Interval,
-                                            DateTime StartDate,
-                                            DateTime? EndDate,
-                                            int DayOfMonth);
-    public record MonthlyNumericScheduleDtoForCreation(string FrequencyType,
-                                                       int Interval,
-                                                       DateTime StartDate,
-                                                       DateTime? EndDate,
-                                                       int DayOfMonth);
+    public record WeeklyScheduleDtoForCreation : ScheduleDtoForCreation
+    {
+        public List<DayOfWeek>? DaysOfWeek { get; set; }
+    }
 
-    public record MonthlyWeekdayScheduleDto(Guid Id,
-                                            string FrequencyType,
-                                            int Interval,
-                                            DateTime StartDate,
-                                            DateTime? EndDate,
-                                            int WeekOfMonth,
-                                            DayOfWeek DayOfWeek);
-    public record MonthlyWeekdayScheduleDtoForCreation(string FrequencyType,
-                                                       int Interval,
-                                                       DateTime StartDate,
-                                                       DateTime? EndDate,
-                                                       int WeekOfMonth,
-                                                       DayOfWeek DayOfWeek);
-    public record YearlyNumericScheduleDto(Guid Id,
-                                           string FrequencyType,
-                                           int Interval,
-                                           DateTime StartDate,
-                                           DateTime? EndDate,
-                                           int DayOfMonth,
-                                           int Month);
-    public record YearlyNumericScheduleDtoForCreation(string FrequencyType,
-                                                      int Interval,
-                                                      DateTime StartDate,
-                                                      DateTime? EndDate,
-                                                      int DayOfMonth,
-                                                      int Month);
+    public record MonthlyNumericScheduleDto : ScheduleDto
+    {
+        public int DayOfMonth { get; set; }
+    }
 
-    public record YearlyOrdinalScheduleDto(Guid Id,
-                                           string FrequencyType,
-                                           int Interval,
-                                           DateTime StartDate,
-                                           DateTime? EndDate,
-                                           int WeekOfMonth,
-                                           DayOfWeek DayOfWeek,
-                                           int Month);
-    public record YearlyOrdinalScheduleDtoForCreation(string FrequencyType,
-                                                      int Interval,
-                                                      DateTime StartDate,
-                                                      DateTime? EndDate,
-                                                      int WeekOfMonth,
-                                                      DayOfWeek DayOfWeek,
-                                                      int Month);
+    public record MonthlyNumericScheduleDtoForCreation : ScheduleDtoForCreation
+    {
+        public int DayOfMonth { get; set; }
+    }
+
+    public record MonthlyWeekdayScheduleDto : ScheduleDto
+    {
+        public int WeekOfMonth { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+    }
+
+    public record MonthlyWeekdayScheduleDtoForCreation : ScheduleDtoForCreation
+    {
+        public int WeekOfMonth { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+    }
+    public record YearlyNumericScheduleDto : ScheduleDto
+    {
+        public int DayOfMonth { get; set; }
+        public int Month { get; set; }
+    }
+
+    public record YearlyNumericScheduleDtoForCreation : ScheduleDtoForCreation
+    {
+        public int DayOfMonth { get; set; }
+        public int Month { get; set; }
+    }
+
+    public record YearlyOrdinalScheduleDto : ScheduleDto
+    {
+        public int WeekOfMonth { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+        public int Month { get; set; }
+    }
+
+    public record YearlyOrdinalScheduleDtoForCreation : ScheduleDtoForCreation
+    {
+        public int WeekOfMonth { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+        public int Month { get; set; }
+    }
 
 }

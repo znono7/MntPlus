@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,14 +50,17 @@ namespace MntPlus.WPF
         public ICommand BackPageCommand { get; set; }
         public ICommand ScheduleWindCommand { get; set; }
         public ICommand OpenMenuPriorityCommand { get; set; }
-
+        public ICommand HighPriorityCommand { get; set; }
+        public ICommand MediumPriorityCommand { get; set; }
+        public ICommand LowPriorityCommand { get; set; }
+        public ICommand NonPriorityCommand { get; set; }
         public PmTypesColllection? TypesColllection { get; set; }
         public PmTypes? SelectedType { get; set; }
 
         public ScheduleStore ScheduleStore { get; set; }
         public string? ScheduleText { get; set; }
 
-        public object? ScheduleModel { get; set; }
+        public ScheduleDtoForCreation? ScheduleModel { get; set; }
         public AssetStore SelectedAssetStore { get; private set; }
         public ICommand BrowseToEquipmentCommand { get; set; }
         public AssetDto? SelectedAsset { get; set; }
@@ -89,8 +93,13 @@ namespace MntPlus.WPF
         public string SaveButtonContent { get; set; } = "Enregistrer";
         public bool SaveIsRunning { get; set; }
         public ICommand SaveCommand { get; set; }
+        public PreventiveMaintenanceStore? PreventiveMaintenanceStore { get; set; }
+
         public NewPreventiveMaintenanceViewModel() 
         {
+            ScheduleModel = null;
+            MeterSchedule = null;
+            GetLastNumber().GetAwaiter().GetResult();
             TypesColllection = new PmTypesColllection();
             BackPageCommand = new RelayCommand(() => BackPage());
             ScheduleWindCommand = new RelayCommand(() => ScheduleWind());
@@ -106,6 +115,84 @@ namespace MntPlus.WPF
             BrowseToMeterCommand = new RelayCommand(BrowseToMeter);
             ClearMeterCommand = new RelayCommand(() => { MeterSchedule = null; MeterScheduleText = null; browseToMeterVisible = false; });
             ClearScheduleCommand = new RelayCommand(() => { browseToMeterScheduleVisible = false; ScheduleText = ""; ScheduleModel = null; });
+            HighPriorityCommand = new RelayCommand(() => OrderWorkPriority = "1");
+            MediumPriorityCommand = new RelayCommand(() => OrderWorkPriority = "2");
+            LowPriorityCommand = new RelayCommand(() => OrderWorkPriority = "3");
+            NonPriorityCommand = new RelayCommand(() => OrderWorkPriority = "Aucune");
+            SaveCommand = new RelayCommand(async () => await SaveAsync());
+        }
+        private async Task GetLastNumber()
+        {
+            var response = await AppServices.ServiceManager.PreventiveMaintenanceService.CreateLastNumberPreventiveMaintenance();
+            if (response.Success && response is ApiOkResponse<int?> result)
+            {
+                num = result.Result ?? 0;
+                Number = AddDynamicLeadingZeros(num);
+            }
+        }
+        public string AddDynamicLeadingZeros(int number)
+        {
+            // Get the number of digits in the number
+            int numberOfDigits = number.ToString().Length;
+
+            // Calculate the total length after adding zeros
+            int totalLength = numberOfDigits * 2 + 1;
+
+            // Pad the number with leading zeros
+            return number.ToString().PadLeft(totalLength, '0');
+        }
+
+        private async Task SaveAsync()
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+               await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error,"Le nom est obligatoire"));
+                return;
+            }
+            if(ScheduleModel == null && MeterSchedule == null)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error,"Le calendrier est obligatoire"));
+                return;
+            }
+            PreventiveMaintenanceDtoForCreation preventive = new PreventiveMaintenanceDtoForCreation(num,
+                                                                                                     Name,
+                                                                                                     Description,
+                                                                                                     "",
+                                                                                                     OrderWorkPriority,
+                                                                                                     SelectedType?.TypeName,
+                                                                                                     null,
+                                                                                                     null,
+                                                                                                     DateTime.Now,
+                                                                                                     Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"),
+                                                                                                     UserGuid,
+                                                                                                     TeamGuid,
+                                                                                                     CheckListDto?.Id,
+                                                                                                     SelectedAsset?.Id,
+                                                                                                     ScheduleModel,
+                                                                                                     MeterSchedule,
+                                                                                                     MeterSchedule != null
+                                                                                                     ); 
+            await RunCommandAsync(() => SaveIsRunning, async () =>
+            {
+                var response = await AppServices.ServiceManager.PreventiveMaintenanceService.CreatePreventiveMaintenance(preventive);
+                if (response.Success && response is ApiOkResponse<PreventiveMaintenanceDto> result)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "La maintenance préventive a été créée avec succès"));
+                    PreventiveMaintenanceStore?.CreatePreventiveMaintenance(result.Result);
+                    BackPage();
+
+
+                }
+                else if(response is ApiPropertyNullRequestResponse responseNull)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, responseNull.Message));
+                }
+                else if (response is ApiBadRequestResponse badRequestResponse)
+                {
+                    await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, badRequestResponse.Message));
+                }
+               
+            });
         }
 
         private void BrowseToMeter()
@@ -376,7 +463,9 @@ namespace MntPlus.WPF
              if(dayOfMonth == 1) return "1er";
              return $"{dayOfMonth}ème";
         }
-            private void BackPage()
+            
+        
+        private void BackPage()
         {
             IoContainer.Application.GoToPage(ApplicationPage.PreventiveMaintenance);
         }

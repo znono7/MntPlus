@@ -11,6 +11,7 @@ namespace Service.Contracts
     public interface IUserService 
     {
         Task<ApiBaseResponse> GetAllUsersAsync(bool trackChanges);
+        Task<ApiBaseResponse> GetAllUsersWithRolesAsync(bool trackChanges);
         Task<ApiBaseResponse> GetUserAsync(Guid userId, bool trackChanges);
         Task<ApiBaseResponse> GetUsersTeamAsync(Guid teamId, bool trackChanges);
         Task<ApiBaseResponse> CreateUser(UserCreateDto user);

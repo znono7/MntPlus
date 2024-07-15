@@ -4,12 +4,18 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MntPlus.WPF"
-      mc:Ignorable="d" 
+      xmlns:local="clr-namespace:MntPlus.WPF" 
+                xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
+                mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="UsersPage">
 
     <Grid Background="{DynamicResource TertiaryBackgroundColor}">
+        <interactivity:Interaction.Triggers>
+            <interactivity:EventTrigger EventName="Loaded">
+                <interactivity:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
+            </interactivity:EventTrigger>
+        </interactivity:Interaction.Triggers>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="Auto"/>
@@ -63,94 +69,52 @@
             <Button  Margin="10 0" Visibility="{Binding IsEmpty,UpdateSourceTrigger=PropertyChanged,Converter={local:BooleanToVisiblityConverter}}" Command="{Binding OpenWindowCommand}" Grid.Column="3" Style="{DynamicResource PrimeButton}" Content="Utilisateur" Tag="{StaticResource plus}"/>
         </Grid>
         <Rectangle Height="1" Grid.Row="2" Fill="{DynamicResource LineColor}"/>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="3" Background="{DynamicResource FourthBackgroundColor}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <RadioButton Command="{Binding MenuActionCommand}" x:Name="ActionBtn" Margin="20 0"  Style="{StaticResource SubVerticalMenuStyle}" Content="Actions" HorizontalAlignment="Left" />
-            <Popup StaysOpen="True" HorizontalAlignment="Center" Width="185"  Height="110" IsOpen="{Binding IsMenuActionOpen}" PlacementTarget="{Binding ElementName=ActionBtn}" Placement="Bottom" AllowsTransparency="True" PopupAnimation="Scroll">
-                <Grid>
-                    <Border Background="{DynamicResource TertiaryBackgroundColor}" BorderBrush="{DynamicResource LineColor}" BorderThickness="1" CornerRadius="7"/>
-                    <StackPanel Margin="1 20 1 20">
-                        <Button Style="{DynamicResource PopupButton}" Content="Supprimer"/>
-                    </StackPanel>
-                </Grid>
-            </Popup>
+           
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
-                <DataGrid  Margin="10" 
-                       ItemsSource="{Binding FilterUsers}"
-                       Style="{StaticResource DataGridStyle}"
-                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
-                       RowStyle="{StaticResource DataGridRowStyle1}"
-                       CellStyle="{StaticResource DataGridCellStyle}"
-                       AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
-                            <DataGridCheckBoxColumn.HeaderTemplate>
+                <Grid Margin="20">
+                    <Border BorderThickness="1.2" BorderBrush="{DynamicResource LineColor}" Background="{DynamicResource TertiaryBackgroundColor}" CornerRadius="7"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="header">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" BorderThickness="0 0 0 1" Grid.ColumnSpan="5" BorderBrush="{DynamicResource LineColor}"/>
+                            <CheckBox VerticalAlignment="Center" Style="{StaticResource CheckBoxStyle2}" IsChecked="{Binding IsChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Column="1" Text="Nom" Style="{DynamicResource ColumnHeaderStyle}" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                            <TextBlock Grid.Column="3" Text="Rôle d'utilisateur" Style="{DynamicResource ColumnHeaderStyle}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="Actions" Style="{DynamicResource ColumnHeaderStyle}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Margin="1.2 0" Grid.Row="1" Background="{DynamicResource PrimaryBackgroundColor}">
+                            <TextBlock Text="{Binding UsersCount}" Style="{DynamicResource  TextBlockStyle}" VerticalAlignment="Center" Margin="20 0"/>
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding FilterUsers}" Grid.Row="2">
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
+                                    <local:UserRecordControl/>
                                 </DataTemplate>
-                            </DataGridCheckBoxColumn.HeaderTemplate>
-                        </DataGridCheckBoxColumn>
-                        <DataGridTemplateColumn Header="Nom"  Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                        <TextBlock FontSize="15" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding UserDto.FullName,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Statut"  Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border Grid.Column="3" Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="#4C44A0">
-                                        <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding UserDto.Status,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
-                                    </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="E-mail" CanUserResize="False" Width="Auto" Binding="{Binding UserDto.Email}" />
-                        <DataGridTextColumn Header="N° de téléphone" CanUserResize="False" Width="Auto" Binding="{Binding UserDto.PhoneNumber}" />
-                        <DataGridTemplateColumn Header="Rôle" Width="240">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="5" VerticalAlignment="Center">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Button Grid.Column="1" ToolTipService.InitialShowDelay="2" Command="{Binding DataContext.AssigneRoleCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                        CommandParameter="{Binding}"  x:Name="AddBtn" Style="{DynamicResource IconPathButton}" Margin="0">
-                                            <Path  Width="12" Fill="{DynamicResource PrimaryGreenColor}" Stretch="Uniform" Data="{DynamicResource plus}"/>
-                                            <Button.ToolTip>
-                                                <ToolTip Style="{StaticResource ToolTipStyle}" >
-                                                    <TextBlock>Attribuer un nouveau Rôle</TextBlock>
-                                                </ToolTip>
-                                            </Button.ToolTip>
-                                        </Button>
-                                        <ItemsControl ItemsSource="{Binding UserRoles}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <!-- Define your item template here -->
-                                                <!-- For example, if you want to display text -->
-                                                <DataTemplate>
-                                                    <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Grid>
-                                   
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                    </DataGrid.Columns>
-                </DataGrid>
-
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Margin" Value="1.5 6"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </Grid>
+                </Grid>
             </ScrollViewer>
         </Grid>
     </Grid>

@@ -220,7 +220,7 @@ namespace MntPlus.WPF
             }
             else if (response is ApiBadRequestResponse errorResponse)
             {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message));
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur : Impossible de supprimer l'enregistrement car il est référencé par d'autres enregistrements."));
             }
             else
             {
@@ -243,7 +243,7 @@ namespace MntPlus.WPF
             }
             else if(response is ApiBadRequestResponse errorResponse)
             {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message));
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur : Impossible de supprimer l'enregistrement car il est référencé par d'autres enregistrements."));
             }
             else
             {
@@ -489,6 +489,7 @@ namespace MntPlus.WPF
         private void OnEquipmentCreated(AssetDto? newEquipment)
         {
             var newItemViewModel = new EquipmentItemViewModel(newEquipment);
+            newItemViewModel.OpenEquipment = OpenAsset;
             FindEquipmentParentViewModel findEquipmentParentViewModel = new(EquipmentItemViewModels);
 
 

@@ -15,4 +15,5 @@ namespace Entities
         public ICollection<LinkPart>? LinkParts { get; set; }
 
     }
+   
 }

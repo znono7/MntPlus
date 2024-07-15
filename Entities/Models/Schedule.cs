@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
@@ -19,5 +20,6 @@ namespace Entities
  
         public DateTime? EndDate { get; set; }
 
+       
     }
 }

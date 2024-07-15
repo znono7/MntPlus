@@ -10,7 +10,7 @@ namespace Contracts
     public interface ILinkPartRepository
     {
         Task<IEnumerable<LinkPart>?> GetLinkPartsAsync(Guid AssetId, bool trackChanges);
-        Task<LinkPart?> GetLinkPartAsync( Guid idLinkPart, bool trackChanges);
+        Task<LinkPart?> GetLinkPartAsync( Guid idLinkPart,Guid idAsset, bool trackChanges);
         void CreateLinkPart(LinkPart linkPart);
         void DeleteLinkPart(LinkPart linkPart);
     }

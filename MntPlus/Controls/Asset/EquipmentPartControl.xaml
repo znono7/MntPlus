@@ -38,7 +38,8 @@
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}"
                 RowStyle="{StaticResource DataGridRowStyle1}"
                 CellStyle="{StaticResource DataGridCellStyle}"
-                AutoGenerateColumns="False">
+                AutoGenerateColumns="False"
+                       VerticalAlignment="Stretch">
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
                         <DataGridCheckBoxColumn.HeaderTemplate>
@@ -83,6 +84,19 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"    Text="{Binding AvailableQuantity,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn  IsReadOnly="True" Width="Auto" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button Cursor="Hand" Background="Transparent" Command="{Binding DataContext.DeleteCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
+                                            CommandParameter="{Binding }"
+                                            Style="{StaticResource IconPathButton}">
+                                        <Path Data="{StaticResource delete}" Fill="#BE2623" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="11" Height="11"/>
+                                    </Button>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

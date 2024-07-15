@@ -20,31 +20,35 @@ namespace Service
         {
             try
             {
-                var linkPartEntity = _mapper.Map<LinkPart>(linkPart);
+                var linkPartEntity = new LinkPart
+                {
+                    PartId = linkPart.PartId,
+                    AssetId = linkPart.AssetId
+                };
                 _repository.LinkPart.CreateLinkPart(linkPartEntity);
                 await _repository.SaveAsync();
                 var linkPartToReturn = new LinkPartDto(linkPartEntity.Id, linkPartEntity.PartId,null, linkPartEntity.AssetId , null);
                 return new ApiOkResponse<LinkPartDto>(linkPartToReturn);
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 return new ApiBadRequestResponse(ex.Message);
             }
             
         }
 
-        public async Task<ApiBaseResponse> DeleteLinkPart(Guid linkPartId, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteLinkPart(Guid linkPartId, Guid idAsset, bool trackChanges)
         {
             try
             {
-                var linkPart = await _repository.LinkPart.GetLinkPartAsync(linkPartId, trackChanges);
+                var linkPart = await _repository.LinkPart.GetLinkPartAsync(linkPartId, idAsset, trackChanges);
                 if (linkPart is null)
-                {
+                { 
                     return new ApiNotFoundResponse("");
                 }
                 _repository.LinkPart.DeleteLinkPart(linkPart);
                 await _repository.SaveAsync();
-                var linkPartToReturn = _mapper.Map<LinkPartDto>(linkPart);
+                var linkPartToReturn = new LinkPartDto(linkPart.Id, linkPart.PartId, null, linkPart.AssetId, null);
 
                 return new ApiOkResponse<LinkPartDto>(linkPartToReturn);
             }
@@ -75,11 +79,11 @@ namespace Service
             }
         }
 
-        public async Task<ApiBaseResponse> GetLinkPartAsync(Guid linkPartId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetLinkPartAsync(Guid linkPartId, Guid idAsset, bool trackChanges)
         {
             try
             {
-                var linkPart = await _repository.LinkPart.GetLinkPartAsync(linkPartId, trackChanges);
+                var linkPart = await _repository.LinkPart.GetLinkPartAsync(linkPartId, idAsset, trackChanges);
                 if (linkPart is null)
                 {
                     return new ApiNotFoundResponse("");

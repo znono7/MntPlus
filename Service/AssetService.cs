@@ -55,8 +55,9 @@ namespace Service
             }
             catch (Exception ex)
             {
-                return new ApiBadRequestResponse(ex.InnerException.Message);
+                return new ApiBadRequestResponse(ex.Message);
             }
+           
             
         }
 
@@ -107,7 +108,7 @@ namespace Service
             try
             {
                 var asset = await _repository.Asset.GetAllPartsAsync(assetId, trackChanges);
-                if (asset is null)
+                if (asset is null) 
                 {
                     return new ApiNotFoundResponse("");
                 }

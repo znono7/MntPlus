@@ -31,7 +31,7 @@ namespace Shared
    (
        Guid Id, string? Name, LocatioWODto? Location
        );
-
+    public record AssetMinimalDto(Guid Id, string? Name);
 
     public record AssetForCreationDto
         (

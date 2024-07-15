@@ -8,17 +8,19 @@ namespace MntPlus.WPF
 {
     public class UsersPageViewModel : BaseViewModel
     {
-        public ObservableCollection<UserWithRolesDto>? FilterUsers { get; set; }
-        private ObservableCollection<UserWithRolesDto>? users { get; set; }
-        public ObservableCollection<UserWithRolesDto>? Users
-        { 
-            get => users; 
-            set {
-                users = value; 
+        public ObservableCollection<UserRecordViewModel>? Users
+        {
+            get => users;
+            set
+            {
+                users = value;
                 if (users is not null)
-                    FilterUsers = new ObservableCollection<UserWithRolesDto>(users);
-            }  
-        } 
+                    FilterUsers = new ObservableCollection<UserRecordViewModel>(users);
+            }
+        }
+        public ObservableCollection<UserRecordViewModel>? FilterUsers { get; set; }
+        private ObservableCollection<UserRecordViewModel>? users { get; set; }
+      
         private ApplicationPage _currentPage;
 
         public ApplicationPage CurrentPage
@@ -65,24 +67,47 @@ namespace MntPlus.WPF
 
         public UserStore? UserStore { get; set; }
         public RoleStore? RoleStore { get; set; }
-
+        public List<RolesDto>? Roles { get; set; }
+        public bool IsLoading { get; set; }
+        public bool IsEmpty { get; set; }
+        public ICommand LoadDataCommand { get; set; }
+        public string? UsersCount { get; set;}
         public UsersPageViewModel()
         {
             MenuActionCommand = new RelayCommand(() => IsMenuActionOpen = !IsMenuActionOpen);
             ToUsersPageCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Users));
             ToTeamsPageCommand = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Teams));
             OpenWindowCommand = new RelayCommand(OpenUserWindow);
-            DeleteUsersCommand = new RelayCommand(RemoveSelectedItems);
             SearchCommand = new RelayCommand(Search);
             AssigneRoleCommand = new RelayParameterizedCommand((p) => AssigneRole(p));
-            //_ = GetUsers();
-            GetUsers().GetAwaiter().GetResult();
-            UserStore = new UserStore();
-            UserStore.UserCreated += UserStore_UserCreated;
-            RoleStore = new RoleStore();
-            RoleStore.UserRoleAssigned += RoleStore_UserRoleAssigned;
+            LoadDataCommand = new RelayCommand(async () => await GetData());
+           
         }
 
+        private async Task GetData()
+        {
+            await RunCommandAsync(() => IsLoading, async () =>
+            {
+                var response = await AppServices.ServiceManager.UserService.GetAllUsersWithRolesAsync(false);
+                if (response.Success && response is ApiOkResponse<IEnumerable<RolesDto>> result)
+                {
+                    Roles = new List<RolesDto>(result.Result!);
+                    Users = new ObservableCollection<UserRecordViewModel>(Roles.Select(r => new UserRecordViewModel(r)));
+                    UsersCount = $"Affichage de {Users.Count} sur {Users.Count} utilisateurs au total" ;
+                }else if(response is ApiNotFoundResponse)
+                {
+                    IsEmpty = true;
+                    Users = new ObservableCollection<UserRecordViewModel>();
+                    UsersCount = $"Affichage de 0 sur 0 utilisateurs au total";
+
+                }
+                else
+                {
+                    Users = new ObservableCollection<UserRecordViewModel>();
+                }
+            });
+           
+        }
         private void AssigneRole(object? p)
         {
             var user = p as UserWithRolesDto;
@@ -91,43 +116,8 @@ namespace MntPlus.WPF
             assignNewRole.ShowDialog();
         }
 
-        private void RoleStore_UserRoleAssigned(UserRoleDto? dto)
-        {
-            var user = Users?.FirstOrDefault(u => u.UserDto?.Id == dto?.UserId);
-            if (user is null) { return; }
-            user.UserRoles?.Add(dto?.Role);
-        }
-
-        private void UserStore_UserCreated(UserWithRolesDto? dto)
-        {
-            if (dto == null) { return; }
-            Users ??= new ObservableCollection<UserWithRolesDto>();
-            FilterUsers ??= new ObservableCollection<UserWithRolesDto>();
-            Users.Add(dto);
-            FilterUsers.Add(dto);
-            
-        }
-
-        private async Task GetUsers()
-        {
-            var result = await AppServices.ServiceManager.UserService.GetAllUsersAsync(false);
-            if (result.Success && result is ApiOkResponse<IEnumerable<UserWithRolesDto>> response )
-            {
-                Users = new ObservableCollection<UserWithRolesDto>(response.Result!);
-            }
-            else if ( result is ApiBadRequestResponse r)
-            {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la récupération des utilisateurs"));
-                Users = new ObservableCollection<UserWithRolesDto>();
-
-            }else if ( result is ApiNotFoundResponse n)
-            {
-                MessageBox.Show("Aucun utilisateur trouvé");
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info,"Aucun utilisateur trouvé"));
-                Users = new ObservableCollection<UserWithRolesDto>();
-            }
-           
-        }
+      
+       
         private void OpenUserWindow()
         {
             AddUserWindow addUserWindow = new () { DataContext = new AddUserViewModel(UserStore)};
@@ -144,16 +134,7 @@ namespace MntPlus.WPF
             await Task.Delay(1);
         }
 
-        private void RemoveSelectedItems()
-        {
-            if (FilterUsers is null || FilterUsers.Count == 0)
-                return;
-            var selectedItems = FilterUsers.Where(item => item.UserDto.IsChecked).ToList();
-            foreach (var item in selectedItems)
-            {
-                FilterUsers.Remove(item);
-            }
-        }
+      
 
         private void Search()
         {
@@ -165,15 +146,15 @@ namespace MntPlus.WPF
             if (string.IsNullOrEmpty(SearchText) || Users is null || Users.Count <= 0)
             {
                 // Make filtered list the same
-                FilterUsers = new ObservableCollection<UserWithRolesDto>(Users ?? Enumerable.Empty<UserWithRolesDto>());
+                FilterUsers = new ObservableCollection<UserRecordViewModel>(Users ?? Enumerable.Empty<UserRecordViewModel>());
 
                 // Set last search text
                 mLastSearchText = SearchText;
 
                 return;
             }
-            FilterUsers = new ObservableCollection<UserWithRolesDto>(
-                Users.Where(item => item.UserDto.FullName is not null && item.UserDto.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+            FilterUsers = new ObservableCollection<UserRecordViewModel>(
+                Users.Where(item => item.FullName is not null && item.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
             // Set last search text
             mLastSearchText = SearchText;
 

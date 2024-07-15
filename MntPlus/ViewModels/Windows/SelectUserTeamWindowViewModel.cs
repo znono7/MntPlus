@@ -96,6 +96,7 @@ namespace MntPlus.WPF
         public SelectUserTeamWindowViewModel(UserTeamStore? userTeamStore)
         {
             _ = GetUsers();
+            _ = GetTeams();
             UserTeamStore = userTeamStore;
             SearchCommand = new RelayCommand(Search);
             TeamSearchCommand = new RelayCommand(TeamSearch);
@@ -121,6 +122,27 @@ namespace MntPlus.WPF
                
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucun utilisateur trouvé"));
                 Users = new ObservableCollection<UserWithRolesDto>();
+            }
+
+        }
+
+        private async Task GetTeams() {             
+            var result = await AppServices.ServiceManager.TeamService.GetAllTeamsAsync(false);
+                   
+            if (result.Success && result is ApiOkResponse<IEnumerable<TeamDto>> response)
+            {
+                Teams = new ObservableCollection<TeamDto>(response.Result!);
+            }
+            else if (result is ApiBadRequestResponse r)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur lors de la récupération des équipes"));
+                Teams = new ObservableCollection<TeamDto>();
+
+            }
+            else if (result is ApiNotFoundResponse n)
+            {
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Info, "Aucune équipe trouvée"));
+                Teams = new ObservableCollection<TeamDto>();
             }
 
         }
@@ -157,18 +179,7 @@ namespace MntPlus.WPF
             Wind.Close();
         }
 
-        private void GenerateUsers()
-        {
-            //Users = new ObservableCollection<UserWithRolesDto>
-            //{
-            //    new UserWithRolesDto(Guid.Parse("9199CE73-0AEB-4A69-9D33-1BBB5CE36A38"), "John Doe", "John Doe - Admin", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "Admin", true) }, "Admin"),
-            //    new UserWithRolesDto(Guid.Parse("B3D8290F-FBE8-4E83-BEB6-91932594774B"), "Jane Doe", "Jane Doe - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
-            //    new UserWithRolesDto(Guid.Parse("53510025-106F-43DE-A759-EF4A94F0013A"), "John Smith", "John Smith - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
-            //    new UserWithRolesDto(Guid.Parse("06D0E2E3-97FF-4645-AE55-5AD3BBDCCB52"), "Jane Smith", "Jane Smith - User", new List<RoleDto> { new RoleDto(Guid.NewGuid(), "User", true) }, "User"),
-
-            //};
-
-        }
+      
       
 
         private void Search()

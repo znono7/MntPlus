@@ -22,8 +22,16 @@ namespace Service
             {
                 var inventoryEntity = _mapper.Map<Inventory>(inventory);
                 _repository.Inventory.CreateInventory(inventoryEntity);
-                await _repository.SaveAsync();
-                var inventoryToReturn = _mapper.Map<InventoryDto>(inventoryEntity);
+                await _repository.SaveAsync(); 
+                var inventoryToReturn = new InventoryDto (inventoryEntity.Id,
+                                                          inventoryEntity.Status,
+                                                          inventoryEntity.Cost,
+                                                          inventoryEntity.AvailableQuantity ?? 0,
+                                                          inventoryEntity.MinimumQuantity,
+                                                          inventoryEntity.MaxQuantity,
+                                                          inventoryEntity.DateReceived,
+                                                          inventoryEntity.PartID,
+                                                          null);
                 return new ApiOkResponse<InventoryDto>(inventoryToReturn);
             }
             catch (Exception ex)

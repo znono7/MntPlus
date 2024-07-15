@@ -30,6 +30,9 @@ namespace Repository
             return await FindAll(trackChanges).ToListAsync();
         }
 
+     
+       
+
         public async Task<UserRole?> GetUserRoleAsync(Guid userRoleId, bool trackChanges)
         {
             return await FindByCondition(userRole => userRole.Id.Equals(userRoleId), trackChanges).SingleOrDefaultAsync();

@@ -28,6 +28,10 @@ namespace Repository
         private readonly Lazy<IIndividualTaskRepository> individualTaskRepository;
         private readonly Lazy<ICheckListItemRepository> checkListItemRepository;
         private readonly Lazy<IRequestRepository> requestRepository;
+        private readonly Lazy<IPreventiveMaintenanceRepository> preventiveMaintenanceRepository;
+        private readonly Lazy<IScheduleRepository> scheduleRepository;
+        private readonly Lazy<IMeterScheduleRepository> meterScheduleRepository;
+
         public RepositoryManager(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
@@ -48,6 +52,9 @@ namespace Repository
             individualTaskRepository = new Lazy<IIndividualTaskRepository>(() => new IndividualTaskRepository(repositoryContext));
             checkListItemRepository = new Lazy<ICheckListItemRepository>(() => new CheckListItemRepository(repositoryContext));
             requestRepository = new Lazy<IRequestRepository>(() => new RequestRepository(repositoryContext));
+            preventiveMaintenanceRepository = new Lazy<IPreventiveMaintenanceRepository>(() => new PreventiveMaintenanceRepository(repositoryContext));
+            scheduleRepository = new Lazy<IScheduleRepository>(() => new ScheduleRepository(repositoryContext));
+            meterScheduleRepository = new Lazy<IMeterScheduleRepository>(() => new MeterScheduleRepository(repositoryContext));
         }
       
 
@@ -85,6 +92,12 @@ namespace Repository
         public ICheckListItemRepository CheckListItem => checkListItemRepository.Value;
 
         public IRequestRepository Request => requestRepository.Value;
+
+        public IPreventiveMaintenanceRepository PreventiveMaintenance => preventiveMaintenanceRepository.Value;
+
+        public IScheduleRepository Schedule => scheduleRepository.Value;
+
+        public IMeterScheduleRepository MeterSchedule => meterScheduleRepository.Value;
 
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         

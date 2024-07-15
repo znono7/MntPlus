@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
-using System.Data;
+﻿using Repository;
 using System.Windows;
 
 namespace MntPlus.WPF
@@ -16,7 +14,7 @@ namespace MntPlus.WPF
 
             // Setup the main application 
             ApplicationSetup();
-
+           
 
 
 

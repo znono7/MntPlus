@@ -13,13 +13,13 @@ namespace Repository
         
         public void Create(T entity) => RepositoryContext.Set<T>().Add(entity);
 
-        public void CreateBulk(IEnumerable<T> entities) => RepositoryContext.BulkInsert(entities, options => options.IncludeGraph = true);
+        public void CreateBulk(IEnumerable<T> entities) => RepositoryContext.Set<T>().AddRange(entities);
        
 
         public void Delete(T entity) => RepositoryContext.Set<T>().Remove(entity);
 
-        public void DeleteBulk(IEnumerable<T> entities) =>  RepositoryContext.BulkDelete(entities, options => options.IncludeGraph = true);
-       
+        public void DeleteBulk(IEnumerable<T> entities) => RepositoryContext.Set<T>().RemoveRange(entities);
+      
          
         public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? RepositoryContext.Set<T>().AsNoTracking() : RepositoryContext.Set<T>();
        
@@ -29,7 +29,7 @@ namespace Repository
 
         public void Update(T entity) => RepositoryContext.Set<T>().Update(entity);
 
-        public void UpdateBulk(IEnumerable<T> entities) => RepositoryContext.BulkUpdate(entities, options => options.IncludeGraph = true);
-        
+        public void UpdateBulk(IEnumerable<T> entities) => RepositoryContext.Set<T>().UpdateRange(entities);
+
     }
 }

@@ -198,9 +198,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="OT#" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -305,7 +305,7 @@
                                                                 <DataTrigger Binding="{Binding WorkAssigned}" Value="user">
                                                                     <Setter Property="Data" Value="{StaticResource user}" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding WorkStat}" Value="team">
+                                                                <DataTrigger Binding="{Binding WorkAssigned}" Value="team">
                                                                     <Setter Property="Data" Value="{StaticResource users}" />
                                                                 </DataTrigger>
 

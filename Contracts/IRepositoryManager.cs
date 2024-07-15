@@ -25,9 +25,9 @@ namespace Contracts
         IIndividualTaskRepository IndividualTask { get; }
         ICheckListItemRepository CheckListItem { get; }
         IRequestRepository Request { get; }
-
-
-
+        IPreventiveMaintenanceRepository PreventiveMaintenance { get; }
+        IScheduleRepository Schedule { get; }
+        IMeterScheduleRepository MeterSchedule { get; }
         Task SaveAsync(); 
     }
 }

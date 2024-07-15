@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Repository
 {
@@ -10,7 +11,7 @@ namespace Repository
         }
          
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
-        { 
+        {  
 
             modelBuilder.Entity<LinkPart>()
                 .HasOne(lp => lp.Asset)
@@ -68,12 +69,21 @@ namespace Repository
                .HasValue<YearlyNumericSchedule>("YearlyNumeric")
                .HasValue<YearlyOrdinalSchedule>("YearlyOrdinal");
 
+           
+            var daysOfWeekConverter = new ValueConverter<List<DayOfWeek>, string>(
+                        v => string.Join(',', v),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(d => Enum.Parse<DayOfWeek>(d)).ToList());
+
+            var daysOfWeekComparer = new ListValueComparer<DayOfWeek>();
+
             modelBuilder.Entity<WeeklySchedule>()
-              .Property(e => e.DaysOfWeek)
-              .HasConversion(
-                      v => string.Join(',', v),
-                      v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                            .Select(d => Enum.Parse<DayOfWeek>(d)).ToList());
+                .Property(e => e.DaysOfWeek)
+                .HasConversion(daysOfWeekConverter!)
+                .Metadata.SetValueComparer(daysOfWeekComparer);
+
+          
+
 
         }
         public DbSet<Location>? Locations { get; set; }

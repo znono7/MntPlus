@@ -16,8 +16,8 @@ namespace Repository
 
         public void DeleteLinkPart(LinkPart linkPart) => Delete(linkPart);
 
-        public async Task<LinkPart?> GetLinkPartAsync( Guid idLinkPart, bool trackChanges) =>
-            await FindByCondition(c =>  c.Id.Equals(idLinkPart), trackChanges)
+        public async Task<LinkPart?> GetLinkPartAsync( Guid idLinkPart, Guid idAsset, bool trackChanges) =>
+            await FindByCondition(c =>  c.PartId.Equals(idLinkPart) && c.AssetId.Equals(idAsset), trackChanges)
             .SingleOrDefaultAsync();
 
         public async Task<IEnumerable<LinkPart>?> GetLinkPartsAsync(Guid AssetId, bool trackChanges) =>

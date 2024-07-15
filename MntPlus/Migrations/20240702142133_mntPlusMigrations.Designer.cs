@@ -11,8 +11,8 @@ using Repository;
 namespace MntPlus.WPF.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240625225046_mntPlus")]
-    partial class mntPlus
+    [Migration("20240702142133_mntPlusMigrations")]
+    partial class mntPlusMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -282,6 +282,36 @@ namespace MntPlus.WPF.Migrations
                     b.ToTable("MeterReadings");
                 });
 
+            modelBuilder.Entity("Entities.MeterSchedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FrequencyType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Interval")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("MeterId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeterId");
+
+                    b.ToTable("MeterSchedule");
+                });
+
             modelBuilder.Entity("Entities.Part", b =>
                 {
                     b.Property<Guid>("Id")
@@ -317,13 +347,13 @@ namespace MntPlus.WPF.Migrations
                     b.Property<Guid?>("AssetId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("CheckListId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("DateCreation")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FrequencyType")
@@ -332,23 +362,51 @@ namespace MntPlus.WPF.Migrations
                     b.Property<DateTime?>("LastPerformed")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("MeterScheduleId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("NextDue")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("ScheduleId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("StartDate")
+                    b.Property<Guid?>("TeamAssignedToId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserAssignedToId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserCreatedId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AssetId");
 
+                    b.HasIndex("CheckListId");
+
+                    b.HasIndex("MeterScheduleId");
+
                     b.HasIndex("ScheduleId");
+
+                    b.HasIndex("TeamAssignedToId");
+
+                    b.HasIndex("UserAssignedToId");
+
+                    b.HasIndex("UserCreatedId");
 
                     b.ToTable("PreventiveMaintenances");
                 });
@@ -867,19 +925,60 @@ namespace MntPlus.WPF.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Entities.MeterSchedule", b =>
+                {
+                    b.HasOne("Entities.Meter", "Meter")
+                        .WithMany()
+                        .HasForeignKey("MeterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meter");
+                });
+
             modelBuilder.Entity("Entities.PreventiveMaintenance", b =>
                 {
                     b.HasOne("Entities.Asset", "Asset")
                         .WithMany()
                         .HasForeignKey("AssetId");
 
+                    b.HasOne("Entities.CheckList", "CheckList")
+                        .WithMany()
+                        .HasForeignKey("CheckListId");
+
+                    b.HasOne("Entities.MeterSchedule", "MeterSchedule")
+                        .WithMany()
+                        .HasForeignKey("MeterScheduleId");
+
                     b.HasOne("Entities.Schedule", "Schedule")
                         .WithMany()
                         .HasForeignKey("ScheduleId");
 
+                    b.HasOne("Entities.Team", "TeamAssignedTo")
+                        .WithMany()
+                        .HasForeignKey("TeamAssignedToId");
+
+                    b.HasOne("Entities.User", "UserAssignedTo")
+                        .WithMany()
+                        .HasForeignKey("UserAssignedToId");
+
+                    b.HasOne("Entities.User", "UserCreatedBy")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
                     b.Navigation("Asset");
 
+                    b.Navigation("CheckList");
+
+                    b.Navigation("MeterSchedule");
+
                     b.Navigation("Schedule");
+
+                    b.Navigation("TeamAssignedTo");
+
+                    b.Navigation("UserAssignedTo");
+
+                    b.Navigation("UserCreatedBy");
                 });
 
             modelBuilder.Entity("Entities.PreventiveMaintenanceHistory", b =>

@@ -68,7 +68,7 @@ namespace MntPlus.WPF
             }
                 var response = await AppServices.ServiceManager.AssetService.DeleteAsset(asset!.Id, true);
             if (response is ApiOkResponse<AssetDto> && response.Success)
-            {
+            { 
                
                 await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Success, "Equipement Supprimé avec Succès"));
                 AssetStore?.DeleteAsset(asset);
@@ -76,7 +76,7 @@ namespace MntPlus.WPF
             }
             else if (response is ApiBadRequestResponse errorResponse)
             {
-                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, errorResponse.Message));
+                await IoContainer.NotificationsManager.ShowMessage(new NotificationControlViewModel(NotificationType.Error, "Erreur : Impossible de supprimer l'enregistrement car il est référencé par d'autres enregistrements."));
             }
             else
             {

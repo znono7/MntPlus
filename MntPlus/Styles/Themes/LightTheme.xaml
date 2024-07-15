@@ -12,7 +12,7 @@
     <SolidColorBrush x:Key="BackSubButtons" Color="#EFEBFD"/>
     <SolidColorBrush x:Key="BackgroundLight" Color="#E5E5E5"/>
     <SolidColorBrush x:Key="btnBackgroundLight" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="SideMenuBackground" Color="#F0F2F5"/>
+    <SolidColorBrush x:Key="SideMenuBackground" Color="#F0F2F5"/> 
 
 
     <!-- System Colors --> 

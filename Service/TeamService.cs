@@ -24,10 +24,10 @@ namespace Service
         {
             try
             {
-                var teamEntity = _mapper.Map<Team>(team);
+                var teamEntity = new Team() { Name = team.Name};
                 _repository.Team.CreateTeam(teamEntity);
                 await _repository.SaveAsync();
-                var teamToReturn = _mapper.Map<TeamDto>(teamEntity);
+                var teamToReturn = new TeamDto( Id : teamEntity.Id, Name : teamEntity.Name );
                 return new ApiOkResponse<TeamDto>(teamToReturn);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace Service
                 {
                     return new ApiNotFoundResponse("");
                 }
-                var teamsDto = _mapper.Map<IEnumerable<TeamDto>>(teams);
+                var teamsDto = teams.Select(t => new TeamDto(t.Id,t.Name!));
                 return new ApiOkResponse<IEnumerable<TeamDto>>(teamsDto);
             }
             catch (Exception ex)

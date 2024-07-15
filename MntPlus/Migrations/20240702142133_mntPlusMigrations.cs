@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MntPlus.WPF.Migrations
 {
     /// <inheritdoc />
-    public partial class mntPlus : Migration
+    public partial class mntPlusMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -329,37 +329,6 @@ namespace MntPlus.WPF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PreventiveMaintenances",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    FrequencyType = table.Column<string>(type: "TEXT", nullable: true),
-                    LastPerformed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NextDue = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateCreation = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    AssetId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ScheduleId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PreventiveMaintenances", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PreventiveMaintenances_Assets_AssetId",
-                        column: x => x.AssetId,
-                        principalTable: "Assets",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PreventiveMaintenances_Schedule_ScheduleId",
-                        column: x => x.ScheduleId,
-                        principalTable: "Schedule",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Requests",
                 columns: table => new
                 {
@@ -477,29 +446,25 @@ namespace MntPlus.WPF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PreventiveMaintenanceHistories",
+                name: "MeterSchedule",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Notes = table.Column<string>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: true),
-                    DateChanged = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ChangedById = table.Column<Guid>(type: "TEXT", nullable: true),
-                    PreventiveMaintenanceId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    FrequencyType = table.Column<string>(type: "TEXT", nullable: false),
+                    Interval = table.Column<int>(type: "INTEGER", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    MeterId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PreventiveMaintenanceHistories", x => x.Id);
+                    table.PrimaryKey("PK_MeterSchedule", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PreventiveMaintenanceHistories_PreventiveMaintenances_PreventiveMaintenanceId",
-                        column: x => x.PreventiveMaintenanceId,
-                        principalTable: "PreventiveMaintenances",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PreventiveMaintenanceHistories_Users_ChangedById",
-                        column: x => x.ChangedById,
-                        principalTable: "Users",
-                        principalColumn: "Id");
+                        name: "FK_MeterSchedule_Meters_MeterId",
+                        column: x => x.MeterId,
+                        principalTable: "Meters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -527,6 +492,94 @@ namespace MntPlus.WPF.Migrations
                         principalTable: "WorkOrders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PreventiveMaintenances",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Number = table.Column<int>(type: "INTEGER", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    FrequencyType = table.Column<string>(type: "TEXT", nullable: true),
+                    Priority = table.Column<string>(type: "TEXT", nullable: true),
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    LastPerformed = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    NextDue = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DateCreation = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UserCreatedId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserAssignedToId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    TeamAssignedToId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CheckListId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    AssetId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ScheduleId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    MeterScheduleId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PreventiveMaintenances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_CheckLists_CheckListId",
+                        column: x => x.CheckListId,
+                        principalTable: "CheckLists",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_MeterSchedule_MeterScheduleId",
+                        column: x => x.MeterScheduleId,
+                        principalTable: "MeterSchedule",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_Schedule_ScheduleId",
+                        column: x => x.ScheduleId,
+                        principalTable: "Schedule",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_Teams_TeamAssignedToId",
+                        column: x => x.TeamAssignedToId,
+                        principalTable: "Teams",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_Users_UserAssignedToId",
+                        column: x => x.UserAssignedToId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenances_Users_UserCreatedId",
+                        column: x => x.UserCreatedId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PreventiveMaintenanceHistories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Notes = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    DateChanged = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ChangedById = table.Column<Guid>(type: "TEXT", nullable: true),
+                    PreventiveMaintenanceId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PreventiveMaintenanceHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenanceHistories_PreventiveMaintenances_PreventiveMaintenanceId",
+                        column: x => x.PreventiveMaintenanceId,
+                        principalTable: "PreventiveMaintenances",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PreventiveMaintenanceHistories_Users_ChangedById",
+                        column: x => x.ChangedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -585,6 +638,11 @@ namespace MntPlus.WPF.Migrations
                 column: "AssetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MeterSchedule_MeterId",
+                table: "MeterSchedule",
+                column: "MeterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PreventiveMaintenanceHistories_ChangedById",
                 table: "PreventiveMaintenanceHistories",
                 column: "ChangedById");
@@ -600,9 +658,34 @@ namespace MntPlus.WPF.Migrations
                 column: "AssetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PreventiveMaintenances_CheckListId",
+                table: "PreventiveMaintenances",
+                column: "CheckListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PreventiveMaintenances_MeterScheduleId",
+                table: "PreventiveMaintenances",
+                column: "MeterScheduleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PreventiveMaintenances_ScheduleId",
                 table: "PreventiveMaintenances",
                 column: "ScheduleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PreventiveMaintenances_TeamAssignedToId",
+                table: "PreventiveMaintenances",
+                column: "TeamAssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PreventiveMaintenances_UserAssignedToId",
+                table: "PreventiveMaintenances",
+                column: "UserAssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PreventiveMaintenances_UserCreatedId",
+                table: "PreventiveMaintenances",
+                column: "UserCreatedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_AssetId",
@@ -673,57 +756,7 @@ namespace MntPlus.WPF.Migrations
                 name: "IX_WorkOrders_UserCreatedId",
                 table: "WorkOrders",
                 column: "UserCreatedId");
-
-
-            migrationBuilder.InsertData(
-table: "Users",
-columns: ["Id", "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Password", "Status", "CreatedAt"],
-values: new object[,]
-{
-           { Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), "Lamine", "Belkheir", "mail@d","01264","lamine","a123456","Actif",DateTime.Now}
-});
-
-
-            migrationBuilder.InsertData(
-                           table: "Roles",
-                           columns: ["Id", "Name", "IsSeeded"],
-                           values: new object[,]
-                           {
-           { Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F"), "Ingénieur GMAO", true },
-           { Guid.NewGuid(), "Responsable", true },
-           { Guid.NewGuid(), "Demandeur", true }
-
-                           });
-
-            migrationBuilder.InsertData(
-                              table: "UserRoles",
-                              columns: ["Id", "UserId", "RoleId"],
-                         values: new object[,]
-                        {
-          { Guid.NewGuid(), Guid.Parse("B04DD1F2-5FF9-4EA0-B7DE-58F5234D426E"), Guid.Parse("F62520DE-F650-41C0-9FCA-D2D0B216612F") },
-
-
-                          });
-
-            //insert into Locations table
-            migrationBuilder.InsertData(
-                               table: "Locations",
-                                              columns: ["Id", "Name", "Address", "IsPrimaryLocation", "IdParent", "CreatedAt"],
-                                                             values: new object[,]
-                                                             {
-          { Guid.NewGuid(), "Aflou", "Cite Bouaeea kada", true, null, DateTime.Now },
-          { Guid.NewGuid(), "Location 2", "Address 2", true, null, DateTime.Now }
-
-                });
-            migrationBuilder.InsertData(
-                                        table: "Assets",
-                                        columns: ["Id", "AssetParent", "Name", "Description", "Status", "Category", "LocationId", "SerialNumber", "Model", "Make", "PurchaseCost", "ImagePath", "AssetImage", "AssetCommissionDate", "CreatedDate", "PurchaseDate"],
-                                        values: new object[,]
-                                        {
-          { Guid.NewGuid(), null, "Asset 1", "Description 1", "Active", "Category 1",null, "Serial 1", "Model 1", "Make 1", 1000, "Path 1", null, DateTime.Now, DateTime.Now, DateTime.Now },
-          { Guid.NewGuid(), null, "Asset 2", "Description 2", "Active", "Category 2", null, "Serial 2", "Model 2", "Make 2", 2000, "Path 2", null, DateTime.Now, DateTime.Now, DateTime.Now }
-
-                });
+            InsertData.InsertDataToDB(migrationBuilder);
         }
 
         /// <inheritdoc />
@@ -757,16 +790,10 @@ values: new object[,]
                 name: "WorkOrderHistories");
 
             migrationBuilder.DropTable(
-                name: "CheckLists");
-
-            migrationBuilder.DropTable(
                 name: "IndividualTasks");
 
             migrationBuilder.DropTable(
                 name: "Parts");
-
-            migrationBuilder.DropTable(
-                name: "Meters");
 
             migrationBuilder.DropTable(
                 name: "PreventiveMaintenances");
@@ -778,16 +805,25 @@ values: new object[,]
                 name: "WorkOrders");
 
             migrationBuilder.DropTable(
-                name: "Schedule");
+                name: "CheckLists");
 
             migrationBuilder.DropTable(
-                name: "Assets");
+                name: "MeterSchedule");
+
+            migrationBuilder.DropTable(
+                name: "Schedule");
 
             migrationBuilder.DropTable(
                 name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Meters");
+
+            migrationBuilder.DropTable(
+                name: "Assets");
 
             migrationBuilder.DropTable(
                 name: "Locations");

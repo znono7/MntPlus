@@ -25,7 +25,7 @@ namespace Service
 
         public async Task<ApiBaseResponse> BulkDeleteWorkOrder(List<Guid> workOrderIds, bool trackChanges)
         {
-            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync(); 
             try
             {
                 var workOrders = await _repository.WorkOrder.GetWorkOrdersByIdsAsync(workOrderIds, trackChanges);
@@ -86,7 +86,7 @@ namespace Service
         { 
             await _unitOfWork.BeginTransactionAsync();
             try  
-            { 
+            {  
                 var workOrderEntity = _mapper.Map<WorkOrder>(workOrder);
                 _repository.WorkOrder.CreateWorkOrder(workOrderEntity);
                 await _unitOfWork.SaveChangesAsync();
@@ -117,27 +117,34 @@ namespace Service
                     await _unitOfWork.SaveChangesAsync();
 
                 }
+                var savedWO = await _repository.WorkOrder.GetWorkOrderAsync(workOrderEntity.Id, false);
+                if(savedWO is null)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
 
-                var workOrderToReturn = new WorkOrderDto(Id: workOrderEntity.Id,
-                Name: workOrderEntity.Name,
-                Number: workOrderEntity.Number,
-                Description: workOrderEntity.Description,
-                Priority: workOrderEntity.Priority,
-                StartDate: workOrderEntity.StartDate,
-                DueDate: workOrderEntity.DueDate,
-                Type: workOrderEntity.Type,
-                Status: workOrderEntity.Status,
-                Requester: workOrderEntity.Requester,
-                CreatedOn: workOrderEntity.CreatedOn,
-                UserCreatedId: workOrderEntity.UserCreatedId,
-                UserCreatedBy: workOrderEntity.UserCreatedBy != null ? new UserByDto(workOrderEntity.UserCreatedBy.Id, $"{workOrderEntity.UserCreatedBy.FirstName} {workOrderEntity.UserCreatedBy.LastName}") : null,
-                UserAssignedToId: workOrderEntity.UserAssignedToId,
-                UserAssignedTo: workOrderEntity.UserAssignedTo != null ? new UserByDto(workOrderEntity.UserAssignedTo.Id, $"{workOrderEntity.UserAssignedTo.FirstName} {workOrderEntity.UserAssignedTo.LastName}") : null,
-                TeamAssignedToId: workOrderEntity.TeamAssignedToId,
-                TeamAssignedTo: workOrderEntity.TeamAssignedTo != null ? new TeamDto(workOrderEntity.TeamAssignedTo.Id, workOrderEntity.TeamAssignedTo.Name!) : null,
-                AssetId: workOrderEntity.AssetId,
-                Asset: workOrderEntity.Asset != null ? new AssetWorkOrderDto(workOrderEntity.Asset.Id, workOrderEntity.Asset.Name,
-                workOrderEntity.Asset.Location != null ? new LocatioWODto(workOrderEntity.Asset.Location.Id, workOrderEntity.Asset.Location.Name) : null) : null);
+                    return new ApiNotFoundResponse("");
+                }
+                var workOrderToReturn = new WorkOrderDto(Id: savedWO.Id,
+                                                         Name: savedWO.Name,
+                                                         Number: savedWO.Number,
+                                                         Description: savedWO.Description,
+                                                         Priority: savedWO.Priority,
+                                                         StartDate: savedWO.StartDate,
+                                                         DueDate: savedWO.DueDate,
+                                                         Type: savedWO.Type,
+                                                         Status: savedWO.Status,
+                                                         Requester: savedWO.Requester,
+                                                         CreatedOn: savedWO.CreatedOn,
+                                                         UserCreatedId: savedWO.UserCreatedId,
+                                                         UserCreatedBy: savedWO.UserCreatedBy != null ? new UserByDto(savedWO.UserCreatedBy.Id, $"{savedWO.UserCreatedBy.FirstName} {savedWO.UserCreatedBy.LastName}") : null,
+                                                         UserAssignedToId: savedWO.UserAssignedToId,
+                                                         UserAssignedTo: savedWO.UserAssignedTo != null ? new UserByDto(savedWO.UserAssignedTo.Id, $"{savedWO.UserAssignedTo.FirstName} {savedWO.UserAssignedTo.LastName}") : null,
+                                                         TeamAssignedToId: savedWO.TeamAssignedToId,
+                                                         TeamAssignedTo: savedWO.TeamAssignedTo != null ? new TeamDto(savedWO.TeamAssignedTo.Id, savedWO.TeamAssignedTo.Name!) : null,
+                                                         AssetId: savedWO.AssetId,
+                                                         Asset: savedWO.Asset != null ? new AssetWorkOrderDto(savedWO.Asset.Id, savedWO.Asset.Name,
+                                                         savedWO.Asset.Location != null ?
+                                                        new LocatioWODto(savedWO.Asset.Location.Id, savedWO.Asset.Location.Name) : null) : null);
 
                 await _unitOfWork.CommitTransactionAsync();
                 return new ApiOkResponse<WorkOrderDto>(workOrderToReturn);

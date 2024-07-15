@@ -100,14 +100,14 @@
                 CellStyle="{StaticResource DataGridCellStyle}"
                 AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxStyle1}">
-                            <DataGridCheckBoxColumn.HeaderTemplate>
+                        <DataGridTemplateColumn  Header="#" CanUserResize="False" Width="auto" >
+                            <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
+                                    <CheckBox IsChecked="{Binding IsChecked,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}"/>
                                 </DataTemplate>
-                            </DataGridCheckBoxColumn.HeaderTemplate>
-                        </DataGridCheckBoxColumn>
-                        <DataGridTemplateColumn Header="Numéro"  Width="*">
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Numéro"  Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Height="Auto" Command="{Binding ViewInventoryCommand }"
@@ -133,7 +133,7 @@
                                 <DataTemplate>
                                     <Grid>
                                         <Border Padding="6 2" Height="28"  CornerRadius="5" HorizontalAlignment="Stretch" Background="{Binding StatusColor,Converter={local:StringRGBToBrushConverter}}"/>
-                                        <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center" Foreground="{Binding ForgroundStatusColor,Converter={local:StringRGBToBrushConverter}}"    Text="{Binding Status,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="0"/>
+                                        <TextBlock FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center" Foreground="{Binding ForgroundStatusColor,Converter={local:StringRGBToBrushConverter}}"    Text="{Binding Status,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ColumnHeaderStyle}" Margin="5 2"/>
                                         
                                     </Grid>
                                 </DataTemplate>
